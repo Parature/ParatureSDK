@@ -1083,7 +1083,26 @@ namespace ParaConnect
             [FriendlyName("D20")]
             [isPublic(true)]
             [SandboxFarm(ServerFarm.SandboxD20)]
-            D20
+            D20,
+
+            /// <summary>
+            /// BBCRM
+            /// </summary>
+            [EnumDescription("https://bbcrm.edusupportcenter.com/")]
+            [FriendlyName("BBCRM")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxBBCRM)]
+            BBCRM,
+
+            /// <summary>
+            /// BBCRM Sandbox
+            /// </summary>
+            [EnumDescription("https://bbcrm-test.edusupportcenter.com/")]
+            [FriendlyName("BBCRM-Sandbox")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxBBCRM)]
+            SandboxBBCRM
+
         }
 
         /// <summary>
