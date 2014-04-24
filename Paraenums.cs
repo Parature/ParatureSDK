@@ -1101,7 +1101,16 @@ namespace ParaConnect
             [FriendlyName("BBCRM-Sandbox")]
             [isPublic(true)]
             [SandboxFarm(ServerFarm.SandboxBBCRM)]
-            SandboxBBCRM
+            SandboxBBCRM,
+
+            /// <summary>
+            /// D1 Stage
+            /// </summary>
+            [EnumDescription("https://d1-stage.parature.net/")]
+            [FriendlyName("D1Stage")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.D1Stage)]
+            D1Stage
 
         }
 
