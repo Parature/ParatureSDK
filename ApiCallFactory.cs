@@ -408,7 +408,12 @@ namespace ParaConnect
 
                 foreach (string line in errorLines)
                 {
-                    string tempLine = line.ToLower().Trim();
+
+                    //added below line, since the validation message is changed for the API call
+                    string tempLine = line.Contains("Short Name") ? line.Remove(line.IndexOf(", Short Name"), line.IndexOf("]") - line.IndexOf(", Short Name")) : line;
+
+                    tempLine = tempLine.ToLower().Trim();
+
 
                     string id = null;
 
