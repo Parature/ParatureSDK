@@ -1110,8 +1110,75 @@ namespace ParaConnect
             [FriendlyName("D1Stage")]
             [isPublic(true)]
             [SandboxFarm(ServerFarm.D1Stage)]
-            D1Stage
+            D1Stage,
 
+            /// <summary>
+            /// D21 SB
+            /// </summary>
+            [EnumDescription("https://d21-sandbox.parature.com/")]
+            [FriendlyName("D21-Sandbox")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxD21)]
+            SandboxD21,
+            /// <summary>
+            /// D21
+            /// </summary>
+            [EnumDescription("https://d21.parature.com/")]
+            [FriendlyName("D21")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxD21)]
+            D21,
+
+            /// <summary>
+            /// D22 SB
+            /// </summary>
+            [EnumDescription("https://d22-sandbox.parature.com/")]
+            [FriendlyName("D22-Sandbox")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxD22)]
+            SandboxD22,
+            /// <summary>
+            /// D22
+            /// </summary>
+            [EnumDescription("https://d22.parature.com/")]
+            [FriendlyName("D22")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxD22)]
+            D22,
+
+            /// <summary>
+            /// S8 SB
+            /// </summary>
+            [EnumDescription("https://s8-sandbox.parature.com/")]
+            [FriendlyName("S8-Sandbox")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxS8)]
+            SandboxS8,
+            /// <summary>
+            /// S8
+            /// </summary>
+            [EnumDescription("https://s8.parature.com/")]
+            [FriendlyName("S8")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxS8)]
+            S8,
+
+            /// <summary>
+            /// S9 SB
+            /// </summary>
+            [EnumDescription("https://s9-sandbox.parature.com/")]
+            [FriendlyName("S9-Sandbox")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxS9)]
+            SandboxS9,
+            /// <summary>
+            /// S9
+            /// </summary>
+            [EnumDescription("https://s9.parature.com/")]
+            [FriendlyName("S8")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxS9)]
+            S9
         }
 
         /// <summary>
