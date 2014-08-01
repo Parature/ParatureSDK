@@ -9,9 +9,13 @@ namespace ParaConnect
         static void Main(string[] args)
         {
             //Testing related chats to tickets
-            ParaCredentials pc = new ParaCredentials("WLFCwXM0XPiyeLqi1Tl0gM@GUVe1mmgqU@b7jOoxor00C@14otdWHVXPgdNWcesMsImLEVpfJ8fQrZfsGavRIw==", Paraenums.ServerFarm.Demo, Paraenums.ApiVersion.v1, 7950, 8139, false);
-            var ticket = ApiHandler.Ticket.TicketGetDetails(1056, false, pc);
-            var chats = ticket.Related_Chats;
+            ParaCredentials pc = new ParaCredentials(
+                    "UFDzbzmhigavHy3H7Z4P6w8tKs3XFR7rc6ARyD7PBkISXewWY/E4gyPOV/ObQOBy72NNPOa6Ypg/UNrZnpDgdg==",
+                    Paraenums.ServerFarm.S7, Paraenums.ApiVersion.v1, 30095, 30137, false);
+            var download = ApiHandler.Download.DownloadsGetList(pc).Downloads;
+            var chats = download[0].Folders;
+
+
             return;
             //ParaCredentials pc = new ParaCredentials("pfawUquX9qFEV9jDN2yledTDFsEnoS/NTWBzjYHsdgnj3LM1n2i9J9EH7vvZ60xiiz/4mmCo4vTF347/TghIEg==", Paraenums.ServerFarm.D17SB1, Paraenums.ApiVersion.v1, 5377, 5383, false);
             ParaObjects.Ticket t = new ParaObjects.Ticket();
