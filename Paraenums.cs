@@ -1175,7 +1175,7 @@ namespace ParaConnect
             /// S9
             /// </summary>
             [EnumDescription("https://s9.parature.com/")]
-            [FriendlyName("S8")]
+            [FriendlyName("S9")]
             [isPublic(true)]
             [SandboxFarm(ServerFarm.SandboxS9)]
             S9
