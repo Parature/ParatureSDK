@@ -1128,7 +1128,6 @@ namespace ParaConnect
             [isPublic(true)]
             [SandboxFarm(ServerFarm.SandboxD21)]
             D21,
-
             /// <summary>
             /// D22 SB
             /// </summary>
@@ -1145,7 +1144,6 @@ namespace ParaConnect
             [isPublic(true)]
             [SandboxFarm(ServerFarm.SandboxD22)]
             D22,
-
             /// <summary>
             /// S8 SB
             /// </summary>
@@ -1162,7 +1160,6 @@ namespace ParaConnect
             [isPublic(true)]
             [SandboxFarm(ServerFarm.SandboxS8)]
             S8,
-
             /// <summary>
             /// S9 SB
             /// </summary>
@@ -1178,7 +1175,87 @@ namespace ParaConnect
             [FriendlyName("S9")]
             [isPublic(true)]
             [SandboxFarm(ServerFarm.SandboxS9)]
-            S9
+            S9,
+            /// <summary>
+            /// S10 SB
+            /// </summary>
+            [EnumDescription("https://s10-sandbox.parature.com/")]
+            [FriendlyName("S10-Sandbox")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxS10)]
+            SandboxS10,
+            /// <summary>
+            /// S10
+            /// </summary>
+            [EnumDescription("https://s10.parature.com/")]
+            [FriendlyName("S10")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxS10)]
+            S10,
+            /// <summary>
+            /// D23 SB
+            /// </summary>
+            [EnumDescription("https://d23-sandbox.parature.com/")]
+            [FriendlyName("d23-Sandbox")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxD23)]
+            SandboxD23,
+            /// <summary>
+            /// D23
+            /// </summary>
+            [EnumDescription("https://d23.parature.com/")]
+            [FriendlyName("d23")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxD23)]
+            D23,
+            /// <summary>
+            /// D24 SB
+            /// </summary>
+            [EnumDescription("https://d24-sandbox.parature.com/")]
+            [FriendlyName("d24-Sandbox")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxD24)]
+            SandboxD24,
+            /// <summary>
+            /// D24
+            /// </summary>
+            [EnumDescription("https://d24.parature.com/")]
+            [FriendlyName("d24")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxD24)]
+            D24,
+            /// <summary>
+            /// D25 SB
+            /// </summary>
+            [EnumDescription("https://d25-sandbox.parature.com/")]
+            [FriendlyName("d25-Sandbox")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxD25)]
+            SandboxD25,
+            /// <summary>
+            /// D25
+            /// </summary>
+            [EnumDescription("https://d25.parature.com/")]
+            [FriendlyName("d25")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxD25)]
+            D25,
+            /// <summary>
+            /// D26 SB
+            /// </summary>
+            [EnumDescription("https://d26-sandbox.parature.com/")]
+            [FriendlyName("d26-Sandbox")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxD26)]
+            SandboxD26,
+            /// <summary>
+            /// D26
+            /// </summary>
+            [EnumDescription("https://d26.parature.com/")]
+            [FriendlyName("d26")]
+            [isPublic(true)]
+            [SandboxFarm(ServerFarm.SandboxD26)]
+            D26
         }
 
         /// <summary>
