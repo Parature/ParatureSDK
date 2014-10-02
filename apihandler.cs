@@ -7,7 +7,7 @@ using System.Net;
 using System.IO;
 
 
-namespace ParaConnect
+namespace ParatureAPI
 {
 
     /// <summary>

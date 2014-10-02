@@ -77,7 +77,7 @@
     <Compile Include="paralogger\LogManager.cs" />
     <Compile Include="paralogger\ParaLoggerEnums.cs" />
     <Compile Include="paralogger\TextLogManager.cs" />
-    <Compile Include="ParaOjects.cs" />
+    <Compile Include="ParaObjects.cs" />
     <Compile Include="ParaQuery.cs" />
     <Compile Include="program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

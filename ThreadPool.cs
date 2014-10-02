@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ParaConnect
+namespace ParatureAPI
 {
     /// <summary>
     /// Main Thread controller class

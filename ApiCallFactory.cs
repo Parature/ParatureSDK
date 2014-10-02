@@ -6,7 +6,7 @@ using System.IO;
 using System.Collections;
 using System.Text.RegularExpressions;
 using Microsoft.VisualBasic;
-namespace ParaConnect
+namespace ParatureAPI
 {
     /// <summary>
     /// The APICallFactory manages all calls made to the APIs server. No API calls should be made outside of this class.
