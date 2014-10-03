@@ -94,9 +94,9 @@ namespace ParatureAPI
         }
 
         /// <summary>
-        /// Numeric value of the Account being used.
+        /// Numeric value of the Instance being used.
         /// </summary>
-        public int Accountid
+        public int Instanceid
         {
             get { return m_accountid; }
 
@@ -132,11 +132,17 @@ namespace ParatureAPI
         #region Constructors
 
         /// <summary>
-        /// Instantiate a new credential object to be passed to the different methods that need it to manage the API Calls with the proper login information.
+        /// Object used to connect to a Parature Instance
         /// </summary>
-        public ParaCredentials(string token, string serverfarm, Paraenums.ApiVersion apiversion, int accountid, int departmentid, bool enforceRequiredFields)
-        {            
-            setCredentials(token, serverfarm, apiversion, accountid, departmentid, enforceRequiredFields);
+        /// <param name="token">API Token</param>
+        /// <param name="serverfarmaddress">Address of your severfarm. Include https://. Ex: https://demo.parature.com</param>
+        /// <param name="apiversion">Version of the API</param>
+        /// <param name="instanceid">Instance ID</param>
+        /// <param name="departmentid">Department ID</param>
+        /// <param name="enforceRequiredFields">Whether to enforce required custom fields or not</param>
+        public ParaCredentials(string token, string serverfarmaddress, Paraenums.ApiVersion apiversion, int instanceid, int departmentid, bool enforceRequiredFields)
+        {
+            setCredentials(token, serverfarmaddress, apiversion, instanceid, departmentid, enforceRequiredFields);
         }
         #endregion
         
@@ -144,12 +150,12 @@ namespace ParatureAPI
         /// <summary>
         /// Internal method to set required credential
         /// </summary>
-        private void setCredentials(string token, String serverfarm, Paraenums.ApiVersion apiversion, int accountid, int departmentid, bool enforceRequiredFields)
+        private void setCredentials(string token, string serverfarmaddress, Paraenums.ApiVersion apiversion, int instanceid, int departmentid, bool enforceRequiredFields)
         {
             Token = token;
-            ServerfarmAddress = serverfarm;
+            ServerfarmAddress = serverfarmaddress;
             Apiversion = apiversion;
-            Accountid = accountid;
+            Instanceid = instanceid;
             Departmentid = departmentid;
             EnforceRequiredFields = enforceRequiredFields;
             if (AutoretryMode == Paraenums.AutoRetryMode.Auto)
@@ -165,7 +171,6 @@ namespace ParatureAPI
                     AutoretryMode = Paraenums.AutoRetryMode.ConsoleApp;
                 }
             }
-
         }
         #endregion
 
@@ -200,12 +205,12 @@ namespace ParatureAPI
             if (module == Paraenums.ParatureModule.Account || module == Paraenums.ParatureModule.Customer)
             {
                 // The module is independant from the department
-                CacheKey = Accountid + "-" + module.ToString();
+                CacheKey = Instanceid + "-" + module.ToString();
             }
 
             else
             {
-                CacheKey = Accountid + "-" + Departmentid + "-" + module.ToString();
+                CacheKey = Instanceid + "-" + Departmentid + "-" + module.ToString();
             }
             return CacheKey;
         }
