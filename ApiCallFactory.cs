@@ -104,7 +104,7 @@ namespace ParatureAPI
             }
 
             // Calling the next method that manages the call.
-            return ApiMakeCall(ApiCallUrl, apicallhttpmethod, FileToPost, paracredentials.Accountid, paracredentials);
+            return ApiMakeCall(ApiCallUrl, apicallhttpmethod, FileToPost, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace ParatureAPI
             }
 
             // Calling the next method that manages the call.
-            return ApiMakeCall(ApiCallUrl, apicallhttpmethod, FileToPost, paracredentials.Accountid, paracredentials);
+            return ApiMakeCall(ApiCallUrl, apicallhttpmethod, FileToPost, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace ParatureAPI
             }
 
 
-            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Delete, paracredentials.Accountid, paracredentials);
+            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace ParatureAPI
             //}
 
 
-            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Delete, paracredentials.Accountid, paracredentials);
+            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace ParatureAPI
 
             ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectid, false);
 
-            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Accountid, paracredentials);
+            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace ParatureAPI
 
             ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entity, objectid, false);
 
-            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Accountid, paracredentials);
+            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace ParatureAPI
 
             ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectid, Arguments);
 
-            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Accountid, paracredentials);
+            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -316,7 +316,7 @@ namespace ParatureAPI
         {
             string ApiCallUrl;
             ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, 0, Arguments);
-            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Accountid, paracredentials);
+            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -333,7 +333,7 @@ namespace ParatureAPI
         {
             string ApiCallUrl;
             ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entity, 0, Arguments);
-            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Accountid, paracredentials);
+            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
 
 
@@ -341,7 +341,7 @@ namespace ParatureAPI
         {
             string ApiCallUrl;
             ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteCustomUrl(paracredentials, module, entity, Arguments);
-            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Accountid, paracredentials);
+            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -353,7 +353,7 @@ namespace ParatureAPI
 
             ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, 0, true);
 
-            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Accountid, paracredentials);
+            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -398,7 +398,7 @@ namespace ParatureAPI
                     break;
             }
 
-            ParaObjects.ApiCallResponse ar = ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Post, doc, paracredentials.Accountid, paracredentials);
+            ParaObjects.ApiCallResponse ar = ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Post, doc, paracredentials.Instanceid, paracredentials);
 
             if (ar.HasException)
             {
@@ -481,13 +481,13 @@ namespace ParatureAPI
             {
                 // The call was successfull, deleting the item
                 ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, ar.Objectid, false);
-                ar = ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Delete, paracredentials.Accountid, paracredentials);
+                ar = ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
 
                 // purging the item
                 ArrayList arguments = new ArrayList();
                 arguments.Add("_purge_=true");
                 ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, ar.Objectid, arguments);
-                ar = ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Delete, paracredentials.Accountid, paracredentials);
+                ar = ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
             }
 
             return baseObject;
@@ -505,7 +505,7 @@ namespace ParatureAPI
 
             ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entity, 0, true);
 
-            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Accountid, paracredentials);
+            return ApiMakeCall(ApiCallUrl, Paraenums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -667,7 +667,7 @@ namespace ParatureAPI
         {
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
             doc = null;
-            ParaObjects.ApiCallResponse resp = MakeThrottledCall(ApiUrlBuilder.ApiObjectReadUpdateDeleteCustomUrl(paracredentials, module, "upload"), Paraenums.ApiCallHttpMethod.Get, doc, paracredentials.Accountid, paracredentials);
+            ParaObjects.ApiCallResponse resp = MakeThrottledCall(ApiUrlBuilder.ApiObjectReadUpdateDeleteCustomUrl(paracredentials, module, "upload"), Paraenums.ApiCallHttpMethod.Get, doc, paracredentials.Instanceid, paracredentials);
 
             #region handing Random API server issues
             // Handling our servers having issues
@@ -687,15 +687,8 @@ namespace ParatureAPI
                     HandleRandomAPIErrorsSleepTime(attemptNumber, paracredentials);
 
                     // try the call again
-                    resp = MakeThrottledCall(ApiUrlBuilder.ApiObjectReadUpdateDeleteCustomUrl(paracredentials, module, "upload"), Paraenums.ApiCallHttpMethod.Get, doc, paracredentials.Accountid, paracredentials);
+                    resp = MakeThrottledCall(ApiUrlBuilder.ApiObjectReadUpdateDeleteCustomUrl(paracredentials, module, "upload"), Paraenums.ApiCallHttpMethod.Get, doc, paracredentials.Instanceid, paracredentials);
                 }
-                if (attemptNumber > 1 && paracredentials.logRetries)
-                {
-                    buildAutoRetryAPIErrorLogMessage(ref callLogger, attemptNumber.ToString(), resp.CalledUrl,
-                        resp.httpCallMethod, resp.httpResponseCode.ToString(), resp.ExceptionDetails,
-                        resp.xmlSent, resp.xmlReceived);
-                }
-                callLogger = null;
             }
 
             #endregion

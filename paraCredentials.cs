@@ -5,18 +5,14 @@ using System.Runtime.Serialization;
 
 namespace ParatureAPI
 {
-
-
     /// <summary>
     /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
     /// </summary>
-    [Serializable]
-    public class ParaCredentials : ISerializable
+    public class ParaCredentials
     {
         #region Properties
         //Specify private properties
         string m_token;
-        Paraenums.ServerFarm m_serverFarm;
         string m_ServerfarmAddress;
         Paraenums.ApiVersion m_apiversion;
         Paraenums.AutoRetryMode m_AutoretryMode = Paraenums.AutoRetryMode.None;
@@ -78,32 +74,6 @@ namespace ParatureAPI
             set { m_token = value; }
         }
 
-
-        /// <summary>
-        /// Please make sure to use the proper Server farm where the account resides. This is an enumeration list, so use ServerFarm.xxx to select the proper value. 
-        /// </summary>
-        public Paraenums.ServerFarm Serverfarm
-        {
-            get { return m_serverFarm; }
-
-            set
-            {
-
-                //SCO = 0, // "www.parature.net",
-                //Demo = 1, // "demo.parature.com",
-                //Sandbox = 2,
-                //Eas = 3,
-                //S2  = 4, s2.parature.com 
-                //S3 = 5, s3.parature.com
-                //D2 = 6,d2.parature.com 
-                //D3 = 7,d3.parature.com 
-                //Premium = 8  premium.parature.com
-
-                m_serverFarm = value;
-                m_ServerfarmAddress = ParaHelper.ParaEnumProvider.ServerFarmEnumProvider(value);
-            }
-        }
-
         /// <summary>
         /// A read only value of the server farm's physical address.
         /// </summary>
@@ -124,9 +94,9 @@ namespace ParatureAPI
         }
 
         /// <summary>
-        /// Numeric value of the Account being used.
+        /// Numeric value of the Instance being used.
         /// </summary>
-        public int Accountid
+        public int Instanceid
         {
             get { return m_accountid; }
 
@@ -160,51 +130,19 @@ namespace ParatureAPI
         #endregion
 
         #region Constructors
-        /// <summary>
-        /// Serialization
-        /// </summary>
-        public ParaCredentials(SerializationInfo info, StreamingContext ctxt)
-        {
-            //Get the values from info and assign them to the appropriate properties
-
-            Token = info.GetString("token");
-            Serverfarm = (Paraenums.ServerFarm)info.GetValue("serverfarm", typeof(Paraenums.ServerFarm));
-            Apiversion = (Paraenums.ApiVersion)info.GetValue("apiversion", typeof(Paraenums.ApiVersion));
-            Accountid = info.GetInt32("accountid");
-            Departmentid = info.GetInt32("departmentid");
-            EnforceRequiredFields = info.GetBoolean("enforcerequiredfields");
-        }
-        
-        /// <summary>
-        /// Instantiate a new credential object to be passed to the different methods that need it to manage the API Calls with the proper login information.
-        /// </summary>
-        public ParaCredentials(string token, Paraenums.ServerFarm serverfarm, Paraenums.ApiVersion apiversion, int accountid, int departmentid, string key1, string key2)
-        {
-            if (key1 != "'1J2*Ll~+?uuE*^e43tFGWf%|t#QD" || key2 != "6b5,DK!cmw,u6`=iLl-`FP.Tcf+/F")
-            {
-                throw new Exception("Could not authenticate request");
-            }
-            setCredentials(token, serverfarm, apiversion, accountid, departmentid, true);
-        }
 
         /// <summary>
-        /// Instantiate a new credential object to be passed to the different methods that need it to manage the API Calls with the proper login information.
+        /// Object used to connect to a Parature Instance
         /// </summary>
-        public ParaCredentials(string token, Paraenums.ServerFarm serverfarm, Paraenums.ApiVersion apiversion, int accountid, int departmentid, bool enforceRequiredFields, string key1, string key2)
+        /// <param name="token">API Token</param>
+        /// <param name="serverfarmaddress">Address of your severfarm. Include https://. Ex: https://demo.parature.com</param>
+        /// <param name="apiversion">Version of the API</param>
+        /// <param name="instanceid">Instance ID</param>
+        /// <param name="departmentid">Department ID</param>
+        /// <param name="enforceRequiredFields">Whether to enforce required custom fields or not</param>
+        public ParaCredentials(string token, string serverfarmaddress, Paraenums.ApiVersion apiversion, int instanceid, int departmentid, bool enforceRequiredFields)
         {
-            if (key1 != "'1J2*Ll~+?uuE*^e43tFGWf%|t#QD" || key2 != "6b5,DK!cmw,u6`=iLl-`FP.Tcf+/F")
-            {
-                throw new Exception("Could not authenticate request");
-            }
-            setCredentials(token, serverfarm, apiversion, accountid, departmentid, enforceRequiredFields);
-        }
-
-        /// <summary>
-        /// Instantiate a new credential object to be passed to the different methods that need it to manage the API Calls with the proper login information.
-        /// </summary>
-        public ParaCredentials(string token, Paraenums.ServerFarm serverfarm, Paraenums.ApiVersion apiversion, int accountid, int departmentid, bool enforceRequiredFields)
-        {            
-            setCredentials(token, serverfarm, apiversion, accountid, departmentid, enforceRequiredFields);
+            setCredentials(token, serverfarmaddress, apiversion, instanceid, departmentid, enforceRequiredFields);
         }
         #endregion
         
@@ -212,12 +150,12 @@ namespace ParatureAPI
         /// <summary>
         /// Internal method to set required credential
         /// </summary>
-        private void setCredentials(string token, Paraenums.ServerFarm serverfarm, Paraenums.ApiVersion apiversion, int accountid, int departmentid, bool enforceRequiredFields)
+        private void setCredentials(string token, string serverfarmaddress, Paraenums.ApiVersion apiversion, int instanceid, int departmentid, bool enforceRequiredFields)
         {
             Token = token;
-            Serverfarm = serverfarm;
+            ServerfarmAddress = serverfarmaddress;
             Apiversion = apiversion;
-            Accountid = accountid;
+            Instanceid = instanceid;
             Departmentid = departmentid;
             EnforceRequiredFields = enforceRequiredFields;
             if (AutoretryMode == Paraenums.AutoRetryMode.Auto)
@@ -233,43 +171,7 @@ namespace ParatureAPI
                     AutoretryMode = Paraenums.AutoRetryMode.ConsoleApp;
                 }
             }
-
         }
-
-        //Serialization function.
-        public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
-        {
-            //You can use any custom name for your name-value pair. But make sure you
-
-            // read the values with the same name. For ex:- If you write EmpId as "EmployeeId"
-
-            // then you should read the same with "EmployeeId"
-
-            info.AddValue("token", Token);
-            info.AddValue("serverfarm", Serverfarm);
-            info.AddValue("apiversion", Apiversion);
-            info.AddValue("accountid", Accountid);
-            info.AddValue("departmentid", Departmentid);
-            info.AddValue("enforcerequiredfields", EnforceRequiredFields);
-        }
-
-        //#if DEBUG
-        //        ///// <summary>
-        //        ///// Instantiate a new credential object to be passed to the different methods that need it to manage the API Calls with the proper login information.
-        //        ///// </summary>
-        //        //public ParaCredentials(string token, Paraenums.ServerFarm serverfarm, Paraenums.ApiVersion apiversion, int accountid, int departmentid)
-        //        //{
-        //        //    setCredentials(token, serverfarm, apiversion, accountid, departmentid, true);
-        //        //}
-
-        //        ///// <summary>
-        //        ///// Instantiate a new credential object to be passed to the different methods that need it to manage the API Calls with the proper login information.
-        //        ///// </summary>
-        //        //public ParaCredentials(string token, Paraenums.ServerFarm serverfarm, Paraenums.ApiVersion apiversion, int accountid, int departmentid, bool enforceRequiredFields)
-        //        //{
-        //        //    setCredentials(token, serverfarm, apiversion, accountid, departmentid, enforceRequiredFields);
-        //        //} 
-        //#endif
         #endregion
 
         #region Pre-Validation Feature
@@ -303,12 +205,12 @@ namespace ParatureAPI
             if (module == Paraenums.ParatureModule.Account || module == Paraenums.ParatureModule.Customer)
             {
                 // The module is independant from the department
-                CacheKey = Accountid + "-" + module.ToString();
+                CacheKey = Instanceid + "-" + module.ToString();
             }
 
             else
             {
-                CacheKey = Accountid + "-" + Departmentid + "-" + module.ToString();
+                CacheKey = Instanceid + "-" + Departmentid + "-" + module.ToString();
             }
             return CacheKey;
         }

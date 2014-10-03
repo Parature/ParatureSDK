@@ -229,34 +229,25 @@ namespace ParatureAPI
             /// <summary>
             /// Create a Parature Account. Requires an Object and a credentials object. Will return the Newly Created Accountid. Returns 0 if the account creation fails.
             /// </summary>
-            public static ParaObjects.ApiCallResponse AccountInsert(ParaObjects.Account account, ParaCredentials ParaCredentials)
+            public static ParaObjects.ApiCallResponse AccountInsert(ParaObjects.Account account, ParaCredentials paraCredentials)
             {
-                ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+                var ar = new ParaObjects.ApiCallResponse();
+                var doc = new XmlDocument();
                 doc = xmlgenerator.AccountGenerateXML(account);
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Account, doc, 0);
+                ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, Paraenums.ParatureModule.Account, doc, 0);
                 account.Accountid = ar.Objectid;
                 account.uniqueIdentifier = ar.Objectid;
-                // TODO: Add an XML Parser to return the account id logic.
                 return ar;
-                //return 0;
-
             }
 
             /// <summary>
             /// Update a Parature Account. Requires an Object and a credentials object.  Will return the updated Accountid. Returns 0 if the account update operation fails.
             /// </summary>
-            public static ParaObjects.ApiCallResponse AccountUpdate(ParaObjects.Account account, ParaCredentials ParaCredentials)
+            public static ParaObjects.ApiCallResponse AccountUpdate(ParaObjects.Account account, ParaCredentials paraCredentials)
             {
-                ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Account, xmlgenerator.AccountGenerateXML(account), account.Accountid);
-
-
-
-                // TODO: Add an XML Parser to return the account id logic.
+                var ar = new ParaObjects.ApiCallResponse();
+                ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, Paraenums.ParatureModule.Account, xmlgenerator.AccountGenerateXML(account), account.Accountid);
                 return ar;
-                //return 0;
             }
 
             /// <summary>
@@ -5299,8 +5290,6 @@ namespace ParatureAPI
 
             public partial class ContactView
             {
-
-
                 /// <summary>
                 /// Returns an View list object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
@@ -5342,10 +5331,6 @@ namespace ParatureAPI
                     return ViewList;
                 }
             }
-
-
-
-
 
             public partial class AccountView
             {
@@ -5391,15 +5376,8 @@ namespace ParatureAPI
                 }
             }
 
-
-
-
-
-
             public partial class TicketView
             {
-
-
                 /// <summary>
                 /// Returns an View list object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
@@ -5469,7 +5447,7 @@ namespace ParatureAPI
 
             System.Xml.XmlDocument AttaDoc = new System.Xml.XmlDocument();
             ParaObjects.ApiCallResponse upresp = new ParaObjects.ApiCallResponse();
-            upresp = ApiCallFactory.FilePerformUpload(postUrl, Attachment, ParaCredentials.Accountid, ParaCredentials);
+            upresp = ApiCallFactory.FilePerformUpload(postUrl, Attachment, ParaCredentials.Instanceid, ParaCredentials);
 
             AttaDoc = upresp.xmlReceived;
 
@@ -5487,32 +5465,6 @@ namespace ParatureAPI
             return UploadFile(Module, ParaCredentials, bytes, contentType, FileName);
         }
 
-        /////// <summary>
-        /////// Internal method to handle the upload of a file to Parature.
-        /////// </summary>
-        ////public static ParaObjects.Attachment UploadFile(Paraenums.ParatureModule Module, ParaCredentials ParaCredentials, FileInfo FileToUpload)
-        ////{
-        ////    // Byte[] Attachment, string contentType, string FileName
-        ////    FileToUpload.
-
-        ////    ParaObjects.Attachment attachment = new ParaObjects.Attachment();
-        ////    string postUrl = "";
-        ////    postUrl = xmlToObjectParser.AttachmentParser.AttachmentGetUrlToPost(ApiCallFactory.FileUploadGetUrl(ParaCredentials, Module).xmlReceived);
-
-        ////    System.Xml.XmlDocument AttaDoc = new System.Xml.XmlDocument();
-        ////    if (string.IsNullOrEmpty(postUrl) == false)
-        ////    {
-        ////        AttaDoc = ApiCallFactory.FilePerformUpload(postUrl, Attachment, contentType, FileName, ParaCredentials.Accountid, ParaCredentials).xmlReceived;
-        ////        attachment = xmlToObjectParser.AttachmentParser.AttachmentFill(AttaDoc);
-        ////    }
-        ////    else
-        ////    {
-        ////        attachment = new ParaObjects.Attachment();
-        ////    }
-        ////    return attachment;
-        ////}
-
-
         /// <summary>
         /// Internal method to handle the upload of a file to Parature.
         /// </summary>
@@ -5525,7 +5477,7 @@ namespace ParatureAPI
             System.Xml.XmlDocument AttaDoc = new System.Xml.XmlDocument();
             if (string.IsNullOrEmpty(postUrl) == false)
             {
-                AttaDoc = ApiCallFactory.FilePerformUpload(postUrl, Attachment, contentType, FileName, ParaCredentials.Accountid, ParaCredentials).xmlReceived;
+                AttaDoc = ApiCallFactory.FilePerformUpload(postUrl, Attachment, contentType, FileName, ParaCredentials.Instanceid, ParaCredentials).xmlReceived;
                 attachment = xmlToObjectParser.AttachmentParser.AttachmentFill(AttaDoc);
             }
             else
