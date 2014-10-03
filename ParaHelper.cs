@@ -82,19 +82,19 @@ namespace ParatureAPI
                 string httpPostMethod = "";
                 switch (ApiCallHttpMethod)
                 {
-                    case ParaConnect.Paraenums.ApiCallHttpMethod.Get:
+                    case Paraenums.ApiCallHttpMethod.Get:
                         httpPostMethod = "GET";
                         break;
 
-                    case ParaConnect.Paraenums.ApiCallHttpMethod.Delete:
+                    case Paraenums.ApiCallHttpMethod.Delete:
                         httpPostMethod = "DELETE";
                         break;
 
-                    case ParaConnect.Paraenums.ApiCallHttpMethod.Post:
+                    case Paraenums.ApiCallHttpMethod.Post:
                         httpPostMethod = "POST";
                         break;
 
-                    case ParaConnect.Paraenums.ApiCallHttpMethod.Update:
+                    case Paraenums.ApiCallHttpMethod.Update:
                         httpPostMethod = "PUT";
                         break;
                 }

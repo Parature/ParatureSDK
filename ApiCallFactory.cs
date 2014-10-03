@@ -541,8 +541,6 @@ namespace ParatureAPI
                     buildAutoRetryAPIErrorLogMessage(ref callLogger, attemptNumber.ToString(), callurl,
                         ApiCallHttpMethod.ToString(), resp.httpResponseCode.ToString(), resp.ExceptionDetails,
                         resp.xmlSent, resp.xmlReceived);
-
-                    ParaLogger.LogManager.LogExceptionToFile(callLogger.ToString(), "RandomAPIErrorsLog" + DateTime.Now.ToString("yyyy-MM-dd"));
                 }
                 callLogger = null;
             }
@@ -587,8 +585,6 @@ namespace ParatureAPI
                     buildAutoRetryAPIErrorLogMessage(ref callLogger, attemptNumber.ToString(),
                         callurl, ApiCallHttpMethod.ToString(), resp.httpResponseCode.ToString(),
                         resp.ExceptionDetails, null, resp.xmlReceived);
-
-                    ParaLogger.LogManager.LogExceptionToFile(callLogger.ToString(), "RandomAPIErrorsLog" + DateTime.Now.ToString("yyyy-MM-dd"));
                 }
                 callLogger = null;
             }
@@ -599,9 +595,20 @@ namespace ParatureAPI
 
             return resp;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="callLogger"></param>
+        /// <param name="attemptNumber"></param>
+        /// <param name="URL"></param>
+        /// <param name="Method"></param>
+        /// <param name="responseCode"></param>
+        /// <param name="message"></param>
+        /// <param name="sent"></param>
+        /// <param name="received"></param>
         private static void buildAutoRetryAPIErrorLogMessage(ref StringBuilder callLogger, string attemptNumber, string URL, string Method, string responseCode, string message, System.Xml.XmlDocument sent, System.Xml.XmlDocument received)
         {
+            //TODO determine use of this mehtod
             callLogger.AppendLine("Call [" + attemptNumber + "]");
             callLogger.AppendLine("Call URL [" + URL + "]");
             callLogger.AppendLine("Call Method [" + Method + "]");
@@ -687,8 +694,6 @@ namespace ParatureAPI
                     buildAutoRetryAPIErrorLogMessage(ref callLogger, attemptNumber.ToString(), resp.CalledUrl,
                         resp.httpCallMethod, resp.httpResponseCode.ToString(), resp.ExceptionDetails,
                         resp.xmlSent, resp.xmlReceived);
-
-                    ParaLogger.LogManager.LogExceptionToFile(callLogger.ToString(), "RandomAPIErrorsLog" + DateTime.Now.ToString("yyyy-MM-dd"));
                 }
                 callLogger = null;
             }

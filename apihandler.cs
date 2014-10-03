@@ -4506,7 +4506,7 @@ namespace ParatureAPI
                 static ParaObjects.Role HelperRoleFindByName(string RoleName, ParaCredentials ParaCredentials, bool IgnoreCase, Paraenums.ParatureModule Module)
                 {
                     ParaObjects.Role foundRole = new ParaObjects.Role();
-                    ParaConnect.EntityQuery.RoleQuery rq = new EntityQuery.RoleQuery();
+                    EntityQuery.RoleQuery rq = new EntityQuery.RoleQuery();
                     rq.PageSize = 1000;
                     ParaObjects.RolesList oRole = new ParaObjects.RolesList();
                     oRole = ApiHandler.Entities.Role.RolesGetList(ParaCredentials, rq, Module);
@@ -4694,7 +4694,7 @@ namespace ParatureAPI
                 static ParaObjects.Sla HelperSlaFindByName(string SlaName, ParaCredentials ParaCredentials, bool IgnoreCase)
                 {
                     ParaObjects.Sla foundSla = new ParaObjects.Sla();
-                    ParaConnect.EntityQuery.SlaQuery sq = new EntityQuery.SlaQuery();
+                    EntityQuery.SlaQuery sq = new EntityQuery.SlaQuery();
                     sq.PageSize = 1000;
                     ParaObjects.SlasList oSLA = new ParaObjects.SlasList();
                     oSLA = ApiHandler.Entities.Sla.SLAsGetList(ParaCredentials, sq);
@@ -5557,7 +5557,7 @@ namespace ParatureAPI
         public static bool TestApiConnection(ParaCredentials credentials)
         {
             ParaObjects.CsrsList CSRs = new ParaObjects.CsrsList();
-            ParaConnect.ModuleQuery.CsrQuery csrq = new ModuleQuery.CsrQuery();
+            ModuleQuery.CsrQuery csrq = new ModuleQuery.CsrQuery();
             csrq.PageSize = 1;
             CSRs = ApiHandler.Csr.CsrsGetList(credentials, csrq);
             if (CSRs.Csrs.Count > 0)
@@ -5573,7 +5573,7 @@ namespace ParatureAPI
         public static ParaObjects.ApiCallResponse TestApiCallResponse(ParaCredentials credentials)
         {
             ParaObjects.CsrsList CSRs = new ParaObjects.CsrsList();
-            ParaConnect.ModuleQuery.CsrQuery csrq = new ModuleQuery.CsrQuery();
+            ModuleQuery.CsrQuery csrq = new ModuleQuery.CsrQuery();
             csrq.PageSize = 1;
             CSRs = ApiHandler.Csr.CsrsGetList(credentials, csrq);
             return CSRs.ApiCallResponse;
@@ -5588,7 +5588,7 @@ namespace ParatureAPI
         public static HttpStatusCode TestApiResponseCode(ParaCredentials credentials)
         {
             ParaObjects.CsrsList CSRs = new ParaObjects.CsrsList();
-            ParaConnect.ModuleQuery.CsrQuery csrq = new ModuleQuery.CsrQuery();
+            ModuleQuery.CsrQuery csrq = new ModuleQuery.CsrQuery();
             csrq.PageSize = 1;
             CSRs = ApiHandler.Csr.CsrsGetList(credentials, csrq);
 
