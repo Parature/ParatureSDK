@@ -5469,7 +5469,7 @@ namespace ParatureAPI
 
             System.Xml.XmlDocument AttaDoc = new System.Xml.XmlDocument();
             ParaObjects.ApiCallResponse upresp = new ParaObjects.ApiCallResponse();
-            upresp = ApiCallFactory.FilePerformUpload(postUrl, Attachment, ParaCredentials.Accountid, ParaCredentials);
+            upresp = ApiCallFactory.FilePerformUpload(postUrl, Attachment, ParaCredentials.Instanceid, ParaCredentials);
 
             AttaDoc = upresp.xmlReceived;
 
@@ -5525,7 +5525,7 @@ namespace ParatureAPI
             System.Xml.XmlDocument AttaDoc = new System.Xml.XmlDocument();
             if (string.IsNullOrEmpty(postUrl) == false)
             {
-                AttaDoc = ApiCallFactory.FilePerformUpload(postUrl, Attachment, contentType, FileName, ParaCredentials.Accountid, ParaCredentials).xmlReceived;
+                AttaDoc = ApiCallFactory.FilePerformUpload(postUrl, Attachment, contentType, FileName, ParaCredentials.Instanceid, ParaCredentials).xmlReceived;
                 attachment = xmlToObjectParser.AttachmentParser.AttachmentFill(AttaDoc);
             }
             else

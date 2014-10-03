@@ -205,7 +205,7 @@ namespace ParatureAPI
         /// </summary>
         static string ApiBuildBasicUrl(ParaCredentials paracredentials)
         {
-            string basicLink = paracredentials.ServerfarmAddress.ToString() + "api/" + paracredentials.Apiversion + "/" + paracredentials.Accountid + "/" + paracredentials.Departmentid + "/";
+            string basicLink = paracredentials.ServerfarmAddress + "/api/" + paracredentials.Apiversion + "/" + paracredentials.Instanceid + "/" + paracredentials.Departmentid + "/";
 
             return basicLink;
 
