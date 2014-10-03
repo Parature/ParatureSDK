@@ -229,34 +229,25 @@ namespace ParatureAPI
             /// <summary>
             /// Create a Parature Account. Requires an Object and a credentials object. Will return the Newly Created Accountid. Returns 0 if the account creation fails.
             /// </summary>
-            public static ParaObjects.ApiCallResponse AccountInsert(ParaObjects.Account account, ParaCredentials ParaCredentials)
+            public static ParaObjects.ApiCallResponse AccountInsert(ParaObjects.Account account, ParaCredentials paraCredentials)
             {
-                ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+                var ar = new ParaObjects.ApiCallResponse();
+                var doc = new XmlDocument();
                 doc = xmlgenerator.AccountGenerateXML(account);
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Account, doc, 0);
+                ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, Paraenums.ParatureModule.Account, doc, 0);
                 account.Accountid = ar.Objectid;
                 account.uniqueIdentifier = ar.Objectid;
-                // TODO: Add an XML Parser to return the account id logic.
                 return ar;
-                //return 0;
-
             }
 
             /// <summary>
             /// Update a Parature Account. Requires an Object and a credentials object.  Will return the updated Accountid. Returns 0 if the account update operation fails.
             /// </summary>
-            public static ParaObjects.ApiCallResponse AccountUpdate(ParaObjects.Account account, ParaCredentials ParaCredentials)
+            public static ParaObjects.ApiCallResponse AccountUpdate(ParaObjects.Account account, ParaCredentials paraCredentials)
             {
-                ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Account, xmlgenerator.AccountGenerateXML(account), account.Accountid);
-
-
-
-                // TODO: Add an XML Parser to return the account id logic.
+                var ar = new ParaObjects.ApiCallResponse();
+                ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, Paraenums.ParatureModule.Account, xmlgenerator.AccountGenerateXML(account), account.Accountid);
                 return ar;
-                //return 0;
             }
 
             /// <summary>
