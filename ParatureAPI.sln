@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParatureAPI", "ParatureAPI.csproj", "{9DEBF649-1163-4B2C-B466-8B0C75A784FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParatureAPITests", "..\ParatureAPITests\ParatureAPITests.csproj", "{7CAE6EF6-6633-43E5-A6E2-D0F0223C4F31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParatureAPITests", "ParatureAPITests\ParatureAPITests.csproj", "{7CAE6EF6-6633-43E5-A6E2-D0F0223C4F31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
