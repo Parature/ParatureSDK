@@ -2910,7 +2910,7 @@ namespace ParatureAPI
             /// </summary>
             public static ParaObjects.Download DownloadSchema(ParaCredentials ParaCredentials)
             {
-                ParaObjects.Download Download = new ParaObjects.Download();
+                ParaObjects.Download Download = new ParaObjects.Download(true);
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
                 ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, Paraenums.ParatureModule.Download);
 
@@ -2981,11 +2981,7 @@ namespace ParatureAPI
             /// </param>
             public static ParaObjects.Download DownloadGetDetails(Int64 Downloadid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
             {
-                ParaObjects.Download Download = new ParaObjects.Download();
-                Download = DownloadFillDetails(Downloadid, ParaCredentials, RequestDepth, true);
-
-                return Download;
-
+                return DownloadFillDetails(Downloadid, ParaCredentials, RequestDepth, true);
             }
 
             /// <summary>
@@ -3000,12 +2996,7 @@ namespace ParatureAPI
             /// </param>
             public static ParaObjects.Download DownloadGetDetails(Int64 Downloadid, ParaCredentials ParaCredentials)
             {
-
-                ParaObjects.Download Download = new ParaObjects.Download();
-                Download = DownloadFillDetails(Downloadid, ParaCredentials, Paraenums.RequestDepth.Standard, true);
-
-                return Download;
-
+                return DownloadFillDetails(Downloadid, ParaCredentials, Paraenums.RequestDepth.Standard, true);
             }
             internal static ParaObjects.Attachment DownloadUploadFile(ParaCredentials ParaCredentials, string text, string contentType, string FileName)
             {
@@ -3030,7 +3021,7 @@ namespace ParatureAPI
             /// </param>
             public static ParaObjects.Download DownloadGetDetails(XmlDocument DownloadXML)
             {
-                ParaObjects.Download download = new ParaObjects.Download();
+                ParaObjects.Download download = new ParaObjects.Download(true);
                 download = xmlToObjectParser.DownloadParser.DownloadFill(DownloadXML, 0, true, null);
                 download.FullyLoaded = true;
 
@@ -3201,8 +3192,7 @@ namespace ParatureAPI
             static ParaObjects.Download DownloadFillDetails(Int64 Downloadid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth, bool MinimalisticLoad)
             {
                 int requestdepth = (int)RequestDepth;
-                ParaObjects.Download Download = new ParaObjects.Download();
-                //Customer = null;
+                ParaObjects.Download Download = new ParaObjects.Download(true);
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
                 ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureModule.Download, Downloadid);
                 if (ar.HasException == false)
