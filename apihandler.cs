@@ -5290,8 +5290,6 @@ namespace ParatureAPI
 
             public partial class ContactView
             {
-
-
                 /// <summary>
                 /// Returns an View list object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
@@ -5333,10 +5331,6 @@ namespace ParatureAPI
                     return ViewList;
                 }
             }
-
-
-
-
 
             public partial class AccountView
             {
@@ -5382,15 +5376,8 @@ namespace ParatureAPI
                 }
             }
 
-
-
-
-
-
             public partial class TicketView
             {
-
-
                 /// <summary>
                 /// Returns an View list object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
@@ -5477,32 +5464,6 @@ namespace ParatureAPI
             byte[] bytes = encoding.GetBytes(text);
             return UploadFile(Module, ParaCredentials, bytes, contentType, FileName);
         }
-
-        /////// <summary>
-        /////// Internal method to handle the upload of a file to Parature.
-        /////// </summary>
-        ////public static ParaObjects.Attachment UploadFile(Paraenums.ParatureModule Module, ParaCredentials ParaCredentials, FileInfo FileToUpload)
-        ////{
-        ////    // Byte[] Attachment, string contentType, string FileName
-        ////    FileToUpload.
-
-        ////    ParaObjects.Attachment attachment = new ParaObjects.Attachment();
-        ////    string postUrl = "";
-        ////    postUrl = xmlToObjectParser.AttachmentParser.AttachmentGetUrlToPost(ApiCallFactory.FileUploadGetUrl(ParaCredentials, Module).xmlReceived);
-
-        ////    System.Xml.XmlDocument AttaDoc = new System.Xml.XmlDocument();
-        ////    if (string.IsNullOrEmpty(postUrl) == false)
-        ////    {
-        ////        AttaDoc = ApiCallFactory.FilePerformUpload(postUrl, Attachment, contentType, FileName, ParaCredentials.Accountid, ParaCredentials).xmlReceived;
-        ////        attachment = xmlToObjectParser.AttachmentParser.AttachmentFill(AttaDoc);
-        ////    }
-        ////    else
-        ////    {
-        ////        attachment = new ParaObjects.Attachment();
-        ////    }
-        ////    return attachment;
-        ////}
-
 
         /// <summary>
         /// Internal method to handle the upload of a file to Parature.

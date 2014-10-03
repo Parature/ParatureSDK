@@ -689,13 +689,6 @@ namespace ParatureAPI
                     // try the call again
                     resp = MakeThrottledCall(ApiUrlBuilder.ApiObjectReadUpdateDeleteCustomUrl(paracredentials, module, "upload"), Paraenums.ApiCallHttpMethod.Get, doc, paracredentials.Instanceid, paracredentials);
                 }
-                if (attemptNumber > 1 && paracredentials.logRetries)
-                {
-                    buildAutoRetryAPIErrorLogMessage(ref callLogger, attemptNumber.ToString(), resp.CalledUrl,
-                        resp.httpCallMethod, resp.httpResponseCode.ToString(), resp.ExceptionDetails,
-                        resp.xmlSent, resp.xmlReceived);
-                }
-                callLogger = null;
             }
 
             #endregion
