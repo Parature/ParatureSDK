@@ -721,7 +721,6 @@ namespace ParatureAPI
             ParaObjects.ApiCallResponse resp = new ParaObjects.ApiCallResponse();
             resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, XmlPosted, accountID, pc);
             int sleepTime = 121000;
-            //ParaLogger.LogManager.LogEvent("first call before the loop, http code is: "  + resp.httpResponseCode, ParaLogger.ParaLoggerEnums.EventType.Event, ParaLogger.ParaLoggerEnums.LogMode.TextFile);
             while ((resp.httpResponseCode == 503 || resp.httpResponseCode == 0) && sleepTime < 240000)
             {
                 // The call has been rejected by the API throttling service.                
