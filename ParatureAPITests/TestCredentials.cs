@@ -14,7 +14,7 @@ namespace ParatureAPITests
         {
             get
             {
-                return new ParaCredentials("1uYL8hcXDySYSXhkQJDwqnjTzrDC2ZxdMG8JkCASeNYmn@GLw@Q2Iotdp12cvvAGq8o7l2FADj2GjNR8JHpLug==", "https://demo.parature.com/", Paraenums.ApiVersion.v1, 45001, 45021, false);
+                return new ParaCredentials("1uYL8hcXDySYSXhkQJDwqnjTzrDC2ZxdMG8JkCASeNYmn@GLw@Q2Iotdp12cvvAGq8o7l2FADj2GjNR8JHpLug==", Paraenums.ServerFarm.Demo, Paraenums.ApiVersion.v1, 45001, 45021, false);
             }
         }
     }
