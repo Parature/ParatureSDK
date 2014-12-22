@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ParatureAPI;
 
@@ -15,6 +16,16 @@ namespace ParatureAPITests
             var ticket = ApiHandler.Ticket.TicketGetDetails(1016, false, creds);
 
             Assert.IsTrue(ticket.Ticket_Sla.SlaID != 0);
+        }
+
+        [TestMethod]
+        public void CustomFieldOptionParsing()
+        {
+            var creds = TestCredentials.Credentials;
+            creds.Departmentid = 45001;
+            var ticket = ApiHandler.Ticket.TicketGetDetails(1016, false, creds);
+            var ticketOriginOptions = ticket.CustomFieldGetOptions(24);
+            Assert.IsTrue(ticketOriginOptions.Count > 1);
         }
     }
 }
