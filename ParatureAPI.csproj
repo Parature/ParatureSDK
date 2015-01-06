@@ -73,6 +73,18 @@
     <Compile Include="ApiCallFactory.cs" />
     <Compile Include="ApiHandler.cs" />
     <Compile Include="ApiUrlBuilder.cs" />
+    <Compile Include="Fields\CustomField.cs" />
+    <Compile Include="Fields\CustomFieldOptions.cs" />
+    <Compile Include="Fields\DependantCustomFields.cs" />
+    <Compile Include="PagedData\AccountsList.cs" />
+    <Compile Include="PagedData\ArticlesList.cs" />
+    <Compile Include="PagedData\AssetsList.cs" />
+    <Compile Include="PagedData\ChatList.cs" />
+    <Compile Include="PagedData\CustomersList.cs" />
+    <Compile Include="PagedData\DownloadsList.cs" />
+    <Compile Include="PagedData\PagedData.cs" />
+    <Compile Include="PagedData\ProductsList.cs" />
+    <Compile Include="PagedData\TicketsList.cs" />
     <Compile Include="ParaCredentials.cs" />
     <Compile Include="ParaEnums.cs" />
     <Compile Include="ParaHelper.cs" />
@@ -106,6 +118,7 @@
   <ItemGroup>
     <None Include="README.md" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

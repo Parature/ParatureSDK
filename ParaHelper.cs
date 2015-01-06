@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Reflection;
+using ParatureAPI.Fields;
+
 namespace ParatureAPI
 {
     internal class ParaHelper
@@ -151,18 +153,18 @@ namespace ParatureAPI
 
         internal class HelperMethods
         {
-            internal static bool CustomFieldReset(Int64 CustomFieldid, List<ParaObjects.CustomField> fields)
+            internal static bool CustomFieldReset(Int64 CustomFieldid, List<CustomField> fields)
             {
                 bool modified = false;
                 if (CustomFieldid > 0 && fields != null)
                 {
-                    foreach (ParaObjects.CustomField cf in fields)
+                    foreach (CustomField cf in fields)
                     {
                         if (cf.CustomFieldID == CustomFieldid)
                         {
                             if (cf.CustomFieldOptionsCollection.Count > 0)
                             {
-                                foreach (ParaObjects.CustomFieldOptions cfo in cf.CustomFieldOptionsCollection)
+                                foreach (CustomFieldOptions cfo in cf.CustomFieldOptionsCollection)
                                 {
                                     if (cfo.IsSelected == true)
                                     {
@@ -197,14 +199,14 @@ namespace ParatureAPI
             /// <param name="CustomFieldValue">
             /// The value to set for the cust field.
             ///</param>
-            internal static bool CustomFieldSetValue(Int64 CustomFieldid, string CustomFieldValue, List<ParaObjects.CustomField> Fields, bool ignoreCase)
+            internal static bool CustomFieldSetValue(Int64 CustomFieldid, string CustomFieldValue, List<CustomField> Fields, bool ignoreCase)
             {
                 bool modified = false;
                 bool found = false;
-                ParaObjects.CustomField cf = new ParaObjects.CustomField();
+                CustomField cf = new CustomField();
                 if (CustomFieldid > 0)
                 {
-                    foreach (ParaObjects.CustomField cfn in Fields)
+                    foreach (CustomField cfn in Fields)
                     {
                         if (cfn.CustomFieldID == CustomFieldid)
                         {
@@ -242,17 +244,17 @@ namespace ParatureAPI
             }
 
 
-            internal static bool CustomFieldSetFieldOption(Int64 CustomFieldid, string CustomFieldOptionName, List<ParaObjects.CustomField> Fields, bool ResetOtherOptions, bool ignoreCase)
+            internal static bool CustomFieldSetFieldOption(Int64 CustomFieldid, string CustomFieldOptionName, List<CustomField> Fields, bool ResetOtherOptions, bool ignoreCase)
             {
 
 
                 if (CustomFieldid > 0 && string.IsNullOrEmpty(CustomFieldOptionName) == false)
                 {
-                    foreach (ParaObjects.CustomField cfn in Fields)
+                    foreach (CustomField cfn in Fields)
                     {
                         if (cfn.CustomFieldID == CustomFieldid)
                         {
-                            foreach (ParaObjects.CustomFieldOptions option in cfn.CustomFieldOptionsCollection)
+                            foreach (CustomFieldOptions option in cfn.CustomFieldOptionsCollection)
                             {
                                 if (string.Compare(option.CustomFieldOptionName, CustomFieldOptionName, ignoreCase) == 0)
                                 {
@@ -269,20 +271,20 @@ namespace ParatureAPI
             }
 
 
-            internal static bool CustomFieldSetFieldOption(Int64 CustomFieldid, Int64 CustomFieldOptionid, List<ParaObjects.CustomField> Fields, bool ResetOtherOptions)
+            internal static bool CustomFieldSetFieldOption(Int64 CustomFieldid, Int64 CustomFieldOptionid, List<CustomField> Fields, bool ResetOtherOptions)
             {
                 bool modified = false;
 
                 if (CustomFieldid > 0 && CustomFieldOptionid > 0)
                 {
                     bool found = false;
-                    foreach (ParaObjects.CustomField cfn in Fields)
+                    foreach (CustomField cfn in Fields)
                     {
                         if (cfn.CustomFieldID == CustomFieldid)
                         {
                             found = true;
                             bool optionFound = false;
-                            foreach (ParaObjects.CustomFieldOptions option in cfn.CustomFieldOptionsCollection)
+                            foreach (CustomFieldOptions option in cfn.CustomFieldOptionsCollection)
                             {
                                 if (option.CustomFieldOptionID == CustomFieldOptionid)
                                 {
@@ -312,7 +314,7 @@ namespace ParatureAPI
                             }
                             if (optionFound == false)
                             {
-                                ParaObjects.CustomFieldOptions NewOption = new ParaObjects.CustomFieldOptions();
+                                CustomFieldOptions NewOption = new CustomFieldOptions();
                                 NewOption.CustomFieldOptionID = CustomFieldOptionid;
                                 NewOption.IsSelected = true;
                                 cfn.CustomFieldOptionsCollection.Add(NewOption);
@@ -324,9 +326,9 @@ namespace ParatureAPI
                     }
                     if (found == false)
                     {
-                        ParaObjects.CustomField cf = new ParaObjects.CustomField();
+                        CustomField cf = new CustomField();
                         cf.CustomFieldID = CustomFieldid;
-                        ParaObjects.CustomFieldOptions NewOption = new ParaObjects.CustomFieldOptions();
+                        CustomFieldOptions NewOption = new CustomFieldOptions();
                         NewOption.CustomFieldOptionID = CustomFieldOptionid;
                         NewOption.IsSelected = true;
                         cf.CustomFieldOptionsCollection.Add(NewOption);

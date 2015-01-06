@@ -6,6 +6,8 @@ using System.IO;
 using System.Collections;
 using System.Text.RegularExpressions;
 using Microsoft.VisualBasic;
+using ParatureAPI.Fields;
+
 namespace ParatureAPI
 {
     /// <summary>
@@ -355,7 +357,7 @@ namespace ParatureAPI
 
             if (baseObject.CustomFields != null)
             {
-                foreach (ParaObjects.CustomField cf in baseObject.CustomFields)
+                foreach (CustomField cf in baseObject.CustomFields)
                 {
                     if (cf.DataType == ParaEnums.CustomFieldDataType.String)
                     {
@@ -413,7 +415,7 @@ namespace ParatureAPI
                             Match m = Regex.Match(line, @"Invalid Field Validation Message : (.+?) is not a valid US phone number");
                             id = m.Groups[1].Value.Trim();
 
-                            foreach (ParaObjects.CustomField cf in baseObject.CustomFields)
+                            foreach (CustomField cf in baseObject.CustomFields)
                             {
                                 if (cf.CustomFieldID == long.Parse(id))
                                 {
@@ -426,7 +428,7 @@ namespace ParatureAPI
                             Match m = Regex.Match(line, @"Invalid Field Validation Message : The Email Address '(.+?)' is not valid.");
                             id = m.Groups[1].Value.Trim();
 
-                            foreach (ParaObjects.CustomField cf in baseObject.CustomFields)
+                            foreach (CustomField cf in baseObject.CustomFields)
                             {
                                 if (cf.CustomFieldID == long.Parse(id))
                                 {
@@ -439,7 +441,7 @@ namespace ParatureAPI
                             Match m = Regex.Match(line, @"Invalid Field Validation Message : (.+?) is not a valid international phone number");
                             id = m.Groups[1].Value.Trim();
 
-                            foreach (ParaObjects.CustomField cf in baseObject.CustomFields)
+                            foreach (CustomField cf in baseObject.CustomFields)
                             {
                                 if (cf.CustomFieldID == long.Parse(id))
                                 {
@@ -453,7 +455,7 @@ namespace ParatureAPI
                             id = m.Groups[1].Value.Trim();
                             if (Information.IsNumeric(id.Trim()))
                             {
-                            foreach (ParaObjects.CustomField cf in baseObject.CustomFields)
+                            foreach (CustomField cf in baseObject.CustomFields)
                             {
                                 if (cf.CustomFieldID == long.Parse(id.Trim()))
                                 {
