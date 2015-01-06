@@ -71,17 +71,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiCallFactory.cs" />
-    <Compile Include="apihandler.cs" />
+    <Compile Include="ApiHandler.cs" />
     <Compile Include="ApiUrlBuilder.cs" />
-    <Compile Include="paraCredentials.cs" />
-    <Compile Include="Paraenums.cs" />
+    <Compile Include="ParaCredentials.cs" />
+    <Compile Include="ParaEnums.cs" />
     <Compile Include="ParaHelper.cs" />
     <Compile Include="ParaObjects.cs" />
     <Compile Include="ParaQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThreadPool.cs" />
-    <Compile Include="xmlgenerator.cs" />
-    <Compile Include="xmlParser.cs" />
+    <Compile Include="XmlGenerator.cs" />
+    <Compile Include="XmlToObjectParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

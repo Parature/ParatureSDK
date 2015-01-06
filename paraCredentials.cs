@@ -14,8 +14,8 @@ namespace ParatureAPI
         //Specify private properties
         string m_token;
         string m_ServerfarmAddress;
-        Paraenums.ApiVersion m_apiversion;
-        Paraenums.AutoRetryMode m_AutoretryMode = Paraenums.AutoRetryMode.None;
+        ParaEnums.ApiVersion m_apiversion;
+        ParaEnums.AutoRetryMode m_AutoretryMode = ParaEnums.AutoRetryMode.None;
         int m_accountid;
         int m_departmentid;
         bool m_enforceRequiredFields;
@@ -54,7 +54,7 @@ namespace ParatureAPI
         /// <summary>
         /// Indicates the retry behaviour in case the Parature API servers are not available (unhandled exception returned). 
         /// </summary>
-        public Paraenums.AutoRetryMode AutoretryMode
+        public ParaEnums.AutoRetryMode AutoretryMode
         {
             get { return m_AutoretryMode; }
 
@@ -86,7 +86,7 @@ namespace ParatureAPI
         /// <summary>
         /// The version of the API being used.
         /// </summary>
-        public Paraenums.ApiVersion Apiversion
+        public ParaEnums.ApiVersion Apiversion
         {
             get { return m_apiversion; }
 
@@ -123,7 +123,7 @@ namespace ParatureAPI
             set { m_enforceRequiredFields = value; }
         }
 
-        private Dictionary<string, ParaObjects.objectBaseProperties> SchemaCache= new Dictionary<string,ParaObjects.objectBaseProperties>();
+        private Dictionary<string, ParaObjects.ObjectBaseProperties> SchemaCache= new Dictionary<string,ParaObjects.ObjectBaseProperties>();
 
         public bool logRetries = false;
 
@@ -140,7 +140,7 @@ namespace ParatureAPI
         /// <param name="instanceid">Instance ID</param>
         /// <param name="departmentid">Department ID</param>
         /// <param name="enforceRequiredFields">Whether to enforce required custom fields or not</param>
-        public ParaCredentials(string token, string serverfarmaddress, Paraenums.ApiVersion apiversion, int instanceid, int departmentid, bool enforceRequiredFields)
+        public ParaCredentials(string token, string serverfarmaddress, ParaEnums.ApiVersion apiversion, int instanceid, int departmentid, bool enforceRequiredFields)
         {
             setCredentials(token, serverfarmaddress, apiversion, instanceid, departmentid, enforceRequiredFields);
         }
@@ -150,7 +150,7 @@ namespace ParatureAPI
         /// <summary>
         /// Internal method to set required credential
         /// </summary>
-        private void setCredentials(string token, string serverfarmaddress, Paraenums.ApiVersion apiversion, int instanceid, int departmentid, bool enforceRequiredFields)
+        private void setCredentials(string token, string serverfarmaddress, ParaEnums.ApiVersion apiversion, int instanceid, int departmentid, bool enforceRequiredFields)
         {
             Token = token;
             ServerfarmAddress = serverfarmaddress;
@@ -158,17 +158,17 @@ namespace ParatureAPI
             Instanceid = instanceid;
             Departmentid = departmentid;
             EnforceRequiredFields = enforceRequiredFields;
-            if (AutoretryMode == Paraenums.AutoRetryMode.Auto)
+            if (AutoretryMode == ParaEnums.AutoRetryMode.Auto)
             {
                 if (System.Web.HttpContext.Current != null)
                 {
                     // this is a web application context
-                    AutoretryMode = Paraenums.AutoRetryMode.WebApplication;
+                    AutoretryMode = ParaEnums.AutoRetryMode.WebApplication;
                 }
                 else
                 {
                     // We are not in a web app environment
-                    AutoretryMode = Paraenums.AutoRetryMode.ConsoleApp;
+                    AutoretryMode = ParaEnums.AutoRetryMode.ConsoleApp;
                 }
             }
         }
@@ -179,7 +179,7 @@ namespace ParatureAPI
         /// <summary>
         /// Insert the Schema of an object to the ParaCredentials cache, so that we are able to prevalidated the call before it is placed.
         /// </summary>
-        public void PreValidationSchemaAdd(Paraenums.ParatureModule module, ParaObjects.objectBaseProperties moduleSchema)
+        public void PreValidationSchemaAdd(ParaEnums.ParatureModule module, ParaObjects.ObjectBaseProperties moduleSchema)
         {
             if (moduleSchema != null)
             {
@@ -199,10 +199,10 @@ namespace ParatureAPI
         /// <summary>
         /// Returns the cache key of the schema stored in ParaCredentials.
         /// </summary>
-        private string PreValidationGetCacheKey(Paraenums.ParatureModule module)
+        private string PreValidationGetCacheKey(ParaEnums.ParatureModule module)
         {
             string CacheKey = "";
-            if (module == Paraenums.ParatureModule.Account || module == Paraenums.ParatureModule.Customer)
+            if (module == ParaEnums.ParatureModule.Account || module == ParaEnums.ParatureModule.Customer)
             {
                 // The module is independant from the department
                 CacheKey = Instanceid + "-" + module.ToString();

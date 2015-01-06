@@ -15,109 +15,20 @@ namespace ParatureAPI
     /// </summary>
     public class ApiHandler
     {
-
-        /// <summary>
-        /// Allows the user to quickly post an XML, and get back the API response.
-        /// </summary>
-        /// <param name="xmlDocument">
-        /// The XML File to Post, for a Create or an Update
-        /// </param>
-        /// <param name="module">
-        /// This is to be selected from "Paraenums.ParatureModule" to decide which module to use (Ticket, Account, etc...)
-        /// </param>
-        /// <param name="Objectid">
-        /// If this is a create, just pass 0, otherwise, pass the objectid to update
-        /// </param>
-        /// <param name="pc">
-        /// ParatureCredentials Class
-        /// </param>
-        /// <returns></returns>
-        public static ParaObjects.ApiCallResponse SubmitGenericRequest(System.Xml.XmlDocument xmlDocument, Paraenums.ParatureModule module, Int64 Objectid, ParaCredentials pc)
-        {
-            return ApiCallFactory.ObjectCreateUpdate(pc, module, xmlDocument, Objectid);
-        }
-
-        private static ParaObjects.PagedData objectFillList(ParaCredentials ParaCredentials, ModuleQuery.CustomerQuery Query, Paraenums.RequestDepth RequestDepth, Paraenums.ParatureModule Module)
-        {
-            // CustomerFillList, AccountFillList, ProductFillList, AssetFillList, 
-            // TicketFillList, and ArticleFillList are all very similar, they should be refactored
-            // out into one generic objectFillList to reduce the redundancy
-            //  -- RShuford 4/22/09
-            throw new Exception("Not Implemented");
-        }
-
-        public static int determineOptimizedObjectPageSize(ParaQuery Query, ParaCredentials pc, Paraenums.ParatureModule module)
-        {
-            ParaObjects.ApiCallResponse tempAr;
-            ParaObjects.PagedData tempObjectList;
-
-            System.Diagnostics.Stopwatch callStopWatch = new System.Diagnostics.Stopwatch();
-
-            int bestTimePerRecord = 0;
-            int testTimePerRecord = 0;
-            int bestPageSize = 0;
-            int testPageSize = 0;
-            int bestPagesRequired = 0;
-            int testPagesRequired = 0;
-
-            while (true)
-            {
-                callStopWatch.Reset();
-                callStopWatch.Start();
-                tempAr = ApiCallFactory.ObjectGetList(pc, module, Query.BuildQueryArguments());
-                callStopWatch.Stop();
-
-                tempObjectList = xmlToObjectParser.ObjectFillList(tempAr.xmlReceived,Query.MinimalisticLoad, (int)Paraenums.RequestDepth.Standard, pc, module);
-
-                testTimePerRecord = (int)(callStopWatch.ElapsedMilliseconds / Query.PageSize);
-                testPagesRequired = (int)Math.Ceiling((double)tempObjectList.TotalItems / (double)Query.PageSize);
-                testPageSize = Query.PageSize;
-                // if the improvment is less than 25 percent lets just take it
-                if (false && tempAr.HasException == false)
-                {
-                    break;
-                }
-                else
-                {
-                    bestPageSize = testPageSize;
-                    bestPagesRequired = testPagesRequired;
-                    bestTimePerRecord = testTimePerRecord;
-
-                    if (((testPageSize + bestPageSize) / 2) == Query.PageSize)
-                    {
-
-                    }
-                    Query.PageSize = (testPageSize + bestPageSize) / 2;
-                }
-            }
-            //double runningTotal;
-            //for (int i = 0; i < 500; i++)
-            //{
-            //    runningTotal = 0.0;
-            //    for (int j = 0; j < 10; j++)
-            //    {
-            //        callStopWatch.Reset();
-            //        callStopWatch.Start();
-            //        tempAr = ApiCallFactory.ObjectGetList(ParaCredentails, module, Query.BuildQueryArguments());
-            //        callStopWatch.Stop();
-            //        runningTotal += (double)(callStopWatch.ElapsedMilliseconds);
-            //    }
-            //}
-
-            return bestPageSize;
-        }
-
         // This Optimize Page Size should be enhanced to get the Exact best pagesize
         // this will take more time, and as such should be the kind of thing that the application runs once,
         // then stores the results and reuses them from then on.
         // Because it will be used once then reused, there should be several calls of each page size to ensure accuracy.
         // The optimizeObjectCalls method should also be built out to determine the best case number of 
         // calls depending on current server load.
-        private static ParaObjects.OptimizationResult optimizeObjectPageSize(ParaObjects.PagedData objectList, ParaQuery Query, ParaCredentials ParaCredentials, int requestdepth, Paraenums.ParatureModule module)
+        private static ParaObjects.OptimizationResult OptimizeObjectPageSize(ParaObjects.PagedData objectList, ParaQuery query, ParaCredentials paraCredentials, int requestdepth, ParaEnums.ParatureModule module)
         {
-            ParaObjects.OptimizationResult rtn = new ParaObjects.OptimizationResult();
-            rtn.Query = Query;
-            rtn.objectList = objectList;
+            var rtn = new ParaObjects.OptimizationResult
+            {
+                Query = query, 
+                objectList = objectList
+            };
+
             //Two distinct sets of logic are required for optimization.  The two methods are as described:
             //OptimizeCalls requires us to compensate for 5 parallel asynchronous threads.  This is best 
             //  approached by making a series of test calls and calculating the required pages size to achieve 
@@ -128,39 +39,38 @@ namespace ParatureAPI
             //  total records by the page size then rounded up. Currently we do this by stepping through a 
             //  fixed set of test calls, but this should be refactored to a more dynamic calculation.
             //ParaObjects.PagedData objectList;
-            ParaObjects.PagedData tempObjectList;
-            ParaObjects.ApiCallResponse tempAR;
-            double testTimePerPage = 0.0;    //units are milliseconds
-            double testTimePagesRequired = 0.0;
-            System.Diagnostics.Stopwatch callStopWatch = new System.Diagnostics.Stopwatch();
-            double masterTimePerPage = 0.0;  //units are milliseconds
-            double masterPagesRequired = 0.0;
+            ParaObjects.ApiCallResponse tempAr;
+            var testTimePerPage = 0.0;    //units are milliseconds
+            var callStopWatch = new System.Diagnostics.Stopwatch();
+            var masterTimePerPage = 0.0;  //units are milliseconds
+            var masterPagesRequired = 0.0;
 
             rtn.apiResponse = new ParaObjects.ApiCallResponse();
 
             if (rtn.Query.OptimizeCalls)
             {
-                List<int> pageSizeSampleSet = new List<int>();
+                var pageSizeSampleSet = new List<int>
+                {
+                    rtn.Query.OptimizePageSizeSeed
+                };
 
-                pageSizeSampleSet.Add(rtn.Query.OptimizePageSizeSeed); //seed
-
-                for (int i = 0; i < rtn.Query.OptimizePageSizeTestCalls; i++)
+                for (var i = 0; i < rtn.Query.OptimizePageSizeTestCalls; i++)
                 {
                     rtn.Query.PageSize = pageSizeSampleSet[i];
 
                     callStopWatch.Reset();
                     callStopWatch.Start();
-                    tempAR = ApiCallFactory.ObjectGetList(ParaCredentials, module, rtn.Query.BuildQueryArguments());
+                    tempAr = ApiCallFactory.ObjectGetList(paraCredentials, module, rtn.Query.BuildQueryArguments());
                     callStopWatch.Stop();
 
-                    tempObjectList = xmlToObjectParser.ObjectFillList(tempAR.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, ParaCredentials, module);
+                    XmlToObjectParser.ObjectFillList(tempAr.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
 
                     testTimePerPage = (int)(callStopWatch.ElapsedMilliseconds);
 
-                    if (i == (rtn.Query.OptimizePageSizeTestCalls - 1) && tempAR.HasException == false)
+                    if (i == (rtn.Query.OptimizePageSizeTestCalls - 1) && tempAr.HasException == false)
                     {
-                        int total = 0;
-                        for (int j = 1; j < pageSizeSampleSet.Count; j++)
+                        var total = 0;
+                        for (var j = 1; j < pageSizeSampleSet.Count; j++)
                         {
                             total = total + pageSizeSampleSet[j];
                         }
@@ -174,31 +84,28 @@ namespace ParatureAPI
                 }
 
                 //first page call
-                rtn.apiResponse = ApiCallFactory.ObjectGetList(ParaCredentials, module, rtn.Query.BuildQueryArguments());
-
-                rtn.objectList = xmlToObjectParser.ObjectFillList(rtn.apiResponse.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, ParaCredentials, module);
-
-                pageSizeSampleSet = null;
+                rtn.apiResponse = ApiCallFactory.ObjectGetList(paraCredentials, module, rtn.Query.BuildQueryArguments());
+                rtn.objectList = XmlToObjectParser.ObjectFillList(rtn.apiResponse.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
             }
             else
             {
                 int[] pageSizeSampleSet = { 50, 100, 150, 200, 250, 300, 350, 400, 450, 500 };
 
-                for (int i = 0; i < pageSizeSampleSet.Length; i++)
+                for (var i = 0; i < pageSizeSampleSet.Length; i++)
                 {
                     rtn.Query.PageSize = pageSizeSampleSet[i];
 
                     callStopWatch.Reset();
                     callStopWatch.Start();
-                    tempAR = ApiCallFactory.ObjectGetList(ParaCredentials, module, rtn.Query.BuildQueryArguments());
+                    tempAr = ApiCallFactory.ObjectGetList(paraCredentials, module, rtn.Query.BuildQueryArguments());
                     callStopWatch.Stop();
 
-                    tempObjectList = xmlToObjectParser.ObjectFillList(tempAR.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, ParaCredentials, module);
+                    var tempObjectList = XmlToObjectParser.ObjectFillList(tempAr.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
 
                     testTimePerPage = (int)(callStopWatch.ElapsedMilliseconds);
-                    testTimePagesRequired = (int)Math.Ceiling((double)tempObjectList.TotalItems / (double)pageSizeSampleSet[i]);
+                    double testTimePagesRequired = (int)Math.Ceiling((double)tempObjectList.TotalItems / (double)pageSizeSampleSet[i]);
                     // if the improvment is less than 25 percent lets just take it
-                    if ((((masterPagesRequired * masterTimePerPage) / (testTimePagesRequired * testTimePerPage)) < 1.25) && i != 0 && tempAR.HasException == false)
+                    if ((((masterPagesRequired * masterTimePerPage) / (testTimePagesRequired * testTimePerPage)) < 1.25) && i != 0 && tempAr.HasException == false)
                     {
                         rtn.Query.PageSize = pageSizeSampleSet[(i - 1)];
                         break;
@@ -208,15 +115,10 @@ namespace ParatureAPI
                         masterTimePerPage = testTimePerPage;
                         masterPagesRequired = testTimePagesRequired;
                         rtn.objectList = tempObjectList;
-                        rtn.apiResponse = tempAR;
+                        rtn.apiResponse = tempAr;
                     }
                 }
-                pageSizeSampleSet = null;
             }
-
-            tempAR = null;
-            tempObjectList = null;
-            callStopWatch = null;
 
             return rtn;
         }
@@ -224,7 +126,7 @@ namespace ParatureAPI
         /// <summary>
         /// Contains all the methods that allow you to interact with the Parature Account module.
         /// </summary>
-        public partial class Account
+        public class Account
         {
             /// <summary>
             /// Create a Parature Account. Requires an Object and a credentials object. Will return the Newly Created Accountid. Returns 0 if the account creation fails.
@@ -233,8 +135,8 @@ namespace ParatureAPI
             {
                 var ar = new ParaObjects.ApiCallResponse();
                 var doc = new XmlDocument();
-                doc = xmlgenerator.AccountGenerateXML(account);
-                ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, Paraenums.ParatureModule.Account, doc, 0);
+                doc = XmlGenerator.AccountGenerateXML(account);
+                ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, ParaEnums.ParatureModule.Account, doc, 0);
                 account.Accountid = ar.Objectid;
                 account.uniqueIdentifier = ar.Objectid;
                 return ar;
@@ -246,7 +148,7 @@ namespace ParatureAPI
             public static ParaObjects.ApiCallResponse AccountUpdate(ParaObjects.Account account, ParaCredentials paraCredentials)
             {
                 var ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, Paraenums.ParatureModule.Account, xmlgenerator.AccountGenerateXML(account), account.Accountid);
+                ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, ParaEnums.ParatureModule.Account, XmlGenerator.AccountGenerateXML(account), account.Accountid);
                 return ar;
             }
 
@@ -264,7 +166,7 @@ namespace ParatureAPI
             /// For a simple account request, please put 0. <br/>When Requesting an account, there might be related objects linked to that Account: such as products, viewable accounts, etc. <br/>With a regular Account detail call, generally only the ID and names of the extra objects are loaded. 
             /// <example>For example, the call will return an Account.Product object, but only the Name and ID values will be filled. All of the other properties of the product object will be empty. If you select RequestDepth=1, then we will go one level deeper into our request and will therefore retrieve the product's detail for you. Products might have assets linked to them, so if you select RequestDepth=2, we will go to an even deeped level and return all the assets properties for that product, etc.<br/> Please make sure you only request the depth you need, as this might make your request slower. </example>
             /// </param>
-            public static ParaObjects.Account AccountGetDetails(Int64 accountid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.Account AccountGetDetails(Int64 accountid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 ParaObjects.Account account = new ParaObjects.Account();
                 account = AccountFillDetails(accountid, ParaCredentials, RequestDepth, true);
@@ -281,7 +183,7 @@ namespace ParatureAPI
             public static ParaObjects.Account AccountGetDetails(XmlDocument AccountXML)
             {
                 ParaObjects.Account account = new ParaObjects.Account();
-                account = xmlToObjectParser.AccountParser.AccountFill(AccountXML, 0, true, null);
+                account = XmlToObjectParser.AccountParser.AccountFill(AccountXML, 0, true, null);
                 account.FullyLoaded = true;
 
                 account.ApiCallResponse.xmlReceived = AccountXML;
@@ -305,7 +207,7 @@ namespace ParatureAPI
             {
 
                 ParaObjects.Account account = new ParaObjects.Account();
-                account = AccountFillDetails(accountid, ParaCredentials, Paraenums.RequestDepth.Standard, true);
+                account = AccountFillDetails(accountid, ParaCredentials, ParaEnums.RequestDepth.Standard, true);
 
                 return account;
 
@@ -317,7 +219,7 @@ namespace ParatureAPI
             /// </summary>
             public static ParaObjects.AccountsList AccountsGetList(ParaCredentials ParaCredentials, ModuleQuery.AccountQuery Query)
             {
-                return AccountsFillList(ParaCredentials, Query, Paraenums.RequestDepth.Standard);
+                return AccountsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
@@ -329,7 +231,7 @@ namespace ParatureAPI
             public static ParaObjects.AccountsList AccountsGetList(XmlDocument AccountListXML)
             {
                 ParaObjects.AccountsList accountsList = new ParaObjects.AccountsList();
-                accountsList = xmlToObjectParser.AccountParser.AccountsFillList(AccountListXML, true, 0, null);
+                accountsList = XmlToObjectParser.AccountParser.AccountsFillList(AccountListXML, true, 0, null);
 
                 accountsList.ApiCallResponse.xmlReceived = AccountListXML;
 
@@ -343,7 +245,7 @@ namespace ParatureAPI
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ParaObjects.AccountsList AccountsGetList(ParaCredentials ParaCredentials, ModuleQuery.AccountQuery Query, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.AccountsList AccountsGetList(ParaCredentials ParaCredentials, ModuleQuery.AccountQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 return AccountsFillList(ParaCredentials, Query, RequestDepth);
             }
@@ -354,7 +256,7 @@ namespace ParatureAPI
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>  
-            public static ParaObjects.AccountsList AccountsGetList(ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.AccountsList AccountsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 return AccountsFillList(ParaCredentials, null, RequestDepth);
             }
@@ -363,7 +265,7 @@ namespace ParatureAPI
             /// </summary>            
             public static ParaObjects.AccountsList AccountsGetList(ParaCredentials ParaCredentials)
             {
-                return AccountsFillList(ParaCredentials, null, Paraenums.RequestDepth.Standard);
+                return AccountsFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
             }
 
 
@@ -379,14 +281,14 @@ namespace ParatureAPI
             ///</param>
             public static ParaObjects.ApiCallResponse AccountDelete(Int64 Accountid, ParaCredentials ParaCredentials, bool purge)
             {
-                return ApiCallFactory.ObjectDelete(ParaCredentials, Paraenums.ParatureModule.Account, Accountid, purge);
+                return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Account, Accountid, purge);
             }
 
 
             /// <summary>
             /// Fills an account list object.
             /// </summary>
-            private static ParaObjects.AccountsList AccountsFillList(ParaCredentials ParaCredentials, ModuleQuery.AccountQuery Query, Paraenums.RequestDepth RequestDepth)
+            private static ParaObjects.AccountsList AccountsFillList(ParaCredentials ParaCredentials, ModuleQuery.AccountQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 if (Query == null)
@@ -406,7 +308,7 @@ namespace ParatureAPI
 
                 if (Query.RetrieveAllRecords && Query.OptimizePageSize)
                 {
-                    ParaObjects.OptimizationResult rslt = optimizeObjectPageSize(AccountsList, Query, ParaCredentials, requestdepth, Paraenums.ParatureModule.Account);
+                    ParaObjects.OptimizationResult rslt = OptimizeObjectPageSize(AccountsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Account);
                     ar = rslt.apiResponse;
                     Query = (ModuleQuery.AccountQuery)rslt.Query;
                     AccountsList = ((ParaObjects.AccountsList)rslt.objectList);
@@ -414,10 +316,10 @@ namespace ParatureAPI
                 }
                 else
                 {
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Account, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Account, Query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        AccountsList = xmlToObjectParser.AccountParser.AccountsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                        AccountsList = XmlToObjectParser.AccountParser.AccountsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                     }
                     AccountsList.ApiCallResponse = ar;
                 }
@@ -436,7 +338,7 @@ namespace ParatureAPI
                             //ApiCallFactory.waitCheck(ParaCredentials.Accountid);
                             Query.PageNumber = i;
                             //implement semaphore right here (in the thread pool instance to control the generation of threads
-                            instance = new ThreadPool.ObjectList(ParaCredentials, Paraenums.ParatureModule.Account, Query.BuildQueryArguments(), requestdepth);
+                            instance = new ThreadPool.ObjectList(ParaCredentials, ParaEnums.ParatureModule.Account, Query.BuildQueryArguments(), requestdepth);
                             t = new System.Threading.Thread(delegate() { instance.Go(AccountsList); });
                             t.Start();
                         }
@@ -463,10 +365,10 @@ namespace ParatureAPI
                                 // Getting next page's data
                                 Query.PageNumber = Query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Account, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Account, Query.BuildQueryArguments());
                                 if (ar.HasException==false)
                                 {
-                                    objectlist = xmlToObjectParser.AccountParser.AccountsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                                    objectlist = XmlToObjectParser.AccountParser.AccountsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                                     AccountsList.Accounts.AddRange(objectlist.Accounts);
                                     AccountsList.ResultsReturned = AccountsList.Accounts.Count;
                                     AccountsList.PageNumber = Query.PageNumber;
@@ -492,16 +394,16 @@ namespace ParatureAPI
                 return AccountsList;
             }
 
-            static ParaObjects.Account AccountFillDetails(Int64 accountid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth, bool MinimalisticLoad)
+            static ParaObjects.Account AccountFillDetails(Int64 accountid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
             {
                 int requestdepth = (int)RequestDepth;
                 ParaObjects.Account account = new ParaObjects.Account();
                 //account = null;
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureModule.Account, accountid);
+                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Account, accountid);
                 if (ar.HasException == false)
                 {
-                    account = xmlToObjectParser.AccountParser.AccountFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
+                    account = XmlToObjectParser.AccountParser.AccountFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
                     account.FullyLoaded = true;
                 }
                 else
@@ -521,11 +423,11 @@ namespace ParatureAPI
             {
                 ParaObjects.Account account = new ParaObjects.Account();
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, Paraenums.ParatureModule.Account);
+                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Account);
 
                 if (ar.HasException == false)
                 {
-                    account = xmlToObjectParser.AccountParser.AccountFill(ar.xmlReceived, 0, false, ParaCredentials);
+                    account = XmlToObjectParser.AccountParser.AccountFill(ar.xmlReceived, 0, false, ParaCredentials);
 
                 }
 
@@ -542,7 +444,7 @@ namespace ParatureAPI
             {
                 ParaObjects.Account account = AccountSchema(ParaCredentials);
 
-                account = (ParaObjects.Account)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, Paraenums.ParatureModule.Account, account);
+                account = (ParaObjects.Account)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, ParaEnums.ParatureModule.Account, account);
 
                 return account;
             }          
@@ -551,7 +453,7 @@ namespace ParatureAPI
         /// <summary>
         /// Contains all the methods that allow you to interact with the Parature Product module.
         /// </summary>
-        public partial class Product
+        public class Product
         {
 
             /// <summary>
@@ -561,11 +463,11 @@ namespace ParatureAPI
             {
                 ParaObjects.Product Product = new ParaObjects.Product();
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, Paraenums.ParatureModule.Product);
+                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Product);
 
                 if (ar.HasException == false)
                 {
-                    Product = xmlToObjectParser.ProductParser.ProductFill(ar.xmlReceived, 0, false, ParaCredentials);
+                    Product = XmlToObjectParser.ProductParser.ProductFill(ar.xmlReceived, 0, false, ParaCredentials);
                 }
                 Product.ApiCallResponse = ar;
                 return Product;
@@ -580,7 +482,7 @@ namespace ParatureAPI
             {
                 ParaObjects.Product Product = ProductSchema(ParaCredentials);
 
-                Product = (ParaObjects.Product)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, Paraenums.ParatureModule.Product, Product);
+                Product = (ParaObjects.Product)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, ParaEnums.ParatureModule.Product, Product);
 
                 return Product;
             }
@@ -597,7 +499,7 @@ namespace ParatureAPI
             ///</param>
             public static ParaObjects.ApiCallResponse ProductDelete(Int64 Productid, ParaCredentials ParaCredentials, bool purge)
             {
-                return ApiCallFactory.ObjectDelete(ParaCredentials, Paraenums.ParatureModule.Product, Productid, purge);
+                return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Product, Productid, purge);
             }
 
 
@@ -608,8 +510,8 @@ namespace ParatureAPI
             {
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
                 System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-                doc = xmlgenerator.ProductGenerateXML(Product);
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Product, doc, 0);
+                doc = XmlGenerator.ProductGenerateXML(Product);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, doc, 0);
                 Product.productid = ar.Objectid;
                 Product.uniqueIdentifier = ar.Objectid;
                 return ar;
@@ -622,7 +524,7 @@ namespace ParatureAPI
             {
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
 
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Product, xmlgenerator.ProductGenerateXML(Product), Product.productid);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, XmlGenerator.ProductGenerateXML(Product), Product.productid);
 
 
                 return ar;
@@ -642,7 +544,7 @@ namespace ParatureAPI
             /// <param name="RequestDepth">
             /// Sets how deep should this call parse through related modules linked to the product you are calling.
             /// </param>
-            public static ParaObjects.Product ProductGetDetails(Int64 Productid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.Product ProductGetDetails(Int64 Productid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 ParaObjects.Product Product = new ParaObjects.Product();
                 Product = ProductFillDetails(Productid, ParaCredentials, RequestDepth, true);
@@ -662,7 +564,7 @@ namespace ParatureAPI
             public static ParaObjects.Product ProductGetDetails(Int64 Productid, ParaCredentials ParaCredentials)
             {
                 ParaObjects.Product Product = new ParaObjects.Product();
-                Product = ProductFillDetails(Productid, ParaCredentials, Paraenums.RequestDepth.Standard, true);
+                Product = ProductFillDetails(Productid, ParaCredentials, ParaEnums.RequestDepth.Standard, true);
 
                 return Product;
             }
@@ -676,7 +578,7 @@ namespace ParatureAPI
             public static ParaObjects.Product ProductGetDetails(XmlDocument ProductXML)
             {
                 ParaObjects.Product product = new ParaObjects.Product();
-                product = xmlToObjectParser.ProductParser.ProductFill(ProductXML, 0, true, null);
+                product = XmlToObjectParser.ProductParser.ProductFill(ProductXML, 0, true, null);
                 product.FullyLoaded = true;
 
                 product.ApiCallResponse.xmlReceived = ProductXML;
@@ -695,7 +597,7 @@ namespace ParatureAPI
             public static ParaObjects.ProductsList ProductsGetList(XmlDocument ProductListXML)
             {
                 ParaObjects.ProductsList productsList = new ParaObjects.ProductsList();
-                productsList = xmlToObjectParser.ProductParser.ProductsFillList(ProductListXML, true, 0, null);
+                productsList = XmlToObjectParser.ProductParser.ProductsFillList(ProductListXML, true, 0, null);
 
                 productsList.ApiCallResponse.xmlReceived = ProductListXML;
 
@@ -708,7 +610,7 @@ namespace ParatureAPI
             /// </summary>
             public static ParaObjects.ProductsList ProductsGetList(ParaCredentials ParaCredentials, ModuleQuery.ProductQuery Query)
             {
-                return ProductsFillList(ParaCredentials, Query, Paraenums.RequestDepth.Standard);
+                return ProductsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
@@ -718,7 +620,7 @@ namespace ParatureAPI
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ParaObjects.ProductsList ProductsGetList(ParaCredentials ParaCredentials, ModuleQuery.ProductQuery Query, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.ProductsList ProductsGetList(ParaCredentials ParaCredentials, ModuleQuery.ProductQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 return ProductsFillList(ParaCredentials, Query, RequestDepth);
             }
@@ -729,7 +631,7 @@ namespace ParatureAPI
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>            
-            public static ParaObjects.ProductsList ProductsGetList(ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.ProductsList ProductsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 return ProductsFillList(ParaCredentials, null, RequestDepth);
             }
@@ -739,13 +641,13 @@ namespace ParatureAPI
             /// </summary>
             public static ParaObjects.ProductsList ProductsGetList(ParaCredentials ParaCredentials)
             {
-                return ProductsFillList(ParaCredentials, null, Paraenums.RequestDepth.Standard);
+                return ProductsFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
             /// Fills an Customer list object.
             /// </summary>
-            private static ParaObjects.ProductsList ProductsFillList(ParaCredentials ParaCredentials, ModuleQuery.ProductQuery Query, Paraenums.RequestDepth RequestDepth)
+            private static ParaObjects.ProductsList ProductsFillList(ParaCredentials ParaCredentials, ModuleQuery.ProductQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 if (Query == null)
@@ -765,7 +667,7 @@ namespace ParatureAPI
 
                 if (Query.RetrieveAllRecords && Query.OptimizePageSize)
                 {
-                    ParaObjects.OptimizationResult rslt = optimizeObjectPageSize(ProductsList, Query, ParaCredentials, requestdepth, Paraenums.ParatureModule.Product);
+                    ParaObjects.OptimizationResult rslt = OptimizeObjectPageSize(ProductsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Product);
                     ar = rslt.apiResponse;
                     Query = (ModuleQuery.ProductQuery)rslt.Query;
                     ProductsList = ((ParaObjects.ProductsList)rslt.objectList);
@@ -773,10 +675,10 @@ namespace ParatureAPI
                 }
                 else
                 {
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Product, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Product, Query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        ProductsList = xmlToObjectParser.ProductParser.ProductsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                        ProductsList = XmlToObjectParser.ProductParser.ProductsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                     }
                     ProductsList.ApiCallResponse = ar;
                 }
@@ -795,7 +697,7 @@ namespace ParatureAPI
                             //ApiCallFactory.waitCheck(ParaCredentials.Accountid);
                             Query.PageNumber = i;
                             //implement semaphore right here (in the thread pool instance to control the generation of threads
-                            instance = new ThreadPool.ObjectList(ParaCredentials, Paraenums.ParatureModule.Product, Query.BuildQueryArguments(), requestdepth);
+                            instance = new ThreadPool.ObjectList(ParaCredentials, ParaEnums.ParatureModule.Product, Query.BuildQueryArguments(), requestdepth);
                             t = new System.Threading.Thread(delegate() { instance.Go(ProductsList); });
                             t.Start();
                         }
@@ -822,11 +724,11 @@ namespace ParatureAPI
                                 // Getting next page's data
                                 Query.PageNumber = Query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Product, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Product, Query.BuildQueryArguments());
 
                                 if (ar.HasException == false)
                                 {
-                                objectlist = xmlToObjectParser.ProductParser.ProductsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                                objectlist = XmlToObjectParser.ProductParser.ProductsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                                 ProductsList.Products.AddRange(objectlist.Products);
                                 ProductsList.ResultsReturned = ProductsList.Products.Count;
                                 ProductsList.PageNumber = Query.PageNumber;
@@ -852,16 +754,16 @@ namespace ParatureAPI
 
             }
                         
-            static ParaObjects.Product ProductFillDetails(Int64 Productid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth, bool MinimalisticLoad)
+            static ParaObjects.Product ProductFillDetails(Int64 Productid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
             {
                 int requestdepth = (int)RequestDepth;
                 ParaObjects.Product Product = new ParaObjects.Product();
                 //Product = null;
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureModule.Product, Productid);
+                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Product, Productid);
                 if (ar.HasException == false)
                 {
-                    Product = xmlToObjectParser.ProductParser.ProductFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
+                    Product = XmlToObjectParser.ProductParser.ProductFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
                     Product.FullyLoaded = true;
                 }
                 else
@@ -926,7 +828,7 @@ namespace ParatureAPI
                 {
                     Int64 id = 0;
                     EntityQuery.DownloadFolderQuery dfQuery = new EntityQuery.DownloadFolderQuery();
-                    dfQuery.AddStaticFieldFilter(EntityQuery.DownloadFolderQuery.DownloadFolderStaticFields.ParentFolder, Paraenums.QueryCriteria.Equal, ParentFolderId.ToString());
+                    dfQuery.AddStaticFieldFilter(EntityQuery.DownloadFolderQuery.DownloadFolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, ParentFolderId.ToString());
                     dfQuery.PageSize = 5000;
                     ParaObjects.DownloadFoldersList Folders = new ParaObjects.DownloadFoldersList();
                     Folders = ApiHandler.Download.DownloadFolder.DownloadFoldersGetList(paracredentials, dfQuery);
@@ -949,8 +851,8 @@ namespace ParatureAPI
                 {
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
                     System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-                    doc = xmlgenerator.ProductFolderGenerateXML(ProductFolder);
-                    ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, Paraenums.ParatureEntity.ProductFolder, doc, 0);
+                    doc = XmlGenerator.ProductFolderGenerateXML(ProductFolder);
+                    ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.ProductFolder, doc, 0);
                     ProductFolder.FolderID = ar.Objectid;
                     return ar;
                 }
@@ -961,14 +863,14 @@ namespace ParatureAPI
                 public static ParaObjects.ApiCallResponse Update(ParaObjects.ProductFolder ProductFolder, ParaCredentials ParaCredentials)
                 {
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Product, xmlgenerator.ProductFolderGenerateXML(ProductFolder), ProductFolder.FolderID);
+                    ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, XmlGenerator.ProductFolderGenerateXML(ProductFolder), ProductFolder.FolderID);
                     return ar;
                 }
 
                 public static ParaObjects.ApiCallResponse Delete(long objectId, ParaCredentials ParaCredentials)
                 {
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.EntityDelete(ParaCredentials, Paraenums.ParatureEntity.ProductFolder, objectId);
+                    ar = ApiCallFactory.EntityDelete(ParaCredentials, ParaEnums.ParatureEntity.ProductFolder, objectId);
                     return ar;
                 }
 
@@ -985,7 +887,7 @@ namespace ParatureAPI
                 /// <param name="RequestDepth">
                 /// For a simple Download request, please put 0. <br/>When Requesting a Download, there might be related objects linked to that Download: such as Products, etc. <br/>With a regular Download detail call, generally only the ID and names of the second level objects are loaded. 
                 /// </param>
-                public static ParaObjects.ProductFolder ProductFolderGetDetails(Int64 ProductFolderid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+                public static ParaObjects.ProductFolder ProductFolderGetDetails(Int64 ProductFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
                 {
                     ParaObjects.ProductFolder ProductFolder = new ParaObjects.ProductFolder();
                     ProductFolder = ProductFolderFillDetails(ProductFolderid, ParaCredentials, RequestDepth);
@@ -1003,7 +905,7 @@ namespace ParatureAPI
                 public static ParaObjects.ProductFolder ProductFolderGetDetails(XmlDocument ProductFolderXML)
                 {
                     ParaObjects.ProductFolder productFolder = new ParaObjects.ProductFolder();
-                    productFolder = xmlToObjectParser.ProductParser.ProductFolderParser.ProductFolderFill(ProductFolderXML, 0, null);
+                    productFolder = XmlToObjectParser.ProductParser.ProductFolderParser.ProductFolderFill(ProductFolderXML, 0, null);
                     productFolder.FullyLoaded = true;
 
                     productFolder.ApiCallResponse.xmlReceived = ProductFolderXML;
@@ -1017,7 +919,7 @@ namespace ParatureAPI
                 /// </summary>
                 public static ParaObjects.ProductFoldersList ProductFoldersGetList(ParaCredentials ParaCredentials)
                 {
-                    return ProductFoldersFillList(ParaCredentials, new EntityQuery.ProductFolderQuery(), Paraenums.RequestDepth.Standard);
+                    return ProductFoldersFillList(ParaCredentials, new EntityQuery.ProductFolderQuery(), ParaEnums.RequestDepth.Standard);
                 }
 
                 /// <summary>
@@ -1026,7 +928,7 @@ namespace ParatureAPI
                 /// </summary>
                 public static ParaObjects.ProductFoldersList ProductFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ProductFolderQuery Query)
                 {
-                    return ProductFoldersFillList(ParaCredentials, Query, Paraenums.RequestDepth.Standard);
+                    return ProductFoldersFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
                 }
 
                 /// <summary>
@@ -1036,7 +938,7 @@ namespace ParatureAPI
                 /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
                 /// the standard field depth.
                 /// </summary>
-                public static ParaObjects.ProductFoldersList ProductFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ProductFolderQuery Query, Paraenums.RequestDepth RequestDepth)
+                public static ParaObjects.ProductFoldersList ProductFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ProductFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
                 {
                     return ProductFoldersFillList(ParaCredentials, Query, RequestDepth);
                 }
@@ -1050,7 +952,7 @@ namespace ParatureAPI
                 public static ParaObjects.ProductFoldersList ProductFoldersGetList(XmlDocument ProductFolderListXML)
                 {
                     ParaObjects.ProductFoldersList productFoldersList = new ParaObjects.ProductFoldersList();
-                    productFoldersList = xmlToObjectParser.ProductParser.ProductFolderParser.ProductFoldersFillList(ProductFolderListXML, 0, null);
+                    productFoldersList = XmlToObjectParser.ProductParser.ProductFolderParser.ProductFoldersFillList(ProductFolderListXML, 0, null);
 
                     productFoldersList.ApiCallResponse.xmlReceived = ProductFolderListXML;
 
@@ -1060,7 +962,7 @@ namespace ParatureAPI
                 /// <summary>
                 /// Fills a ProductFolderList object.
                 /// </summary>
-                private static ParaObjects.ProductFoldersList ProductFoldersFillList(ParaCredentials ParaCredentials, EntityQuery.ProductFolderQuery Query, Paraenums.RequestDepth RequestDepth)
+                private static ParaObjects.ProductFoldersList ProductFoldersFillList(ParaCredentials ParaCredentials, EntityQuery.ProductFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
                 {
                     /*
                     int requestdepth = (int)RequestDepth;
@@ -1097,10 +999,10 @@ namespace ParatureAPI
                     }
                     else
                     {
-                        ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.ProductFolder, Query.BuildQueryArguments());
+                        ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.ProductFolder, Query.BuildQueryArguments());
                         if (ar.HasException == false)
                         {
-                            ProductFoldersList = xmlToObjectParser.ProductParser.ProductFolderParser.ProductFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials);
+                            ProductFoldersList = XmlToObjectParser.ProductParser.ProductFolderParser.ProductFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials);
                             //CustomersList = xmlToObjectParser.CustomerParser.CustomersFillList(ar.xmlReceived, requestdepth, ParaCredentials);
                         }
                         ProductFoldersList.ApiCallResponse = ar;
@@ -1148,8 +1050,8 @@ namespace ParatureAPI
                                     // Getting next page's data
                                     Query.PageNumber = Query.PageNumber + 1;
 
-                                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.ProductFolder, Query.BuildQueryArguments());
-                                    ProductFoldersList.ProductFolders.AddRange(xmlToObjectParser.ProductParser.ProductFolderParser.ProductFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials).ProductFolders);
+                                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.ProductFolder, Query.BuildQueryArguments());
+                                    ProductFoldersList.ProductFolders.AddRange(XmlToObjectParser.ProductParser.ProductFolderParser.ProductFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials).ProductFolders);
                                     ProductFoldersList.ResultsReturned = ProductFoldersList.ProductFolders.Count;
                                     ProductFoldersList.PageNumber = Query.PageNumber;
                                 }
@@ -1168,16 +1070,16 @@ namespace ParatureAPI
                     return ProductFoldersList;
                 }
 
-                static ParaObjects.ProductFolder ProductFolderFillDetails(Int64 ProductFolderid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+                static ParaObjects.ProductFolder ProductFolderFillDetails(Int64 ProductFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
                 {
                     int requestdepth = (int)RequestDepth;
                     ParaObjects.ProductFolder ProductFolder = new ParaObjects.ProductFolder();
                     //Customer = null;
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureEntity.ProductFolder, ProductFolderid);
+                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.ProductFolder, ProductFolderid);
                     if (ar.HasException == false)
                     {
-                        ProductFolder = xmlToObjectParser.ProductParser.ProductFolderParser.ProductFolderFill(ar.xmlReceived, requestdepth, ParaCredentials);
+                        ProductFolder = XmlToObjectParser.ProductParser.ProductFolderParser.ProductFolderFill(ar.xmlReceived, requestdepth, ParaCredentials);
                         ProductFolder.FullyLoaded = true;
                     }
                     else
@@ -1195,18 +1097,17 @@ namespace ParatureAPI
                 {
 
                     ParaObjects.ProductFolder ProductFolder = new ParaObjects.ProductFolder();
-                    ProductFolder = ProductFolderFillDetails(ProductFolderid, ParaCredentials, Paraenums.RequestDepth.Standard);
+                    ProductFolder = ProductFolderFillDetails(ProductFolderid, ParaCredentials, ParaEnums.RequestDepth.Standard);
 
                     return ProductFolder;
                 }
             }
         }
 
-
         /// <summary>
         /// Contains all the methods that allow you to interact with the Parature Chat module.
         /// </summary>
-        public partial class Chat
+        public class Chat
         {
             /// <summary>
             /// Returns a Chat object with all the properties of a chat.
@@ -1256,17 +1157,17 @@ namespace ParatureAPI
 
             public static ParaObjects.ChatList ChatGetList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ModuleQuery.ChatQuery Query)
             {
-                return ChatFillList(ParaCredentials, IncludeTranscripts, Query, Paraenums.RequestDepth.Standard);
+                return ChatFillList(ParaCredentials, IncludeTranscripts, Query, ParaEnums.RequestDepth.Standard);
             }
 
 
             public static ParaObjects.ChatList ChatGetList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, Boolean IncludeHistory)
             {
-                return ChatFillList(ParaCredentials, IncludeTranscripts, null, Paraenums.RequestDepth.Standard);
+                return ChatFillList(ParaCredentials, IncludeTranscripts, null, ParaEnums.RequestDepth.Standard);
             }
 
 
-            private static ParaObjects.ChatList ChatFillList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ModuleQuery.ChatQuery Query, Paraenums.RequestDepth RequestDepth)
+            private static ParaObjects.ChatList ChatFillList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ModuleQuery.ChatQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 if (Query == null)
@@ -1285,7 +1186,7 @@ namespace ParatureAPI
 
                 if (Query.RetrieveAllRecords && Query.OptimizePageSize)
                 {
-                    ParaObjects.OptimizationResult rslt = optimizeObjectPageSize(ChatList, Query, ParaCredentials, requestdepth, Paraenums.ParatureModule.Customer);
+                    ParaObjects.OptimizationResult rslt = OptimizeObjectPageSize(ChatList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Customer);
                     ar = rslt.apiResponse;
                     Query = (ModuleQuery.ChatQuery)rslt.Query;
                     ChatList = ((ParaObjects.ChatList)rslt.objectList);
@@ -1293,10 +1194,10 @@ namespace ParatureAPI
                 }
                 else
                 {
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Chat, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Chat, Query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        ChatList = xmlToObjectParser.ChatParser.ChatsFillList(ar.xmlReceived, Query.MinimalisticLoad, IncludeTranscripts, requestdepth, ParaCredentials);
+                        ChatList = XmlToObjectParser.ChatParser.ChatsFillList(ar.xmlReceived, Query.MinimalisticLoad, IncludeTranscripts, requestdepth, ParaCredentials);
                     }
                     ChatList.ApiCallResponse = ar;
                 }
@@ -1315,7 +1216,7 @@ namespace ParatureAPI
                             //ApiCallFactory.waitCheck(ParaCredentials.Accountid);
                             Query.PageNumber = i;
                             //implement semaphore right here (in the thread pool instance to control the generation of threads
-                            instance = new ThreadPool.ObjectList(ParaCredentials, Paraenums.ParatureModule.Customer, Query.BuildQueryArguments(), requestdepth);
+                            instance = new ThreadPool.ObjectList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments(), requestdepth);
                             t = new System.Threading.Thread(delegate() { instance.Go(ChatList, IncludeTranscripts); });
                             t.Start();
                         }
@@ -1341,10 +1242,10 @@ namespace ParatureAPI
                                 // Getting next page's data
                                 Query.PageNumber = Query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Customer, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments());
                                 if (ar.HasException == false)
                                 {
-                                    ChatList.chats.AddRange(xmlToObjectParser.ChatParser.ChatsFillList(ar.xmlReceived, Query.MinimalisticLoad, IncludeTranscripts, requestdepth, ParaCredentials).chats);
+                                    ChatList.chats.AddRange(XmlToObjectParser.ChatParser.ChatsFillList(ar.xmlReceived, Query.MinimalisticLoad, IncludeTranscripts, requestdepth, ParaCredentials).chats);
                                     ChatList.ResultsReturned = ChatList.chats.Count;
                                     ChatList.PageNumber = Query.PageNumber;
                                 }
@@ -1379,10 +1280,10 @@ namespace ParatureAPI
                 {
                     arl.Add("_history_=true");
                 }
-                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureModule.Chat, chatid, arl);
+                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Chat, chatid, arl);
                 if (ar.HasException == false)
                 {
-                    chat = xmlToObjectParser.ChatParser.ChatFill(ar.xmlReceived, true, 0, IncludeTranscripts, ParaCredentials);
+                    chat = XmlToObjectParser.ChatParser.ChatFill(ar.xmlReceived, true, 0, IncludeTranscripts, ParaCredentials);
                     chat.FullyLoaded = true;
                 }
                 else
@@ -1399,11 +1300,11 @@ namespace ParatureAPI
             {
                 ParaObjects.Chat chat = new ParaObjects.Chat();
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, Paraenums.ParatureModule.Chat);
+                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Chat);
 
                 if (ar.HasException == false)
                 {
-                    chat = xmlToObjectParser.ChatParser.ChatFill(ar.xmlReceived, false, 0,false, ParaCredentials);
+                    chat = XmlToObjectParser.ChatParser.ChatFill(ar.xmlReceived, false, 0,false, ParaCredentials);
                 }
                 chat.ApiCallResponse = ar;
                 return chat;
@@ -1418,7 +1319,7 @@ namespace ParatureAPI
             {
                 ParaObjects.Chat chat = ChatSchema(ParaCredentials);
 
-                chat = (ParaObjects.Chat)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, Paraenums.ParatureModule.Chat, chat);
+                chat = (ParaObjects.Chat)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, ParaEnums.ParatureModule.Chat, chat);
 
                 return chat;
             }
@@ -1426,19 +1327,21 @@ namespace ParatureAPI
             static public List<ParaObjects.ChatTranscript> ChatTranscripts(Int64 ChatID, ParaCredentials pc)
             {
                 List<ParaObjects.ChatTranscript> transcripts = new List<ParaObjects.ChatTranscript>() ;
-                ParaObjects.ApiCallResponse ar = ApiCallFactory.ObjectGetDetail(pc, Paraenums.ParatureEntity.ChatTranscript, ChatID);
+                ParaObjects.ApiCallResponse ar = ApiCallFactory.ObjectGetDetail(pc, ParaEnums.ParatureEntity.ChatTranscript, ChatID);
 
                 if (ar.HasException == false)
                 {
-                    transcripts = xmlToObjectParser.ChatParser.ChatTranscriptsFillList(ar.xmlReceived);
+                    transcripts = XmlToObjectParser.ChatParser.ChatTranscriptsFillList(ar.xmlReceived);
                 }
 
                 return transcripts;
             }
         }
 
-
-        public partial class Csr
+        /// <summary>
+        /// Contains all the methods that allow you to interact with the Parature Csr module.
+        /// </summary>
+        public class Csr
         {
             /// <summary>
             /// Provides the Schema of the CSR module.
@@ -1447,11 +1350,11 @@ namespace ParatureAPI
             {
                 ParaObjects.Csr Csr = new ParaObjects.Csr();
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, Paraenums.ParatureModule.Csr);
+                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Csr);
 
                 if (ar.HasException == false)
                 {
-                    Csr = xmlToObjectParser.CsrParser.CsrFill(ar.xmlReceived);
+                    Csr = XmlToObjectParser.CsrParser.CsrFill(ar.xmlReceived);
                 }
                 Csr.ApiCallResponse = ar;
                 Csr.IsDirty = false;
@@ -1466,7 +1369,7 @@ namespace ParatureAPI
             /// </param>
             public static ParaObjects.ApiCallResponse CsrDelete(Int64 CsrId, ParaCredentials ParaCredentials)
             {
-                return ApiCallFactory.ObjectDelete(ParaCredentials, Paraenums.ParatureModule.Csr, CsrId, true);
+                return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Csr, CsrId, true);
             }
 
             /// <summary>
@@ -1495,7 +1398,7 @@ namespace ParatureAPI
             public static ParaObjects.Csr CsrGetDetails(XmlDocument CsrXML)
             {
                 ParaObjects.Csr csr = new ParaObjects.Csr();
-                csr = xmlToObjectParser.CsrParser.CsrFill(CsrXML);
+                csr = XmlToObjectParser.CsrParser.CsrFill(CsrXML);
 
                 return csr;
             }
@@ -1507,8 +1410,8 @@ namespace ParatureAPI
             {
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
                 System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-                doc = xmlgenerator.CsrGenerateXML(Csr);
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Csr, doc, 0);
+                doc = XmlGenerator.CsrGenerateXML(Csr);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Csr, doc, 0);
                 Csr.CsrID = ar.Objectid;
                 return ar;
             }
@@ -1522,7 +1425,7 @@ namespace ParatureAPI
             public static ParaObjects.CsrsList CsrsGetList(XmlDocument CsrListXML)
             {
                 ParaObjects.CsrsList csrsList = new ParaObjects.CsrsList();
-                csrsList = xmlToObjectParser.CsrParser.CsrsFillList(CsrListXML);
+                csrsList = XmlToObjectParser.CsrParser.CsrsFillList(CsrListXML);
 
                 csrsList.ApiCallResponse.xmlReceived = CsrListXML;
 
@@ -1544,7 +1447,7 @@ namespace ParatureAPI
             {
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
 
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Csr, xmlgenerator.CsrGenerateXML(Csr), Csr.CsrID);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Csr, XmlGenerator.CsrGenerateXML(Csr), Csr.CsrID);
 
 
                 return ar;
@@ -1566,10 +1469,10 @@ namespace ParatureAPI
 
                 ParaObjects.CsrsList CsrsList = new ParaObjects.CsrsList();
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Csr, Query.BuildQueryArguments());
+                ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Csr, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    CsrsList = xmlToObjectParser.CsrParser.CsrsFillList(ar.xmlReceived);
+                    CsrsList = XmlToObjectParser.CsrParser.CsrsFillList(ar.xmlReceived);
                 }
 
                 CsrsList.ApiCallResponse = ar;
@@ -1590,9 +1493,9 @@ namespace ParatureAPI
                                 // Getting next page's data
                                 Query.PageNumber = Query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Csr, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Csr, Query.BuildQueryArguments());
 
-                                objectlist = xmlToObjectParser.CsrParser.CsrsFillList(ar.xmlReceived);
+                                objectlist = XmlToObjectParser.CsrParser.CsrsFillList(ar.xmlReceived);
 
                                 if (objectlist.Csrs.Count == 0)
                                 {
@@ -1618,10 +1521,10 @@ namespace ParatureAPI
             {
                 ParaObjects.Csr Csr = new ParaObjects.Csr();
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureModule.Csr, Csrid);
+                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Csr, Csrid);
                 if (ar.HasException == false)
                 {
-                    Csr = xmlToObjectParser.CsrParser.CsrFill(ar.xmlReceived);
+                    Csr = XmlToObjectParser.CsrParser.CsrFill(ar.xmlReceived);
                 }
                 else
                 {
@@ -1665,7 +1568,7 @@ namespace ParatureAPI
                 public static ParaObjects.CsrStatus CsrStatusGetDetails(XmlDocument CsrStatusXML)
                 {
                     ParaObjects.CsrStatus CsrStatus = new ParaObjects.CsrStatus();
-                    CsrStatus = xmlToObjectParser.CsrStatusParser.CsrStatusFill(CsrStatusXML);
+                    CsrStatus = XmlToObjectParser.CsrStatusParser.CsrStatusFill(CsrStatusXML);
 
                     CsrStatus.ApiCallResponse.xmlReceived = CsrStatusXML;
                     CsrStatus.ApiCallResponse.Objectid = CsrStatus.StatusID;
@@ -1682,7 +1585,7 @@ namespace ParatureAPI
                 public static ParaObjects.CsrStatusList CsrStatusGetList(XmlDocument CsrStatusListXML)
                 {
                     ParaObjects.CsrStatusList CsrStatussList = new ParaObjects.CsrStatusList();
-                    CsrStatussList = xmlToObjectParser.CsrStatusParser.CsrStatusFillList(CsrStatusListXML);
+                    CsrStatussList = XmlToObjectParser.CsrStatusParser.CsrStatusFillList(CsrStatusListXML);
 
                     CsrStatussList.ApiCallResponse.xmlReceived = CsrStatusListXML;
 
@@ -1707,10 +1610,10 @@ namespace ParatureAPI
                     ParaObjects.CsrStatusList CsrStatusList = new ParaObjects.CsrStatusList();
                     //DownloadsList = null;
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectSecondLevelGetList(ParaCredentials, Paraenums.ParatureModule.Csr, Paraenums.ParatureEntity.status, new ArrayList(0));
+                    ar = ApiCallFactory.ObjectSecondLevelGetList(ParaCredentials, ParaEnums.ParatureModule.Csr, ParaEnums.ParatureEntity.status, new ArrayList(0));
                     if (ar.HasException == false)
                     {
-                        CsrStatusList = xmlToObjectParser.CsrStatusParser.CsrStatusFillList(ar.xmlReceived);
+                        CsrStatusList = XmlToObjectParser.CsrStatusParser.CsrStatusFillList(ar.xmlReceived);
                     }
                     CsrStatusList.ApiCallResponse = ar;
                     return CsrStatusList;
@@ -1721,10 +1624,10 @@ namespace ParatureAPI
 
                     ParaObjects.CsrStatus CsrStatus = new ParaObjects.CsrStatus();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureEntity.CsrStatus, CsrStatusid);
+                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.CsrStatus, CsrStatusid);
                     if (ar.HasException == false)
                     {
-                        CsrStatus = xmlToObjectParser.CsrStatusParser.CsrStatusFill(ar.xmlReceived);
+                        CsrStatus = XmlToObjectParser.CsrStatusParser.CsrStatusFill(ar.xmlReceived);
                     }
                     else
                     {
@@ -1741,7 +1644,7 @@ namespace ParatureAPI
         /// <summary>
         /// Contains all the methods that allow you to interact with the Parature Customer module.
         /// </summary>
-        public partial class Customer
+        public class Customer
         {
 
             /// <summary>
@@ -1756,7 +1659,7 @@ namespace ParatureAPI
             ///</param>
             public static ParaObjects.ApiCallResponse CustomerDelete(Int64 Customerid, ParaCredentials ParaCredentials, bool purge)
             {
-                return ApiCallFactory.ObjectDelete(ParaCredentials, Paraenums.ParatureModule.Customer, Customerid, purge);
+                return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Customer, Customerid, purge);
             }
 
 
@@ -1788,8 +1691,8 @@ namespace ParatureAPI
 
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
                 System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-                doc = xmlgenerator.customerGenerateXML(customer);
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Customer, doc, 0, arguments);
+                doc = XmlGenerator.customerGenerateXML(customer);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Customer, doc, 0, arguments);
                 customer.customerid = ar.Objectid;
                 customer.uniqueIdentifier = ar.Objectid;
                 return ar;
@@ -1818,7 +1721,7 @@ namespace ParatureAPI
                     //arguments.Add("_include_password_=" + IncludePasswordInNotification.ToString().ToLower());
                 }
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Customer, xmlgenerator.customerGenerateXML(Customer), Customer.customerid, arguments);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Customer, XmlGenerator.customerGenerateXML(Customer), Customer.customerid, arguments);
                 return ar;
             }
 
@@ -1835,7 +1738,7 @@ namespace ParatureAPI
             /// <param name="RequestDepth">
             /// For a simple customer request, please put 0. <br/>When Requesting a Customer, there might be related objects linked to that Customer: such as Account, etc. <br/>With a regular Customer detail call, generally only the ID and names of the second level objects are loaded. 
             /// </param>
-            public static ParaObjects.Customer CustomerGetDetails(Int64 customerid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.Customer CustomerGetDetails(Int64 customerid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 ParaObjects.Customer Customer = new ParaObjects.Customer();
                 Customer = CustomerFillDetails(customerid, ParaCredentials, RequestDepth, true);
@@ -1858,7 +1761,7 @@ namespace ParatureAPI
             {
 
                 ParaObjects.Customer Customer = new ParaObjects.Customer();
-                Customer = CustomerFillDetails(Customerid, ParaCredentials, Paraenums.RequestDepth.Standard, true);
+                Customer = CustomerFillDetails(Customerid, ParaCredentials, ParaEnums.RequestDepth.Standard, true);
 
                 return Customer;
 
@@ -1873,7 +1776,7 @@ namespace ParatureAPI
             public static ParaObjects.Customer CustomerGetDetails(XmlDocument CustomerXML)
             {
                 ParaObjects.Customer customer = new ParaObjects.Customer();
-                customer = xmlToObjectParser.CustomerParser.CustomerFill(CustomerXML, 0, true, null);
+                customer = XmlToObjectParser.CustomerParser.CustomerFill(CustomerXML, 0, true, null);
                 customer.FullyLoaded = true;
 
                 customer.ApiCallResponse.xmlReceived = CustomerXML;
@@ -1892,7 +1795,7 @@ namespace ParatureAPI
             public static ParaObjects.CustomersList CustomersGetList(XmlDocument CustomerListXML)
             {
                 ParaObjects.CustomersList customersList = new ParaObjects.CustomersList();
-                customersList = xmlToObjectParser.CustomerParser.CustomersFillList(CustomerListXML, true, 0, null);
+                customersList = XmlToObjectParser.CustomerParser.CustomersFillList(CustomerListXML, true, 0, null);
 
                 customersList.ApiCallResponse.xmlReceived = CustomerListXML;
 
@@ -1905,7 +1808,7 @@ namespace ParatureAPI
             /// </summary>
             public static ParaObjects.CustomersList CustomersGetList(ParaCredentials ParaCredentials, ModuleQuery.CustomerQuery Query)
             {
-                return CustomersFillList(ParaCredentials, Query, Paraenums.RequestDepth.Standard);
+                return CustomersFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
@@ -1915,7 +1818,7 @@ namespace ParatureAPI
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ParaObjects.CustomersList CustomersGetList(ParaCredentials ParaCredentials, ModuleQuery.CustomerQuery Query, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.CustomersList CustomersGetList(ParaCredentials ParaCredentials, ModuleQuery.CustomerQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 return CustomersFillList(ParaCredentials, Query, RequestDepth);
             }
@@ -1926,7 +1829,7 @@ namespace ParatureAPI
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>            
-            public static ParaObjects.CustomersList CustomersGetList(ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.CustomersList CustomersGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 return CustomersFillList(ParaCredentials, null, RequestDepth);
             }
@@ -1936,13 +1839,13 @@ namespace ParatureAPI
             /// </summary>
             public static ParaObjects.CustomersList CustomersGetList(ParaCredentials ParaCredentials)
             {
-                return CustomersFillList(ParaCredentials, null, Paraenums.RequestDepth.Standard);
+                return CustomersFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
             /// Fills an Customer list object.
             /// </summary>
-            private static ParaObjects.CustomersList CustomersFillList(ParaCredentials ParaCredentials, ModuleQuery.CustomerQuery Query, Paraenums.RequestDepth RequestDepth)
+            private static ParaObjects.CustomersList CustomersFillList(ParaCredentials ParaCredentials, ModuleQuery.CustomerQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 if (Query == null)
@@ -1961,7 +1864,7 @@ namespace ParatureAPI
 
                 if (Query.RetrieveAllRecords && Query.OptimizePageSize)
                 {
-                    ParaObjects.OptimizationResult rslt = optimizeObjectPageSize(CustomersList, Query, ParaCredentials, requestdepth, Paraenums.ParatureModule.Customer);
+                    ParaObjects.OptimizationResult rslt = OptimizeObjectPageSize(CustomersList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Customer);
                     ar = rslt.apiResponse;
                     Query = (ModuleQuery.CustomerQuery)rslt.Query;
                     CustomersList = ((ParaObjects.CustomersList)rslt.objectList);
@@ -1969,10 +1872,10 @@ namespace ParatureAPI
                 }
                 else
                 {
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Customer, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        CustomersList = xmlToObjectParser.CustomerParser.CustomersFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                        CustomersList = XmlToObjectParser.CustomerParser.CustomersFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                     }
                     CustomersList.ApiCallResponse = ar;
                 }
@@ -1991,7 +1894,7 @@ namespace ParatureAPI
                             //ApiCallFactory.waitCheck(ParaCredentials.Accountid);
                             Query.PageNumber = i;
                             //implement semaphore right here (in the thread pool instance to control the generation of threads
-                            instance = new ThreadPool.ObjectList(ParaCredentials, Paraenums.ParatureModule.Customer, Query.BuildQueryArguments(), requestdepth);
+                            instance = new ThreadPool.ObjectList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments(), requestdepth);
                             t = new System.Threading.Thread(delegate() { instance.Go(CustomersList); });
                             t.Start();
                         }
@@ -2017,10 +1920,10 @@ namespace ParatureAPI
                                 // Getting next page's data
                                 Query.PageNumber = Query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Customer, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments());
                                 if (ar.HasException == false)
                                 {
-                                    CustomersList.Customers.AddRange(xmlToObjectParser.CustomerParser.CustomersFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials).Customers);
+                                    CustomersList.Customers.AddRange(XmlToObjectParser.CustomerParser.CustomersFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials).Customers);
                                     CustomersList.ResultsReturned = CustomersList.Customers.Count;
                                     CustomersList.PageNumber = Query.PageNumber;
                                 }
@@ -2044,16 +1947,16 @@ namespace ParatureAPI
                 return CustomersList;
             }
 
-            static ParaObjects.Customer CustomerFillDetails(Int64 Customerid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth, bool MinimalisticLoad)
+            static ParaObjects.Customer CustomerFillDetails(Int64 Customerid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
             {
                 int requestdepth = (int)RequestDepth;
                 ParaObjects.Customer Customer = new ParaObjects.Customer();
                 //Customer = null;
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureModule.Customer, Customerid);
+                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Customer, Customerid);
                 if (ar.HasException == false)
                 {
-                    Customer = xmlToObjectParser.CustomerParser.CustomerFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
+                    Customer = XmlToObjectParser.CustomerParser.CustomerFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
                     Customer.FullyLoaded = true;
                 }
                 else
@@ -2071,11 +1974,11 @@ namespace ParatureAPI
             {
                 ParaObjects.Customer Customer = new ParaObjects.Customer();
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, Paraenums.ParatureModule.Customer);
+                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Customer);
 
                 if (ar.HasException == false)
                 {
-                    Customer = xmlToObjectParser.CustomerParser.CustomerFill(ar.xmlReceived, 0, false, ParaCredentials);
+                    Customer = XmlToObjectParser.CustomerParser.CustomerFill(ar.xmlReceived, 0, false, ParaCredentials);
                 }
                 Customer.ApiCallResponse = ar;
                 return Customer;
@@ -2090,7 +1993,7 @@ namespace ParatureAPI
             {
                 ParaObjects.Customer Customer = CustomerSchema(ParaCredentials);
 
-                Customer = (ParaObjects.Customer)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, Paraenums.ParatureModule.Customer, Customer);
+                Customer = (ParaObjects.Customer)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, ParaEnums.ParatureModule.Customer, Customer);
 
                 return Customer;
             }
@@ -2100,7 +2003,7 @@ namespace ParatureAPI
         /// <summary>
         /// Contains all the methods that allow you to interact with the Parature Ticket module.
         /// </summary>
-        public partial class Ticket
+        public class Ticket
         {
             /// <summary>
             /// Provides the Schema of the Ticket module.
@@ -2109,11 +2012,11 @@ namespace ParatureAPI
             {
                 ParaObjects.Ticket Ticket = new ParaObjects.Ticket();
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, Paraenums.ParatureModule.Ticket);
+                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Ticket);
 
                 if (ar.HasException == false)
                 {
-                    Ticket = xmlToObjectParser.TicketParser.TicketFill(ar.xmlReceived, 0, false, ParaCredentials);
+                    Ticket = XmlToObjectParser.TicketParser.TicketFill(ar.xmlReceived, 0, false, ParaCredentials);
                 }
                 Ticket.ApiCallResponse = ar;
                 return Ticket;
@@ -2128,7 +2031,7 @@ namespace ParatureAPI
             {
                 ParaObjects.Ticket Ticket = TicketSchema(ParaCredentials);
 
-                Ticket = (ParaObjects.Ticket)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, Paraenums.ParatureModule.Ticket, Ticket);
+                Ticket = (ParaObjects.Ticket)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, ParaEnums.ParatureModule.Ticket, Ticket);
 
                 return Ticket;
             }
@@ -2140,8 +2043,8 @@ namespace ParatureAPI
             {
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
                 System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-                doc = xmlgenerator.TicketGenerateXML(Ticket);
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Ticket, doc, 0);
+                doc = XmlGenerator.TicketGenerateXML(Ticket);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Ticket, doc, 0);
                 Ticket.id = ar.Objectid;
                 Ticket.uniqueIdentifier = ar.Objectid;
                 return ar;
@@ -2153,7 +2056,7 @@ namespace ParatureAPI
             public static ParaObjects.ApiCallResponse TicketUpdate(ParaObjects.Ticket Ticket, ParaCredentials ParaCredentials)
             {
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Ticket, xmlgenerator.TicketGenerateXML(Ticket), Ticket.id);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Ticket, XmlGenerator.TicketGenerateXML(Ticket), Ticket.id);
                 return ar;
             }
 
@@ -2169,7 +2072,7 @@ namespace ParatureAPI
             ///</param>
             public static ParaObjects.ApiCallResponse TicketDelete(Int64 Ticketid, ParaCredentials ParaCredentials, bool purge)
             {
-                return ApiCallFactory.ObjectDelete(ParaCredentials, Paraenums.ParatureModule.Ticket, Ticketid, purge);
+                return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Ticket, Ticketid, purge);
             }
 
             /// <summary>
@@ -2190,7 +2093,7 @@ namespace ParatureAPI
             /// For a simple Ticket request, please put 0. <br/>When Requesting a Ticket, there might be related objects linked to that Ticket: such as Customer, AssignedToCsr, etc. <br/>With a regular Ticket detail call, generally only the ID and names of the extra objects are loaded. 
             /// <example>For example, the call will return a Ticket.Customer object, but only the Name and ID values will be filled. All of the other properties of the Customer object will be empty. If you select RequestDepth=1, then we will go one level deeper into our request and will therefore retrieve the Customer's detail for you. Customers might be part of an account, so if you select RequestDepth=2, we will go to an even deeper level and return the full account object with all of its properties, etc.<br/> Please make sure you only request the depth you need, as this might make your request slower. </example>
             /// </param>
-            public static ParaObjects.Ticket TicketGetDetails(Int64 TicketNumber, bool IncludeHistory, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.Ticket TicketGetDetails(Int64 TicketNumber, bool IncludeHistory, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 ParaObjects.Ticket Ticket = new ParaObjects.Ticket();
                 Ticket = TicketFillDetails(TicketNumber, ParaCredentials, RequestDepth, true, IncludeHistory);
@@ -2215,7 +2118,7 @@ namespace ParatureAPI
             {
 
                 ParaObjects.Ticket Ticket = new ParaObjects.Ticket();
-                Ticket = TicketFillDetails(TicketNumber, ParaCredentials, Paraenums.RequestDepth.Standard, true, IncludeHistory);
+                Ticket = TicketFillDetails(TicketNumber, ParaCredentials, ParaEnums.RequestDepth.Standard, true, IncludeHistory);
                 return Ticket;
             }
 
@@ -2228,7 +2131,7 @@ namespace ParatureAPI
             public static ParaObjects.Ticket TicketGetDetails(XmlDocument TicketXML)
             {
                 ParaObjects.Ticket ticket = new ParaObjects.Ticket();
-                ticket = xmlToObjectParser.TicketParser.TicketFill(TicketXML, 0, true, null);
+                ticket = XmlToObjectParser.TicketParser.TicketFill(TicketXML, 0, true, null);
                 ticket.FullyLoaded = true;
 
                 ticket.ApiCallResponse.xmlReceived = TicketXML;
@@ -2247,7 +2150,7 @@ namespace ParatureAPI
             public static ParaObjects.TicketsList TicketsGetList(XmlDocument TicketListXML)
             {
                 ParaObjects.TicketsList ticketsList = new ParaObjects.TicketsList();
-                ticketsList = xmlToObjectParser.TicketParser.TicketsFillList(TicketListXML, true, 0, null);
+                ticketsList = XmlToObjectParser.TicketParser.TicketsFillList(TicketListXML, true, 0, null);
 
                 ticketsList.ApiCallResponse.xmlReceived = TicketListXML;
 
@@ -2260,7 +2163,7 @@ namespace ParatureAPI
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ParaObjects.TicketsList TicketsGetList(ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.TicketsList TicketsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 return TicketsFillList(ParaCredentials, null, RequestDepth);
             }
@@ -2270,7 +2173,7 @@ namespace ParatureAPI
             /// </summary>
             public static ParaObjects.TicketsList TicketsGetList(ParaCredentials ParaCredentials)
             {
-                return TicketsFillList(ParaCredentials, null, Paraenums.RequestDepth.Standard);
+                return TicketsFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
@@ -2279,7 +2182,7 @@ namespace ParatureAPI
             /// </summary>
             public static ParaObjects.TicketsList TicketsGetList(ParaCredentials ParaCredentials, ModuleQuery.TicketQuery Query)
             {
-                return TicketsFillList(ParaCredentials, Query, Paraenums.RequestDepth.Standard);
+                return TicketsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
@@ -2289,7 +2192,7 @@ namespace ParatureAPI
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ParaObjects.TicketsList TicketsGetList(ParaCredentials ParaCredentials, ModuleQuery.TicketQuery Query, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.TicketsList TicketsGetList(ParaCredentials ParaCredentials, ModuleQuery.TicketQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 return TicketsFillList(ParaCredentials, Query, RequestDepth);
             }
@@ -2297,7 +2200,7 @@ namespace ParatureAPI
             /// <summary>
             /// Fills an Ticket list object.
             /// </summary>
-            private static ParaObjects.TicketsList TicketsFillList(ParaCredentials ParaCredentials, ModuleQuery.TicketQuery Query, Paraenums.RequestDepth RequestDepth)
+            private static ParaObjects.TicketsList TicketsFillList(ParaCredentials ParaCredentials, ModuleQuery.TicketQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 if (Query == null)
@@ -2317,7 +2220,7 @@ namespace ParatureAPI
 
                 if (Query.RetrieveAllRecords && Query.OptimizePageSize)
                 {
-                    ParaObjects.OptimizationResult rslt = optimizeObjectPageSize(TicketsList, Query, ParaCredentials, requestdepth, Paraenums.ParatureModule.Ticket);
+                    ParaObjects.OptimizationResult rslt = OptimizeObjectPageSize(TicketsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Ticket);
                     ar = rslt.apiResponse;
                     Query = (ModuleQuery.TicketQuery)rslt.Query;
                     TicketsList = ((ParaObjects.TicketsList)rslt.objectList);
@@ -2325,10 +2228,10 @@ namespace ParatureAPI
                 }
                 else
                 {
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Ticket, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Ticket, Query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        TicketsList = xmlToObjectParser.TicketParser.TicketsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                        TicketsList = XmlToObjectParser.TicketParser.TicketsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                     }
                     TicketsList.ApiCallResponse = ar;
                 }
@@ -2347,7 +2250,7 @@ namespace ParatureAPI
                             //ApiCallFactory.waitCheck(ParaCredentials.Accountid);
                             Query.PageNumber = i;
                             //implement semaphore right here (in the thread pool instance to control the generation of threads
-                            instance = new ThreadPool.ObjectList(ParaCredentials, Paraenums.ParatureModule.Ticket, Query.BuildQueryArguments(), requestdepth);
+                            instance = new ThreadPool.ObjectList(ParaCredentials, ParaEnums.ParatureModule.Ticket, Query.BuildQueryArguments(), requestdepth);
                             t = new System.Threading.Thread(delegate() { instance.Go(TicketsList); });
                             t.Start();
                         }
@@ -2374,12 +2277,12 @@ namespace ParatureAPI
                                 // Getting next page's data
                                 Query.PageNumber = Query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Ticket, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Ticket, Query.BuildQueryArguments());
 
 
                                 if (ar.HasException == false)
                                 {
-                                    objectlist = xmlToObjectParser.TicketParser.TicketsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                                    objectlist = XmlToObjectParser.TicketParser.TicketsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
 
                                     TicketsList.Tickets.AddRange(objectlist.Tickets);
                                     TicketsList.ResultsReturned = TicketsList.Tickets.Count;
@@ -2408,14 +2311,14 @@ namespace ParatureAPI
 
             internal static ParaObjects.Attachment TicketAddAttachment(ParaCredentials ParaCredentials, Byte[] Attachment, string contentType, string FileName)
             {
-                return ApiHandler.UploadFile(Paraenums.ParatureModule.Ticket, ParaCredentials, Attachment, contentType, FileName);
+                return ApiHandler.UploadFile(ParaEnums.ParatureModule.Ticket, ParaCredentials, Attachment, contentType, FileName);
             }
             internal static ParaObjects.Attachment TicketAddAttachment(ParaCredentials ParaCredentials, string text, string contentType, string FileName)
             {
-                return ApiHandler.UploadFile(Paraenums.ParatureModule.Ticket, ParaCredentials, text, contentType, FileName);
+                return ApiHandler.UploadFile(ParaEnums.ParatureModule.Ticket, ParaCredentials, text, contentType, FileName);
             }
 
-            static ParaObjects.Ticket TicketFillDetails(Int64 TicketNumber, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth, bool MinimalisticLoad, bool IncludeHistory)
+            static ParaObjects.Ticket TicketFillDetails(Int64 TicketNumber, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad, bool IncludeHistory)
             {
                 int requestdepth = (int)RequestDepth;
                 ParaObjects.Ticket Ticket = new ParaObjects.Ticket();
@@ -2426,17 +2329,17 @@ namespace ParatureAPI
                 {
                     ArrayList arl = new ArrayList();
                     arl.Add("_history_=true");
-                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureModule.Ticket, TicketNumber, arl);
+                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Ticket, TicketNumber, arl);
                 }
                 else
                 {
-                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureModule.Ticket, TicketNumber);
+                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Ticket, TicketNumber);
                 }
 
 
                 if (ar.HasException == false)
                 {
-                    Ticket = xmlToObjectParser.TicketParser.TicketFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
+                    Ticket = XmlToObjectParser.TicketParser.TicketFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
                     Ticket.FullyLoaded = true;
                 }
                 else
@@ -2466,9 +2369,9 @@ namespace ParatureAPI
             {
                 ParaObjects.Action Action = new ParaObjects.Action();
                 Action.ActionID = actionid;
-                Action.actionType = Paraenums.ActionType.Grab;
+                Action.actionType = ParaEnums.ActionType.Grab;
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiHandler.ActionRun(Ticketid, Action, ParaCredentials, Paraenums.ParatureModule.Ticket);
+                ar = ApiHandler.ActionRun(Ticketid, Action, ParaCredentials, ParaEnums.ParatureModule.Ticket);
                 return ar;
             }
 
@@ -2490,10 +2393,10 @@ namespace ParatureAPI
             /// <returns></returns>
             public static ParaObjects.ApiCallResponse ActionRunAssignToCsr(Int64 Ticketid, ParaObjects.Action Action, Int64 CsrID, ParaCredentials ParaCredentials)
             {
-                Action.actionType = Paraenums.ActionType.Assign;
+                Action.actionType = ParaEnums.ActionType.Assign;
                 Action.AssigntToCsrid = CsrID;
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiHandler.ActionRun(Ticketid, Action, ParaCredentials, Paraenums.ParatureModule.Ticket);
+                ar = ApiHandler.ActionRun(Ticketid, Action, ParaCredentials, ParaEnums.ParatureModule.Ticket);
                 return ar;
             }
 
@@ -2515,10 +2418,10 @@ namespace ParatureAPI
             /// <returns></returns>
             public static ParaObjects.ApiCallResponse ActionRunAssignToQueue(Int64 Ticketid, ParaObjects.Action Action, Int64 QueueID, ParaCredentials ParaCredentials)
             {
-                Action.actionType = Paraenums.ActionType.Assign_Queue;
+                Action.actionType = ParaEnums.ActionType.Assign_Queue;
                 Action.AssignToQueueid = QueueID;
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiHandler.ActionRun(Ticketid, Action, ParaCredentials, Paraenums.ParatureModule.Ticket);
+                ar = ApiHandler.ActionRun(Ticketid, Action, ParaCredentials, ParaEnums.ParatureModule.Ticket);
                 return ar;
             }
 
@@ -2537,9 +2440,9 @@ namespace ParatureAPI
             /// <returns></returns>
             public static ParaObjects.ApiCallResponse ActionRun(Int64 Ticketid, ParaObjects.Action Action, ParaCredentials ParaCredentials)
             {
-                Action.actionType = Paraenums.ActionType.Other;
+                Action.actionType = ParaEnums.ActionType.Other;
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiHandler.ActionRun(Ticketid, Action, ParaCredentials, Paraenums.ParatureModule.Ticket);
+                ar = ApiHandler.ActionRun(Ticketid, Action, ParaCredentials, ParaEnums.ParatureModule.Ticket);
                 return ar;
             }
         }
@@ -2547,7 +2450,7 @@ namespace ParatureAPI
         /// <summary>
         /// Contains all the methods that allow you to interact with the Parature Asset module.
         /// </summary>
-        public partial class Asset
+        public class Asset
         {
 
             /// <summary>
@@ -2558,11 +2461,11 @@ namespace ParatureAPI
                 ParaObjects.Asset Asset = new ParaObjects.Asset();
 
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, Paraenums.ParatureModule.Asset);
+                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Asset);
 
                 if (ar.HasException == false)
                 {
-                    Asset = xmlToObjectParser.AssetParser.AssetFill(ar.xmlReceived, false, 0, ParaCredentials);
+                    Asset = XmlToObjectParser.AssetParser.AssetFill(ar.xmlReceived, false, 0, ParaCredentials);
                 }
                 Asset.ApiCallResponse = ar;
                 Asset.IsDirty = false;
@@ -2578,7 +2481,7 @@ namespace ParatureAPI
             {
                 ParaObjects.Asset asset = AssetSchema(ParaCredentials);
 
-                asset = (ParaObjects.Asset)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, Paraenums.ParatureModule.Asset, asset);
+                asset = (ParaObjects.Asset)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, ParaEnums.ParatureModule.Asset, asset);
 
                 return asset;
             }
@@ -2590,8 +2493,8 @@ namespace ParatureAPI
             {
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
                 System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-                doc = xmlgenerator.AssetGenerateXML(Asset);
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Asset, doc, 0);
+                doc = XmlGenerator.AssetGenerateXML(Asset);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Asset, doc, 0);
                 Asset.Assetid = ar.Objectid;
                 Asset.uniqueIdentifier = ar.Objectid;
                 return ar;
@@ -2603,7 +2506,7 @@ namespace ParatureAPI
             public static ParaObjects.ApiCallResponse AssetUpdate(ParaObjects.Asset Asset, ParaCredentials ParaCredentials)
             {
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Asset, xmlgenerator.AssetGenerateXML(Asset), Asset.Assetid);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Asset, XmlGenerator.AssetGenerateXML(Asset), Asset.Assetid);
                 return ar;
             }
 
@@ -2619,7 +2522,7 @@ namespace ParatureAPI
             ///</param>
             public static ParaObjects.ApiCallResponse AssetDelete(Int64 Assetid, ParaCredentials ParaCredentials, bool purge)
             {
-                return ApiCallFactory.ObjectDelete(ParaCredentials, Paraenums.ParatureModule.Asset, Assetid, purge);
+                return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Asset, Assetid, purge);
             }
 
 
@@ -2637,7 +2540,7 @@ namespace ParatureAPI
             /// For a simple Asset request, please put 0. <br/>When Requesting an Asset, there might be related objects linked to that Asset: such as Customer Owner, Product, etc. <br/>With a regular Asset detail call, generally only the ID and names of the extra objects are loaded. 
             /// <example>For example, the call will return a Asset.CustomerOwner object, but only the Name and ID values will be filled. All of the other properties of the Customer object will be empty. If you select RequestDepth=1, then we will go one level deeper into our request and will therefore retrieve the Customer's detail for you. Customers might be part of an account, so if you select RequestDepth=2, we will go to an even deeper level and return the full account object with all of its properties, etc.<br/> Please make sure you only request the depth you need, as this might make your request slower. </example>
             /// </param>
-            public static ParaObjects.Asset AssetGetDetails(Int64 Assetid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.Asset AssetGetDetails(Int64 Assetid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 ParaObjects.Asset Asset = new ParaObjects.Asset();
                 Asset = AssetFillDetails(Assetid, ParaCredentials, RequestDepth);
@@ -2657,7 +2560,7 @@ namespace ParatureAPI
             /// </param>           
             public static ParaObjects.Asset AssetGetDetails(Int64 Assetid, ParaCredentials ParaCredentials)
             {
-                return AssetGetDetails(Assetid, ParaCredentials, Paraenums.RequestDepth.Standard);
+                return AssetGetDetails(Assetid, ParaCredentials, ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
@@ -2669,7 +2572,7 @@ namespace ParatureAPI
             public static ParaObjects.Asset AssetGetDetails(XmlDocument AssetXML)
             {
                 ParaObjects.Asset asset = new ParaObjects.Asset();
-                asset = xmlToObjectParser.AssetParser.AssetFill(AssetXML, true, 0, null);
+                asset = XmlToObjectParser.AssetParser.AssetFill(AssetXML, true, 0, null);
                 asset.FullyLoaded = true;
 
                 asset.ApiCallResponse.xmlReceived = AssetXML;
@@ -2688,7 +2591,7 @@ namespace ParatureAPI
             public static ParaObjects.AssetsList AssetsGetList(XmlDocument AssetsListXML)
             {
                 ParaObjects.AssetsList assetsList = new ParaObjects.AssetsList();
-                assetsList = xmlToObjectParser.AssetParser.AssetsFillList(AssetsListXML, true, 0, null);
+                assetsList = XmlToObjectParser.AssetParser.AssetsFillList(AssetsListXML, true, 0, null);
 
                 assetsList.ApiCallResponse.xmlReceived = AssetsListXML;
 
@@ -2701,7 +2604,7 @@ namespace ParatureAPI
             /// </summary>
             public static ParaObjects.AssetsList AssetsGetList(ParaCredentials ParaCredentials, ModuleQuery.AssetQuery Query)
             {
-                return AssetsFillList(ParaCredentials, Query, Paraenums.RequestDepth.Standard);
+                return AssetsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
@@ -2710,7 +2613,7 @@ namespace ParatureAPI
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ParaObjects.AssetsList AssetsGetList(ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.AssetsList AssetsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 return AssetsFillList(ParaCredentials, null, RequestDepth);
             }
@@ -2719,7 +2622,7 @@ namespace ParatureAPI
             /// </summary>            
             public static ParaObjects.AssetsList AssetsGetList(ParaCredentials ParaCredentials)
             {
-                return AssetsFillList(ParaCredentials, null, Paraenums.RequestDepth.Standard);
+                return AssetsFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
             }
             /// <summary>
             /// Provides you with the capability to list Assets, following criteria you would set
@@ -2728,7 +2631,7 @@ namespace ParatureAPI
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ParaObjects.AssetsList AssetsGetList(ParaCredentials ParaCredentials, ModuleQuery.AssetQuery Query, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.AssetsList AssetsGetList(ParaCredentials ParaCredentials, ModuleQuery.AssetQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 return AssetsFillList(ParaCredentials, Query, RequestDepth);
             }
@@ -2736,7 +2639,7 @@ namespace ParatureAPI
             /// <summary>
             /// Fills an Asset list object.
             /// </summary>
-            private static ParaObjects.AssetsList AssetsFillList(ParaCredentials ParaCredentials, ModuleQuery.AssetQuery Query, Paraenums.RequestDepth RequestDepth)
+            private static ParaObjects.AssetsList AssetsFillList(ParaCredentials ParaCredentials, ModuleQuery.AssetQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 if (Query == null)
@@ -2756,7 +2659,7 @@ namespace ParatureAPI
 
                 if (Query.RetrieveAllRecords && Query.OptimizePageSize)
                 {
-                    ParaObjects.OptimizationResult rslt = optimizeObjectPageSize(AssetsList, Query, ParaCredentials, requestdepth, Paraenums.ParatureModule.Asset);
+                    ParaObjects.OptimizationResult rslt = OptimizeObjectPageSize(AssetsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Asset);
                     ar = rslt.apiResponse;
                     Query = (ModuleQuery.AssetQuery)rslt.Query;
                     AssetsList = ((ParaObjects.AssetsList)rslt.objectList);
@@ -2764,10 +2667,10 @@ namespace ParatureAPI
                 }
                 else
                 {
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Asset, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Asset, Query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        AssetsList = xmlToObjectParser.AssetParser.AssetsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                        AssetsList = XmlToObjectParser.AssetParser.AssetsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                     }
                     AssetsList.ApiCallResponse = ar;
                 }
@@ -2786,7 +2689,7 @@ namespace ParatureAPI
                             //ApiCallFactory.waitCheck(ParaCredentials.Accountid);
                             Query.PageNumber = i;
                             //implement semaphore right here (in the thread pool instance to control the generation of threads
-                            instance = new ThreadPool.ObjectList(ParaCredentials, Paraenums.ParatureModule.Asset, Query.BuildQueryArguments(), requestdepth);
+                            instance = new ThreadPool.ObjectList(ParaCredentials, ParaEnums.ParatureModule.Asset, Query.BuildQueryArguments(), requestdepth);
                             t = new System.Threading.Thread(delegate() { instance.Go(AssetsList); });
                             t.Start();
                         }
@@ -2813,11 +2716,11 @@ namespace ParatureAPI
                                 // Getting next page's data
                                 Query.PageNumber = Query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Asset, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Asset, Query.BuildQueryArguments());
 
                                 if (ar.HasException == false)
                                 {
-                                objectlist = xmlToObjectParser.AssetParser.AssetsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                                objectlist = XmlToObjectParser.AssetParser.AssetsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                                 AssetsList.Assets.AddRange(objectlist.Assets);
                                 AssetsList.ResultsReturned = AssetsList.Assets.Count;
                                 AssetsList.PageNumber = Query.PageNumber;
@@ -2844,18 +2747,18 @@ namespace ParatureAPI
 
             }
 
-            static ParaObjects.Asset AssetFillDetails(Int64 Assetid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+            static ParaObjects.Asset AssetFillDetails(Int64 Assetid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 ParaObjects.Asset Asset = new ParaObjects.Asset();
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
 
 
-                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureModule.Asset, Assetid);
+                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Asset, Assetid);
 
                 if (ar.HasException == false)
                 {
-                    Asset = xmlToObjectParser.AssetParser.AssetFill(ar.xmlReceived, true, requestdepth, ParaCredentials);
+                    Asset = XmlToObjectParser.AssetParser.AssetFill(ar.xmlReceived, true, requestdepth, ParaCredentials);
                     Asset.FullyLoaded = true;
                 }
                 else
@@ -2884,9 +2787,9 @@ namespace ParatureAPI
             /// <returns></returns>
             public static ParaObjects.ApiCallResponse ActionRun(Int64 Assetid, ParaObjects.Action Action, ParaCredentials ParaCredentials)
             {
-                Action.actionType = Paraenums.ActionType.Other;
+                Action.actionType = ParaEnums.ActionType.Other;
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiHandler.ActionRun(Assetid, Action, ParaCredentials, Paraenums.ParatureModule.Asset);
+                ar = ApiHandler.ActionRun(Assetid, Action, ParaCredentials, ParaEnums.ParatureModule.Asset);
                 return ar;
             }
         }
@@ -2894,7 +2797,7 @@ namespace ParatureAPI
         /// <summary>
         /// Contains all the methods that allow you to interact with the Parature Download module.
         /// </summary>
-        public partial class Download
+        public class Download
         {
             /// <summary>
             /// Provides the Schema of the download module.
@@ -2903,11 +2806,11 @@ namespace ParatureAPI
             {
                 ParaObjects.Download Download = new ParaObjects.Download(true);
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, Paraenums.ParatureModule.Download);
+                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Download);
 
                 if (ar.HasException == false)
                 {
-                    Download = xmlToObjectParser.DownloadParser.DownloadFill(ar.xmlReceived, 0, false, ParaCredentials);
+                    Download = XmlToObjectParser.DownloadParser.DownloadFill(ar.xmlReceived, 0, false, ParaCredentials);
                 }
 
                 Download.ApiCallResponse = ar;
@@ -2926,7 +2829,7 @@ namespace ParatureAPI
             ///</param>
             public static ParaObjects.ApiCallResponse DownloadDelete(Int64 Downloadid, ParaCredentials ParaCredentials, bool purge)
             {
-                return ApiCallFactory.ObjectDelete(ParaCredentials, Paraenums.ParatureModule.Download, Downloadid, purge);
+                return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Download, Downloadid, purge);
             }
 
             /// <summary>
@@ -2936,8 +2839,8 @@ namespace ParatureAPI
             {
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
                 System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-                doc = xmlgenerator.DownloadGenerateXML(Download);
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Download, doc, 0);
+                doc = XmlGenerator.DownloadGenerateXML(Download);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Download, doc, 0);
                 Download.Downloadid = ar.Objectid;
                 Download.uniqueIdentifier = ar.Objectid;
                 return ar;
@@ -2950,7 +2853,7 @@ namespace ParatureAPI
             {
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
 
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Download, xmlgenerator.DownloadGenerateXML(Download), Download.Downloadid);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Download, XmlGenerator.DownloadGenerateXML(Download), Download.Downloadid);
 
 
                 return ar;
@@ -2970,7 +2873,7 @@ namespace ParatureAPI
             /// <param name="RequestDepth">
             /// For a simple Download request, please put 0. <br/>When Requesting a Download, there might be related objects linked to that Download: such as Products, etc. <br/>With a regular Download detail call, generally only the ID and names of the second level objects are loaded. 
             /// </param>
-            public static ParaObjects.Download DownloadGetDetails(Int64 Downloadid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.Download DownloadGetDetails(Int64 Downloadid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 return DownloadFillDetails(Downloadid, ParaCredentials, RequestDepth, true);
             }
@@ -2987,21 +2890,21 @@ namespace ParatureAPI
             /// </param>
             public static ParaObjects.Download DownloadGetDetails(Int64 Downloadid, ParaCredentials ParaCredentials)
             {
-                return DownloadFillDetails(Downloadid, ParaCredentials, Paraenums.RequestDepth.Standard, true);
+                return DownloadFillDetails(Downloadid, ParaCredentials, ParaEnums.RequestDepth.Standard, true);
             }
             internal static ParaObjects.Attachment DownloadUploadFile(ParaCredentials ParaCredentials, string text, string contentType, string FileName)
             {
-                return ApiHandler.UploadFile(Paraenums.ParatureModule.Download, ParaCredentials, text, contentType, FileName);
+                return ApiHandler.UploadFile(ParaEnums.ParatureModule.Download, ParaCredentials, text, contentType, FileName);
             }
 
             internal static ParaObjects.Attachment DownloadUploadFile(ParaCredentials ParaCredentials, Byte[] Attachment, string contentType, string FileName)
             {
-                return ApiHandler.UploadFile(Paraenums.ParatureModule.Download, ParaCredentials, Attachment, contentType, FileName);
+                return ApiHandler.UploadFile(ParaEnums.ParatureModule.Download, ParaCredentials, Attachment, contentType, FileName);
             }
 
             internal static ParaObjects.Attachment DownloadUploadFile(ParaCredentials ParaCredentials, System.Net.Mail.Attachment Attachment)
             {
-                return ApiHandler.UploadFile(Paraenums.ParatureModule.Download, ParaCredentials, Attachment);
+                return ApiHandler.UploadFile(ParaEnums.ParatureModule.Download, ParaCredentials, Attachment);
             }
 
             /// <summary>
@@ -3013,7 +2916,7 @@ namespace ParatureAPI
             public static ParaObjects.Download DownloadGetDetails(XmlDocument DownloadXML)
             {
                 ParaObjects.Download download = new ParaObjects.Download(true);
-                download = xmlToObjectParser.DownloadParser.DownloadFill(DownloadXML, 0, true, null);
+                download = XmlToObjectParser.DownloadParser.DownloadFill(DownloadXML, 0, true, null);
                 download.FullyLoaded = true;
 
                 download.ApiCallResponse.xmlReceived = DownloadXML;
@@ -3032,7 +2935,7 @@ namespace ParatureAPI
             public static ParaObjects.DownloadsList DownloadsGetList(XmlDocument DownloadListXML)
             {
                 ParaObjects.DownloadsList downloadsList = new ParaObjects.DownloadsList();
-                downloadsList = xmlToObjectParser.DownloadParser.DownloadsFillList(DownloadListXML, true, 0, null);
+                downloadsList = XmlToObjectParser.DownloadParser.DownloadsFillList(DownloadListXML, true, 0, null);
 
                 downloadsList.ApiCallResponse.xmlReceived = DownloadListXML;
 
@@ -3045,7 +2948,7 @@ namespace ParatureAPI
             /// </summary>
             public static ParaObjects.DownloadsList DownloadsGetList(ParaCredentials ParaCredentials, ModuleQuery.DownloadQuery Query)
             {
-                return DownloadsFillList(ParaCredentials, Query, Paraenums.RequestDepth.Standard);
+                return DownloadsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
@@ -3055,7 +2958,7 @@ namespace ParatureAPI
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ParaObjects.DownloadsList DownloadsGetList(ParaCredentials ParaCredentials, ModuleQuery.DownloadQuery Query, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.DownloadsList DownloadsGetList(ParaCredentials ParaCredentials, ModuleQuery.DownloadQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 return DownloadsFillList(ParaCredentials, Query, RequestDepth);
             }
@@ -3064,7 +2967,7 @@ namespace ParatureAPI
             /// </summary>
             public static ParaObjects.DownloadsList DownloadsGetList(ParaCredentials ParaCredentials)
             {
-                return DownloadsFillList(ParaCredentials, null, Paraenums.RequestDepth.Standard);
+                return DownloadsFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
             }
             /// <summary>
             /// Returns a list of the first 25 Downloads returned by the APIs.
@@ -3072,7 +2975,7 @@ namespace ParatureAPI
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ParaObjects.DownloadsList DownloadsGetList(ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.DownloadsList DownloadsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 return DownloadsFillList(ParaCredentials, null, RequestDepth);
             }
@@ -3080,7 +2983,7 @@ namespace ParatureAPI
             /// <summary>
             /// Fills a Download list object.
             /// </summary>
-            private static ParaObjects.DownloadsList DownloadsFillList(ParaCredentials ParaCredentials, ModuleQuery.DownloadQuery Query, Paraenums.RequestDepth RequestDepth)
+            private static ParaObjects.DownloadsList DownloadsFillList(ParaCredentials ParaCredentials, ModuleQuery.DownloadQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 if (Query == null)
@@ -3094,7 +2997,7 @@ namespace ParatureAPI
 
                 if (Query.RetrieveAllRecords && Query.OptimizePageSize)
                 {
-                    ParaObjects.OptimizationResult rslt = optimizeObjectPageSize(DownloadsList, Query, ParaCredentials, requestdepth, Paraenums.ParatureModule.Download);
+                    ParaObjects.OptimizationResult rslt = OptimizeObjectPageSize(DownloadsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Download);
                     ar = rslt.apiResponse;
                     Query = (ModuleQuery.DownloadQuery)rslt.Query;
                     DownloadsList = ((ParaObjects.DownloadsList)rslt.objectList);
@@ -3102,10 +3005,10 @@ namespace ParatureAPI
                 }
                 else
                 {
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Download, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Download, Query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        DownloadsList = xmlToObjectParser.DownloadParser.DownloadsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                        DownloadsList = XmlToObjectParser.DownloadParser.DownloadsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                     }
                     DownloadsList.ApiCallResponse = ar;
                 }
@@ -3124,7 +3027,7 @@ namespace ParatureAPI
                             //ApiCallFactory.waitCheck(ParaCredentials.Accountid);
                             Query.PageNumber = i;
                             //implement semaphore right here (in the thread pool instance to control the generation of threads
-                            instance = new ThreadPool.ObjectList(ParaCredentials, Paraenums.ParatureModule.Download, Query.BuildQueryArguments(), requestdepth);
+                            instance = new ThreadPool.ObjectList(ParaCredentials, ParaEnums.ParatureModule.Download, Query.BuildQueryArguments(), requestdepth);
                             t = new System.Threading.Thread(delegate() { instance.Go(DownloadsList); });
                             t.Start();
                         }
@@ -3151,11 +3054,11 @@ namespace ParatureAPI
                                 // Getting next page's data
                                 Query.PageNumber = Query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Download, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Download, Query.BuildQueryArguments());
 
                                 if (ar.HasException == false)
                                 {
-                                    objectlist = xmlToObjectParser.DownloadParser.DownloadsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                                    objectlist = XmlToObjectParser.DownloadParser.DownloadsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                                     DownloadsList.Downloads.AddRange(objectlist.Downloads);
                                     DownloadsList.ResultsReturned = DownloadsList.Downloads.Count;
                                     DownloadsList.PageNumber = Query.PageNumber;
@@ -3180,15 +3083,15 @@ namespace ParatureAPI
                 return DownloadsList;
             }
 
-            static ParaObjects.Download DownloadFillDetails(Int64 Downloadid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth, bool MinimalisticLoad)
+            static ParaObjects.Download DownloadFillDetails(Int64 Downloadid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
             {
                 int requestdepth = (int)RequestDepth;
                 ParaObjects.Download Download = new ParaObjects.Download(true);
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureModule.Download, Downloadid);
+                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Download, Downloadid);
                 if (ar.HasException == false)
                 {
-                    Download = xmlToObjectParser.DownloadParser.DownloadFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
+                    Download = XmlToObjectParser.DownloadParser.DownloadFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
                     Download.FullyLoaded = true;
                 }
                 else
@@ -3253,7 +3156,7 @@ namespace ParatureAPI
                 {
                     Int64 id = 0;
                     EntityQuery.DownloadFolderQuery dfQuery = new EntityQuery.DownloadFolderQuery();
-                    dfQuery.AddStaticFieldFilter(EntityQuery.DownloadFolderQuery.DownloadFolderStaticFields.ParentFolder, Paraenums.QueryCriteria.Equal, ParentFolderId.ToString());
+                    dfQuery.AddStaticFieldFilter(EntityQuery.DownloadFolderQuery.DownloadFolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, ParentFolderId.ToString());
                     dfQuery.PageSize = 5000;
                     ParaObjects.DownloadFoldersList Folders = new ParaObjects.DownloadFoldersList();
                     Folders = ApiHandler.Download.DownloadFolder.DownloadFoldersGetList(paracredentials, dfQuery);
@@ -3276,8 +3179,8 @@ namespace ParatureAPI
                 {
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
                     System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-                    doc = xmlgenerator.DownloadFolderGenerateXML(downloadfolder);
-                    ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, Paraenums.ParatureEntity.DownloadFolder, doc, 0);
+                    doc = XmlGenerator.DownloadFolderGenerateXML(downloadfolder);
+                    ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, doc, 0);
                     downloadfolder.FolderID = ar.Objectid;
                     return ar;
                 }
@@ -3288,7 +3191,7 @@ namespace ParatureAPI
                 public static ParaObjects.ApiCallResponse Update(ParaObjects.DownloadFolder downloadfolder, ParaCredentials ParaCredentials)
                 {
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, Paraenums.ParatureEntity.DownloadFolder, xmlgenerator.DownloadFolderGenerateXML(downloadfolder), downloadfolder.FolderID);
+                    ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, XmlGenerator.DownloadFolderGenerateXML(downloadfolder), downloadfolder.FolderID);
 
                     return ar;
                 }
@@ -3306,7 +3209,7 @@ namespace ParatureAPI
                 /// <param name="RequestDepth">
                 /// For a simple Download request, please put 0. <br/>When Requesting a Download, there might be related objects linked to that Download: such as Products, etc. <br/>With a regular Download detail call, generally only the ID and names of the second level objects are loaded. 
                 /// </param>
-                public static ParaObjects.DownloadFolder DownloadFolderGetDetails(Int64 DownloadFolderid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+                public static ParaObjects.DownloadFolder DownloadFolderGetDetails(Int64 DownloadFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
                 {
                     ParaObjects.DownloadFolder DownloadFolder = new ParaObjects.DownloadFolder();
                     DownloadFolder = DownloadFolderFillDetails(DownloadFolderid, ParaCredentials, RequestDepth);
@@ -3322,7 +3225,7 @@ namespace ParatureAPI
                 /// </summary>
                 public static ParaObjects.DownloadFoldersList DownloadFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.DownloadFolderQuery Query)
                 {
-                    return DownloadFoldersFillList(ParaCredentials, Query, Paraenums.RequestDepth.Standard);
+                    return DownloadFoldersFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
                 }
 
                 /// <summary>
@@ -3332,7 +3235,7 @@ namespace ParatureAPI
                 /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
                 /// the standard field depth.
                 /// </summary>
-                public static ParaObjects.DownloadFoldersList DownloadFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.DownloadFolderQuery Query, Paraenums.RequestDepth RequestDepth)
+                public static ParaObjects.DownloadFoldersList DownloadFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.DownloadFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
                 {
                     return DownloadFoldersFillList(ParaCredentials, Query, RequestDepth);
                 }
@@ -3340,16 +3243,16 @@ namespace ParatureAPI
                 /// <summary>
                 /// Fills an Download list object.
                 /// </summary>
-                private static ParaObjects.DownloadFoldersList DownloadFoldersFillList(ParaCredentials ParaCredentials, EntityQuery.DownloadFolderQuery Query, Paraenums.RequestDepth RequestDepth)
+                private static ParaObjects.DownloadFoldersList DownloadFoldersFillList(ParaCredentials ParaCredentials, EntityQuery.DownloadFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
                 {
                     int requestdepth = (int)RequestDepth;
                     ParaObjects.DownloadFoldersList DownloadFoldersList = new ParaObjects.DownloadFoldersList();
                     //DownloadsList = null;
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.DownloadFolder, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, Query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        DownloadFoldersList = xmlToObjectParser.DownloadParser.DownloadFolderParser.DownloadFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials);
+                        DownloadFoldersList = XmlToObjectParser.DownloadParser.DownloadFolderParser.DownloadFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials);
                     }
                     DownloadFoldersList.ApiCallResponse = ar;
 
@@ -3369,9 +3272,9 @@ namespace ParatureAPI
                                 // Getting next page's data
                                 Query.PageNumber = Query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.DownloadFolder, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, Query.BuildQueryArguments());
 
-                                objectlist = xmlToObjectParser.DownloadParser.DownloadFolderParser.DownloadFoldersFillList(ar.xmlReceived,0, ParaCredentials);
+                                objectlist = XmlToObjectParser.DownloadParser.DownloadFolderParser.DownloadFoldersFillList(ar.xmlReceived,0, ParaCredentials);
 
                                 if (objectlist.DownloadFolders.Count == 0)
                                 {
@@ -3395,16 +3298,16 @@ namespace ParatureAPI
                     return DownloadFoldersList;
                 }
 
-                static ParaObjects.DownloadFolder DownloadFolderFillDetails(Int64 DownloadFolderid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+                static ParaObjects.DownloadFolder DownloadFolderFillDetails(Int64 DownloadFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
                 {
                     int requestdepth = (int)RequestDepth;
                     ParaObjects.DownloadFolder DownloadFolder = new ParaObjects.DownloadFolder();
                     //Customer = null;
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureEntity.DownloadFolder, DownloadFolderid);
+                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, DownloadFolderid);
                     if (ar.HasException == false)
                     {
-                        DownloadFolder = xmlToObjectParser.DownloadParser.DownloadFolderParser.DownloadFolderFill(ar.xmlReceived, requestdepth, ParaCredentials);
+                        DownloadFolder = XmlToObjectParser.DownloadParser.DownloadFolderParser.DownloadFolderFill(ar.xmlReceived, requestdepth, ParaCredentials);
                         DownloadFolder.FullyLoaded = true;
                     }
                     else
@@ -3426,7 +3329,7 @@ namespace ParatureAPI
                 public static ParaObjects.DownloadFolder DownloadFolderGetDetails(XmlDocument DownloadFolderXML)
                 {
                     ParaObjects.DownloadFolder downloadFolder = new ParaObjects.DownloadFolder();
-                    downloadFolder = xmlToObjectParser.DownloadParser.DownloadFolderParser.DownloadFolderFill(DownloadFolderXML, 0, null);
+                    downloadFolder = XmlToObjectParser.DownloadParser.DownloadFolderParser.DownloadFolderFill(DownloadFolderXML, 0, null);
                     downloadFolder.FullyLoaded = true;
 
                     downloadFolder.ApiCallResponse.xmlReceived = DownloadFolderXML;
@@ -3444,7 +3347,7 @@ namespace ParatureAPI
                 public static ParaObjects.DownloadFoldersList DownloadFoldersGetList(XmlDocument DownloadFolderListXML)
                 {
                     ParaObjects.DownloadFoldersList downloadFoldersList = new ParaObjects.DownloadFoldersList();
-                    downloadFoldersList = xmlToObjectParser.DownloadParser.DownloadFolderParser.DownloadFoldersFillList(DownloadFolderListXML, 0, null);
+                    downloadFoldersList = XmlToObjectParser.DownloadParser.DownloadFolderParser.DownloadFoldersFillList(DownloadFolderListXML, 0, null);
 
                     downloadFoldersList.ApiCallResponse.xmlReceived = DownloadFolderListXML;
 
@@ -3456,7 +3359,7 @@ namespace ParatureAPI
                 {
 
                     ParaObjects.DownloadFolder DownloadFolder = new ParaObjects.DownloadFolder();
-                    DownloadFolder = DownloadFolderFillDetails(DownloadFolderid, ParaCredentials, Paraenums.RequestDepth.Standard);
+                    DownloadFolder = DownloadFolderFillDetails(DownloadFolderid, ParaCredentials, ParaEnums.RequestDepth.Standard);
 
                     return DownloadFolder;
                 }
@@ -3466,7 +3369,7 @@ namespace ParatureAPI
         /// <summary>
         /// Contains all the methods that allow you to interact with the Parature Knowledge Base module.
         /// </summary>
-        public partial class Article
+        public class Article
         {
             /// <summary>
             /// Provides the Schema of the article module.
@@ -3475,11 +3378,11 @@ namespace ParatureAPI
             {
                 ParaObjects.Article Article = new ParaObjects.Article();
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, Paraenums.ParatureModule.Article);
+                ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Article);
 
                 if (ar.HasException == false)
                 {
-                    Article = xmlToObjectParser.ArticleParser.ArticleFill(ar.xmlReceived, 0, false, ParaCredentials);
+                    Article = XmlToObjectParser.ArticleParser.ArticleFill(ar.xmlReceived, 0, false, ParaCredentials);
                 }
 
                 Article.ApiCallResponse = ar;
@@ -3500,7 +3403,7 @@ namespace ParatureAPI
             ///</param>
             public static ParaObjects.ApiCallResponse ArticleDelete(Int64 Articleid, ParaCredentials ParaCredentials, bool purge)
             {
-                return ApiCallFactory.ObjectDelete(ParaCredentials, Paraenums.ParatureModule.Article, Articleid, purge);
+                return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Article, Articleid, purge);
             }
 
             /// <summary>
@@ -3510,8 +3413,8 @@ namespace ParatureAPI
             {
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
                 System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-                doc = xmlgenerator.ArticleGenerateXML(Article);
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Article, doc, 0);
+                doc = XmlGenerator.ArticleGenerateXML(Article);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Article, doc, 0);
                 Article.Articleid = ar.Objectid;
                 Article.uniqueIdentifier = ar.Objectid;
                 return ar;
@@ -3524,7 +3427,7 @@ namespace ParatureAPI
             {
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
 
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Paraenums.ParatureModule.Article, xmlgenerator.ArticleGenerateXML(Article), Article.Articleid);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Article, XmlGenerator.ArticleGenerateXML(Article), Article.Articleid);
 
 
                 return ar;
@@ -3544,7 +3447,7 @@ namespace ParatureAPI
             /// <param name="RequestDepth">
             /// For a simple customer request, please put 0. <br/>When Requesting a Customer, there might be related objects linked to that Customer: such as Account, etc. <br/>With a regular Customer detail call, generally only the ID and names of the second level objects are loaded. 
             /// </param>
-            public static ParaObjects.Article ArticleGetDetails(Int64 Articleid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.Article ArticleGetDetails(Int64 Articleid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 ParaObjects.Article Article = new ParaObjects.Article();
                 Article = ArticleFillDetails(Articleid, ParaCredentials, RequestDepth, true);
@@ -3567,7 +3470,7 @@ namespace ParatureAPI
             {
 
                 ParaObjects.Article Article = new ParaObjects.Article();
-                Article = ArticleFillDetails(Articleid, ParaCredentials, Paraenums.RequestDepth.Standard, true);
+                Article = ArticleFillDetails(Articleid, ParaCredentials, ParaEnums.RequestDepth.Standard, true);
 
                 return Article;
 
@@ -3582,7 +3485,7 @@ namespace ParatureAPI
             public static ParaObjects.Article ArticleGetDetails(XmlDocument ArticleXML)
             {
                 ParaObjects.Article article = new ParaObjects.Article();
-                article = xmlToObjectParser.ArticleParser.ArticleFill(ArticleXML, 0, true, null);
+                article = XmlToObjectParser.ArticleParser.ArticleFill(ArticleXML, 0, true, null);
                 article.FullyLoaded = true;
 
                 article.ApiCallResponse.xmlReceived = ArticleXML;
@@ -3601,7 +3504,7 @@ namespace ParatureAPI
             public static ParaObjects.ArticlesList ArticlesGetList(XmlDocument ArticleListXML)
             {
                 ParaObjects.ArticlesList articlesList = new ParaObjects.ArticlesList();
-                articlesList = xmlToObjectParser.ArticleParser.ArticlesFillList(ArticleListXML, true, 0, null);
+                articlesList = XmlToObjectParser.ArticleParser.ArticlesFillList(ArticleListXML, true, 0, null);
 
                 articlesList.ApiCallResponse.xmlReceived = ArticleListXML;
 
@@ -3614,7 +3517,7 @@ namespace ParatureAPI
             /// </summary>
             public static ParaObjects.ArticlesList ArticlesGetList(ParaCredentials ParaCredentials, ModuleQuery.ArticleQuery Query)
             {
-                return ArticlesFillList(ParaCredentials, Query, Paraenums.RequestDepth.Standard);
+                return ArticlesFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
@@ -3624,7 +3527,7 @@ namespace ParatureAPI
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ParaObjects.ArticlesList ArticlesGetList(ParaCredentials ParaCredentials, ModuleQuery.ArticleQuery Query, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.ArticlesList ArticlesGetList(ParaCredentials ParaCredentials, ModuleQuery.ArticleQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 return ArticlesFillList(ParaCredentials, Query, RequestDepth);
             }
@@ -3634,7 +3537,7 @@ namespace ParatureAPI
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>           
-            public static ParaObjects.ArticlesList ArticlesGetList(ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+            public static ParaObjects.ArticlesList ArticlesGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 return ArticlesFillList(ParaCredentials, null, RequestDepth);
             }
@@ -3643,13 +3546,13 @@ namespace ParatureAPI
             /// </summary>
             public static ParaObjects.ArticlesList ArticlesGetList(ParaCredentials ParaCredentials)
             {
-                return ArticlesFillList(ParaCredentials, null, Paraenums.RequestDepth.Standard);
+                return ArticlesFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
             /// Fills an Article list object.
             /// </summary>
-            private static ParaObjects.ArticlesList ArticlesFillList(ParaCredentials ParaCredentials, ModuleQuery.ArticleQuery Query, Paraenums.RequestDepth RequestDepth)
+            private static ParaObjects.ArticlesList ArticlesFillList(ParaCredentials ParaCredentials, ModuleQuery.ArticleQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 if (Query == null)
@@ -3663,7 +3566,7 @@ namespace ParatureAPI
 
                 if (Query.RetrieveAllRecords && Query.OptimizePageSize)
                 {
-                    ParaObjects.OptimizationResult rslt = optimizeObjectPageSize(ArticlesList, Query, ParaCredentials, requestdepth, Paraenums.ParatureModule.Article);
+                    ParaObjects.OptimizationResult rslt = OptimizeObjectPageSize(ArticlesList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Article);
                     ar = rslt.apiResponse;
                     Query = (ModuleQuery.ArticleQuery)rslt.Query;
                     ArticlesList = ((ParaObjects.ArticlesList)rslt.objectList);
@@ -3671,10 +3574,10 @@ namespace ParatureAPI
                 }
                 else
                 {
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Article, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Article, Query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        ArticlesList = xmlToObjectParser.ArticleParser.ArticlesFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                        ArticlesList = XmlToObjectParser.ArticleParser.ArticlesFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                     }
                     ArticlesList.ApiCallResponse = ar;
                 }
@@ -3693,7 +3596,7 @@ namespace ParatureAPI
                             //ApiCallFactory.waitCheck(ParaCredentials.Accountid);
                             Query.PageNumber = i;
                             //implement semaphore right here (in the thread pool instance to control the generation of threads
-                            instance = new ThreadPool.ObjectList(ParaCredentials, Paraenums.ParatureModule.Article, Query.BuildQueryArguments(), requestdepth);
+                            instance = new ThreadPool.ObjectList(ParaCredentials, ParaEnums.ParatureModule.Article, Query.BuildQueryArguments(), requestdepth);
                             t = new System.Threading.Thread(delegate() { instance.Go(ArticlesList); });
                             t.Start();
                         }
@@ -3720,10 +3623,10 @@ namespace ParatureAPI
                                 // Getting next page's data
                                 Query.PageNumber = Query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureModule.Article, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Article, Query.BuildQueryArguments());
                                 if (ar.HasException == false)
                                 {
-                                    objectlist = xmlToObjectParser.ArticleParser.ArticlesFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                                    objectlist = XmlToObjectParser.ArticleParser.ArticlesFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                                     ArticlesList.Articles.AddRange(objectlist.Articles);
                                     ArticlesList.ResultsReturned = ArticlesList.Articles.Count;
                                     ArticlesList.PageNumber = Query.PageNumber;
@@ -3748,15 +3651,15 @@ namespace ParatureAPI
                 return ArticlesList;
             }
 
-            static ParaObjects.Article ArticleFillDetails(Int64 Articleid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth, bool MinimalisticLoad)
+            static ParaObjects.Article ArticleFillDetails(Int64 Articleid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
             {
                 int requestdepth = (int)RequestDepth;
                 ParaObjects.Article article = new ParaObjects.Article();
                 ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureModule.Article, Articleid);
+                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Article, Articleid);
                 if (ar.HasException == false)
                 {
-                    article = xmlToObjectParser.ArticleParser.ArticleFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
+                    article = XmlToObjectParser.ArticleParser.ArticleFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
                     article.FullyLoaded = true;
                 }
                 else
@@ -3782,11 +3685,11 @@ namespace ParatureAPI
                 {
                     ParaObjects.ArticleFolder ArticleFolder = new ParaObjects.ArticleFolder();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.EntityGetSchema(ParaCredentials, Paraenums.ParatureEntity.ArticleFolder);
+                    ar = ApiCallFactory.EntityGetSchema(ParaCredentials, ParaEnums.ParatureEntity.ArticleFolder);
 
                     if (ar.HasException == false)
                     {
-                        ArticleFolder = xmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFolderFill(ar.xmlReceived, 0, ParaCredentials);
+                        ArticleFolder = XmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFolderFill(ar.xmlReceived, 0, ParaCredentials);
                     }
                     ArticleFolder.ApiCallResponse = ar;
                     return ArticleFolder;
@@ -3837,7 +3740,7 @@ namespace ParatureAPI
                 {
                     Int64 id = 0;
                     EntityQuery.ArticleFolderQuery afQuery = new EntityQuery.ArticleFolderQuery();
-                    afQuery.AddStaticFieldFilter(EntityQuery.ArticleFolderQuery.ArticleFolderStaticFields.Name, Paraenums.QueryCriteria.Equal, ParentFolderId.ToString());
+                    afQuery.AddStaticFieldFilter(EntityQuery.ArticleFolderQuery.ArticleFolderStaticFields.Name, ParaEnums.QueryCriteria.Equal, ParentFolderId.ToString());
                     afQuery.PageSize = 5000;
                     ParaObjects.ArticleFoldersList Folders = new ParaObjects.ArticleFoldersList();
                     Folders = ApiHandler.Article.ArticleFolder.ArticleFoldersGetList(paracredentials, afQuery);
@@ -3860,7 +3763,7 @@ namespace ParatureAPI
                 /// </param>
                 public static ParaObjects.ApiCallResponse Delete(Int64 Folderid, ParaCredentials ParaCredentials)
                 {
-                    return ApiCallFactory.EntityDelete(ParaCredentials, Paraenums.ParatureEntity.ArticleFolder, Folderid);
+                    return ApiCallFactory.EntityDelete(ParaCredentials, ParaEnums.ParatureEntity.ArticleFolder, Folderid);
                 }
 
                 /// <summary>
@@ -3870,8 +3773,8 @@ namespace ParatureAPI
                 {
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
                     System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-                    doc = xmlgenerator.ArticleFolderGenerateXML(articleFolder);
-                    ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, Paraenums.ParatureEntity.ArticleFolder, doc, 0);
+                    doc = XmlGenerator.ArticleFolderGenerateXML(articleFolder);
+                    ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.ArticleFolder, doc, 0);
                     articleFolder.FolderID = ar.Objectid;
                     return ar;
                     //return 0;
@@ -3884,7 +3787,7 @@ namespace ParatureAPI
                 {
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
 
-                    ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, Paraenums.ParatureEntity.ArticleFolder, xmlgenerator.ArticleFolderGenerateXML(articleFolder), articleFolder.FolderID);
+                    ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.ArticleFolder, XmlGenerator.ArticleFolderGenerateXML(articleFolder), articleFolder.FolderID);
 
                     return ar;
                     //return 0;
@@ -3903,7 +3806,7 @@ namespace ParatureAPI
                 /// <param name="RequestDepth">
                 /// For a simple Article request, please put 0. <br/>When Requesting a Article, there might be related objects linked to that Article: such as Products, etc. <br/>With a regular Download detail call, generally only the ID and names of the second level objects are loaded. 
                 /// </param>
-                public static ParaObjects.ArticleFolder ArticleFolderGetDetails(Int64 ArticleFolderid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+                public static ParaObjects.ArticleFolder ArticleFolderGetDetails(Int64 ArticleFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
                 {
                     ParaObjects.ArticleFolder ArticleFolder = new ParaObjects.ArticleFolder();
                     ArticleFolder = ArticleFolderFillDetails(ArticleFolderid, ParaCredentials, RequestDepth);
@@ -3921,7 +3824,7 @@ namespace ParatureAPI
                 public static ParaObjects.ArticleFolder ArticleFolderGetDetails(XmlDocument ArticleFolderXml)
                 {
                     ParaObjects.ArticleFolder articleFolder = new ParaObjects.ArticleFolder();
-                    articleFolder = xmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFolderFill(ArticleFolderXml, 0, null);
+                    articleFolder = XmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFolderFill(ArticleFolderXml, 0, null);
                     articleFolder.FullyLoaded = true;
 
                     articleFolder.ApiCallResponse.xmlReceived = ArticleFolderXml;
@@ -3937,7 +3840,7 @@ namespace ParatureAPI
                 {
                     EntityQuery.ArticleFolderQuery eq = new EntityQuery.ArticleFolderQuery();
                     eq.RetrieveAllRecords = true;
-                    return ArticleFoldersFillList(ParaCredentials, eq, Paraenums.RequestDepth.Standard);
+                    return ArticleFoldersFillList(ParaCredentials, eq, ParaEnums.RequestDepth.Standard);
                 }
 
                 /// <summary>
@@ -3946,7 +3849,7 @@ namespace ParatureAPI
                 /// </summary>
                 public static ParaObjects.ArticleFoldersList ArticleFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ArticleFolderQuery Query)
                 {
-                    return ArticleFoldersFillList(ParaCredentials, Query, Paraenums.RequestDepth.Standard);
+                    return ArticleFoldersFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
                 }
 
                 /// <summary>
@@ -3956,7 +3859,7 @@ namespace ParatureAPI
                 /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
                 /// the standard field depth.
                 /// </summary>
-                public static ParaObjects.ArticleFoldersList ArticleFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ArticleFolderQuery Query, Paraenums.RequestDepth RequestDepth)
+                public static ParaObjects.ArticleFoldersList ArticleFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
                 {
                     return ArticleFoldersFillList(ParaCredentials, Query, RequestDepth);
                 }
@@ -3970,7 +3873,7 @@ namespace ParatureAPI
                 public static ParaObjects.ArticleFoldersList ArticleFoldersGetList(XmlDocument ArticleFoldersListXml)
                 {
                     ParaObjects.ArticleFoldersList articleFolderList = new ParaObjects.ArticleFoldersList();
-                    articleFolderList = xmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ArticleFoldersListXml, 0, null);
+                    articleFolderList = XmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ArticleFoldersListXml, 0, null);
 
                     articleFolderList.ApiCallResponse.xmlReceived = ArticleFoldersListXml;
 
@@ -3980,7 +3883,7 @@ namespace ParatureAPI
                 /// <summary>
                 /// Fills an Article list object.
                 /// </summary>
-                private static ParaObjects.ArticleFoldersList ArticleFoldersFillList(ParaCredentials ParaCredentials, EntityQuery.ArticleFolderQuery Query, Paraenums.RequestDepth RequestDepth)
+                private static ParaObjects.ArticleFoldersList ArticleFoldersFillList(ParaCredentials ParaCredentials, EntityQuery.ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
                 {
                     /*
                     int requestdepth = (int)RequestDepth;
@@ -4011,10 +3914,10 @@ namespace ParatureAPI
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
                     ParaObjects.ArticleFoldersList ArticleFoldersList = new ParaObjects.ArticleFoldersList();
 
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.ArticleFolder, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.ArticleFolder, Query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        ArticleFoldersList = xmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials);
+                        ArticleFoldersList = XmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials);
                     }
 
                     ArticleFoldersList.ApiCallResponse = ar;
@@ -4031,11 +3934,11 @@ namespace ParatureAPI
                                 // Getting next page's data
                                 Query.PageNumber = Query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.ArticleFolder, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.ArticleFolder, Query.BuildQueryArguments());
 
                                 if (ar.HasException == false)
                                 {
-                                    ArticleFoldersList.ArticleFolders.AddRange(xmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials).ArticleFolders);
+                                    ArticleFoldersList.ArticleFolders.AddRange(XmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials).ArticleFolders);
                                     ArticleFoldersList.ResultsReturned = ArticleFoldersList.ArticleFolders.Count;
                                     ArticleFoldersList.PageNumber = Query.PageNumber;
                                 }
@@ -4058,16 +3961,16 @@ namespace ParatureAPI
                     return ArticleFoldersList;
                 }
 
-                static ParaObjects.ArticleFolder ArticleFolderFillDetails(Int64 ArticleFolderid, ParaCredentials ParaCredentials, Paraenums.RequestDepth RequestDepth)
+                static ParaObjects.ArticleFolder ArticleFolderFillDetails(Int64 ArticleFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
                 {
                     int requestdepth = (int)RequestDepth;
                     ParaObjects.ArticleFolder ArticleFolder = new ParaObjects.ArticleFolder();
                     //Customer = null;
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureEntity.ArticleFolder, ArticleFolderid);
+                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.ArticleFolder, ArticleFolderid);
                     if (ar.HasException == false)
                     {
-                        ArticleFolder = xmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFolderFill(ar.xmlReceived, requestdepth, ParaCredentials);
+                        ArticleFolder = XmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFolderFill(ar.xmlReceived, requestdepth, ParaCredentials);
                         ArticleFolder.FullyLoaded = true;
                     }
                     else
@@ -4085,7 +3988,7 @@ namespace ParatureAPI
                 {
 
                     ParaObjects.ArticleFolder ArticleFolder = new ParaObjects.ArticleFolder();
-                    ArticleFolder = ArticleFolderFillDetails(ArticleFolderid, ParaCredentials, Paraenums.RequestDepth.Standard);
+                    ArticleFolder = ArticleFolderFillDetails(ArticleFolderid, ParaCredentials, ParaEnums.RequestDepth.Standard);
 
                     return ArticleFolder;
                 }
@@ -4096,7 +3999,7 @@ namespace ParatureAPI
         /// <summary>
         /// Contains all the methods to access shared entities (like CSRs, SLAs, departments, etc)
         /// </summary>
-        public partial class Entities
+        public class Entities
         {
             public partial class Timezone
             {
@@ -4126,7 +4029,7 @@ namespace ParatureAPI
                 public static ParaObjects.Timezone TimezoneGetDetails(XmlDocument TimezoneXML)
                 {
                     ParaObjects.Timezone Timezone = new ParaObjects.Timezone();
-                    Timezone = xmlToObjectParser.TimezoneParser.TimezoneFill(TimezoneXML);
+                    Timezone = XmlToObjectParser.TimezoneParser.TimezoneFill(TimezoneXML);
 
                     return Timezone;
                 }
@@ -4140,7 +4043,7 @@ namespace ParatureAPI
                 public static ParaObjects.TimezonesList TimezoneGetList(XmlDocument TimezoneListXML)
                 {
                     ParaObjects.TimezonesList TimezonesList = new ParaObjects.TimezonesList();
-                    TimezonesList = xmlToObjectParser.TimezoneParser.TimezonesFillList(TimezoneListXML);
+                    TimezonesList = XmlToObjectParser.TimezoneParser.TimezonesFillList(TimezoneListXML);
 
                     TimezonesList.ApiCallResponse.xmlReceived = TimezoneListXML;
 
@@ -4169,10 +4072,10 @@ namespace ParatureAPI
 
                     ParaObjects.TimezonesList TimezoneList = new ParaObjects.TimezonesList();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.Timezone, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.Timezone, Query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        TimezoneList = xmlToObjectParser.TimezoneParser.TimezonesFillList(ar.xmlReceived);
+                        TimezoneList = XmlToObjectParser.TimezoneParser.TimezonesFillList(ar.xmlReceived);
                     }
                     TimezoneList.ApiCallResponse = ar;
                     return TimezoneList;
@@ -4181,10 +4084,10 @@ namespace ParatureAPI
                 {
                     ParaObjects.Timezone Timezone = new ParaObjects.Timezone();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureEntity.Timezone, TimezoneId);
+                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.Timezone, TimezoneId);
                     if (ar.HasException == false)
                     {
-                        Timezone = xmlToObjectParser.TimezoneParser.TimezoneFill(ar.xmlReceived);
+                        Timezone = XmlToObjectParser.TimezoneParser.TimezoneFill(ar.xmlReceived);
                     }
                     else
                     {
@@ -4224,7 +4127,7 @@ namespace ParatureAPI
                 public static ParaObjects.Status StatusGetDetails(XmlDocument StatusXML)
                 {
                     ParaObjects.Status Status = new ParaObjects.Status();
-                    Status = xmlToObjectParser.StatusParser.StatusFill(StatusXML);
+                    Status = XmlToObjectParser.StatusParser.StatusFill(StatusXML);
 
                     return Status;
                 }
@@ -4238,7 +4141,7 @@ namespace ParatureAPI
                 public static ParaObjects.StatusList StatusGetList(XmlDocument StatusListXML)
                 {
                     ParaObjects.StatusList StatussList = new ParaObjects.StatusList();
-                    StatussList = xmlToObjectParser.StatusParser.StatusFillList(StatusListXML);
+                    StatussList = XmlToObjectParser.StatusParser.StatusFillList(StatusListXML);
 
                     StatussList.ApiCallResponse.xmlReceived = StatusListXML;
 
@@ -4268,10 +4171,10 @@ namespace ParatureAPI
 
                     ParaObjects.StatusList StatusList = new ParaObjects.StatusList();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.status, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.status, Query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        StatusList = xmlToObjectParser.StatusParser.StatusFillList(ar.xmlReceived);
+                        StatusList = XmlToObjectParser.StatusParser.StatusFillList(ar.xmlReceived);
                     }
                     StatusList.ApiCallResponse = ar;
 
@@ -4291,9 +4194,9 @@ namespace ParatureAPI
                                 // Getting next page's data
                                 Query.PageNumber = Query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.status, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.status, Query.BuildQueryArguments());
 
-                                objectlist = xmlToObjectParser.StatusParser.StatusFillList(ar.xmlReceived);
+                                objectlist = XmlToObjectParser.StatusParser.StatusFillList(ar.xmlReceived);
 
                                 if (objectlist.Statuses.Count == 0)
                                 {
@@ -4319,10 +4222,10 @@ namespace ParatureAPI
                 {
                     ParaObjects.Status Status = new ParaObjects.Status();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureEntity.status, StatusId);
+                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.status, StatusId);
                     if (ar.HasException == false)
                     {
-                        Status = xmlToObjectParser.StatusParser.StatusFill(ar.xmlReceived);
+                        Status = XmlToObjectParser.StatusParser.StatusFill(ar.xmlReceived);
                     }
                     else
                     {
@@ -4363,7 +4266,7 @@ namespace ParatureAPI
                 public static ParaObjects.Role RoleGetDetails(XmlDocument RoleXML)
                 {
                     ParaObjects.Role role = new ParaObjects.Role();
-                    role = xmlToObjectParser.RoleParser.RoleFill(RoleXML);
+                    role = XmlToObjectParser.RoleParser.RoleFill(RoleXML);
 
                     return role;
                 }
@@ -4377,7 +4280,7 @@ namespace ParatureAPI
                 public static ParaObjects.RolesList RolesGetList(XmlDocument RoleListXML)
                 {
                     ParaObjects.RolesList rolesList = new ParaObjects.RolesList();
-                    rolesList = xmlToObjectParser.RoleParser.RolesFillList(RoleListXML);
+                    rolesList = XmlToObjectParser.RoleParser.RolesFillList(RoleListXML);
 
                     rolesList.ApiCallResponse.xmlReceived = RoleListXML;
 
@@ -4390,13 +4293,13 @@ namespace ParatureAPI
                 /// <param name="ParaCredentials"></param>
                 /// <param name="Query"></param>
                 /// <returns></returns>
-                public static ParaObjects.RolesList RolesGetList(ParaCredentials ParaCredentials, EntityQuery.RoleQuery Query, Paraenums.ParatureModule Module)
+                public static ParaObjects.RolesList RolesGetList(ParaCredentials ParaCredentials, EntityQuery.RoleQuery Query, ParaEnums.ParatureModule Module)
                 {
                     return RoleFillList(ParaCredentials, Query, Module);
                 }
 
 
-                public static ParaObjects.RolesList RolesGetList(ParaCredentials ParaCredentials, Paraenums.ParatureModule Module)
+                public static ParaObjects.RolesList RolesGetList(ParaCredentials ParaCredentials, ParaEnums.ParatureModule Module)
                 {
                     return RoleFillList(ParaCredentials, new EntityQuery.RoleQuery(), Module);
                 }
@@ -4404,22 +4307,23 @@ namespace ParatureAPI
                 /// <summary>
                 /// Fills a Role list object
                 /// </summary>
-                /// <param name="ParaCredentials"></param>
-                /// <param name="Query"></param>
+                /// <param name="paraCredentials"></param>
+                /// <param name="query"></param>
+                /// <param name="Module"></param>
                 /// <returns></returns>
-                private static ParaObjects.RolesList RoleFillList(ParaCredentials ParaCredentials, EntityQuery.RoleQuery Query, Paraenums.ParatureModule Module)
+                private static ParaObjects.RolesList RoleFillList(ParaCredentials paraCredentials, EntityQuery.RoleQuery query, ParaEnums.ParatureModule Module)
                 {
                     ParaObjects.RolesList RolesList = new ParaObjects.RolesList();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectSecondLevelGetList(ParaCredentials, Module, Paraenums.ParatureEntity.role, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, Module, ParaEnums.ParatureEntity.role, query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        RolesList = xmlToObjectParser.RoleParser.RolesFillList(ar.xmlReceived);
+                        RolesList = XmlToObjectParser.RoleParser.RolesFillList(ar.xmlReceived);
                     }
                     RolesList.ApiCallResponse = ar;
 
                     // Checking if the system needs to recursively call all of the data returned.
-                    if (Query.RetrieveAllRecords)
+                    if (query.RetrieveAllRecords)
                     {
                         bool continueCalling = true;
                         while (continueCalling)
@@ -4431,11 +4335,11 @@ namespace ParatureAPI
                                 // We still need to pull data
 
                                 // Getting next page's data
-                                Query.PageNumber = Query.PageNumber + 1;
+                                query.PageNumber = query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.role, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.role, query.BuildQueryArguments());
 
-                                objectlist = xmlToObjectParser.RoleParser.RolesFillList(ar.xmlReceived);
+                                objectlist = XmlToObjectParser.RoleParser.RolesFillList(ar.xmlReceived);
 
                                 if (objectlist.Roles.Count == 0)
                                 {
@@ -4444,7 +4348,7 @@ namespace ParatureAPI
 
                                 RolesList.Roles.AddRange(objectlist.Roles);
                                 RolesList.ResultsReturned = RolesList.Roles.Count;
-                                RolesList.PageNumber = Query.PageNumber;
+                                RolesList.PageNumber = query.PageNumber;
                             }
                             else
                             {
@@ -4458,14 +4362,14 @@ namespace ParatureAPI
                     return RolesList;
                 }
 
-                static ParaObjects.Role RoleFillDetails(Int64 RoleID, ParaCredentials ParaCredentials)
+                static ParaObjects.Role RoleFillDetails(Int64 roleId, ParaCredentials paraCredentials)
                 {
                     ParaObjects.Role Role = new ParaObjects.Role();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureEntity.role, RoleID);
+                    ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.role, roleId);
                     if (ar.HasException == false)
                     {
-                        Role = xmlToObjectParser.RoleParser.RoleFill(ar.xmlReceived);
+                        Role = XmlToObjectParser.RoleParser.RoleFill(ar.xmlReceived);
                     }
                     else
                     {
@@ -4473,85 +4377,37 @@ namespace ParatureAPI
                     }
                     return Role;
                 }
-                /// <summary>
-                /// Returns a Role object if it finds a Role matching the name you provide to it. Will return null if nothing is found.
-                /// </summary>
-                /// <param name="RoleName">
-                /// The Role Name to look for.
-                /// </param>
-                /// <param name="ParaCredentials"></param>
-                /// <param name="IgnoreCase">
-                /// When looking for this Role, please indicate whether the search should be case sensitive or not.
-                /// </param>
-                /// <returns></returns>
-                static ParaObjects.Role HelperRoleFindByName(string RoleName, ParaCredentials ParaCredentials, bool IgnoreCase, Paraenums.ParatureModule Module)
-                {
-                    ParaObjects.Role foundRole = new ParaObjects.Role();
-                    EntityQuery.RoleQuery rq = new EntityQuery.RoleQuery();
-                    rq.PageSize = 1000;
-                    ParaObjects.RolesList oRole = new ParaObjects.RolesList();
-                    oRole = ApiHandler.Entities.Role.RolesGetList(ParaCredentials, rq, Module);
-
-                    string RoleToCompare = "";
-                    string RoleDestRole = "";
-                    if (IgnoreCase == true)
-                    {
-                        RoleToCompare = RoleName.ToLower();
-                    }
-                    bool found = false;
-                    foreach (ParaObjects.Role role in oRole.Roles)
-                    {
-                        if (IgnoreCase == true)
-                        {
-                            RoleDestRole = role.Name.ToLower();
-                        }
-                        if (string.Compare(RoleToCompare, RoleDestRole) == 0)
-                        {
-                            found = true;
-                            foundRole = role;
-                            break;
-                        }
-                    }
-                    if (found == true)
-                    {
-                        return foundRole;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
             }
 
-            public partial class Sla
+            public class Sla
             {
                 /// <summary>
                 /// Returns an SLA object with all of its properties filled.
                 /// </summary>
-                /// <param name="SLAid">
+                /// <param name="slaId">
                 ///The SLA number that you would like to get the details of. 
                 ///Value Type: <see cref="Int64" />   (System.Int64)
                 ///</param>
-                /// <param name="ParaCredentials">
+                /// <param name="paraCredentials">
                 /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
                 /// </param>               
-                public static ParaObjects.Sla SLAGetDetails(Int64 SLAid, ParaCredentials ParaCredentials)
+                public static ParaObjects.Sla SLAGetDetails(Int64 slaId, ParaCredentials paraCredentials)
                 {
                     ParaObjects.Sla Sla = new ParaObjects.Sla();
-                    Sla = SlaFillDetails(SLAid, ParaCredentials);
+                    Sla = SlaFillDetails(slaId, paraCredentials);
                     return Sla;
                 }
 
                 /// <summary>
                 /// Returns an sla object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
-                /// <param name="SlaXML">
+                /// <param name="slaXml">
                 /// The Sla XML, is should follow the exact template of the XML returned by the Parature APIs.
                 /// </param>
-                public static ParaObjects.Sla SLAGetDetails(XmlDocument SlaXML)
+                public static ParaObjects.Sla SLAGetDetails(XmlDocument slaXml)
                 {
                     ParaObjects.Sla sla = new ParaObjects.Sla();
-                    sla = xmlToObjectParser.SlaParser.SlaFill(SlaXML);
+                    sla = XmlToObjectParser.SlaParser.SlaFill(slaXml);
 
                     return sla;
                 }
@@ -4559,31 +4415,31 @@ namespace ParatureAPI
                 /// <summary>
                 /// Get the list of SLAs from within your Parature license.
                 /// </summary>
-                public static ParaObjects.SlasList SLAsGetList(ParaCredentials ParaCredentials)
+                public static ParaObjects.SlasList SLAsGetList(ParaCredentials paraCredentials)
                 {
-                    return SlaFillList(ParaCredentials, new EntityQuery.SlaQuery());
+                    return SlaFillList(paraCredentials, new EntityQuery.SlaQuery());
                 }
 
                 /// <summary>
                 /// Get the list of SLAs from within your Parature license.
                 /// </summary>
-                public static ParaObjects.SlasList SLAsGetList(ParaCredentials ParaCredentials, EntityQuery.SlaQuery Query)
+                public static ParaObjects.SlasList SLAsGetList(ParaCredentials paraCredentials, EntityQuery.SlaQuery query)
                 {
-                    return SlaFillList(ParaCredentials, Query);
+                    return SlaFillList(paraCredentials, query);
                 }
 
                 /// <summary>
                 /// Returns an sla list object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
-                /// <param name="SlaListXML">
+                /// <param name="slaListXml">
                 /// The Sla List XML, is should follow the exact template of the XML returned by the Parature APIs.
                 /// </param>
-                public static ParaObjects.SlasList SLAsGetList(XmlDocument SlaListXML)
+                public static ParaObjects.SlasList SLAsGetList(XmlDocument slaListXml)
                 {
                     ParaObjects.SlasList slasList = new ParaObjects.SlasList();
-                    slasList = xmlToObjectParser.SlaParser.SlasFillList(SlaListXML);
+                    slasList = XmlToObjectParser.SlaParser.SlasFillList(slaListXml);
 
-                    slasList.ApiCallResponse.xmlReceived = SlaListXML;
+                    slasList.ApiCallResponse.xmlReceived = slaListXml;
 
                     return slasList;
                 }
@@ -4591,20 +4447,20 @@ namespace ParatureAPI
                 /// <summary>
                 /// Fills a Sla list object.
                 /// </summary>
-                private static ParaObjects.SlasList SlaFillList(ParaCredentials ParaCredentials, EntityQuery.SlaQuery Query)
+                private static ParaObjects.SlasList SlaFillList(ParaCredentials paraCredentials, EntityQuery.SlaQuery query)
                 {
 
                     ParaObjects.SlasList SlasList = new ParaObjects.SlasList();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.Sla, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Sla, query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        SlasList = xmlToObjectParser.SlaParser.SlasFillList(ar.xmlReceived);
+                        SlasList = XmlToObjectParser.SlaParser.SlasFillList(ar.xmlReceived);
                     }
                     SlasList.ApiCallResponse = ar;
 
                     // Checking if the system needs to recursively call all of the data returned.
-                    if (Query.RetrieveAllRecords)
+                    if (query.RetrieveAllRecords)
                     {
                         bool continueCalling = true;
                         while (continueCalling)
@@ -4616,11 +4472,11 @@ namespace ParatureAPI
                                 // We still need to pull data
 
                                 // Getting next page's data
-                                Query.PageNumber = Query.PageNumber + 1;
+                                query.PageNumber = query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.Sla, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Sla, query.BuildQueryArguments());
 
-                                objectlist = xmlToObjectParser.SlaParser.SlasFillList(ar.xmlReceived);
+                                objectlist = XmlToObjectParser.SlaParser.SlasFillList(ar.xmlReceived);
 
                                 if (objectlist.Slas.Count == 0)
                                 {
@@ -4629,7 +4485,7 @@ namespace ParatureAPI
 
                                 SlasList.Slas.AddRange(objectlist.Slas);
                                 SlasList.ResultsReturned = SlasList.Slas.Count;
-                                SlasList.PageNumber = Query.PageNumber;
+                                SlasList.PageNumber = query.PageNumber;
                             }
                             else
                             {
@@ -4643,14 +4499,15 @@ namespace ParatureAPI
 
                     return SlasList;
                 }
-                static ParaObjects.Sla SlaFillDetails(Int64 Slaid, ParaCredentials ParaCredentials)
+
+                private static ParaObjects.Sla SlaFillDetails(Int64 slaId, ParaCredentials paraCredentials)
                 {
                     ParaObjects.Sla Sla = new ParaObjects.Sla();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureEntity.Sla, Slaid);
+                    ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.Sla, slaId);
                     if (ar.HasException == false)
                     {
-                        Sla = xmlToObjectParser.SlaParser.SlaFill(ar.xmlReceived);
+                        Sla = XmlToObjectParser.SlaParser.SlaFill(ar.xmlReceived);
                     }
                     else
                     {
@@ -4660,54 +4517,6 @@ namespace ParatureAPI
 
                     //Sla.ApiCallResponse = ar;
                     return Sla;
-                }
-                /// <summary>
-                /// Returns an SLA object if it finds an Sla matching the name you provide to it. Will return null if nothing is found.
-                /// </summary>
-                /// <param name="SlaName">
-                /// The Sla Name to look for.
-                /// </param>
-                /// <param name="ParaCredentials"></param>
-                /// <param name="IgnoreCase">
-                /// When looking for this SLA, please indicate whether the search should be case sensitive or not.
-                /// </param>
-                /// <returns></returns>
-                static ParaObjects.Sla HelperSlaFindByName(string SlaName, ParaCredentials ParaCredentials, bool IgnoreCase)
-                {
-                    ParaObjects.Sla foundSla = new ParaObjects.Sla();
-                    EntityQuery.SlaQuery sq = new EntityQuery.SlaQuery();
-                    sq.PageSize = 1000;
-                    ParaObjects.SlasList oSLA = new ParaObjects.SlasList();
-                    oSLA = ApiHandler.Entities.Sla.SLAsGetList(ParaCredentials, sq);
-
-                    string SlaToCompare = "";
-                    string SlaDestSla = "";
-                    if (IgnoreCase == true)
-                    {
-                        SlaToCompare = SlaName.ToLower();
-                    }
-                    bool found = false;
-                    foreach (ParaObjects.Sla sla in oSLA.Slas)
-                    {
-                        if (IgnoreCase == true)
-                        {
-                            SlaDestSla = sla.Name.ToLower();
-                        }
-                        if (string.Compare(SlaToCompare, SlaDestSla) == 0)
-                        {
-                            found = true;
-                            foundSla = sla;
-                            break;
-                        }
-                    }
-                    if (found == true)
-                    {
-                        return foundSla;
-                    }
-                    else
-                    {
-                        return null;
-                    }
                 }
             }
 
@@ -4719,26 +4528,26 @@ namespace ParatureAPI
                 /// <param name="departmentid">
                 ///The Department number that you would like to get the details of. 
                 ///</param>
-                /// <param name="ParaCredentials">
+                /// <param name="paraCredentials">
                 /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
                 /// </param>               
-                public static ParaObjects.Department DepartmentGetDetails(Int64 departmentid, ParaCredentials ParaCredentials)
+                public static ParaObjects.Department DepartmentGetDetails(Int64 departmentid, ParaCredentials paraCredentials)
                 {
                     ParaObjects.Department department = new ParaObjects.Department();
-                    department = DepartmentFillDetails(departmentid, ParaCredentials);
+                    department = DepartmentFillDetails(departmentid, paraCredentials);
                     return department;
                 }
 
                 /// <summary>
                 /// Returns a department object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
-                /// <param name="DepartmentXML">
+                /// <param name="departmentXml">
                 /// The department XML, is should follow the exact template of the XML returned by the Parature APIs.
                 /// </param>
-                public static ParaObjects.Department DepartmentGetDetails(XmlDocument DepartmentXML)
+                public static ParaObjects.Department DepartmentGetDetails(XmlDocument departmentXml)
                 {
                     ParaObjects.Department department = new ParaObjects.Department();
-                    department = xmlToObjectParser.DepartmentParser.DepartmentFill(DepartmentXML);
+                    department = XmlToObjectParser.DepartmentParser.DepartmentFill(departmentXml);
 
                     return department;
                 }
@@ -4746,15 +4555,15 @@ namespace ParatureAPI
                 /// <summary>
                 /// Returns an Department list object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
-                /// <param name="DepartmentListXML">
+                /// <param name="departmentListXml">
                 /// The Departments List XML, is should follow the exact template of the XML returned by the Parature APIs.
                 /// </param>
-                public static ParaObjects.DepartmentsList DepartmentsGetList(XmlDocument DepartmentListXML)
+                public static ParaObjects.DepartmentsList DepartmentsGetList(XmlDocument departmentListXml)
                 {
                     ParaObjects.DepartmentsList departmentslist = new ParaObjects.DepartmentsList();
-                    departmentslist = xmlToObjectParser.DepartmentParser.DepartmentsFillList(DepartmentListXML);
+                    departmentslist = XmlToObjectParser.DepartmentParser.DepartmentsFillList(departmentListXml);
 
-                    departmentslist.ApiCallResponse.xmlReceived = DepartmentListXML;
+                    departmentslist.ApiCallResponse.xmlReceived = departmentListXml;
 
                     return departmentslist;
                 }
@@ -4762,34 +4571,35 @@ namespace ParatureAPI
                 /// <summary>
                 /// Get the list of Departments from within your Parature license.
                 /// </summary>
-                public static ParaObjects.DepartmentsList DepartmentsGetList(ParaCredentials ParaCredentials, EntityQuery.DepartmentQuery Query)
+                public static ParaObjects.DepartmentsList DepartmentsGetList(ParaCredentials paraCredentials, EntityQuery.DepartmentQuery query)
                 {
-                    return DepartmentFillList(ParaCredentials, Query);
+                    return DepartmentFillList(paraCredentials, query);
                 }
                 /// <summary>
                 /// Fills a Departmentslist object.
                 /// </summary>
-                private static ParaObjects.DepartmentsList DepartmentFillList(ParaCredentials ParaCredentials, EntityQuery.DepartmentQuery Query)
+                private static ParaObjects.DepartmentsList DepartmentFillList(ParaCredentials paraCredentials, EntityQuery.DepartmentQuery query)
                 {
 
                     ParaObjects.DepartmentsList departmentsList = new ParaObjects.DepartmentsList();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.Department, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Department, query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        departmentsList = xmlToObjectParser.DepartmentParser.DepartmentsFillList(ar.xmlReceived);
+                        departmentsList = XmlToObjectParser.DepartmentParser.DepartmentsFillList(ar.xmlReceived);
                     }
                     departmentsList.ApiCallResponse = ar;
                     return departmentsList;
                 }
-                static ParaObjects.Department DepartmentFillDetails(Int64 Departmentid, ParaCredentials ParaCredentials)
+
+                private static ParaObjects.Department DepartmentFillDetails(Int64 departmentid, ParaCredentials paraCredentials)
                 {
                     ParaObjects.Department department = new ParaObjects.Department();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureEntity.Department, Departmentid);
+                    ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.Department, departmentid);
                     if (ar.HasException == false)
                     {
-                        department = xmlToObjectParser.DepartmentParser.DepartmentFill(ar.xmlReceived);
+                        department = XmlToObjectParser.DepartmentParser.DepartmentFill(ar.xmlReceived);
                     }
                     else
                     {
@@ -4801,52 +4611,50 @@ namespace ParatureAPI
                 }
             }
 
-            public partial class CustomerStatus
+            public class CustomerStatus
             {
-                /// <summary>
-                /// Returns an Customer object with all of its properties filled.
-                /// </summary>
-                /// <param name="Customerid">
-                ///The Customer number that you would like to get the details of. 
-                ///Value Type: <see cref="Int64" />   (System.Int64)
-                ///</param>
-                /// <param name="ParaCredentials">
-                /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
-                /// </param>               
-                public static ParaObjects.CustomerStatus CustomerStatusGetDetails(Int64 CustomerStatusId, ParaCredentials ParaCredentials)
+                ///  <summary>
+                ///  Returns an Customer object with all of its properties filled.
+                ///  </summary>
+                /// <param name="customerStatusId"></param>
+                /// <param name="paraCredentials">
+                ///  The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
+                ///  </param>               
+                public static ParaObjects.CustomerStatus CustomerStatusGetDetails(Int64 customerStatusId, ParaCredentials paraCredentials)
                 {
                     ParaObjects.CustomerStatus CustomerStatus = new ParaObjects.CustomerStatus();
-                    CustomerStatus = CustomerStatusFillDetails(CustomerStatusId, ParaCredentials);
+                    CustomerStatus = CustomerStatusFillDetails(customerStatusId, paraCredentials);
                     return CustomerStatus;
-                }
-                /// <summary>
-                /// Get the list of Customers from within your Parature license.
-                /// </summary>
-                public static ParaObjects.CustomerStatusList CustomerStatusGetList(ParaCredentials ParaCredentials)
-                {
-                    return CustomerStatusFillList(ParaCredentials, new EntityQuery.CustomerStatusQuery());
                 }
 
                 /// <summary>
                 /// Get the list of Customers from within your Parature license.
                 /// </summary>
-                public static ParaObjects.CustomerStatusList CustomerStatusGetList(ParaCredentials ParaCredentials, EntityQuery.CustomerStatusQuery Query)
+                public static ParaObjects.CustomerStatusList CustomerStatusGetList(ParaCredentials paraCredentials)
                 {
-                    return CustomerStatusFillList(ParaCredentials, Query);
+                    return CustomerStatusFillList(paraCredentials, new EntityQuery.CustomerStatusQuery());
+                }
+
+                /// <summary>
+                /// Get the list of Customers from within your Parature license.
+                /// </summary>
+                public static ParaObjects.CustomerStatusList CustomerStatusGetList(ParaCredentials paraCredentials, EntityQuery.CustomerStatusQuery query)
+                {
+                    return CustomerStatusFillList(paraCredentials, query);
                 }
 
                 /// <summary>
                 /// Returns an CustomerStatus object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
-                /// <param name="CustomerStatusXML">
+                /// <param name="customerStatusXml">
                 /// The CustomerStatus XML, is should follow the exact template of the XML returned by the Parature APIs.
                 /// </param>
-                public static ParaObjects.CustomerStatus CustomerStatusGetDetails(XmlDocument CustomerStatusXML)
+                public static ParaObjects.CustomerStatus CustomerStatusGetDetails(XmlDocument customerStatusXml)
                 {
                     ParaObjects.CustomerStatus CustomerStatus = new ParaObjects.CustomerStatus();
-                    CustomerStatus = xmlToObjectParser.CustomerStatusParser.CustomerStatusFill(CustomerStatusXML);
+                    CustomerStatus = XmlToObjectParser.CustomerStatusParser.CustomerStatusFill(customerStatusXml);
 
-                    CustomerStatus.ApiCallResponse.xmlReceived = CustomerStatusXML;
+                    CustomerStatus.ApiCallResponse.xmlReceived = customerStatusXml;
                     CustomerStatus.ApiCallResponse.Objectid = CustomerStatus.StatusID;
 
                     return CustomerStatus;
@@ -4855,15 +4663,15 @@ namespace ParatureAPI
                 /// <summary>
                 /// Returns an CustomerStatus list object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
-                /// <param name="CustomerStatusListXML">
+                /// <param name="customerStatusListXml">
                 /// The CustomerStatus List XML, is should follow the exact template of the XML returned by the Parature APIs.
                 /// </param>
-                public static ParaObjects.CustomerStatusList CustomerStatusGetList(XmlDocument CustomerStatusListXML)
+                public static ParaObjects.CustomerStatusList CustomerStatusGetList(XmlDocument customerStatusListXml)
                 {
                     ParaObjects.CustomerStatusList CustomerStatussList = new ParaObjects.CustomerStatusList();
-                    CustomerStatussList = xmlToObjectParser.CustomerStatusParser.CustomerStatusFillList(CustomerStatusListXML);
+                    CustomerStatussList = XmlToObjectParser.CustomerStatusParser.CustomerStatusFillList(customerStatusListXml);
 
-                    CustomerStatussList.ApiCallResponse.xmlReceived = CustomerStatusListXML;
+                    CustomerStatussList.ApiCallResponse.xmlReceived = customerStatusListXml;
 
                     return CustomerStatussList;
                 }
@@ -4871,15 +4679,15 @@ namespace ParatureAPI
                 /// <summary>
                 /// Fills a Sla list object.
                 /// </summary>
-                private static ParaObjects.CustomerStatusList CustomerStatusFillList(ParaCredentials ParaCredentials, EntityQuery.CustomerStatusQuery Query)
+                private static ParaObjects.CustomerStatusList CustomerStatusFillList(ParaCredentials paraCredentials, EntityQuery.CustomerStatusQuery query)
                 {
 
                     ParaObjects.CustomerStatusList CustomerStatusList = new ParaObjects.CustomerStatusList();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectSecondLevelGetList(ParaCredentials, Paraenums.ParatureModule.Customer, Paraenums.ParatureEntity.status, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Customer, ParaEnums.ParatureEntity.status, query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        CustomerStatusList = xmlToObjectParser.CustomerStatusParser.CustomerStatusFillList(ar.xmlReceived);
+                        CustomerStatusList = XmlToObjectParser.CustomerStatusParser.CustomerStatusFillList(ar.xmlReceived);
                     }
                     CustomerStatusList.ApiCallResponse = ar;
 
@@ -4889,14 +4697,15 @@ namespace ParatureAPI
 
                     return CustomerStatusList;
                 }
-                static ParaObjects.CustomerStatus CustomerStatusFillDetails(Int64 CustomerStatusId, ParaCredentials ParaCredentials)
+
+                private static ParaObjects.CustomerStatus CustomerStatusFillDetails(Int64 customerStatusId, ParaCredentials paraCredentials)
                 {
                     ParaObjects.CustomerStatus CustomerStatus = new ParaObjects.CustomerStatus();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureEntity.CustomerStatus, CustomerStatusId);
+                    ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.CustomerStatus, customerStatusId);
                     if (ar.HasException == false)
                     {
-                        CustomerStatus = xmlToObjectParser.CustomerStatusParser.CustomerStatusFill(ar.xmlReceived);
+                        CustomerStatus = XmlToObjectParser.CustomerStatusParser.CustomerStatusFill(ar.xmlReceived);
                     }
                     else
                     {
@@ -4908,52 +4717,54 @@ namespace ParatureAPI
                 }
             }
 
-            public partial class CsrStatus
+            public class CsrStatus
             {
-                /// <summary>
-                /// Returns an Csr object with all of its properties filled.
-                /// </summary>
-                /// <param name="Csrid">
-                ///The Csr number that you would like to get the details of. 
-                ///Value Type: <see cref="Int64" />   (System.Int64)
-                ///</param>
-                /// <param name="ParaCredentials">
-                /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
-                /// </param>               
-                public static ParaObjects.CsrStatus CsrStatusGetDetails(Int64 CsrStatusId, ParaCredentials ParaCredentials)
+                ///  <summary>
+                ///  Returns an Csr object with all of its properties filled.
+                ///  </summary>
+                ///  <param name="Csrid">
+                /// The Csr number that you would like to get the details of. 
+                /// Value Type: <see cref="Int64" />   (System.Int64)
+                /// </param>
+                /// <param name="csrStatusId"></param>
+                /// <param name="paraCredentials">
+                ///  The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
+                ///  </param>               
+                public static ParaObjects.CsrStatus CsrStatusGetDetails(Int64 csrStatusId, ParaCredentials paraCredentials)
                 {
                     ParaObjects.CsrStatus CsrStatus = new ParaObjects.CsrStatus();
-                    CsrStatus = CsrStatusFillDetails(CsrStatusId, ParaCredentials);
+                    CsrStatus = CsrStatusFillDetails(csrStatusId, paraCredentials);
                     return CsrStatus;
                 }
+               
                 /// <summary>
                 /// Get the list of Csrs from within your Parature license.
                 /// </summary>
-                public static ParaObjects.CsrStatusList CsrStatusGetList(ParaCredentials ParaCredentials)
+                public static ParaObjects.CsrStatusList CsrStatusGetList(ParaCredentials paraCredentials)
                 {
-                    return CsrStatusFillList(ParaCredentials, new EntityQuery.CsrStatusQuery());
+                    return CsrStatusFillList(paraCredentials, new EntityQuery.CsrStatusQuery());
                 }
 
                 /// <summary>
                 /// Get the list of Csrs from within your Parature license.
                 /// </summary>
-                public static ParaObjects.CsrStatusList CsrStatusGetList(ParaCredentials ParaCredentials, EntityQuery.CsrStatusQuery Query)
+                public static ParaObjects.CsrStatusList CsrStatusGetList(ParaCredentials paraCredentials, EntityQuery.CsrStatusQuery query)
                 {
-                    return CsrStatusFillList(ParaCredentials, Query);
+                    return CsrStatusFillList(paraCredentials, query);
                 }
 
                 /// <summary>
                 /// Returns an CsrStatus object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
-                /// <param name="CsrStatusXML">
+                /// <param name="csrStatusXml">
                 /// The CsrStatus XML, is should follow the exact template of the XML returned by the Parature APIs.
                 /// </param>
-                public static ParaObjects.CsrStatus CsrStatusGetDetails(XmlDocument CsrStatusXML)
+                public static ParaObjects.CsrStatus CsrStatusGetDetails(XmlDocument csrStatusXml)
                 {
                     ParaObjects.CsrStatus CsrStatus = new ParaObjects.CsrStatus();
-                    CsrStatus = xmlToObjectParser.CsrStatusParser.CsrStatusFill(CsrStatusXML);
+                    CsrStatus = XmlToObjectParser.CsrStatusParser.CsrStatusFill(csrStatusXml);
 
-                    CsrStatus.ApiCallResponse.xmlReceived = CsrStatusXML;
+                    CsrStatus.ApiCallResponse.xmlReceived = csrStatusXml;
                     CsrStatus.ApiCallResponse.Objectid = CsrStatus.StatusID;
 
                     return CsrStatus;
@@ -4962,15 +4773,15 @@ namespace ParatureAPI
                 /// <summary>
                 /// Returns an CsrStatus list object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
-                /// <param name="CsrStatusListXML">
+                /// <param name="csrStatusListXml">
                 /// The CsrStatus List XML, is should follow the exact template of the XML returned by the Parature APIs.
                 /// </param>
-                public static ParaObjects.CsrStatusList CsrStatusGetList(XmlDocument CsrStatusListXML)
+                public static ParaObjects.CsrStatusList CsrStatusGetList(XmlDocument csrStatusListXml)
                 {
                     ParaObjects.CsrStatusList CsrStatussList = new ParaObjects.CsrStatusList();
-                    CsrStatussList = xmlToObjectParser.CsrStatusParser.CsrStatusFillList(CsrStatusListXML);
+                    CsrStatussList = XmlToObjectParser.CsrStatusParser.CsrStatusFillList(csrStatusListXml);
 
-                    CsrStatussList.ApiCallResponse.xmlReceived = CsrStatusListXML;
+                    CsrStatussList.ApiCallResponse.xmlReceived = csrStatusListXml;
 
                     return CsrStatussList;
                 }
@@ -4978,27 +4789,28 @@ namespace ParatureAPI
                 /// <summary>
                 /// Fills a Sla list object.
                 /// </summary>
-                private static ParaObjects.CsrStatusList CsrStatusFillList(ParaCredentials ParaCredentials, EntityQuery.CsrStatusQuery Query)
+                private static ParaObjects.CsrStatusList CsrStatusFillList(ParaCredentials paraCredentials, EntityQuery.CsrStatusQuery query)
                 {
 
                     ParaObjects.CsrStatusList CsrStatusList = new ParaObjects.CsrStatusList();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectSecondLevelGetList(ParaCredentials, Paraenums.ParatureModule.Csr, Paraenums.ParatureEntity.status, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Csr, ParaEnums.ParatureEntity.status, query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        CsrStatusList = xmlToObjectParser.CsrStatusParser.CsrStatusFillList(ar.xmlReceived);
+                        CsrStatusList = XmlToObjectParser.CsrStatusParser.CsrStatusFillList(ar.xmlReceived);
                     }
                     CsrStatusList.ApiCallResponse = ar;
                     return CsrStatusList;
                 }
-                static ParaObjects.CsrStatus CsrStatusFillDetails(Int64 CsrStatusId, ParaCredentials ParaCredentials)
+
+                private static ParaObjects.CsrStatus CsrStatusFillDetails(Int64 csrStatusId, ParaCredentials paraCredentials)
                 {
                     ParaObjects.CsrStatus CsrStatus = new ParaObjects.CsrStatus();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureEntity.CsrStatus, CsrStatusId);
+                    ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.CsrStatus, csrStatusId);
                     if (ar.HasException == false)
                     {
-                        CsrStatus = xmlToObjectParser.CsrStatusParser.CsrStatusFill(ar.xmlReceived);
+                        CsrStatus = XmlToObjectParser.CsrStatusParser.CsrStatusFill(ar.xmlReceived);
                     }
                     else
                     {
@@ -5010,52 +4822,49 @@ namespace ParatureAPI
                 }
             }
 
-            public partial class TicketStatus
+            public class TicketStatus
             {
-                /// <summary>
-                /// Returns an Csr object with all of its properties filled.
-                /// </summary>
-                /// <param name="Csrid">
-                ///The Csr number that you would like to get the details of. 
-                ///Value Type: <see cref="Int64" />   (System.Int64)
-                ///</param>
-                /// <param name="ParaCredentials">
-                /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
-                /// </param>               
-                public static ParaObjects.TicketStatus TicketStatusGetDetails(Int64 ticketStatusId, ParaCredentials ParaCredentials)
+                ///  <summary>
+                ///  Returns an Csr object with all of its properties filled.
+                ///  </summary>
+                /// <param name="ticketStatusId"></param>
+                /// <param name="paraCredentials">
+                ///  The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
+                ///  </param>               
+                public static ParaObjects.TicketStatus TicketStatusGetDetails(Int64 ticketStatusId, ParaCredentials paraCredentials)
                 {
                     ParaObjects.TicketStatus ticketStatus = new ParaObjects.TicketStatus();
-                    ticketStatus = TicketStatusFillDetails(ticketStatusId, ParaCredentials);
+                    ticketStatus = TicketStatusFillDetails(ticketStatusId, paraCredentials);
                     return ticketStatus;
                 }
 
                 /// <summary>
                 /// Get the list of Csrs from within your Parature license.
                 /// </summary>
-                public static ParaObjects.TicketStatusList TicketStatusGetList(ParaCredentials ParaCredentials)
+                public static ParaObjects.TicketStatusList TicketStatusGetList(ParaCredentials paraCredentials)
                 {
-                    return TicketStatusFillList(ParaCredentials, new EntityQuery.TicketStatusQuery());
+                    return TicketStatusFillList(paraCredentials, new EntityQuery.TicketStatusQuery());
                 }
                 /// <summary>
                 /// Get the list of Csrs from within your Parature license.
                 /// </summary>
-                public static ParaObjects.TicketStatusList TicketStatusGetList(ParaCredentials ParaCredentials, EntityQuery.TicketStatusQuery Query)
+                public static ParaObjects.TicketStatusList TicketStatusGetList(ParaCredentials paraCredentials, EntityQuery.TicketStatusQuery query)
                 {
-                    return TicketStatusFillList(ParaCredentials, Query);
+                    return TicketStatusFillList(paraCredentials, query);
                 }
 
                 /// <summary>
                 /// Returns an ticketStatus object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
-                /// <param name="TicketStatusXML">
+                /// <param name="ticketStatusXml">
                 /// The TicketStatus XML, is should follow the exact template of the XML returned by the Parature APIs.
                 /// </param>
-                public static ParaObjects.TicketStatus TicketStatusGetDetails(XmlDocument TicketStatusXML)
+                public static ParaObjects.TicketStatus TicketStatusGetDetails(XmlDocument ticketStatusXml)
                 {
                     ParaObjects.TicketStatus ticketStatus = new ParaObjects.TicketStatus();
-                    ticketStatus = xmlToObjectParser.TicketStatusParser.TicketStatusFill(TicketStatusXML);
+                    ticketStatus = XmlToObjectParser.TicketStatusParser.TicketStatusFill(ticketStatusXml);
 
-                    ticketStatus.ApiCallResponse.xmlReceived = TicketStatusXML;
+                    ticketStatus.ApiCallResponse.xmlReceived = ticketStatusXml;
                     ticketStatus.ApiCallResponse.Objectid = ticketStatus.StatusID;
 
                     return ticketStatus;
@@ -5064,15 +4873,15 @@ namespace ParatureAPI
                 /// <summary>
                 /// Returns an ticketStatus list object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
-                /// <param name="TicketStatusListXML">
+                /// <param name="ticketStatusListXml">
                 /// The TicketStatus List XML, is should follow the exact template of the XML returned by the Parature APIs.
                 /// </param>
-                public static ParaObjects.TicketStatusList TicketStatusGetList(XmlDocument TicketStatusListXML)
+                public static ParaObjects.TicketStatusList TicketStatusGetList(XmlDocument ticketStatusListXml)
                 {
                     ParaObjects.TicketStatusList ticketStatussList = new ParaObjects.TicketStatusList();
-                    ticketStatussList = xmlToObjectParser.TicketStatusParser.TicketStatusFillList(TicketStatusListXML);
+                    ticketStatussList = XmlToObjectParser.TicketStatusParser.TicketStatusFillList(ticketStatusListXml);
 
-                    ticketStatussList.ApiCallResponse.xmlReceived = TicketStatusListXML;
+                    ticketStatussList.ApiCallResponse.xmlReceived = ticketStatusListXml;
 
                     return ticketStatussList;
                 }
@@ -5080,20 +4889,20 @@ namespace ParatureAPI
                 /// <summary>
                 /// Fills a Sla list object.
                 /// </summary>
-                private static ParaObjects.TicketStatusList TicketStatusFillList(ParaCredentials ParaCredentials, EntityQuery.TicketStatusQuery Query)
+                private static ParaObjects.TicketStatusList TicketStatusFillList(ParaCredentials paraCredentials, EntityQuery.TicketStatusQuery query)
                 {
 
                     ParaObjects.TicketStatusList TicketStatusList = new ParaObjects.TicketStatusList();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectSecondLevelGetList(ParaCredentials, Paraenums.ParatureModule.Ticket, Paraenums.ParatureEntity.status, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Ticket, ParaEnums.ParatureEntity.status, query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        TicketStatusList = xmlToObjectParser.TicketStatusParser.TicketStatusFillList(ar.xmlReceived);
+                        TicketStatusList = XmlToObjectParser.TicketStatusParser.TicketStatusFillList(ar.xmlReceived);
                     }
                     TicketStatusList.ApiCallResponse = ar;
 
                     // Checking if the system needs to recursively call all of the data returned.
-                    if (Query.RetrieveAllRecords)
+                    if (query.RetrieveAllRecords)
                     {
                         bool continueCalling = true;
                         while (continueCalling)
@@ -5105,11 +4914,11 @@ namespace ParatureAPI
                                 // We still need to pull data
 
                                 // Getting next page's data
-                                Query.PageNumber = Query.PageNumber + 1;
+                                query.PageNumber = query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.TicketStatus, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.TicketStatus, query.BuildQueryArguments());
 
-                                objectlist = xmlToObjectParser.TicketStatusParser.TicketStatusFillList(ar.xmlReceived);
+                                objectlist = XmlToObjectParser.TicketStatusParser.TicketStatusFillList(ar.xmlReceived);
 
                                 if (objectlist.TicketStatuses.Count == 0)
                                 {
@@ -5118,7 +4927,7 @@ namespace ParatureAPI
 
                                 TicketStatusList.TicketStatuses.AddRange(objectlist.TicketStatuses);
                                 TicketStatusList.ResultsReturned = TicketStatusList.TicketStatuses.Count;
-                                TicketStatusList.PageNumber = Query.PageNumber;
+                                TicketStatusList.PageNumber = query.PageNumber;
                             }
                             else
                             {
@@ -5132,14 +4941,15 @@ namespace ParatureAPI
 
                     return TicketStatusList;
                 }
-                static ParaObjects.TicketStatus TicketStatusFillDetails(Int64 ticketStatusId, ParaCredentials ParaCredentials)
+
+                private static ParaObjects.TicketStatus TicketStatusFillDetails(Int64 ticketStatusId, ParaCredentials paraCredentials)
                 {
                     ParaObjects.TicketStatus TicketStatus = new ParaObjects.TicketStatus();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureEntity.TicketStatus, ticketStatusId);
+                    ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.TicketStatus, ticketStatusId);
                     if (ar.HasException == false)
                     {
-                        TicketStatus = xmlToObjectParser.TicketStatusParser.TicketStatusFill(ar.xmlReceived);
+                        TicketStatus = XmlToObjectParser.TicketStatusParser.TicketStatusFill(ar.xmlReceived);
                     }
                     else
                     {
@@ -5151,35 +4961,32 @@ namespace ParatureAPI
                 }
             }
 
-            public partial class Queue
+            public class Queue
             {
-                /// <summary>
-                /// Returns a Queue object with all of its properties filled.
-                /// </summary>
-                /// <param name="Csrid">
-                ///The Queue id that you would like to get the details of. 
-                ///Value Type: <see cref="Int64" />   (System.Int64)
-                ///</param>
-                /// <param name="ParaCredentials">
-                /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
-                /// </param>               
-                public static ParaObjects.Queue QueueGetDetails(Int64 queueId, ParaCredentials ParaCredentials)
+                ///  <summary>
+                ///  Returns a Queue object with all of its properties filled.
+                ///  </summary>
+                /// <param name="queueId"></param>
+                /// <param name="paraCredentials">
+                ///  The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
+                ///  </param>               
+                public static ParaObjects.Queue QueueGetDetails(Int64 queueId, ParaCredentials paraCredentials)
                 {
                     ParaObjects.Queue queue = new ParaObjects.Queue();
-                    queue = QueueFillDetails(queueId, ParaCredentials);
+                    queue = QueueFillDetails(queueId, paraCredentials);
                     return queue;
                 }
 
                 /// <summary>
                 /// Returns an queue object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
-                /// <param name="QueueXML">
+                /// <param name="queueXml">
                 /// The Queue XML, is should follow the exact template of the XML returned by the Parature APIs.
                 /// </param>
-                public static ParaObjects.Queue QueueGetDetails(XmlDocument QueueXML)
+                public static ParaObjects.Queue QueueGetDetails(XmlDocument queueXml)
                 {
                     ParaObjects.Queue queue = new ParaObjects.Queue();
-                    queue = xmlToObjectParser.QueueParser.QueueFill(QueueXML);
+                    queue = XmlToObjectParser.QueueParser.QueueFill(queueXml);
 
                     return queue;
                 }
@@ -5187,15 +4994,15 @@ namespace ParatureAPI
                 /// <summary>
                 /// Returns an queue list object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
-                /// <param name="QueueListXML">
+                /// <param name="queueListXml">
                 /// The Queue List XML, is should follow the exact template of the XML returned by the Parature APIs.
                 /// </param>
-                public static ParaObjects.QueueList QueueGetList(XmlDocument QueueListXML)
+                public static ParaObjects.QueueList QueueGetList(XmlDocument queueListXml)
                 {
                     ParaObjects.QueueList queuesList = new ParaObjects.QueueList();
-                    queuesList = xmlToObjectParser.QueueParser.QueueFillList(QueueListXML);
+                    queuesList = XmlToObjectParser.QueueParser.QueueFillList(queueListXml);
 
-                    queuesList.ApiCallResponse.xmlReceived = QueueListXML;
+                    queuesList.ApiCallResponse.xmlReceived = queueListXml;
 
                     return queuesList;
                 }
@@ -5203,35 +5010,35 @@ namespace ParatureAPI
                 /// <summary>
                 /// Get the list of Queues from within your Parature license.
                 /// </summary>
-                public static ParaObjects.QueueList QueueGetList(ParaCredentials ParaCredentials)
+                public static ParaObjects.QueueList QueueGetList(ParaCredentials paraCredentials)
                 {
-                    return QueueFillList(ParaCredentials, new EntityQuery.QueueQuery());
+                    return QueueFillList(paraCredentials, new EntityQuery.QueueQuery());
                 }
 
                 /// <summary>
                 /// Get the list of Queues from within your Parature license.
                 /// </summary>
-                public static ParaObjects.QueueList QueueGetList(ParaCredentials ParaCredentials, EntityQuery.QueueQuery Query)
+                public static ParaObjects.QueueList QueueGetList(ParaCredentials paraCredentials, EntityQuery.QueueQuery query)
                 {
-                    return QueueFillList(ParaCredentials, Query);
+                    return QueueFillList(paraCredentials, query);
                 }
                 /// <summary>
                 /// Fills a Queue List object.
                 /// </summary>
-                private static ParaObjects.QueueList QueueFillList(ParaCredentials ParaCredentials, EntityQuery.QueueQuery Query)
+                private static ParaObjects.QueueList QueueFillList(ParaCredentials paraCredentials, EntityQuery.QueueQuery query)
                 {
 
                     ParaObjects.QueueList QueueList = new ParaObjects.QueueList();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.Queue, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Queue, query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        QueueList = xmlToObjectParser.QueueParser.QueueFillList(ar.xmlReceived);
+                        QueueList = XmlToObjectParser.QueueParser.QueueFillList(ar.xmlReceived);
                     }
                     QueueList.ApiCallResponse = ar;
 
                     // Checking if the system needs to recursively call all of the data returned.
-                    if (Query.RetrieveAllRecords)
+                    if (query.RetrieveAllRecords)
                     {
                         bool continueCalling = true;
                         while (continueCalling)
@@ -5243,11 +5050,11 @@ namespace ParatureAPI
                                 // We still need to pull data
 
                                 // Getting next page's data
-                                Query.PageNumber = Query.PageNumber + 1;
+                                query.PageNumber = query.PageNumber + 1;
 
-                                ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.Queue, Query.BuildQueryArguments());
+                                ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Queue, query.BuildQueryArguments());
 
-                                objectlist = xmlToObjectParser.QueueParser.QueueFillList(ar.xmlReceived);
+                                objectlist = XmlToObjectParser.QueueParser.QueueFillList(ar.xmlReceived);
 
                                 if (objectlist.Queues.Count == 0)
                                 {
@@ -5256,7 +5063,7 @@ namespace ParatureAPI
 
                                 QueueList.Queues.AddRange(objectlist.Queues);
                                 QueueList.ResultsReturned = QueueList.Queues.Count;
-                                QueueList.PageNumber = Query.PageNumber;
+                                QueueList.PageNumber = query.PageNumber;
                             }
                             else
                             {
@@ -5269,14 +5076,15 @@ namespace ParatureAPI
 
                     return QueueList;
                 }
-                static ParaObjects.Queue QueueFillDetails(Int64 queueId, ParaCredentials ParaCredentials)
+
+                private static ParaObjects.Queue QueueFillDetails(Int64 queueId, ParaCredentials paraCredentials)
                 {
                     ParaObjects.Queue Queue = new ParaObjects.Queue();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, Paraenums.ParatureEntity.Queue, queueId);
+                    ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.Queue, queueId);
                     if (ar.HasException == false)
                     {
-                        Queue = xmlToObjectParser.QueueParser.QueueFill(ar.xmlReceived);
+                        Queue = XmlToObjectParser.QueueParser.QueueFill(ar.xmlReceived);
                     }
                     else
                     {
@@ -5288,20 +5096,20 @@ namespace ParatureAPI
                 }
             }
 
-            public partial class ContactView
+            public class ContactView
             {
                 /// <summary>
                 /// Returns an View list object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
-                /// <param name="ViewListXML">
+                /// <param name="viewListXml">
                 /// The View List XML, is should follow the exact template of the XML returned by the Parature APIs.
                 /// </param>
-                public static ParaObjects.ContactViewList ViewGetList(XmlDocument ViewListXML)
+                public static ParaObjects.ContactViewList ViewGetList(XmlDocument viewListXml)
                 {
                     ParaObjects.ContactViewList ViewsList = new ParaObjects.ContactViewList();
-                    ViewsList = xmlToObjectParser.CustomerViewParser.ViewFillList(ViewListXML);
+                    ViewsList = XmlToObjectParser.CustomerViewParser.ViewFillList(viewListXml);
 
-                    ViewsList.ApiCallResponse.xmlReceived = ViewListXML;
+                    ViewsList.ApiCallResponse.xmlReceived = viewListXml;
 
                     return ViewsList;
                 }
@@ -5309,43 +5117,43 @@ namespace ParatureAPI
                 /// <summary>
                 /// Get the list of Views from within your Parature license.
                 /// </summary>
-                public static ParaObjects.ContactViewList ViewGetList(ParaCredentials ParaCredentials, EntityQuery.ViewQuery Query)
+                public static ParaObjects.ContactViewList ViewGetList(ParaCredentials paraCredentials, EntityQuery.ViewQuery query)
                 {
-                    return ViewFillList(ParaCredentials, Query);
+                    return ViewFillList(paraCredentials, query);
                 }
 
                 /// <summary>
                 /// Fills a View List object.
                 /// </summary>
-                private static ParaObjects.ContactViewList ViewFillList(ParaCredentials ParaCredentials, EntityQuery.ViewQuery Query)
+                private static ParaObjects.ContactViewList ViewFillList(ParaCredentials paraCredentials, EntityQuery.ViewQuery query)
                 {
 
                     ParaObjects.ContactViewList ViewList = new ParaObjects.ContactViewList();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectSecondLevelGetList(ParaCredentials, Paraenums.ParatureModule.Customer, Paraenums.ParatureEntity.view, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Customer, ParaEnums.ParatureEntity.view, query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        ViewList = xmlToObjectParser.CustomerViewParser.ViewFillList(ar.xmlReceived);
+                        ViewList = XmlToObjectParser.CustomerViewParser.ViewFillList(ar.xmlReceived);
                     }
                     ViewList.ApiCallResponse = ar;
                     return ViewList;
                 }
             }
 
-            public partial class AccountView
+            public class AccountView
             {
                 /// <summary>
                 /// Returns an View list object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
-                /// <param name="ViewListXML">
+                /// <param name="viewListXml">
                 /// The View List XML, is should follow the exact template of the XML returned by the Parature APIs.
                 /// </param>
-                public static ParaObjects.AccountViewList ViewGetList(XmlDocument ViewListXML)
+                public static ParaObjects.AccountViewList ViewGetList(XmlDocument viewListXml)
                 {
                     ParaObjects.AccountViewList ViewsList = new ParaObjects.AccountViewList();
-                    ViewsList = xmlToObjectParser.AccountViewParser.ViewFillList(ViewListXML);
+                    ViewsList = XmlToObjectParser.AccountViewParser.ViewFillList(viewListXml);
 
-                    ViewsList.ApiCallResponse.xmlReceived = ViewListXML;
+                    ViewsList.ApiCallResponse.xmlReceived = viewListXml;
 
                     return ViewsList;
                 }
@@ -5353,43 +5161,43 @@ namespace ParatureAPI
                 /// <summary>
                 /// Get the list of Views from within your Parature license.
                 /// </summary>
-                public static ParaObjects.AccountViewList ViewGetList(ParaCredentials ParaCredentials, EntityQuery.ViewQuery Query)
+                public static ParaObjects.AccountViewList ViewGetList(ParaCredentials paraCredentials, EntityQuery.ViewQuery query)
                 {
-                    return ViewFillList(ParaCredentials, Query);
+                    return ViewFillList(paraCredentials, query);
                 }
 
                 /// <summary>
                 /// Fills a View List object.
                 /// </summary>
-                private static ParaObjects.AccountViewList ViewFillList(ParaCredentials ParaCredentials, EntityQuery.ViewQuery Query)
+                private static ParaObjects.AccountViewList ViewFillList(ParaCredentials paraCredentials, EntityQuery.ViewQuery query)
                 {
 
                     ParaObjects.AccountViewList ViewList = new ParaObjects.AccountViewList();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectSecondLevelGetList(ParaCredentials, Paraenums.ParatureModule.Account, Paraenums.ParatureEntity.view, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Account, ParaEnums.ParatureEntity.view, query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        ViewList = xmlToObjectParser.AccountViewParser.ViewFillList(ar.xmlReceived);
+                        ViewList = XmlToObjectParser.AccountViewParser.ViewFillList(ar.xmlReceived);
                     }
                     ViewList.ApiCallResponse = ar;
                     return ViewList;
                 }
             }
 
-            public partial class TicketView
+            public class TicketView
             {
                 /// <summary>
                 /// Returns an View list object from a XML Document. No calls to the APIs are made when calling this method.
                 /// </summary>
-                /// <param name="ViewListXML">
+                /// <param name="viewListXml">
                 /// The View List XML, is should follow the exact template of the XML returned by the Parature APIs.
                 /// </param>
-                public static ParaObjects.TicketViewList ViewGetList(XmlDocument ViewListXML)
+                public static ParaObjects.TicketViewList ViewGetList(XmlDocument viewListXml)
                 {
                     ParaObjects.TicketViewList ViewsList = new ParaObjects.TicketViewList();
-                    ViewsList = xmlToObjectParser.TicketViewParser.ViewFillList(ViewListXML);
+                    ViewsList = XmlToObjectParser.TicketViewParser.ViewFillList(viewListXml);
 
-                    ViewsList.ApiCallResponse.xmlReceived = ViewListXML;
+                    ViewsList.ApiCallResponse.xmlReceived = viewListXml;
 
                     return ViewsList;
                 }
@@ -5397,23 +5205,23 @@ namespace ParatureAPI
                 /// <summary>
                 /// Get the list of Views from within your Parature license.
                 /// </summary>
-                public static ParaObjects.TicketViewList ViewGetList(ParaCredentials ParaCredentials, EntityQuery.ViewQuery Query)
+                public static ParaObjects.TicketViewList ViewGetList(ParaCredentials paraCredentials, EntityQuery.ViewQuery query)
                 {
-                    return ViewFillList(ParaCredentials, Query);
+                    return ViewFillList(paraCredentials, query);
                 }
 
                 /// <summary>
                 /// Fills a View List object.
                 /// </summary>
-                private static ParaObjects.TicketViewList ViewFillList(ParaCredentials ParaCredentials, EntityQuery.ViewQuery Query)
+                private static ParaObjects.TicketViewList ViewFillList(ParaCredentials paraCredentials, EntityQuery.ViewQuery query)
                 {
 
                     ParaObjects.TicketViewList ViewList = new ParaObjects.TicketViewList();
                     ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectSecondLevelGetList(ParaCredentials, Paraenums.ParatureModule.Ticket, Paraenums.ParatureEntity.view, Query.BuildQueryArguments());
+                    ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Ticket, ParaEnums.ParatureEntity.view, query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        ViewList = xmlToObjectParser.TicketViewParser.ViewFillList(ar.xmlReceived);
+                        ViewList = XmlToObjectParser.TicketViewParser.ViewFillList(ar.xmlReceived);
                     }
                     ViewList.ApiCallResponse = ar;
                     return ViewList;
@@ -5425,66 +5233,56 @@ namespace ParatureAPI
         /// <summary>
         /// Internal Method to run an Action, independently from the module.
         /// </summary>
-        private static ParaObjects.ApiCallResponse ActionRun(Int64 Objectid, ParaObjects.Action Action, ParaCredentials ParaCredentials, Paraenums.ParatureModule Module)
+        private static ParaObjects.ApiCallResponse ActionRun(Int64 objectId, ParaObjects.Action action, ParaCredentials pc, ParaEnums.ParatureModule module)
         {
-            System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-            doc = xmlgenerator.ActionGenerateXML(Action, Module);
-            ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, Module, doc, Objectid);
+            var doc = XmlGenerator.ActionGenerateXML(action, module);
+            var ar = ApiCallFactory.ObjectCreateUpdate(pc, module, doc, objectId);
             return ar;
         }
 
-
-        static ParaObjects.Attachment UploadFile(Paraenums.ParatureModule Module, ParaCredentials ParaCredentials, System.Net.Mail.Attachment Attachment)
+        private static ParaObjects.Attachment UploadFile(ParaEnums.ParatureModule module, ParaCredentials pc, System.Net.Mail.Attachment attachment)
         {
-            ParaObjects.Attachment attachment = new ParaObjects.Attachment();
-            string postUrl = "";
-            System.Xml.XmlDocument UploadUrlDoc = new System.Xml.XmlDocument();
-            ParaObjects.ApiCallResponse PostUrlR = new ParaObjects.ApiCallResponse();
-            PostUrlR = ApiCallFactory.FileUploadGetUrl(ParaCredentials, Module);
-            UploadUrlDoc = PostUrlR.xmlReceived;
-            postUrl = xmlToObjectParser.AttachmentParser.AttachmentGetUrlToPost(UploadUrlDoc);
+            var postUrlR = ApiCallFactory.FileUploadGetUrl(pc, module);
+            var uploadUrlDoc = postUrlR.xmlReceived;
+            var postUrl = XmlToObjectParser.AttachmentParser.AttachmentGetUrlToPost(uploadUrlDoc);
 
-            System.Xml.XmlDocument AttaDoc = new System.Xml.XmlDocument();
-            ParaObjects.ApiCallResponse upresp = new ParaObjects.ApiCallResponse();
-            upresp = ApiCallFactory.FilePerformUpload(postUrl, Attachment, ParaCredentials.Instanceid, ParaCredentials);
+            var upresp = ApiCallFactory.FilePerformUpload(postUrl, attachment, pc.Instanceid, pc);
 
-            AttaDoc = upresp.xmlReceived;
+            var attaDoc = upresp.xmlReceived;
 
-            attachment = xmlToObjectParser.AttachmentParser.AttachmentFill(AttaDoc);
-            return attachment;
+            var attach = XmlToObjectParser.AttachmentParser.AttachmentFill(attaDoc);
+            return attach;
         }
 
         /// <summary>
         /// Internal method to handle the upload of a file to Parature.
         /// </summary>
-        static ParaObjects.Attachment UploadFile(Paraenums.ParatureModule Module, ParaCredentials ParaCredentials, string text, string contentType, string FileName)
+        private static ParaObjects.Attachment UploadFile(ParaEnums.ParatureModule module, ParaCredentials pc, string text, string contentType, string fileName)
         {
-            System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
-            byte[] bytes = encoding.GetBytes(text);
-            return UploadFile(Module, ParaCredentials, bytes, contentType, FileName);
+            var encoding = new ASCIIEncoding();
+            var bytes = encoding.GetBytes(text);
+            return UploadFile(module, pc, bytes, contentType, fileName);
         }
 
         /// <summary>
         /// Internal method to handle the upload of a file to Parature.
         /// </summary>
-        public static ParaObjects.Attachment UploadFile(Paraenums.ParatureModule Module, ParaCredentials ParaCredentials, Byte[] Attachment, String contentType, String FileName)
+        public static ParaObjects.Attachment UploadFile(ParaEnums.ParatureModule module, ParaCredentials pc, Byte[] attachment, String contentType, String fileName)
         {
-            ParaObjects.Attachment attachment = new ParaObjects.Attachment();
-            string postUrl = "";
-            postUrl = xmlToObjectParser.AttachmentParser.AttachmentGetUrlToPost(ApiCallFactory.FileUploadGetUrl(ParaCredentials, Module).xmlReceived);
+            ParaObjects.Attachment attach;
+            var postUrl = "";
+            postUrl = XmlToObjectParser.AttachmentParser.AttachmentGetUrlToPost(ApiCallFactory.FileUploadGetUrl(pc, module).xmlReceived);
 
-            System.Xml.XmlDocument AttaDoc = new System.Xml.XmlDocument();
             if (string.IsNullOrEmpty(postUrl) == false)
             {
-                AttaDoc = ApiCallFactory.FilePerformUpload(postUrl, Attachment, contentType, FileName, ParaCredentials.Instanceid, ParaCredentials).xmlReceived;
-                attachment = xmlToObjectParser.AttachmentParser.AttachmentFill(AttaDoc);
+                var attaDoc = ApiCallFactory.FilePerformUpload(postUrl, attachment, contentType, fileName, pc.Instanceid, pc).xmlReceived;
+                attach = XmlToObjectParser.AttachmentParser.AttachmentFill(attaDoc);
             }
             else
             {
-                attachment = new ParaObjects.Attachment();
+                attach = new ParaObjects.Attachment();
             }
-            return attachment;
+            return attach;
         }
 
         /// <summary>
@@ -5498,27 +5296,24 @@ namespace ParatureAPI
         ///</returns>
         public static bool TestApiConnection(ParaCredentials credentials)
         {
-            ParaObjects.CsrsList CSRs = new ParaObjects.CsrsList();
-            ModuleQuery.CsrQuery csrq = new ModuleQuery.CsrQuery();
-            csrq.PageSize = 1;
-            CSRs = ApiHandler.Csr.CsrsGetList(credentials, csrq);
-            if (CSRs.Csrs.Count > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var callResponse = TestApiCallResponse(credentials);
+
+            return !callResponse.HasException;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="credentials"></param>
+        /// <returns></returns>
         public static ParaObjects.ApiCallResponse TestApiCallResponse(ParaCredentials credentials)
         {
-            ParaObjects.CsrsList CSRs = new ParaObjects.CsrsList();
-            ModuleQuery.CsrQuery csrq = new ModuleQuery.CsrQuery();
-            csrq.PageSize = 1;
-            CSRs = ApiHandler.Csr.CsrsGetList(credentials, csrq);
-            return CSRs.ApiCallResponse;
+            var csrq = new ModuleQuery.CsrQuery
+            {
+                PageSize = 1
+            };
+            var csrList = Csr.CsrsGetList(credentials, csrq);
+            return csrList.ApiCallResponse;
         }
 
         /// <summary>
@@ -5529,12 +5324,9 @@ namespace ParatureAPI
         /// </param>
         public static HttpStatusCode TestApiResponseCode(ParaCredentials credentials)
         {
-            ParaObjects.CsrsList CSRs = new ParaObjects.CsrsList();
-            ModuleQuery.CsrQuery csrq = new ModuleQuery.CsrQuery();
-            csrq.PageSize = 1;
-            CSRs = ApiHandler.Csr.CsrsGetList(credentials, csrq);
+            var callResponse = TestApiCallResponse(credentials);
 
-            return (HttpStatusCode)CSRs.ApiCallResponse.httpResponseCode;
+            return (HttpStatusCode)callResponse.httpResponseCode;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace ParatureAPI
     /// <summary>
     /// Paraenums contains all the available enumeration for your Parature Connector.
     /// </summary>
-    public class Paraenums
+    public class ParaEnums
     {
         /// <summary>
         /// This is used when using the sorting capabilities of the APIs. It helps set up the sorting direction.

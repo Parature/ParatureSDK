@@ -7,29 +7,29 @@ namespace ParatureAPI
 {
     internal class ParaHelper
     {
-        internal partial class ParaEnumProvider
+        internal class ParaEnumProvider
         {
             /// <summary>
             /// Returns the Http request method for an API call, requires an ApiCallHttpMethod enum.
             /// </summary>
-            internal static String ApiHttpPostProvider(Paraenums.ApiCallHttpMethod ApiCallHttpMethod)
+            internal static String ApiHttpPostProvider(ParaEnums.ApiCallHttpMethod ApiCallHttpMethod)
             {
                 string httpPostMethod = "";
                 switch (ApiCallHttpMethod)
                 {
-                    case Paraenums.ApiCallHttpMethod.Get:
+                    case ParaEnums.ApiCallHttpMethod.Get:
                         httpPostMethod = "GET";
                         break;
 
-                    case Paraenums.ApiCallHttpMethod.Delete:
+                    case ParaEnums.ApiCallHttpMethod.Delete:
                         httpPostMethod = "DELETE";
                         break;
 
-                    case Paraenums.ApiCallHttpMethod.Post:
+                    case ParaEnums.ApiCallHttpMethod.Post:
                         httpPostMethod = "POST";
                         break;
 
-                    case Paraenums.ApiCallHttpMethod.Update:
+                    case ParaEnums.ApiCallHttpMethod.Update:
                         httpPostMethod = "PUT";
                         break;
                 }
@@ -40,47 +40,47 @@ namespace ParatureAPI
             /// <summary>
             /// Return the customFieldDataType enum, requires a string. Usually the string comes from the API response.
             /// </summary>
-            internal static Paraenums.CustomFieldDataType CustomFieldDataTypeProvider(string dt)
+            internal static ParaEnums.CustomFieldDataType CustomFieldDataTypeProvider(string dt)
             {
-                Paraenums.CustomFieldDataType dataType = Paraenums.CustomFieldDataType.Unknown;
+                ParaEnums.CustomFieldDataType dataType = ParaEnums.CustomFieldDataType.Unknown;
                 switch (dt.ToLower())
                 {
                     case "boolean":
 
-                        dataType = Paraenums.CustomFieldDataType.boolean;
+                        dataType = ParaEnums.CustomFieldDataType.boolean;
                         break;
                     case "float":
 
-                        dataType = Paraenums.CustomFieldDataType.Float;
+                        dataType = ParaEnums.CustomFieldDataType.Float;
                         break;
                     case "attachment":
 
-                        dataType = Paraenums.CustomFieldDataType.attachment;
+                        dataType = ParaEnums.CustomFieldDataType.attachment;
                         break;
                     case "datetime":
 
-                        dataType = Paraenums.CustomFieldDataType.DateTime;
+                        dataType = ParaEnums.CustomFieldDataType.DateTime;
                         break;
                     case "int":
-                        dataType = Paraenums.CustomFieldDataType.Int;
+                        dataType = ParaEnums.CustomFieldDataType.Int;
 
                         break;
                     case "date":
-                        dataType = Paraenums.CustomFieldDataType.Date;
+                        dataType = ParaEnums.CustomFieldDataType.Date;
                         break;
 
 
                     case "readonly":
-                        dataType = Paraenums.CustomFieldDataType.ReadOnly;
+                        dataType = ParaEnums.CustomFieldDataType.ReadOnly;
                         break;
 
 
                     case "string":
-                        dataType = Paraenums.CustomFieldDataType.String;
+                        dataType = ParaEnums.CustomFieldDataType.String;
                         break;
 
                     case "option":
-                        dataType = Paraenums.CustomFieldDataType.Option;
+                        dataType = ParaEnums.CustomFieldDataType.Option;
                         break;
 
                 }
@@ -88,7 +88,7 @@ namespace ParatureAPI
             }
         }
 
-        internal partial class ParaThrottler
+        internal class ParaThrottler
         {
 
 
@@ -149,7 +149,7 @@ namespace ParatureAPI
 
         }
 
-        internal partial class HelperMethods
+        internal class HelperMethods
         {
             internal static bool CustomFieldReset(Int64 CustomFieldid, List<ParaObjects.CustomField> fields)
             {
