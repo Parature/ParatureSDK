@@ -9,7 +9,7 @@ namespace ParatureAPI.PagedData
     /// </summary>
     public class ChatList : PagedData
     {
-        public List<Chat> chats = new List<Chat>();
+        public List<ParaObjects.Chat> chats = new List<ParaObjects.Chat>();
 
         public ChatList()
         {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using ParatureAPI.Fields;
+using ParatureAPI.ParaHelper;
 
 namespace ParatureAPI.ParaObjects
 {
@@ -38,7 +39,7 @@ namespace ParatureAPI.ParaObjects
         /// <returns>Returns True if the custom field was modified, False if there was no need to modify the custom field.</returns>
         public bool CustomFieldReset(Int64 CustomFieldid)
         {
-            return DirtyStateManager(ParaHelper.HelperMethods.CustomFieldReset(CustomFieldid, CustomFields));
+            return DirtyStateManager(HelperMethods.CustomFieldReset(CustomFieldid, CustomFields));
         }
 
         /// <summary>
@@ -51,7 +52,7 @@ namespace ParatureAPI.ParaObjects
         ///</returns>
         public bool CustomFieldSetValue(Int64 CustomFieldid, string CustomFieldValue, bool ignoreCase)
         {
-            return DirtyStateManager(ParaHelper.HelperMethods.CustomFieldSetValue(CustomFieldid, CustomFieldValue, CustomFields, ignoreCase));
+            return DirtyStateManager(HelperMethods.CustomFieldSetValue(CustomFieldid, CustomFieldValue, CustomFields, ignoreCase));
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace ParatureAPI.ParaObjects
         ///</returns>
         public bool CustomFieldSetValue(Int64 CustomFieldid, bool CustomFieldValue)
         {
-            return DirtyStateManager(ParaHelper.HelperMethods.CustomFieldSetValue(CustomFieldid, CustomFieldValue.ToString().ToLower(), CustomFields, true));
+            return DirtyStateManager(HelperMethods.CustomFieldSetValue(CustomFieldid, CustomFieldValue.ToString().ToLower(), CustomFields, true));
         }
 
 
@@ -92,7 +93,7 @@ namespace ParatureAPI.ParaObjects
         public bool CustomFieldSetValue(Int64 CustomFieldid, DateTime CustomFieldValue)
         {
             string date = CustomFieldValue.ToString("yyyy-MM-ddTHH:mm:ss");
-            return DirtyStateManager(ParaHelper.HelperMethods.CustomFieldSetValue(CustomFieldid, date, CustomFields, true));
+            return DirtyStateManager(HelperMethods.CustomFieldSetValue(CustomFieldid, date, CustomFields, true));
         }
 
         /// <summary>
@@ -110,7 +111,7 @@ namespace ParatureAPI.ParaObjects
                     if (cf.CustomFieldID == CustomFieldid)
                     {
                         fields.Add(cf);
-                        DirtyStateManager(ParaHelper.HelperMethods.CustomFieldReset(CustomFieldid, fields));
+                        DirtyStateManager(HelperMethods.CustomFieldReset(CustomFieldid, fields));
                         cf.FlagToDelete = true;
                         break;
                     }
@@ -129,7 +130,7 @@ namespace ParatureAPI.ParaObjects
         /// </returns>
         public bool CustomFieldSetSelectedFieldOption(Int64 CustomFieldid, Int64 CustomFieldOptionid)
         {
-            return DirtyStateManager(ParaHelper.HelperMethods.CustomFieldSetFieldOption(CustomFieldid, CustomFieldOptionid, CustomFields, true));
+            return DirtyStateManager(HelperMethods.CustomFieldSetFieldOption(CustomFieldid, CustomFieldOptionid, CustomFields, true));
         }
 
         /// <summary>
@@ -143,7 +144,7 @@ namespace ParatureAPI.ParaObjects
         /// </returns>
         public bool CustomFieldSetSelectedFieldOption(Int64 CustomFieldid, string CustomFieldOptionname, bool ignoreCase)
         {
-            return DirtyStateManager(ParaHelper.HelperMethods.CustomFieldSetFieldOption(CustomFieldid, CustomFieldOptionname, CustomFields, true, ignoreCase));
+            return DirtyStateManager(HelperMethods.CustomFieldSetFieldOption(CustomFieldid, CustomFieldOptionname, CustomFields, true, ignoreCase));
         }
 
         /// <summary>
@@ -157,7 +158,7 @@ namespace ParatureAPI.ParaObjects
         /// </returns>
         public bool CustomFieldAddSelectedFieldOption(Int64 CustomFieldid, Int64 CustomFieldOptionid)
         {
-            return DirtyStateManager(ParaHelper.HelperMethods.CustomFieldSetFieldOption(CustomFieldid, CustomFieldOptionid, CustomFields, false));
+            return DirtyStateManager(HelperMethods.CustomFieldSetFieldOption(CustomFieldid, CustomFieldOptionid, CustomFields, false));
         }
 
         /// <summary>
@@ -165,7 +166,7 @@ namespace ParatureAPI.ParaObjects
         /// </summary>
         public bool CustomFieldAddSelectedFieldOption(Int64 CustomFieldid, string CustomFieldOptionname, bool ignoreCase)
         {
-            return DirtyStateManager(ParaHelper.HelperMethods.CustomFieldSetFieldOption(CustomFieldid, CustomFieldOptionname, CustomFields, false, ignoreCase));
+            return DirtyStateManager(HelperMethods.CustomFieldSetFieldOption(CustomFieldid, CustomFieldOptionname, CustomFields, false, ignoreCase));
         }
 
         /// <summary>

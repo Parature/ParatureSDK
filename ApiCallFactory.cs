@@ -7,6 +7,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using Microsoft.VisualBasic;
 using ParatureAPI.Fields;
+using ParatureAPI.ParaHelper;
 using ParatureAPI.ParaObjects;
 
 namespace ParatureAPI
@@ -371,19 +372,19 @@ namespace ParatureAPI
             switch (module)
             {
                 case ParaEnums.ParatureModule.Account:
-                    doc = XmlGenerator.AccountGenerateXML((Account)baseObject);
+                    doc = XmlGenerator.AccountGenerateXML((ParaObjects.Account)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Customer:
-                    doc = XmlGenerator.customerGenerateXML((Customer)baseObject);
+                    doc = XmlGenerator.customerGenerateXML((ParaObjects.Customer)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Product:
-                    doc = XmlGenerator.ProductGenerateXML((Product)baseObject);
+                    doc = XmlGenerator.ProductGenerateXML((ParaObjects.Product)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Asset:
-                    doc = XmlGenerator.AssetGenerateXML((Asset)baseObject);
+                    doc = XmlGenerator.AssetGenerateXML((ParaObjects.Asset)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Ticket:
-                    doc = XmlGenerator.TicketGenerateXML((Ticket)baseObject);
+                    doc = XmlGenerator.TicketGenerateXML((ParaObjects.Ticket)baseObject);
                     break;
                 default:
                     break;
@@ -800,7 +801,7 @@ namespace ParatureAPI
 
             System.Net.ServicePointManager.CertificatePolicy = new TrustAllCertificatePolicy();
 
-            req.Method = ParaHelper.ParaEnumProvider.ApiHttpPostProvider(ApiCallHttpMethod);
+            req.Method = ParaEnumProvider.ApiHttpPostProvider(ApiCallHttpMethod);
             ac.httpCallMethod = req.Method;
             req.KeepAlive = false;
             
@@ -848,7 +849,7 @@ namespace ParatureAPI
             Uri uriAddress = new Uri(callurl);
 
             HttpWebRequest req = WebRequest.Create(uriAddress) as HttpWebRequest;
-            req.Method = ParaHelper.ParaEnumProvider.ApiHttpPostProvider(ApiCallHttpMethod);
+            req.Method = ParaEnumProvider.ApiHttpPostProvider(ApiCallHttpMethod);
             req.KeepAlive = false;
             ac.httpCallMethod = req.Method;
 
@@ -904,7 +905,7 @@ namespace ParatureAPI
             Uri uriAddress = new Uri(callurl);
 
             HttpWebRequest req = WebRequest.Create(uriAddress) as HttpWebRequest;
-            req.Method = ParaHelper.ParaEnumProvider.ApiHttpPostProvider(ApiCallHttpMethod);
+            req.Method = ParaEnumProvider.ApiHttpPostProvider(ApiCallHttpMethod);
             req.KeepAlive = false;
             ac.httpCallMethod = req.Method;
 

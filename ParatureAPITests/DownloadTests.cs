@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ParatureAPI;
 using ParatureAPI.ParaObjects;
+using Download = ParatureAPI.ParaObjects.Download;
 
 namespace ParatureAPITests
 {
@@ -17,7 +18,7 @@ namespace ParatureAPITests
             var creds = TestCredentials.Credentials;
             creds.Departmentid = 45021;
 
-            var download = ApiHandler.Download.DownloadSchema(creds);
+            var download = ParatureAPI.ApiHandler.Download.DownloadSchema(creds);
 
             bool FlagSetCorrectly = !download.MultipleFolders;
 
@@ -33,7 +34,7 @@ namespace ParatureAPITests
             var creds = TestCredentials.Credentials;
             creds.Departmentid = 45001;
 
-            var Download = ApiHandler.Download.DownloadGetDetails(1, creds);
+            var Download = ParatureAPI.ApiHandler.Download.DownloadGetDetails(1, creds);
 
             bool FlagSetCorrectly = Download.MultipleFolders;
 
@@ -54,7 +55,7 @@ namespace ParatureAPITests
 
             try
             {
-                ApiHandler.Download.DownloadInsert(download, TestCredentials.Credentials);
+                ParatureAPI.ApiHandler.Download.DownloadInsert(download, TestCredentials.Credentials);
             }
             catch (ArgumentOutOfRangeException e)
             {

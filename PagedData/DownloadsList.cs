@@ -9,7 +9,7 @@ namespace ParatureAPI.PagedData
     /// </summary>
     public class DownloadsList : PagedData
     {
-        public List<Download> Downloads = new List<Download>();
+        public List<ParaObjects.Download> Downloads = new List<ParaObjects.Download>();
 
         public DownloadsList()
         {
@@ -18,7 +18,7 @@ namespace ParatureAPI.PagedData
         public DownloadsList(DownloadsList downloadsList)
             : base(downloadsList)
         {
-            Downloads = new List<Download>(downloadsList.Downloads);
+            Downloads = new List<ParaObjects.Download>(downloadsList.Downloads);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ParatureAPI.PagedData
         /// <summary>
         /// The collection of Tickets objects returned.
         /// </summary>
-        public List<Ticket> Tickets = new List<Ticket>();
+        public List<ParaObjects.Ticket> Tickets = new List<ParaObjects.Ticket>();
 
         public TicketsList()
         {
@@ -21,7 +21,7 @@ namespace ParatureAPI.PagedData
         public TicketsList(TicketsList ticketsList)
             : base(ticketsList)
         {
-            Tickets = new List<Ticket>(ticketsList.Tickets);
+            Tickets = new List<ParaObjects.Ticket>(ticketsList.Tickets);
         }
 
     }

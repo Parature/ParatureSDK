@@ -71,7 +71,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiCallFactory.cs" />
-    <Compile Include="ApiHandler.cs" />
+    <Compile Include="ApiHandler\Account.cs" />
+    <Compile Include="ApiHandler\Article.cs" />
+    <Compile Include="ApiHandler\Asset.cs" />
+    <Compile Include="ApiHandler\Chat.cs" />
+    <Compile Include="ApiHandler\Csr.cs" />
+    <Compile Include="ApiHandler\Customer.cs" />
+    <Compile Include="ApiHandler\Download.cs" />
+    <Compile Include="ApiHandler\Entities.cs" />
+    <Compile Include="ApiHandler\Product.cs" />
+    <Compile Include="ApiHandler\ApiUtils.cs" />
+    <Compile Include="ApiHandler\Ticket.cs" />
     <Compile Include="ApiUrlBuilder.cs" />
     <Compile Include="Fields\CustomField.cs" />
     <Compile Include="Fields\CustomFieldOptions.cs" />
@@ -87,7 +97,9 @@
     <Compile Include="PagedData\TicketsList.cs" />
     <Compile Include="ParaCredentials.cs" />
     <Compile Include="ParaEnums.cs" />
-    <Compile Include="ParaHelper.cs" />
+    <Compile Include="ParaHelper\HelperMethods.cs" />
+    <Compile Include="ParaHelper\ParaEnumProvider.cs" />
+    <Compile Include="ParaHelper\ParaThrottler.cs" />
     <Compile Include="ParaObjects\Account.cs" />
     <Compile Include="ParaObjects\AccountView.cs" />
     <Compile Include="ParaObjects\AccountViewList.cs" />
