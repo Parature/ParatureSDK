@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ParatureAPI.ParaObjects;
 
 namespace ParatureAPI.PagedData
 {
@@ -8,7 +9,7 @@ namespace ParatureAPI.PagedData
     /// </summary>
     public class AssetsList : PagedData
     {
-        public List<ParaObjects.Asset> Assets = new List<ParaObjects.Asset>();
+        public List<Asset> Assets = new List<Asset>();
 
         public AssetsList()
         {
@@ -17,7 +18,7 @@ namespace ParatureAPI.PagedData
         public AssetsList(AssetsList assetsList)
             : base(assetsList)
         {
-            Assets = new List<ParaObjects.Asset>(assetsList.Assets);
+            Assets = new List<Asset>(assetsList.Assets);
         }
     }
 }

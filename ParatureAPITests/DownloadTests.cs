@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ParatureAPI;
+using ParatureAPI.ParaObjects;
 
 namespace ParatureAPITests
 {
@@ -45,9 +46,9 @@ namespace ParatureAPITests
         [TestMethod]
         public void TestFoldersException()
         {
-            var download = new ParaObjects.Download(false);
-            download.Folders.Add(new ParaObjects.DownloadFolder());
-            download.Folders.Add(new ParaObjects.DownloadFolder());
+            var download = new Download(false);
+            download.Folders.Add(new DownloadFolder());
+            download.Folders.Add(new DownloadFolder());
 
             bool caughtException = false;
 

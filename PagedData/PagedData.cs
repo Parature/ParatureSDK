@@ -1,3 +1,5 @@
+using ParatureAPI.ParaObjects;
+
 namespace ParatureAPI.PagedData
 {
     /// <summary>
@@ -24,7 +26,7 @@ namespace ParatureAPI.PagedData
         /// <summary>
         /// Contains all the information regarding the API Call that was made.
         /// </summary>
-        public ParaObjects.ApiCallResponse ApiCallResponse = new ParaObjects.ApiCallResponse();
+        public ApiCallResponse ApiCallResponse = new ApiCallResponse();
 
         /// <summary>
         /// 
@@ -43,7 +45,7 @@ namespace ParatureAPI.PagedData
             ResultsReturned = pagedData.ResultsReturned;
             PageSize = pagedData.PageSize;
             PageNumber = pagedData.PageNumber;
-            ApiCallResponse = new ParaObjects.ApiCallResponse(pagedData.ApiCallResponse);
+            ApiCallResponse = new ApiCallResponse(pagedData.ApiCallResponse);
         }
     }
 }

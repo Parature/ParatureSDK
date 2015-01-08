@@ -7,6 +7,7 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using Microsoft.VisualBasic;
 using ParatureAPI.Fields;
+using ParatureAPI.ParaObjects;
 
 namespace ParatureAPI
 {
@@ -42,7 +43,7 @@ namespace ParatureAPI
         ///When creating or updating an object, you will need to pass the properly formatted XML document to be sent to the server.
         ///Value Type: <see cref="String" />   (System.String)
         ///</param>
-        public static ParaObjects.ApiCallResponse ObjectCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureModule module, System.Xml.XmlDocument fileToPost, Int64 objectid)
+        public static ApiCallResponse ObjectCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureModule module, System.Xml.XmlDocument fileToPost, Int64 objectid)
         {
             // Calling the next method that manages the call.
             return ObjectCreateUpdate(paracredentials, module, fileToPost, objectid, null);
@@ -68,7 +69,7 @@ namespace ParatureAPI
         /// Value Type: <see cref="Int64" />   (System.Int64)
         /// </param>
         /// <param name="arguments"></param>
-        public static ParaObjects.ApiCallResponse ObjectCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureModule module, System.Xml.XmlDocument fileToPost, Int64 objectid, ArrayList arguments)
+        public static ApiCallResponse ObjectCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureModule module, System.Xml.XmlDocument fileToPost, Int64 objectid, ArrayList arguments)
         {
             if (arguments == null)
             {
@@ -116,7 +117,7 @@ namespace ParatureAPI
         /// When creating or updating an object, you will need to pass the properly formatted XML document to be sent to the server.
         /// Value Type: <see cref="String" />   (System.String)
         /// </param>
-        public static ParaObjects.ApiCallResponse EntityCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, System.Xml.XmlDocument fileToPost, Int64 objectid)
+        public static ApiCallResponse EntityCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, System.Xml.XmlDocument fileToPost, Int64 objectid)
         {
             string ApiCallUrl;
             // Getting the standard API URL to call.
@@ -157,7 +158,7 @@ namespace ParatureAPI
         ///Indicates whether this a Purge (permanent deletion), or just a deletion (move to trash bin). Indicate TRUE for a purge, FALSE for a delete
         ///Value Type: <see cref="bool" />   (System.bool)
         ///</param>
-        public static ParaObjects.ApiCallResponse ObjectDelete(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid, bool purge)
+        public static ApiCallResponse ObjectDelete(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid, bool purge)
         {
             string ApiCallUrl;
 
@@ -191,7 +192,7 @@ namespace ParatureAPI
         ///The id of the entity to delete. 
         ///Value Type: <see cref="Int64" />   (System.int64)
         /// </param>
-        public static ParaObjects.ApiCallResponse EntityDelete(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, Int64 entityid)
+        public static ApiCallResponse EntityDelete(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, Int64 entityid)
         {
             string ApiCallUrl;
 
@@ -225,7 +226,7 @@ namespace ParatureAPI
         ///The id of the object to create or update. 
         ///Value Type: <see cref="Int64" />   (System.int64)
         ///</param>
-        public static ParaObjects.ApiCallResponse ObjectGetDetail(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid)
+        public static ApiCallResponse ObjectGetDetail(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid)
         {
 
             string ApiCallUrl;
@@ -250,7 +251,7 @@ namespace ParatureAPI
         ///The id of the object to create or update. 
         ///Value Type: <see cref="Int64" />   (System.int64)
         ///</param>
-        public static ParaObjects.ApiCallResponse ObjectGetDetail(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, Int64 objectid)
+        public static ApiCallResponse ObjectGetDetail(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, Int64 objectid)
         {
 
             string ApiCallUrl;
@@ -279,7 +280,7 @@ namespace ParatureAPI
         ///The list of extra optional arguments you need to include in the call. For example, for a ticket, we might want to get the action history.
         ///Value Type: <see cref="ArrayList" />   (System.String[])
         ///</param>
-        public static ParaObjects.ApiCallResponse ObjectGetDetail(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid, ArrayList Arguments)
+        public static ApiCallResponse ObjectGetDetail(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid, ArrayList Arguments)
         {
             string ApiCallUrl;
 
@@ -302,7 +303,7 @@ namespace ParatureAPI
         ///The list of extra optional arguments you need to include in the call. For example, any fields filtering, any custom fields to include, etc.
         ///Value Type: <see cref="ArrayList" />   
         ///</param>
-        public static ParaObjects.ApiCallResponse ObjectGetList(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ArrayList Arguments)
+        public static ApiCallResponse ObjectGetList(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ArrayList Arguments)
         {
             string ApiCallUrl;
             ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, 0, Arguments);
@@ -319,7 +320,7 @@ namespace ParatureAPI
         /// <param name="entity">
         ///The name of the entity to list. Choose from the ParatureEntity enum list. 
         ///</param>      
-        public static ParaObjects.ApiCallResponse ObjectGetList(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, ArrayList Arguments)
+        public static ApiCallResponse ObjectGetList(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, ArrayList Arguments)
         {
             string ApiCallUrl;
             ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entity, 0, Arguments);
@@ -327,7 +328,7 @@ namespace ParatureAPI
         }
 
 
-        public static ParaObjects.ApiCallResponse ObjectSecondLevelGetList(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ParaEnums.ParatureEntity entity, ArrayList Arguments)
+        public static ApiCallResponse ObjectSecondLevelGetList(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ParaEnums.ParatureEntity entity, ArrayList Arguments)
         {
             string ApiCallUrl;
             ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteCustomUrl(paracredentials, module, entity, Arguments);
@@ -337,7 +338,7 @@ namespace ParatureAPI
         /// <summary>
         /// Use this method to get the Schema XML of an object.
         /// </summary>
-        public static ParaObjects.ApiCallResponse ObjectGetSchema(ParaCredentials paracredentials, ParaEnums.ParatureModule module)
+        public static ApiCallResponse ObjectGetSchema(ParaCredentials paracredentials, ParaEnums.ParatureModule module)
         {
             string ApiCallUrl;
 
@@ -349,7 +350,7 @@ namespace ParatureAPI
         /// <summary>
         /// Use this method to determine if any custom fields have custom validation
         /// </summary>
-        public static ParaObjects.ModuleWithCustomFields ObjectCheckCustomFieldTypes(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ParaObjects.ModuleWithCustomFields baseObject)
+        public static ModuleWithCustomFields ObjectCheckCustomFieldTypes(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ModuleWithCustomFields baseObject)
         {
             string ApiCallUrl;
             paracredentials.EnforceRequiredFields = false;
@@ -370,25 +371,25 @@ namespace ParatureAPI
             switch (module)
             {
                 case ParaEnums.ParatureModule.Account:
-                    doc = XmlGenerator.AccountGenerateXML((ParaObjects.Account)baseObject);
+                    doc = XmlGenerator.AccountGenerateXML((Account)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Customer:
-                    doc = XmlGenerator.customerGenerateXML((ParaObjects.Customer)baseObject);
+                    doc = XmlGenerator.customerGenerateXML((Customer)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Product:
-                    doc = XmlGenerator.ProductGenerateXML((ParaObjects.Product)baseObject);
+                    doc = XmlGenerator.ProductGenerateXML((Product)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Asset:
-                    doc = XmlGenerator.AssetGenerateXML((ParaObjects.Asset)baseObject);
+                    doc = XmlGenerator.AssetGenerateXML((Asset)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Ticket:
-                    doc = XmlGenerator.TicketGenerateXML((ParaObjects.Ticket)baseObject);
+                    doc = XmlGenerator.TicketGenerateXML((Ticket)baseObject);
                     break;
                 default:
                     break;
             }
 
-            ParaObjects.ApiCallResponse ar = ApiMakeCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Post, doc, paracredentials.Instanceid, paracredentials);
+            ApiCallResponse ar = ApiMakeCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Post, doc, paracredentials.Instanceid, paracredentials);
 
             if (ar.HasException)
             {
@@ -489,7 +490,7 @@ namespace ParatureAPI
         /// <param name="paracredentials"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static ParaObjects.ApiCallResponse EntityGetSchema(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity)
+        public static ApiCallResponse EntityGetSchema(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity)
         {
             string ApiCallUrl;
 
@@ -501,9 +502,9 @@ namespace ParatureAPI
         /// <summary>
         /// This method makes the call to the API Server and return a class holding the response. It is used when you are also posting an XML To the server (in the case of a create, or an update).
         /// </summary>
-        static ParaObjects.ApiCallResponse ApiMakeCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Xml.XmlDocument XmlPosted, int accountID, ParaCredentials paracredentials)
+        static ApiCallResponse ApiMakeCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Xml.XmlDocument XmlPosted, int accountID, ParaCredentials paracredentials)
         {
-            ParaObjects.ApiCallResponse resp = MakeThrottledCall(callurl, ApiCallHttpMethod, XmlPosted, accountID, paracredentials);
+            ApiCallResponse resp = MakeThrottledCall(callurl, ApiCallHttpMethod, XmlPosted, accountID, paracredentials);
 
             #region handing Random API server issues
             // Handling our servers having issues
@@ -544,11 +545,11 @@ namespace ParatureAPI
         /// This method makes the call to the API Server and return a class holding the response.
         /// </summary>
         /// 
-        static ParaObjects.ApiCallResponse ApiMakeCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, int accountID, ParaCredentials paracredentials)
+        static ApiCallResponse ApiMakeCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, int accountID, ParaCredentials paracredentials)
         {
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
             doc = null;
-            ParaObjects.ApiCallResponse resp = MakeThrottledCall(callurl, ApiCallHttpMethod, doc, accountID, paracredentials);
+            ApiCallResponse resp = MakeThrottledCall(callurl, ApiCallHttpMethod, doc, accountID, paracredentials);
             Int16 attemptNumber = 1;
 
             #region handling Random API server issues
@@ -653,11 +654,11 @@ namespace ParatureAPI
             System.Threading.Thread.Sleep(sleepTime);
         }
 
-        public static ParaObjects.ApiCallResponse FileUploadGetUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module)
+        public static ApiCallResponse FileUploadGetUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module)
         {
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
             doc = null;
-            ParaObjects.ApiCallResponse resp = MakeThrottledCall(ApiUrlBuilder.ApiObjectReadUpdateDeleteCustomUrl(paracredentials, module, "upload"), ParaEnums.ApiCallHttpMethod.Get, doc, paracredentials.Instanceid, paracredentials);
+            ApiCallResponse resp = MakeThrottledCall(ApiUrlBuilder.ApiObjectReadUpdateDeleteCustomUrl(paracredentials, module, "upload"), ParaEnums.ApiCallHttpMethod.Get, doc, paracredentials.Instanceid, paracredentials);
 
             #region handing Random API server issues
             // Handling our servers having issues
@@ -686,12 +687,12 @@ namespace ParatureAPI
             return resp;
         }
 
-        public static ParaObjects.ApiCallResponse FilePerformUpload(string PostUrl, System.Net.Mail.Attachment Attachment, int accountID, ParaCredentials paraCredentials)
+        public static ApiCallResponse FilePerformUpload(string PostUrl, System.Net.Mail.Attachment Attachment, int accountID, ParaCredentials paraCredentials)
         {
             return MakeThrottledCall(PostUrl, ParaEnums.ApiCallHttpMethod.Post, Attachment, accountID, paraCredentials);
         }
 
-        public static ParaObjects.ApiCallResponse FilePerformUpload(string PostUrl, Byte[] Attachment, string contentType, string FileName, int accountID, ParaCredentials paraCredentials)
+        public static ApiCallResponse FilePerformUpload(string PostUrl, Byte[] Attachment, string contentType, string FileName, int accountID, ParaCredentials paraCredentials)
         {
             return MakeThrottledCall(PostUrl, ParaEnums.ApiCallHttpMethod.Post, Attachment, contentType, FileName, accountID, paraCredentials);
         }
@@ -699,9 +700,9 @@ namespace ParatureAPI
         /// <summary>
         /// Manages throttling when making a call to the server.
         /// </summary>
-        static ParaObjects.ApiCallResponse MakeThrottledCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Xml.XmlDocument XmlPosted, int accountID, ParaCredentials pc)
+        static ApiCallResponse MakeThrottledCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Xml.XmlDocument XmlPosted, int accountID, ParaCredentials pc)
         {
-            ParaObjects.ApiCallResponse resp = new ParaObjects.ApiCallResponse();
+            ApiCallResponse resp = new ApiCallResponse();
             resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, XmlPosted, accountID, pc);
             int sleepTime = 121000;
             while ((resp.httpResponseCode == 503 || resp.httpResponseCode == 0) && sleepTime < 240000)
@@ -728,9 +729,9 @@ namespace ParatureAPI
         /// <summary>
         /// Manages throttling when making a call to the server.
         /// </summary>
-        static ParaObjects.ApiCallResponse MakeThrottledCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Net.Mail.Attachment att, int accountID, ParaCredentials paraCredentials)
+        static ApiCallResponse MakeThrottledCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Net.Mail.Attachment att, int accountID, ParaCredentials paraCredentials)
         {
-            ParaObjects.ApiCallResponse resp = new ParaObjects.ApiCallResponse();
+            ApiCallResponse resp = new ApiCallResponse();
             resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, att, accountID, paraCredentials);
             int sleepTime = 121000;
 
@@ -759,9 +760,9 @@ namespace ParatureAPI
         /// <summary>
         /// Manages throttling when making a call to the server.
         /// </summary>
-        static ParaObjects.ApiCallResponse MakeThrottledCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, Byte[] Attachment, string ContentType, string FileName, int accountID, ParaCredentials paraCredentials)
+        static ApiCallResponse MakeThrottledCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, Byte[] Attachment, string ContentType, string FileName, int accountID, ParaCredentials paraCredentials)
         {
-            ParaObjects.ApiCallResponse resp = new ParaObjects.ApiCallResponse();
+            ApiCallResponse resp = new ApiCallResponse();
             resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, Attachment, ContentType, FileName, accountID, paraCredentials);
             int sleepTime = 121000;
 
@@ -790,9 +791,9 @@ namespace ParatureAPI
         /// <summary>
         /// The true call is being made by this method.
         /// </summary>
-        static ParaObjects.ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Xml.XmlDocument XmlPosted, int accountID, ParaCredentials paraCredentials)
+        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Xml.XmlDocument XmlPosted, int accountID, ParaCredentials paraCredentials)
         {
-            var ac = new ParaObjects.ApiCallResponse();
+            var ac = new ApiCallResponse();
             var uriAddress = new Uri(callurl);
             var req = WebRequest.Create(uriAddress) as HttpWebRequest;
             //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
@@ -837,13 +838,13 @@ namespace ParatureAPI
         /// <summary>
         /// The call, with passing a binary file.
         /// </summary>
-        static ParaObjects.ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Net.Mail.Attachment att, int accountID, ParaCredentials paraCredentials)
+        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Net.Mail.Attachment att, int accountID, ParaCredentials paraCredentials)
         {
 
             string Boundary = "--ParaBoundary";
             string LineBreak = "\r\n";
             string ContentDisposition = string.Format("Content-Disposition: {0}; name=\"{1}\"; filename=\"{1}\"", att.ContentType.MediaType, att.ContentType.Name);
-            ParaObjects.ApiCallResponse ac = new ParaObjects.ApiCallResponse();
+            ApiCallResponse ac = new ApiCallResponse();
             Uri uriAddress = new Uri(callurl);
 
             HttpWebRequest req = WebRequest.Create(uriAddress) as HttpWebRequest;
@@ -893,13 +894,13 @@ namespace ParatureAPI
         /// <summary>
         /// The call, with passing a binary file.
         /// </summary>
-        static ParaObjects.ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, Byte[] Attachment, string ContentType, string FileName, int accountID, ParaCredentials paraCredentials)
+        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, Byte[] Attachment, string ContentType, string FileName, int accountID, ParaCredentials paraCredentials)
         {
 
             string Boundary = "--ParaBoundary";
             string LineBreak = "\r\n";
             string ContentDisposition = string.Format("Content-Disposition: {0}; name=\"{1}\"; filename=\"{1}\"", ContentType, FileName);
-            ParaObjects.ApiCallResponse ac = new ParaObjects.ApiCallResponse();
+            ApiCallResponse ac = new ApiCallResponse();
             Uri uriAddress = new Uri(callurl);
 
             HttpWebRequest req = WebRequest.Create(uriAddress) as HttpWebRequest;
@@ -954,7 +955,7 @@ namespace ParatureAPI
         /// the http call with the request object passed to it.
         /// </param>
         /// <returns></returns>
-        static ParaObjects.ApiCallResponse ApiHttpRequestProcessor(ParaObjects.ApiCallResponse ac, HttpWebRequest req, int accountID, ParaCredentials pc)
+        static ApiCallResponse ApiHttpRequestProcessor(ApiCallResponse ac, HttpWebRequest req, int accountID, ParaCredentials pc)
         {
             string responseFromServer = "";
 

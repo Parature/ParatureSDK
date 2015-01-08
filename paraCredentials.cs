@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.Serialization;
+using ParatureAPI.ParaObjects;
 
 namespace ParatureAPI
 {
@@ -123,7 +124,7 @@ namespace ParatureAPI
             set { m_enforceRequiredFields = value; }
         }
 
-        private Dictionary<string, ParaObjects.ObjectBaseProperties> SchemaCache= new Dictionary<string,ParaObjects.ObjectBaseProperties>();
+        private Dictionary<string, ObjectBaseProperties> SchemaCache= new Dictionary<string,ObjectBaseProperties>();
 
         public bool logRetries = false;
 
@@ -179,7 +180,7 @@ namespace ParatureAPI
         /// <summary>
         /// Insert the Schema of an object to the ParaCredentials cache, so that we are able to prevalidated the call before it is placed.
         /// </summary>
-        public void PreValidationSchemaAdd(ParaEnums.ParatureModule module, ParaObjects.ObjectBaseProperties moduleSchema)
+        public void PreValidationSchemaAdd(ParaEnums.ParatureModule module, ObjectBaseProperties moduleSchema)
         {
             if (moduleSchema != null)
             {
