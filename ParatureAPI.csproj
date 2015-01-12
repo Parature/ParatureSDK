@@ -101,7 +101,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="License.txt" />
+    <Content Include="LICENSE.txt" />
+    <None Include="CONTRIBUTING.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
