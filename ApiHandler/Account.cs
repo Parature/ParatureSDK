@@ -277,7 +277,7 @@ namespace ParatureAPI.ApiHandler
             return AccountsList;
         }
 
-        static ParaObjects.Account AccountFillDetails(Int64 accountid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
+        private static ParaObjects.Account AccountFillDetails(Int64 accountid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
         {
             int requestdepth = (int)RequestDepth;
             ParaObjects.Account account = new ParaObjects.Account();
@@ -302,7 +302,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Gets an empty object with the scheam (custom fields, if any).
         /// </summary>            
-        static public ParaObjects.Account AccountSchema(ParaCredentials ParaCredentials)
+        public static ParaObjects.Account AccountSchema(ParaCredentials ParaCredentials)
         {
             ParaObjects.Account account = new ParaObjects.Account();
             ApiCallResponse ar = new ApiCallResponse();

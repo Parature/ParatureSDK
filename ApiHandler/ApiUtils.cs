@@ -8,7 +8,7 @@ using Action = ParatureAPI.ParaObjects.Action;
 
 namespace ParatureAPI.ApiHandler
 {
-    internal class ApiUtils
+    internal static class ApiUtils
     {
         // This Optimize Page Size should be enhanced to get the Exact best pagesize
         // this will take more time, and as such should be the kind of thing that the application runs once,

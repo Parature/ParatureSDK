@@ -11,7 +11,6 @@ namespace ParatureAPI.ApiHandler
     /// </summary>
     public class Product
     {
-
         /// <summary>
         /// Provides the Schema of the Product module.
         /// </summary>
@@ -57,7 +56,6 @@ namespace ParatureAPI.ApiHandler
         {
             return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Product, Productid, purge);
         }
-
 
         /// <summary>
         /// Creates a Parature Product. Requires an Object and a credentials object. Will return the Newly Created Productid. Returns 0 if the Product creation failed.
@@ -310,7 +308,7 @@ namespace ParatureAPI.ApiHandler
 
         }
                         
-        static ParaObjects.Product ProductFillDetails(Int64 Productid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
+        private static ParaObjects.Product ProductFillDetails(Int64 Productid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
         {
             int requestdepth = (int)RequestDepth;
             ParaObjects.Product Product = new ParaObjects.Product();
@@ -336,7 +334,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Contains all the methods needed to work with the download module's folders.
         /// </summary>
-        public partial class ProductFolder
+        public class ProductFolder
         {
 
             /// <summary>

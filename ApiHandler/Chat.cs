@@ -218,7 +218,7 @@ namespace ParatureAPI.ApiHandler
         /// record in order to determine if any of the custom fields have special validation rules (e.g. email, phone, url)
         /// and set the "dataType" of the custom field accordingly.
         /// </summary> 
-        static public ParaObjects.Chat ChatSchemaWithCustomFieldTypes(ParaCredentials ParaCredentials)
+        public static ParaObjects.Chat ChatSchemaWithCustomFieldTypes(ParaCredentials ParaCredentials)
         {
             ParaObjects.Chat chat = ChatSchema(ParaCredentials);
 

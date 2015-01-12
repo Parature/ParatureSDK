@@ -104,6 +104,7 @@ namespace ParatureAPI.ApiHandler
         {
             return DownloadFillDetails(Downloadid, ParaCredentials, ParaEnums.RequestDepth.Standard, true);
         }
+
         internal static Attachment DownloadUploadFile(ParaCredentials ParaCredentials, string text, string contentType, string FileName)
         {
             return ApiUtils.UploadFile(ParaEnums.ParatureModule.Download, ParaCredentials, text, contentType, FileName);
@@ -177,6 +178,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Returns a list of the first 25 Downloads returned by the APIs.
         /// </summary>
+        
         public static DownloadsList DownloadsGetList(ParaCredentials ParaCredentials)
         {
             return DownloadsFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
@@ -187,6 +189,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
+        
         public static DownloadsList DownloadsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
             return DownloadsFillList(ParaCredentials, null, RequestDepth);
@@ -295,7 +298,7 @@ namespace ParatureAPI.ApiHandler
             return DownloadsList;
         }
 
-        static ParaObjects.Download DownloadFillDetails(Int64 Downloadid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
+        private static ParaObjects.Download DownloadFillDetails(Int64 Downloadid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
         {
             int requestdepth = (int)RequestDepth;
             ParaObjects.Download Download = new ParaObjects.Download(true);
@@ -320,7 +323,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Contains all the methods needed to work with the download module's folders.
         /// </summary>
-        public partial class DownloadFolder
+        public class DownloadFolder
         {
 
             /// <summary>
@@ -565,7 +568,6 @@ namespace ParatureAPI.ApiHandler
 
                 return downloadFoldersList;
             }
-
 
             public static ParaObjects.DownloadFolder DownloadFolderGetDetails(Int64 DownloadFolderid, ParaCredentials ParaCredentials)
             {

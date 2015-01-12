@@ -184,7 +184,8 @@ namespace ParatureAPI.ApiHandler
 
             return CsrsList;
         }
-        static ParaObjects.Csr CsrFillDetails(Int64 Csrid, ParaCredentials ParaCredentials)
+
+        private static ParaObjects.Csr CsrFillDetails(Int64 Csrid, ParaCredentials ParaCredentials)
         {
             ParaObjects.Csr Csr = new ParaObjects.Csr();
             ApiCallResponse ar = new ApiCallResponse();

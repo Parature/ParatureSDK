@@ -321,12 +321,13 @@ namespace ParatureAPI.ApiHandler
         {
             return ApiUtils.UploadFile(ParaEnums.ParatureModule.Ticket, ParaCredentials, Attachment, contentType, FileName);
         }
+        
         internal static Attachment TicketAddAttachment(ParaCredentials ParaCredentials, string text, string contentType, string FileName)
         {
             return ApiUtils.UploadFile(ParaEnums.ParatureModule.Ticket, ParaCredentials, text, contentType, FileName);
         }
 
-        static ParaObjects.Ticket TicketFillDetails(Int64 TicketNumber, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad, bool IncludeHistory)
+        private static ParaObjects.Ticket TicketFillDetails(Int64 TicketNumber, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad, bool IncludeHistory)
         {
             int requestdepth = (int)RequestDepth;
             ParaObjects.Ticket Ticket = new ParaObjects.Ticket();

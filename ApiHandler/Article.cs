@@ -601,7 +601,7 @@ namespace ParatureAPI.ApiHandler
                 return ArticleFoldersList;
             }
 
-            static ParaObjects.ArticleFolder ArticleFolderFillDetails(Int64 ArticleFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+            private static ParaObjects.ArticleFolder ArticleFolderFillDetails(Int64 ArticleFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 ParaObjects.ArticleFolder ArticleFolder = new ParaObjects.ArticleFolder();

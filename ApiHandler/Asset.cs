@@ -307,7 +307,7 @@ namespace ParatureAPI.ApiHandler
 
         }
 
-        static ParaObjects.Asset AssetFillDetails(Int64 Assetid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        private static ParaObjects.Asset AssetFillDetails(Int64 Assetid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             ParaObjects.Asset Asset = new ParaObjects.Asset();
