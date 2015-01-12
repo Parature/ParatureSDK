@@ -105,6 +105,8 @@
     <None Include="CONTRIBUTING.md" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Microsoft-Contribution-License-Agreement.docx" />
+    <None Include="Microsoft-Contribution-License-Agreement.pdf" />
     <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
