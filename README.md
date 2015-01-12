@@ -3,7 +3,7 @@
 The Microsoft ParatureSDK for .NET allows you to integrate Parature with other systems to create amazing Agent and Customer experiences. It is a C# library which abstracts the [Parature REST API](https://support.parature.com/public/doc/api.html) to C# Classes. 
 
 ## Contribute
-Please see the separate documentation on [contributing](/CONTRIBUTING.md) to the ParatureSDK.
+Please see the separate documentation on [contributing](CONTRIBUTING.md) to the ParatureSDK.
 
 ## Features
 The ParatureAPI library is merely a layer over the Parature REST API, so no new functionality from the API's perspective is introduced. It does simplify use of the API in many ways:

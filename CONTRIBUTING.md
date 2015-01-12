@@ -15,3 +15,10 @@ Microsoft asks that all contributors agree to a contributor license agreement (C
 Microsoft to distribute your code without restriction. It doesn’t require you to assign to us any copyright you have, the ownership of the copyright remains with you. You cannot withdraw permission for use of the contribution at a later date. 
 
 We are generally seeking originally authored code and documentation as contributions. Should you wish to submit materials that are not your original work, you may submit them separately to the Project in accordance with the terms of the CLA.
+
+## Contributions which don't need the CLA
+Major code contributions are the major area of contribution where we'll need the CLA signed. The following don't need the same red-tape.
+
+* Descriptive Bug Requests (without code)
+* Code used for reproduction of bugs (ie not intended for inclusion into the project)
+* High-level feedback or feature requests
