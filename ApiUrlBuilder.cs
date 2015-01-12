@@ -177,30 +177,6 @@ namespace ParatureAPI
         }
 
         /// <summary>
-        /// Build the basic link to Delete an object from the APIs.
-        /// </summary>
-        static string ApiDeleteObjectUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid)
-        {
-            return ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectid, false);
-        }
-
-        /// <summary>
-        /// Build the basic link to read an object from the APIs.
-        /// </summary>
-        static string ApiReadObjectUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid)
-        {
-            return ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectid, false);
-        }
-
-        /// <summary>
-        /// Build the basic link to update an object using the APIs.
-        /// </summary>
-        static string ApiUpdateObjectUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid)
-        {
-            return ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectid, false);
-        }
-
-        /// <summary>
         /// Build the basic link to the APIs. This link is independant from what you will be doing with the APIs.
         /// </summary>
         static string ApiBuildBasicUrl(ParaCredentials paracredentials)

@@ -14,7 +14,7 @@ namespace ParatureAPI
         /// <summary>
         /// Main Thread object, limit of 5 parallel threads
         /// </summary>
-        public partial class ObjectList
+        public class ObjectList
         {
             private static System.Threading.Semaphore sem = new System.Threading.Semaphore(5, 5);
             private ParaCredentials _paracredentials = null;

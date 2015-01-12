@@ -130,8 +130,6 @@ namespace ParatureAPI
 
         #endregion
 
-        #region Constructors
-
         /// <summary>
         /// Object used to connect to a Parature Instance
         /// </summary>
@@ -143,15 +141,13 @@ namespace ParatureAPI
         /// <param name="enforceRequiredFields">Whether to enforce required custom fields or not</param>
         public ParaCredentials(string token, string serverfarmaddress, ParaEnums.ApiVersion apiversion, int instanceid, int departmentid, bool enforceRequiredFields)
         {
-            setCredentials(token, serverfarmaddress, apiversion, instanceid, departmentid, enforceRequiredFields);
+            SetCredentials(token, serverfarmaddress, apiversion, instanceid, departmentid, enforceRequiredFields);
         }
-        #endregion
         
-        #region Internal Methods
         /// <summary>
         /// Internal method to set required credential
         /// </summary>
-        private void setCredentials(string token, string serverfarmaddress, ParaEnums.ApiVersion apiversion, int instanceid, int departmentid, bool enforceRequiredFields)
+        private void SetCredentials(string token, string serverfarmaddress, ParaEnums.ApiVersion apiversion, int instanceid, int departmentid, bool enforceRequiredFields)
         {
             Token = token;
             ServerfarmAddress = serverfarmaddress;
@@ -170,29 +166,6 @@ namespace ParatureAPI
                 {
                     // We are not in a web app environment
                     AutoretryMode = ParaEnums.AutoRetryMode.ConsoleApp;
-                }
-            }
-        }
-        #endregion
-
-        #region Pre-Validation Feature
-
-        /// <summary>
-        /// Insert the Schema of an object to the ParaCredentials cache, so that we are able to prevalidated the call before it is placed.
-        /// </summary>
-        public void PreValidationSchemaAdd(ParaEnums.ParatureModule module, ObjectBaseProperties moduleSchema)
-        {
-            if (moduleSchema != null)
-            {
-                string CacheKey = PreValidationGetCacheKey(module);
-                
-                if (SchemaCache.ContainsKey(CacheKey))
-                {
-                    SchemaCache[CacheKey] = moduleSchema;
-                }
-                else
-                {
-                    SchemaCache.Add(CacheKey, moduleSchema);
                 }
             }
         }
@@ -216,6 +189,26 @@ namespace ParatureAPI
             return CacheKey;
         }
 
-        #endregion
+        /// <summary>
+        /// Insert the Schema of an object to the ParaCredentials cache, so that we are able to prevalidated the call before it is placed.
+        /// </summary>
+        public void PreValidationSchemaAdd(ParaEnums.ParatureModule module, ObjectBaseProperties moduleSchema)
+        {
+            if (moduleSchema != null)
+            {
+                string CacheKey = PreValidationGetCacheKey(module);
+                
+                if (SchemaCache.ContainsKey(CacheKey))
+                {
+                    SchemaCache[CacheKey] = moduleSchema;
+                }
+                else
+                {
+                    SchemaCache.Add(CacheKey, moduleSchema);
+                }
+            }
+        }
+
+
     }
 }
