@@ -36,7 +36,7 @@ namespace ParatureAPI.ParaObjects
         /// </summary>
         public IEnumerable<StaticField> StaticFields
         {
-            get { return Fields.Where(f => f is StaticField) as List<StaticField>; }
+            get { return Fields.OfType<StaticField>(); }
             set
             {
                 Fields.RemoveAll(f => f is StaticField);
