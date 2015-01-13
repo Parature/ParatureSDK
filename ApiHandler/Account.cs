@@ -20,7 +20,7 @@ namespace ParatureAPI.ApiHandler
             var doc = new XmlDocument();
             doc = XmlGenerator.AccountGenerateXml(account);
             ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, ParaEnums.ParatureModule.Account, doc, 0);
-            account.AccountId = ar.Objectid;
+            account.Id = ar.Objectid;
             account.uniqueIdentifier = ar.Objectid;
             return ar;
         }
@@ -31,7 +31,7 @@ namespace ParatureAPI.ApiHandler
         public static ApiCallResponse AccountUpdate(ParaObjects.Account account, ParaCredentials paraCredentials)
         {
             var ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, ParaEnums.ParatureModule.Account, XmlGenerator.AccountGenerateXml(account), account.AccountId);
+            ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, ParaEnums.ParatureModule.Account, XmlGenerator.AccountGenerateXml(account), account.Id);
             return ar;
         }
 
@@ -70,7 +70,7 @@ namespace ParatureAPI.ApiHandler
             account.FullyLoaded = true;
 
             account.ApiCallResponse.xmlReceived = AccountXML;
-            account.ApiCallResponse.Objectid = account.AccountId;
+            account.ApiCallResponse.Objectid = account.Id;
 
             account.IsDirty = false;
             return account;
@@ -292,7 +292,7 @@ namespace ParatureAPI.ApiHandler
             else
             {
                 account.FullyLoaded = false;
-                account.AccountId = 0;
+                account.Id = 0;
             }
             account.ApiCallResponse = ar;
             account.IsDirty = false;

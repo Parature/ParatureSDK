@@ -10,36 +10,6 @@ namespace ParatureAPI.ParaObjects
     /// </summary>
     public class Account : ParaEntity
     {
-        public Int64 AccountId
-        {
-            get
-            {
-                var field = Fields.FirstOrDefault(f => f.Name == "id");
-                var val = 0;
-                try
-                {
-                    return Convert.ToInt64(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
-            }
-            set
-            {
-                var field = Fields.FirstOrDefault(f => f.Name == "id");
-                if (field == null)
-                {
-                    field = new StaticField()
-                    {
-                        Name = "id",
-                        DataType = ParaEnums.FieldDataType.Int
-                    };
-                    Fields.Add(field);
-                }
-
-                field.Value = value.ToString();
-            }
-        }
         public string Account_Name = "";
         public Csr Modified_By = new Csr();
         public Csr Owned_By = new Csr();
@@ -59,7 +29,7 @@ namespace ParatureAPI.ParaObjects
         public Account(Account account)
             : base(account)
         {
-            AccountId = account.AccountId;
+            Id = account.Id;
             Account_Name = account.Account_Name;
             Modified_By = new Csr(account.Modified_By);
             Owned_By = new Csr(account.Owned_By);
