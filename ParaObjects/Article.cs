@@ -1,39 +1,278 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using ParatureAPI.Fields;
 
 namespace ParatureAPI.ParaObjects
 {
     /// <summary>
     /// Holds all the properties of the Knowledge Base module.
     /// </summary>
-    public class Article : ParaEntityBaseProperties
+    public class Article : ParaEntity
     {
-        public string Date_Created = "";
-        public string Date_Updated = "";
+        public DateTime Date_Created
+        {
+            get
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Date_Created");
+                var val = DateTime.MinValue;
+                try
+                {
+                    return DateTime.Parse(field.Value);
+                }
+                catch (Exception e) { }
+
+                return val;
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Date_Created");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Date_Created",
+                        DataType = ParaEnums.FieldDataType.DateTime
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value.ToString();
+            }
+        }
+        public DateTime Date_Updated
+        {
+            get
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Date_Updated");
+                var val = DateTime.MinValue;
+                try
+                {
+                    return DateTime.Parse(field.Value);
+                }
+                catch (Exception e) { }
+
+                return val;
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Date_Updated");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Date_Updated",
+                        DataType = ParaEnums.FieldDataType.DateTime
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value.ToString();
+            }
+        }
+
         /// <summary>
         /// The answer to the knowledge base question.
         /// </summary>
-        public string Answer = "";
+        public string Answer
+        {
+            get
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Answer");
+                var val = string.Empty;
+                try
+                {
+                    val = field.Value;
+                }
+                catch (Exception e) { }
+
+                return val;
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Answer");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Answer",
+                        DataType = ParaEnums.FieldDataType.String
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
         /// <summary>
         /// The date this Article will expire on.
         /// </summary>
-        public string Expiration_Date = "";
+        public DateTime Expiration_Date
+        {
+            get
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Expiration_Date");
+                var val = DateTime.MinValue;
+                try
+                {
+                    return DateTime.Parse(field.Value);
+                }
+                catch (Exception e) { }
+
+                return val;
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Expiration_Date");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Expiration_Date",
+                        DataType = ParaEnums.FieldDataType.Date
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value.ToString();
+            }
+        }
+
         /// <summary>
         /// Whether this article is published or not.
         /// </summary>
-        public Boolean Published = new Boolean();
+        public Boolean Published
+        {
+            get
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Published");
+                var val = false;
+                try
+                {
+                    val = Convert.ToBoolean(field.Value);
+                }
+                catch (Exception e) { }
+
+                return val;
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Published");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Published",
+                        DataType = ParaEnums.FieldDataType.boolean
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value.ToString();
+            }
+        }
+
         /// <summary>
         /// The question asked for this Article.
         /// </summary>
-        public string Question = "";
+        public string Question
+        {
+            get
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Question");
+                var val = string.Empty;
+                try
+                {
+                    val = field.Value;
+                }
+                catch (Exception e) { }
+
+                return val;
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Question");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Question",
+                        DataType = ParaEnums.FieldDataType.String
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
         /// <summary>
         /// The average rating this article received.
         /// </summary>
-        public Int32 Rating = 0;
+        public Int32 Rating
+        {
+            get
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Rating");
+                var val = 0;
+                try
+                {
+                    val = Convert.ToInt32(field.Value);
+                }
+                catch (Exception e) { }
+
+                return val;
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Rating");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Rating",
+                        DataType = ParaEnums.FieldDataType.Int
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value.ToString();
+            }
+        }
+
         /// <summary>
         /// The number of times this article has been viewed.
         /// </summary>
-        public Int32 Times_Viewed = 0;
+        public Int32 Times_Viewed
+        {
+            get
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Times_Viewed");
+                var val = 0;
+                try
+                {
+                    val = Convert.ToInt32(field.Value);
+                }
+                catch (Exception e) { }
+
+                return val;
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Times_Viewed");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Times_Viewed",
+                        DataType = ParaEnums.FieldDataType.Int
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value.ToString();
+            }
+        }
         public Csr Modified_By = new Csr();
         public Csr Created_By = new Csr();
 
@@ -71,6 +310,11 @@ namespace ParatureAPI.ParaObjects
             Folders = new List<Folder>(article.Folders);
             Permissions = new List<Sla>(article.Permissions);
             Products = new List<Product>(article.Products);
+        }
+
+        public override string GetReadableName()
+        {
+            return Question;
         }
     }
 }

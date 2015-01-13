@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using ParatureAPI.Fields;
 
 namespace ParatureAPI.ParaObjects
 {
@@ -13,12 +15,36 @@ namespace ParatureAPI.ParaObjects
         /// The full ticket number, including the account number. Usually in the format 
         /// of Account #-Ticket # 
         /// </summary>
-        public string Ticket_Number = "";
+        public string Ticket_Number
+        {
+            get
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Ticket_Number");
+                var val = string.Empty;
+                try
+                {
+                    val = field.Value;
+                }
+                catch (Exception e) { }
 
-        ///// <summary>
-        ///// The id of the department the ticket is part of.
-        ///// </summary>
-        //public Int64 DepartmentID = 0;
+                return val;
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Ticket_Number");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Ticket_Number",
+                        DataType = ParaEnums.FieldDataType.String
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The product associated to a ticket. It will only be populated in certain configurations.
@@ -44,7 +70,6 @@ namespace ParatureAPI.ParaObjects
         /// </summary>
         public Department Department = new Department();
 
-
         /// <summary>
         /// The customer that owns the ticket. If your only requested a standard Ticket read, only the customer id is returned withing the Customer class.
         /// </summary>
@@ -68,18 +93,104 @@ namespace ParatureAPI.ParaObjects
         /// <summary>
         /// Whether email notification is turned on or off.
         /// </summary>
-        public bool Email_Notification;
+        public bool Email_Notification
+        {
+            get
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Email_Notification");
+                var val = false;
+                try
+                {
+                    val = Convert.ToBoolean(field.Value);
+                }
+                catch (Exception e) { }
+
+                return val;
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Email_Notification");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Email_Notification",
+                        DataType = ParaEnums.FieldDataType.boolean
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value.ToString();
+            }
+        }
 
         /// <summary>
         /// Whether email notification to Additional Contact is turned on or off.
         /// </summary>
-        public Nullable<Boolean> Email_Notification_Additional_Contact;
+        public bool? Email_Notification_Additional_Contact
+        {
+            get
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Email_Notification_Additional_Contact");
+                var val = false;
+                try
+                {
+                    val = Convert.ToBoolean(field.Value);
+                }
+                catch (Exception e) { }
+
+                return val;
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Email_Notification_Additional_Contact");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Email_Notification_Additional_Contact",
+                        DataType = ParaEnums.FieldDataType.boolean
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value.ToString();
+            }
+        }
 
         /// <summary>
         /// Whether email notification to Additional Contact is turned on or off.
         /// </summary>
-        public Nullable<Boolean> Hide_From_Customer;
+        public bool? Hide_From_Customer
+        {
+            get
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Hide_From_Customer");
+                var val = false;
+                try
+                {
+                    val = Convert.ToBoolean(field.Value);
+                }
+                catch (Exception e) { }
 
+                return val;
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Hide_From_Customer");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Hide_From_Customer",
+                        DataType = ParaEnums.FieldDataType.boolean
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value.ToString();
+            }
+        }
 
         /// <summary>
         /// An optional string array of CSR emails that are CCed when an email notification is sent.
@@ -127,19 +238,79 @@ namespace ParatureAPI.ParaObjects
         /// </summary>
         public List<ActionHistory> ActionHistory = new List<ActionHistory>();
 
-        public string Date_Created = "";
-        public string Date_Updated = "";
-
-        /// <summary>
-        /// Uploads an attachment to the current ticket. 
-        /// The attachment will also be added to the current Ticket's attachments collection.
-        /// </summary>
-        /// <param name="Attachment">
-        /// The binary Byte array of the attachment you would like to add. 
-        ///</param>
-        public void AttachmentsAdd(ParaCredentials paracredentials, Byte[] Attachment, string contentType, string FileName)
+        public DateTime Date_Created
         {
-            Ticket_Attachments.Add(ApiHandler.Ticket.TicketAddAttachment(paracredentials, Attachment, contentType, FileName));
+            get
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Date_Created");
+                var val = DateTime.MinValue;
+                try
+                {
+                    return DateTime.Parse(field.Value);
+                }
+                catch (Exception e) { }
+
+                return val;
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Date_Created");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Date_Created",
+                        DataType = ParaEnums.FieldDataType.DateTime
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value.ToString();
+            }
+        }
+
+        public DateTime Date_Updated
+        {
+            get
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Date_Updated");
+                var val = DateTime.MinValue;
+                try
+                {
+                    return DateTime.Parse(field.Value);
+                }
+                catch (Exception e) { }
+
+                return val;
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Date_Updated");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Date_Updated",
+                        DataType = ParaEnums.FieldDataType.DateTime
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value.ToString();
+            }
+        }
+
+        ///  <summary>
+        ///  Uploads an attachment to the current ticket. 
+        ///  The attachment will also be added to the current Ticket's attachments collection.
+        ///  </summary>
+        ///  <param name="attachment">
+        ///  The binary Byte array of the attachment you would like to add. 
+        /// </param>
+        /// <param name="fileName"></param>
+        public void AttachmentsAdd(ParaCredentials creds, Byte[] attachment, string contentType, string fileName)
+        {
+            Ticket_Attachments.Add(ApiHandler.Ticket.TicketAddAttachment(creds, attachment, contentType, fileName));
         }
 
         /// <summary>
@@ -148,18 +319,18 @@ namespace ParatureAPI.ParaObjects
         /// <param name="text">
         /// The content of the text based file. 
         ///</param>           
-        /// <param name="paracredentials">
+        /// <param name="creds">
         /// The parature credentials class for the APIs.
         /// </param>            
         /// <param name="contentType">
         /// The type of content being uploaded, you have to make sure this is the right text.
         /// </param>
-        /// <param name="FileName">
+        /// <param name="fileName">
         /// The name you woule like the attachment to have.
         ///</param>
-        public void AttachmentsAdd(ParaCredentials paracredentials, string text, string contentType, string FileName)
+        public void AttachmentsAdd(ParaCredentials creds, string text, string contentType, string fileName)
         {
-            Ticket_Attachments.Add(ApiHandler.Ticket.TicketAddAttachment(paracredentials, text, contentType, FileName));
+            Ticket_Attachments.Add(ApiHandler.Ticket.TicketAddAttachment(creds, text, contentType, fileName));
         }
 
         /// <summary>
@@ -168,31 +339,29 @@ namespace ParatureAPI.ParaObjects
         /// <param name="text">
         /// The content of the text based file. 
         ///</param>           
-        /// <param name="paracredentials">
+        /// <param name="creds">
         /// The parature credentials class for the APIs.
         /// </param>            
         /// <param name="contentType">
         /// The type of content being uploaded, you have to make sure this is the right text.
         /// </param>
-        /// <param name="FileName">
+        /// <param name="fileName">
         /// The name you woule like the attachment to have.
         ///</param>
-        public void AttachmentsUpdate(ParaCredentials paracredentials, string text, string AttachmentGuid, string contentType, string FileName)
+        public void AttachmentsUpdate(ParaCredentials creds, string text, string attachmentGuid, string contentType, string fileName)
         {
-            AttachmentsDelete(AttachmentGuid);
-            Ticket_Attachments.Add(ApiHandler.Ticket.TicketAddAttachment(paracredentials, text, contentType, FileName));
+            AttachmentsDelete(attachmentGuid);
+            Ticket_Attachments.Add(ApiHandler.Ticket.TicketAddAttachment(creds, text, contentType, fileName));
         }
-
-
 
         /// <summary>
         /// If you have an attachment and would like to replace the file, use this method. It will actually delete 
         /// the existing attachment, and then add a new one to replace it.
         /// </summary>
-        public void AttachmentsUpdate(ParaCredentials paracredentials, Byte[] Attachment, string AttachmentGuid, string contentType, string FileName)
+        public void AttachmentsUpdate(ParaCredentials creds, Byte[] attachment, string attachmentGuid, string contentType, string fileName)
         {
-            AttachmentsDelete(AttachmentGuid);
-            Ticket_Attachments.Add(ApiHandler.Ticket.TicketAddAttachment(paracredentials, Attachment, contentType, FileName));
+            AttachmentsDelete(attachmentGuid);
+            Ticket_Attachments.Add(ApiHandler.Ticket.TicketAddAttachment(creds, attachment, contentType, fileName));
         }
 
         /// <summary>
@@ -226,7 +395,7 @@ namespace ParatureAPI.ParaObjects
                 Assigned_To = new Csr(ticket.Assigned_To);
                 Cc_Csr = new ArrayList(ticket.Cc_Csr);
                 Cc_Customer = new ArrayList(ticket.Cc_Customer);
-                Date_Created = new string(ticket.Date_Created.ToCharArray());
+                Date_Created = ticket.Date_Created;
                 Date_Updated = ticket.Date_Updated;
                 Department = new Department(ticket.Department);
                 Email_Notification = ticket.Email_Notification;
@@ -258,7 +427,7 @@ namespace ParatureAPI.ParaObjects
 
         public override string GetReadableName()
         {
-            return "Ticket #" + uniqueIdentifier.ToString();
+            return "Ticket #" + uniqueIdentifier;
         }
     }
 }
