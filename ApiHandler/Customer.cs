@@ -57,7 +57,7 @@ namespace ParatureAPI.ApiHandler
 
             ApiCallResponse ar = new ApiCallResponse();
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-            doc = XmlGenerator.customerGenerateXML(customer);
+            doc = XmlGenerator.CustomerGenerateXml(customer);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Customer, doc, 0, arguments);
             customer.customerid = ar.Objectid;
             customer.uniqueIdentifier = ar.Objectid;
@@ -87,7 +87,7 @@ namespace ParatureAPI.ApiHandler
                 //arguments.Add("_include_password_=" + IncludePasswordInNotification.ToString().ToLower());
             }
             ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Customer, XmlGenerator.customerGenerateXML(Customer), Customer.customerid, arguments);
+            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Customer, XmlGenerator.CustomerGenerateXml(Customer), Customer.customerid, arguments);
             return ar;
         }
 

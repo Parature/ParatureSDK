@@ -64,7 +64,7 @@ namespace ParatureAPI.ApiHandler
         {
             ApiCallResponse ar = new ApiCallResponse();
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-            doc = XmlGenerator.ProductGenerateXML(Product);
+            doc = XmlGenerator.ProductGenerateXml(Product);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, doc, 0);
             Product.productid = ar.Objectid;
             Product.uniqueIdentifier = ar.Objectid;
@@ -78,7 +78,7 @@ namespace ParatureAPI.ApiHandler
         {
             ApiCallResponse ar = new ApiCallResponse();
 
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, XmlGenerator.ProductGenerateXML(Product), Product.productid);
+            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, XmlGenerator.ProductGenerateXml(Product), Product.productid);
 
 
             return ar;

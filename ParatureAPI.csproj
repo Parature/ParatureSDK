@@ -90,6 +90,7 @@
     <Compile Include="ApiHandler\Entities\TicketStatus.cs" />
     <Compile Include="ApiHandler\Entities\TicketView.cs" />
     <Compile Include="ApiHandler\Entities\Timezone.cs" />
+    <Compile Include="ApiHandler\Entity.cs" />
     <Compile Include="ApiHandler\Product.cs" />
     <Compile Include="ApiHandler\ApiUtils.cs" />
     <Compile Include="ApiHandler\Ticket.cs" />
@@ -97,6 +98,8 @@
     <Compile Include="Fields\CustomField.cs" />
     <Compile Include="Fields\CustomFieldOptions.cs" />
     <Compile Include="Fields\DependantCustomFields.cs" />
+    <Compile Include="Fields\Field.cs" />
+    <Compile Include="Fields\StaticField.cs" />
     <Compile Include="PagedData\AccountsList.cs" />
     <Compile Include="PagedData\ArticlesList.cs" />
     <Compile Include="PagedData\AssetsList.cs" />
@@ -141,6 +144,7 @@
     <Compile Include="ParaObjects\Download.cs" />
     <Compile Include="ParaObjects\DownloadFolder.cs" />
     <Compile Include="ParaObjects\DownloadFoldersList.cs" />
+    <Compile Include="ParaObjects\Entity.cs" />
     <Compile Include="ParaObjects\Eula.cs" />
     <Compile Include="ParaObjects\Folder.cs" />
     <Compile Include="ParaObjects\ModuleWithCustomFields.cs" />

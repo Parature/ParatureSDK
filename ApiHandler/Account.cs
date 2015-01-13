@@ -18,7 +18,7 @@ namespace ParatureAPI.ApiHandler
         {
             var ar = new ApiCallResponse();
             var doc = new XmlDocument();
-            doc = XmlGenerator.AccountGenerateXML(account);
+            doc = XmlGenerator.AccountGenerateXml(account);
             ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, ParaEnums.ParatureModule.Account, doc, 0);
             account.Accountid = ar.Objectid;
             account.uniqueIdentifier = ar.Objectid;
@@ -31,7 +31,7 @@ namespace ParatureAPI.ApiHandler
         public static ApiCallResponse AccountUpdate(ParaObjects.Account account, ParaCredentials paraCredentials)
         {
             var ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, ParaEnums.ParatureModule.Account, XmlGenerator.AccountGenerateXML(account), account.Accountid);
+            ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, ParaEnums.ParatureModule.Account, XmlGenerator.AccountGenerateXml(account), account.Accountid);
             return ar;
         }
 

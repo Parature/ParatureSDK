@@ -372,19 +372,19 @@ namespace ParatureAPI
             switch (module)
             {
                 case ParaEnums.ParatureModule.Account:
-                    doc = XmlGenerator.AccountGenerateXML((ParaObjects.Account)baseObject);
+                    doc = XmlGenerator.AccountGenerateXml((ParaObjects.Account)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Customer:
-                    doc = XmlGenerator.customerGenerateXML((ParaObjects.Customer)baseObject);
+                    doc = XmlGenerator.CustomerGenerateXml((ParaObjects.Customer)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Product:
-                    doc = XmlGenerator.ProductGenerateXML((ParaObjects.Product)baseObject);
+                    doc = XmlGenerator.ProductGenerateXml((ParaObjects.Product)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Asset:
-                    doc = XmlGenerator.AssetGenerateXML((ParaObjects.Asset)baseObject);
+                    doc = XmlGenerator.AssetGenerateXml((ParaObjects.Asset)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Ticket:
-                    doc = XmlGenerator.TicketGenerateXML((ParaObjects.Ticket)baseObject);
+                    doc = XmlGenerator.TicketGenerateXml((ParaObjects.Ticket)baseObject);
                     break;
                 default:
                     break;

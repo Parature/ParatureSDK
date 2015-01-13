@@ -51,7 +51,7 @@ namespace ParatureAPI.ApiHandler
         {
             ApiCallResponse ar = new ApiCallResponse();
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-            doc = XmlGenerator.TicketGenerateXML(Ticket);
+            doc = XmlGenerator.TicketGenerateXml(Ticket);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Ticket, doc, 0);
             Ticket.id = ar.Objectid;
             Ticket.uniqueIdentifier = ar.Objectid;
@@ -64,7 +64,7 @@ namespace ParatureAPI.ApiHandler
         public static ApiCallResponse TicketUpdate(ParaObjects.Ticket Ticket, ParaCredentials ParaCredentials)
         {
             ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Ticket, XmlGenerator.TicketGenerateXML(Ticket), Ticket.id);
+            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Ticket, XmlGenerator.TicketGenerateXml(Ticket), Ticket.id);
             return ar;
         }
 

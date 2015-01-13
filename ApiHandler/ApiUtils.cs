@@ -123,7 +123,7 @@ namespace ParatureAPI.ApiHandler
         /// </summary>
         public static ApiCallResponse ActionRun(Int64 objectId, Action action, ParaCredentials pc, ParaEnums.ParatureModule module)
         {
-            var doc = XmlGenerator.ActionGenerateXML(action, module);
+            var doc = XmlGenerator.ActionGenerateXml(action, module);
             var ar = ApiCallFactory.ObjectCreateUpdate(pc, module, doc, objectId);
             return ar;
         }
