@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class TimezonesList : PagedData.PagedData
+    public class TimezonesList : PagedData.PagedData
     {
         public List<Timezone> Timezones = new List<Timezone>();
 
@@ -12,7 +12,7 @@ namespace ParatureAPI.ParaObjects
         public TimezonesList(TimezonesList TimezonesList)
             : base(TimezonesList)
         {
-            this.Timezones = new List<Timezone>(TimezonesList.Timezones);
+            Timezones = new List<Timezone>(TimezonesList.Timezones);
         }
     }
 }

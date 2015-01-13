@@ -2,10 +2,9 @@ using System;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class Folder
+    public class Folder
     {
         // Specific properties for this module
-
         public Int64 FolderID = 0;
         public string Name = "";
         public string Description = "";
@@ -23,11 +22,11 @@ namespace ParatureAPI.ParaObjects
 
         public Folder(Folder folder)
         {
-            this.FolderID = folder.FolderID;
-            this.Name = folder.Name;
-            this.Description = folder.Description;
-            this.Is_Private = folder.Is_Private;
-            this.ApiCallResponse = folder.ApiCallResponse;
+            FolderID = folder.FolderID;
+            Name = folder.Name;
+            Description = folder.Description;
+            Is_Private = folder.Is_Private;
+            ApiCallResponse = folder.ApiCallResponse;
         }
 
     }

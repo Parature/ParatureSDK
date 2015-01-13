@@ -9,36 +9,6 @@ namespace ParatureAPI.ParaObjects
     /// </summary>
     public class Customer : ParaEntity
     {
-        public Int64 CustomerId
-        {
-            get
-            {
-                var field = Fields.FirstOrDefault(f => f.Name == "id");
-                var val = 0;
-                try
-                {
-                    return Convert.ToInt64(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
-            }
-            set
-            {
-                var field = Fields.FirstOrDefault(f => f.Name == "id");
-                if (field == null)
-                {
-                    field = new StaticField()
-                    {
-                        Name = "id",
-                        DataType = ParaEnums.FieldDataType.Int
-                    };
-                    Fields.Add(field);
-                }
-
-                field.Value = value.ToString();
-            }
-        }
         public Account Account = new Account();
         public Sla Sla = new Sla();
         public DateTime Date_Visited;
@@ -90,7 +60,7 @@ namespace ParatureAPI.ParaObjects
         public Customer(Customer customer)
             : base(customer)
         {
-            CustomerId = customer.CustomerId;
+            Id = customer.Id;
             Account = new Account(customer.Account);
             Sla = new Sla(customer.Sla);
             Date_Visited = customer.Date_Visited;

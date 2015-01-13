@@ -2,13 +2,13 @@ using System;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class ChatTranscript:ObjectBaseProperties
+    public class ChatTranscript : ParaEntityBaseProperties
     {
-        public Boolean isInternal =false;
-        public ParaEnums.ActionHistoryPerformerType performer;
-        public String csrName="";
-        public String customerName="";
-        public String Text="";
-        public DateTime Timestamp= new DateTime();
+        public Boolean IsInternal = false;
+        public ParaEnums.ActionHistoryPerformerType Performer;
+        public String CsrName = "";
+        public String CustomerName = "";
+        public String Text = "";
+        public DateTime Timestamp = DateTime.MinValue;
     }
 }

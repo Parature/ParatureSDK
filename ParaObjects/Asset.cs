@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class Asset : ParaEntity
+    public class Asset : ParaEntity
     {
-        public Int64 Assetid = 0;
         /// <summary>
         /// The account that owns the asset, if any.
         /// </summary>
@@ -30,11 +29,6 @@ namespace ParatureAPI.ParaObjects
         /// The name of the Asset.
         /// </summary>
         public string Name = "";
-
-        ///// <summary>
-        ///// The collection of custom fields of the asset module
-        ///// </summary>
-        //public List<ParaObjects.CustomField> CustomFields = new List<ParaObjects.CustomField>();
 
         /// <summary>
         /// The product this asset is derived from.
@@ -72,24 +66,24 @@ namespace ParatureAPI.ParaObjects
         public Asset(Asset asset)
             : base(asset)
         {
-            this.Assetid = asset.Assetid;
-            this.Account_Owner = new Account(asset.Account_Owner);
-            this.Created_By = new Csr(asset.Created_By);
-            this.Customer_Owner = new Customer(asset.Customer_Owner);
-            this.Modified_By = new Csr(asset.Modified_By);
-            this.Name = asset.Name;
-            this.Product = new Product(asset.Product);
-            this.Status = new AssetStatus(asset.Status);
-            this.Date_Created = asset.Date_Created;
-            this.Date_Updated = asset.Date_Updated;
-            this.AvailableActions = new List<Action>(asset.AvailableActions);
-            this.Serial_Number = asset.Serial_Number;
+            Id = asset.Id;
+            Account_Owner = new Account(asset.Account_Owner);
+            Created_By = new Csr(asset.Created_By);
+            Customer_Owner = new Customer(asset.Customer_Owner);
+            Modified_By = new Csr(asset.Modified_By);
+            Name = asset.Name;
+            Product = new Product(asset.Product);
+            Status = new AssetStatus(asset.Status);
+            Date_Created = asset.Date_Created;
+            Date_Updated = asset.Date_Updated;
+            AvailableActions = new List<Action>(asset.AvailableActions);
+            Serial_Number = asset.Serial_Number;
         }
 
 
         public override string GetReadableName()
         {
-            return this.Name;
+            return Name;
         }
     }
 }

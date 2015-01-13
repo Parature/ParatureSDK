@@ -7,13 +7,8 @@ namespace ParatureAPI.ParaObjects
     /// <summary>
     /// Holds all the properties of the Ticket module.
     /// </summary>
-    public partial class Ticket : ParaEntity
+    public class Ticket : ParaEntity
     {
-        /// <summary>
-        /// The unique identifier of the ticket
-        /// </summary>
-        public Int64 id = 0;
-
         /// <summary>
         /// The full ticket number, including the account number. Usually in the format 
         /// of Account #-Ticket # 
@@ -225,45 +220,45 @@ namespace ParatureAPI.ParaObjects
         {
             if (ticket != null)
             {
-                this.ActionHistory = new List<ActionHistory>(ticket.ActionHistory);
-                this.Actions = new List<Action>(ticket.Actions);
-                this.Additional_Contact = new Customer(ticket.Additional_Contact);
-                this.Assigned_To = new Csr(ticket.Assigned_To);
-                this.Cc_Csr = new ArrayList(ticket.Cc_Csr);
-                this.Cc_Customer = new ArrayList(ticket.Cc_Customer);
-                this.Date_Created = new string(ticket.Date_Created.ToCharArray());
-                this.Date_Updated = ticket.Date_Updated;
-                this.Department = new Department(ticket.Department);
-                this.Email_Notification = ticket.Email_Notification;
-                this.Email_Notification_Additional_Contact = ticket.Email_Notification_Additional_Contact;
-                this.Entered_By = new Csr(ticket.Entered_By);
-                this.Hide_From_Customer = ticket.Hide_From_Customer;
-                this.id = ticket.id;
-                this.operation = ticket.operation;
-                this.Ticket_Asset = new Asset(ticket.Ticket_Asset);
-                this.Ticket_Attachments = new List<Attachment>(ticket.Ticket_Attachments);
+                ActionHistory = new List<ActionHistory>(ticket.ActionHistory);
+                Actions = new List<Action>(ticket.Actions);
+                Additional_Contact = new Customer(ticket.Additional_Contact);
+                Assigned_To = new Csr(ticket.Assigned_To);
+                Cc_Csr = new ArrayList(ticket.Cc_Csr);
+                Cc_Customer = new ArrayList(ticket.Cc_Customer);
+                Date_Created = new string(ticket.Date_Created.ToCharArray());
+                Date_Updated = ticket.Date_Updated;
+                Department = new Department(ticket.Department);
+                Email_Notification = ticket.Email_Notification;
+                Email_Notification_Additional_Contact = ticket.Email_Notification_Additional_Contact;
+                Entered_By = new Csr(ticket.Entered_By);
+                Hide_From_Customer = ticket.Hide_From_Customer;
+                Id = ticket.Id;
+                operation = ticket.operation;
+                Ticket_Asset = new Asset(ticket.Ticket_Asset);
+                Ticket_Attachments = new List<Attachment>(ticket.Ticket_Attachments);
                 if (ticket.Ticket_Customer != null)
                 {
-                    this.Ticket_Customer = new Customer(ticket.Ticket_Customer);
+                    Ticket_Customer = new Customer(ticket.Ticket_Customer);
                 }
                 if (ticket.Ticket_Children != null)
                 {
-                    this.Ticket_Children = new List<Ticket>(ticket.Ticket_Children);
+                    Ticket_Children = new List<Ticket>(ticket.Ticket_Children);
                 }
-                this.Ticket_Number = ticket.Ticket_Number;
+                Ticket_Number = ticket.Ticket_Number;
                 if (ticket.Ticket_Parent != null)
                 {
-                    this.Ticket_Parent = new Ticket(ticket.Ticket_Parent);
+                    Ticket_Parent = new Ticket(ticket.Ticket_Parent);
                 }
-                this.Ticket_Product = new Product(ticket.Ticket_Product);
-                this.Ticket_Queue = new Queue(ticket.Ticket_Queue);
-                this.Ticket_Status = new TicketStatus(ticket.Ticket_Status);
+                Ticket_Product = new Product(ticket.Ticket_Product);
+                Ticket_Queue = new Queue(ticket.Ticket_Queue);
+                Ticket_Status = new TicketStatus(ticket.Ticket_Status);
             }
         }
 
         public override string GetReadableName()
         {
-            return "Ticket #" + this.uniqueIdentifier.ToString();
+            return "Ticket #" + uniqueIdentifier.ToString();
         }
     }
 }

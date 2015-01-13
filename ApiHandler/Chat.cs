@@ -192,7 +192,7 @@ namespace ParatureAPI.ApiHandler
             else
             {
                 chat.FullyLoaded = false;
-                chat.ChatID = 0;
+                chat.Id = 0;
             }
             chat.ApiCallResponse = ar;
             chat.IsDirty = false;

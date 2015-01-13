@@ -53,7 +53,7 @@ namespace ParatureAPI.ApiHandler
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
             doc = XmlGenerator.TicketGenerateXml(Ticket);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Ticket, doc, 0);
-            Ticket.id = ar.Objectid;
+            Ticket.Id = ar.Objectid;
             Ticket.uniqueIdentifier = ar.Objectid;
             return ar;
         }
@@ -64,7 +64,7 @@ namespace ParatureAPI.ApiHandler
         public static ApiCallResponse TicketUpdate(ParaObjects.Ticket Ticket, ParaCredentials ParaCredentials)
         {
             ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Ticket, XmlGenerator.TicketGenerateXml(Ticket), Ticket.id);
+            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Ticket, XmlGenerator.TicketGenerateXml(Ticket), Ticket.Id);
             return ar;
         }
 
@@ -143,7 +143,7 @@ namespace ParatureAPI.ApiHandler
             ticket.FullyLoaded = true;
 
             ticket.ApiCallResponse.xmlReceived = TicketXML;
-            ticket.ApiCallResponse.Objectid = ticket.id;
+            ticket.ApiCallResponse.Objectid = ticket.Id;
 
             ticket.IsDirty = false;
             return ticket;
@@ -354,7 +354,7 @@ namespace ParatureAPI.ApiHandler
             else
             {
                 Ticket.FullyLoaded = false;
-                Ticket.id = 0;
+                Ticket.Id = 0;
             }
             Ticket.ApiCallResponse = ar;
             Ticket.IsDirty = false;
@@ -377,7 +377,7 @@ namespace ParatureAPI.ApiHandler
         public static ApiCallResponse ActionRunGrab(Int64 Ticketid, Int64 actionid, ParaCredentials ParaCredentials)
         {
             Action Action = new Action();
-            Action.ActionID = actionid;
+            Action.Id = actionid;
             Action.actionType = ParaEnums.ActionType.Grab;
             ApiCallResponse ar = new ApiCallResponse();
             ar = ApiUtils.ActionRun(Ticketid, Action, ParaCredentials, ParaEnums.ParatureModule.Ticket);

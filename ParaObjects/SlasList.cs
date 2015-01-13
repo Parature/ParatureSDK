@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class SlasList : PagedData.PagedData
+    public class SlasList : PagedData.PagedData
     {
         public List<Sla> Slas = new List<Sla>();
 
@@ -13,7 +13,7 @@ namespace ParatureAPI.ParaObjects
         public SlasList(SlasList slasList)
             : base(slasList)
         {
-            this.Slas = new List<Sla>(slasList.Slas);
+            Slas = new List<Sla>(slasList.Slas);
         }
     }
 }

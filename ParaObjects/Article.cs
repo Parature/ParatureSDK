@@ -6,14 +6,8 @@ namespace ParatureAPI.ParaObjects
     /// <summary>
     /// Holds all the properties of the Knowledge Base module.
     /// </summary>
-    public partial class Article : ObjectBaseProperties
+    public class Article : ParaEntityBaseProperties
     {
-        // Specific properties for this module
-
-        /// <summary>
-        /// The unique identified of the Knowledge Base id.
-        /// </summary>
-        public Int64 Articleid = 0;
         public string Date_Created = "";
         public string Date_Updated = "";
         /// <summary>
@@ -65,18 +59,18 @@ namespace ParatureAPI.ParaObjects
         public Article(Article article)
             : base(article)
         {
-            this.Articleid = article.Articleid;
-            this.Date_Created = article.Date_Created;
-            this.Date_Updated = article.Date_Updated;
-            this.Answer = article.Answer;
-            this.Expiration_Date = article.Expiration_Date;
-            this.Rating = article.Rating;
-            this.Times_Viewed = article.Times_Viewed;
-            this.Modified_By = new Csr(article.Modified_By);
-            this.Created_By = new Csr(article.Created_By);
-            this.Folders = new List<Folder>(article.Folders);
-            this.Permissions = new List<Sla>(article.Permissions);
-            this.Products = new List<Product>(article.Products);
+            Id = article.Id;
+            Date_Created = article.Date_Created;
+            Date_Updated = article.Date_Updated;
+            Answer = article.Answer;
+            Expiration_Date = article.Expiration_Date;
+            Rating = article.Rating;
+            Times_Viewed = article.Times_Viewed;
+            Modified_By = new Csr(article.Modified_By);
+            Created_By = new Csr(article.Created_By);
+            Folders = new List<Folder>(article.Folders);
+            Permissions = new List<Sla>(article.Permissions);
+            Products = new List<Product>(article.Products);
         }
     }
 }

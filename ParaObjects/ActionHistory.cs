@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class ActionHistory
+    public class ActionHistory
     {
         /// <summary>
         /// The unique identifier of this action history item
@@ -46,18 +46,18 @@ namespace ParatureAPI.ParaObjects
 
         public ActionHistory(ActionHistory actionHistory)
         {
-            this.ActionHistoryID = actionHistory.ActionHistoryID;
-            this.Action = new Action(actionHistory.Action);
-            this.Old_Status = new TicketStatus(actionHistory.Old_Status);
-            this.New_Status = new TicketStatus(actionHistory.New_Status);
-            this.Comments = actionHistory.Comments;
-            this.Show_To_Customer = actionHistory.Show_To_Customer;
-            this.Time_Spent = actionHistory.Time_Spent;
-            this.Action_Date = actionHistory.Action_Date;
-            this.History_Attachments = new List<Attachment>(actionHistory.History_Attachments);
-            this.Action_Performer = new ActionHistoryPerformer(actionHistory.Action_Performer);
-            this.Cc_Csr = new ArrayList(actionHistory.Cc_Csr);
-            this.Cc_Customer = new ArrayList(actionHistory.Cc_Customer);
+            ActionHistoryID = actionHistory.ActionHistoryID;
+            Action = new Action(actionHistory.Action);
+            Old_Status = new TicketStatus(actionHistory.Old_Status);
+            New_Status = new TicketStatus(actionHistory.New_Status);
+            Comments = actionHistory.Comments;
+            Show_To_Customer = actionHistory.Show_To_Customer;
+            Time_Spent = actionHistory.Time_Spent;
+            Action_Date = actionHistory.Action_Date;
+            History_Attachments = new List<Attachment>(actionHistory.History_Attachments);
+            Action_Performer = new ActionHistoryPerformer(actionHistory.Action_Performer);
+            Cc_Csr = new ArrayList(actionHistory.Cc_Csr);
+            Cc_Customer = new ArrayList(actionHistory.Cc_Customer);
         }
     }
 }

@@ -1,6 +1,6 @@
 namespace ParatureAPI.ParaObjects
 {
-    public partial class AssetStatus : Status
+    public class AssetStatus : Status
     {
         // Specific properties for this module
 
@@ -20,8 +20,8 @@ namespace ParatureAPI.ParaObjects
         public AssetStatus(AssetStatus assetStatus)
             : base(assetStatus)
         {
-            this.Text = assetStatus.Text;
-            this.Description = assetStatus.Description;
+            Text = assetStatus.Text;
+            Description = assetStatus.Description;
         }
 
     }

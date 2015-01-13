@@ -2,7 +2,7 @@ using System;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class Sla
+    public class Sla
     {
         public Int64 SlaID = 0;
         public string Name = "";
@@ -13,8 +13,8 @@ namespace ParatureAPI.ParaObjects
 
         public Sla(Sla sla)
         {
-            this.SlaID = sla.SlaID;
-            this.Name = sla.Name;
+            SlaID = sla.SlaID;
+            Name = sla.Name;
         }
     }
 }

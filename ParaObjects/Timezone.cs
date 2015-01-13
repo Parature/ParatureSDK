@@ -2,7 +2,7 @@ using System;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class Timezone
+    public class Timezone
     {
         public Int64 TimezoneID;
         public string Name;
@@ -15,14 +15,14 @@ namespace ParatureAPI.ParaObjects
         }
         public Timezone(Timezone timezone)
         {
-            this.TimezoneID = timezone.TimezoneID;
-            this.Name = timezone.Name;
-            this.Abbreviation = timezone.Abbreviation;
+            TimezoneID = timezone.TimezoneID;
+            Name = timezone.Name;
+            Abbreviation = timezone.Abbreviation;
         }
 
         public Timezone(Int64 ID, string Name, string Abbreviation)
         {
-            this.TimezoneID = ID;
+            TimezoneID = ID;
             this.Name = Name;
             this.Abbreviation = Abbreviation;
         }

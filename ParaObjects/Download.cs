@@ -6,17 +6,14 @@ namespace ParatureAPI.ParaObjects
     /// <summary>
     /// Holds all the properties of the Download module.
     /// </summary>
-    public partial class Download : ObjectBaseProperties
+    public class Download : ParaEntityBaseProperties
     {
         // Specific properties for this module
         /// <summary>
         /// An attachment object holds the information about any attachment.
         /// </summary>
         public Attachment Attachment = new Attachment();
-        /// <summary>
-        /// The unique identified of the download.
-        /// </summary>
-        public Int64 Downloadid = 0;
+
         public string Date_Created = "";
         public string Date_Updated = "";
         /// <summary>
@@ -90,8 +87,8 @@ namespace ParatureAPI.ParaObjects
         /// </param>
         public void AttachmentsAdd(ParaCredentials paracredentials, System.Net.Mail.Attachment EmailAttachment)
         {
-            this.Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, EmailAttachment);
-            this.Guid = this.Attachment.GUID;
+            Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, EmailAttachment);
+            Guid = Attachment.GUID;
         }
             
         /// <summary>
@@ -113,7 +110,7 @@ namespace ParatureAPI.ParaObjects
         public void AttachmentsAdd(ParaCredentials paracredentials, Byte[] Attachment, string contentType, string FileName)
         {
             this.Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, Attachment, contentType, FileName);
-            this.Guid = this.Attachment.GUID;
+            Guid = this.Attachment.GUID;
         }
 
         /// <summary>
@@ -133,8 +130,8 @@ namespace ParatureAPI.ParaObjects
         ///</param>
         public void AttachmentsAdd(ParaCredentials paracredentials, string text, string contentType, string FileName)
         {
-            this.Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, text, contentType, FileName);
-            this.Guid = this.Attachment.GUID;
+            Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, text, contentType, FileName);
+            Guid = Attachment.GUID;
         }
 
         /// <summary>
@@ -154,9 +151,9 @@ namespace ParatureAPI.ParaObjects
         ///</param>
         public void AttachmentsUpdate(ParaCredentials paracredentials, string text, string contentType, string FileName)
         {
-            this.Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, text, contentType, FileName);
-            this.Guid = this.Attachment.GUID;
-            this.Name = FileName;
+            Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, text, contentType, FileName);
+            Guid = Attachment.GUID;
+            Name = FileName;
         }
 
 
@@ -167,8 +164,8 @@ namespace ParatureAPI.ParaObjects
         public void AttachmentsUpdate(ParaCredentials paracredentials, Byte[] Attachment, string contentType, string FileName)
         {
             this.Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, Attachment, contentType, FileName);
-            this.Guid = this.Attachment.GUID;
-            this.Name = FileName;
+            Guid = this.Attachment.GUID;
+            Name = FileName;
         }
 
 
@@ -178,29 +175,29 @@ namespace ParatureAPI.ParaObjects
         /// <param name="allowMultipleFolders">True if Multiple Folders is configured</param>
         public Download(bool allowMultipleFolders)
         {
-            this.MultipleFolders = allowMultipleFolders;
+            MultipleFolders = allowMultipleFolders;
         }
 
         public Download(Download download)
             : base(download)
         {
-            this.Downloadid = download.Downloadid;
-            this.Date_Created = download.Date_Created;
-            this.Date_Updated = download.Date_Updated;
-            this.Description = download.Description;
-            this.External_Link = download.External_Link;
-            this.MultipleFolders = download.MultipleFolders;
-            this.Folders = download.Folders;
-            this.Guid = download.Guid;
-            this.Permissions = new List<Sla>(download.Permissions);
-            this.Name = download.Name;
-            this.Products = new List<Product>(download.Products);
-            this.Published = download.Published;
-            this.Title = download.Title;
-            this.Visible = download.Visible;
-            this.Eula = new Eula(download.Eula);
-            this.File_Hits = download.File_Hits;
-            this.File_Size = download.File_Size;
+            Id = download.Id;
+            Date_Created = download.Date_Created;
+            Date_Updated = download.Date_Updated;
+            Description = download.Description;
+            External_Link = download.External_Link;
+            MultipleFolders = download.MultipleFolders;
+            Folders = download.Folders;
+            Guid = download.Guid;
+            Permissions = new List<Sla>(download.Permissions);
+            Name = download.Name;
+            Products = new List<Product>(download.Products);
+            Published = download.Published;
+            Title = download.Title;
+            Visible = download.Visible;
+            Eula = new Eula(download.Eula);
+            File_Hits = download.File_Hits;
+            File_Size = download.File_Size;
         }
     }
 }

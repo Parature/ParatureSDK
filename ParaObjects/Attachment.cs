@@ -3,7 +3,7 @@ namespace ParatureAPI.ParaObjects
     /// <summary>
     /// An attachment object holds the information about any attachment, whether in the ticket history, in the ticket itself, a download, or any other module that supports the attachments feature.
     /// </summary>
-    public partial class Attachment
+    public class Attachment
     {
         /// <summary>
         /// This is the unique identifier of the Attachment/Download file in your Parature license.
@@ -29,11 +29,11 @@ namespace ParatureAPI.ParaObjects
 
         public Attachment(Attachment attachment)
         {
-            this.GUID = attachment.GUID;
-            this.Name = attachment.Name;
-            this.AttachmentURL = attachment.AttachmentURL;
-            this.Error = attachment.Error;
-            this.HasException = attachment.HasException;
+            GUID = attachment.GUID;
+            Name = attachment.Name;
+            AttachmentURL = attachment.AttachmentURL;
+            Error = attachment.Error;
+            HasException = attachment.HasException;
         }
     }
 }

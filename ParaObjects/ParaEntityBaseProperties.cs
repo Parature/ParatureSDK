@@ -5,8 +5,13 @@ namespace ParatureAPI.ParaObjects
     /// <summary>
     /// Provides basic shared properties among all the objects.
     /// </summary>
-    public abstract class ObjectBaseProperties
+    public abstract class ParaEntityBaseProperties
     {
+        /// <summary>
+        /// Id for the entity in Parature
+        /// </summary>
+        public Int64 Id = 0;
+
         /// <summary>
         /// Indicates whether the object is fully loaded or not. If the object is returned as a second level object, this flag will indicate whether only the id property of the object is filled, or if all the properties have been loaded.
         /// </summary>
@@ -42,11 +47,11 @@ namespace ParatureAPI.ParaObjects
         /// <summary>
         /// 
         /// </summary>
-        protected ObjectBaseProperties()
+        protected ParaEntityBaseProperties()
         {
         }
 
-        protected ObjectBaseProperties(ObjectBaseProperties objBP)
+        protected ParaEntityBaseProperties(ParaEntityBaseProperties objBP)
         {
             FullyLoaded = objBP.FullyLoaded;
             ApiCallResponse = new ApiCallResponse(objBP.ApiCallResponse);

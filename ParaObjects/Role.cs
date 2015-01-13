@@ -2,7 +2,7 @@ using System;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class Role
+    public class Role
     {
         public Int64 RoleID;
         public string Name;
@@ -15,9 +15,9 @@ namespace ParatureAPI.ParaObjects
         }
         public Role(Role role)
         {
-            this.RoleID = role.RoleID;
-            this.Name = role.Name;
-            this.Description = role.Description;
+            RoleID = role.RoleID;
+            Name = role.Name;
+            Description = role.Description;
         }
         public Role(Int64 RoleID, string Name, string Description)
         {

@@ -9,7 +9,7 @@ namespace ParatureAPI.ParaObjects
     /// <summary>
     /// Base class for all Parature Entities (Modules) retrievable via the API
     /// </summary>
-    public abstract class ParaEntity : ObjectBaseProperties
+    public abstract class ParaEntity : ParaEntityBaseProperties
     {
         public ParaEntity()
         { }
@@ -23,6 +23,7 @@ namespace ParatureAPI.ParaObjects
                 return;
             }
 
+            Id = paraEntity.Id;
             Fields = paraEntity.Fields;
         }
 
@@ -372,9 +373,9 @@ namespace ParatureAPI.ParaObjects
         {
             Int64 customFieldId = -1;
 
-            if (this.CustomFields != null)
+            if (CustomFields != null)
             {
-                foreach(CustomField cf in this.CustomFields)
+                foreach(CustomField cf in CustomFields)
                 {
                     if (cf.Name.ToLower() == customFieldName.ToLower())
                     {

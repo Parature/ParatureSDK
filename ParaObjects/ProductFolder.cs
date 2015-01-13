@@ -3,7 +3,7 @@ namespace ParatureAPI.ParaObjects
     /// <summary>
     /// Used only for the downloads module folders.
     /// </summary>
-    public partial class ProductFolder : Folder
+    public class ProductFolder : Folder
     {
         /// <summary>
         /// Indicates whether this object is fully loaded or not. An object that is not fully loaded means 
@@ -22,13 +22,13 @@ namespace ParatureAPI.ParaObjects
 
         public ProductFolder(ProductFolder ProductFolder)
         {
-            this.FolderID = ProductFolder.FolderID;
-            this.Date_Updated = ProductFolder.Date_Updated;
-            this.FullyLoaded = ProductFolder.FullyLoaded;
+            FolderID = ProductFolder.FolderID;
+            Date_Updated = ProductFolder.Date_Updated;
+            FullyLoaded = ProductFolder.FullyLoaded;
             if (ProductFolder.Parent_Folder != null)
             {
-                this.Parent_Folder = new ProductFolder();
-                this.Parent_Folder = ProductFolder.Parent_Folder;
+                Parent_Folder = new ProductFolder();
+                Parent_Folder = ProductFolder.Parent_Folder;
             }
         }
 

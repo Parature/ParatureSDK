@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class CsrsList : PagedData.PagedData
+    public class CsrsList : PagedData.PagedData
     {
         public List<Csr> Csrs = new List<Csr>();
 
@@ -13,7 +13,7 @@ namespace ParatureAPI.ParaObjects
         public CsrsList(CsrsList csrsList)
             : base(csrsList)
         {
-            this.Csrs = new List<Csr>(csrsList.Csrs);
+            Csrs = new List<Csr>(csrsList.Csrs);
         }
     }
 }

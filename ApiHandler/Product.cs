@@ -66,7 +66,7 @@ namespace ParatureAPI.ApiHandler
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
             doc = XmlGenerator.ProductGenerateXml(Product);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, doc, 0);
-            Product.productid = ar.Objectid;
+            Product.Id = ar.Objectid;
             Product.uniqueIdentifier = ar.Objectid;
             return ar;
         }
@@ -78,7 +78,7 @@ namespace ParatureAPI.ApiHandler
         {
             ApiCallResponse ar = new ApiCallResponse();
 
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, XmlGenerator.ProductGenerateXml(Product), Product.productid);
+            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, XmlGenerator.ProductGenerateXml(Product), Product.Id);
 
 
             return ar;
@@ -136,7 +136,7 @@ namespace ParatureAPI.ApiHandler
             product.FullyLoaded = true;
 
             product.ApiCallResponse.xmlReceived = ProductXML;
-            product.ApiCallResponse.Objectid = product.productid;
+            product.ApiCallResponse.Objectid = product.Id;
 
             product.IsDirty = false;
             return product;
@@ -323,7 +323,7 @@ namespace ParatureAPI.ApiHandler
             else
             {
                 Product.FullyLoaded = false;
-                Product.productid = 0;
+                Product.Id = 0;
             }
             Product.ApiCallResponse = ar;
             Product.IsDirty = false;

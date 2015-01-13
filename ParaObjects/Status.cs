@@ -2,7 +2,7 @@ using System;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class Status
+    public class Status
     {
         // Specific properties for this module
 
@@ -34,13 +34,13 @@ namespace ParatureAPI.ParaObjects
 
         public Status(Status status)
         {
-            this.StatusID = status.StatusID;
-            this.Name = status.Name;
+            StatusID = status.StatusID;
+            Name = status.Name;
         }
 
         public Status(Int64 ID, string Name)
         {
-            this.StatusID = ID;
+            StatusID = ID;
             this.Name = Name;
         }
     }

@@ -6,9 +6,8 @@ namespace ParatureAPI.ParaObjects
     /// <summary>
     /// Holds all the properties of the Chat module.
     /// </summary>
-    public partial class Chat : ParaEntity
+    public class Chat : ParaEntity
     {
-        public Int64 ChatID = 0;
         public Int64 Chat_Number = 0;
         public String Browser_Language = "";
         public String Browser_Type = "";
@@ -40,7 +39,7 @@ namespace ParatureAPI.ParaObjects
 
         public override string GetReadableName()
         {
-            return "Chat #" + this.uniqueIdentifier.ToString();
+            return "Chat #" + uniqueIdentifier.ToString();
         }
     }
 }

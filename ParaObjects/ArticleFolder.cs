@@ -1,6 +1,6 @@
 namespace ParatureAPI.ParaObjects
 {
-    public partial class ArticleFolder : Folder
+    public class ArticleFolder : Folder
     {
 
         public ArticleFolder Parent_Folder;
@@ -13,11 +13,11 @@ namespace ParatureAPI.ParaObjects
 
         public ArticleFolder(ArticleFolder articleFolder)
         {
-            this.Description = articleFolder.Description;
-            this.FolderID = articleFolder.FolderID;
-            this.FullyLoaded = articleFolder.FullyLoaded;
-            this.Is_Private = articleFolder.Is_Private;
-            this.Name = articleFolder.Name;
+            Description = articleFolder.Description;
+            FolderID = articleFolder.FolderID;
+            FullyLoaded = articleFolder.FullyLoaded;
+            Is_Private = articleFolder.Is_Private;
+            Name = articleFolder.Name;
         }
     }
 }

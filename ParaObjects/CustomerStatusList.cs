@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class CustomerStatusList : PagedData.PagedData
+    public class CustomerStatusList : PagedData.PagedData
     {
         public List<CustomerStatus> CustomerStatuses = new List<CustomerStatus>();
         public CustomerStatusList()
@@ -11,7 +11,7 @@ namespace ParatureAPI.ParaObjects
         public CustomerStatusList(CustomerStatusList Customerstatuslist)
             : base(Customerstatuslist)
         {
-            this.CustomerStatuses = new List<CustomerStatus>(Customerstatuslist.CustomerStatuses);
+            CustomerStatuses = new List<CustomerStatus>(Customerstatuslist.CustomerStatuses);
         }
     }
 }

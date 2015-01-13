@@ -2,7 +2,7 @@ using System;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class Queue
+    public class Queue
     {
         // Specific properties for this module
 
@@ -27,8 +27,8 @@ namespace ParatureAPI.ParaObjects
 
         public Queue(Queue queue)
         {
-            this.QueueID = queue.QueueID;
-            this.Name = queue.Name;
+            QueueID = queue.QueueID;
+            Name = queue.Name;
         }
 
     }

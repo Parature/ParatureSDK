@@ -1,6 +1,6 @@
 namespace ParatureAPI.ParaObjects
 {
-    public partial class TicketView : View
+    public class TicketView : View
     {
 
 

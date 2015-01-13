@@ -3,17 +3,8 @@ using System.Collections.Generic;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class Csr : ObjectBaseProperties
+    public class Csr : ParaEntityBaseProperties
     {
-        // Specific properties for this module
-
-        private Int64 _CsrID = 0;
-
-        public Int64 CsrID
-        {
-            get { return _CsrID; }
-            set { _CsrID = value; }
-        }
         private string _Full_Name = "";
 
         public string Full_Name
@@ -43,19 +34,19 @@ namespace ParatureAPI.ParaObjects
 
         public Csr(Csr csr)
         {
-            this.CsrID = csr.CsrID;
-            this.Full_Name = csr.Full_Name;
-            this.Email = csr.Email;
-            this.Fax = csr.Fax;
-            this.Phone_1 = csr.Phone_1;
-            this.Phone_2 = csr.Phone_2;
-            this.Screen_Name = csr.Screen_Name;
-            this.Date_Format = csr.Date_Format;
-            this.Status = new Status(csr.Status);
-            this.Timezone = new Timezone(csr.Timezone);
-            this.Date_Created = csr.Date_Created;
-            this.Role = new List<Role>(csr.Role);
-            this.Password = csr.Password;
+            Id = csr.Id;
+            Full_Name = csr.Full_Name;
+            Email = csr.Email;
+            Fax = csr.Fax;
+            Phone_1 = csr.Phone_1;
+            Phone_2 = csr.Phone_2;
+            Screen_Name = csr.Screen_Name;
+            Date_Format = csr.Date_Format;
+            Status = new Status(csr.Status);
+            Timezone = new Timezone(csr.Timezone);
+            Date_Created = csr.Date_Created;
+            Role = new List<Role>(csr.Role);
+            Password = csr.Password;
         }
     }
 }

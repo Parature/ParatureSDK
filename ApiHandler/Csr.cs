@@ -79,7 +79,7 @@ namespace ParatureAPI.ApiHandler
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
             doc = XmlGenerator.CsrGenerateXML(Csr);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Csr, doc, 0);
-            Csr.CsrID = ar.Objectid;
+            Csr.Id = ar.Objectid;
             return ar;
         }
 
@@ -114,7 +114,7 @@ namespace ParatureAPI.ApiHandler
         {
             ApiCallResponse ar = new ApiCallResponse();
 
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Csr, XmlGenerator.CsrGenerateXML(Csr), Csr.CsrID);
+            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Csr, XmlGenerator.CsrGenerateXML(Csr), Csr.Id);
 
 
             return ar;
@@ -197,7 +197,7 @@ namespace ParatureAPI.ApiHandler
             else
             {
 
-                Csr.CsrID = 0;
+                Csr.Id = 0;
             }
 
             Csr.ApiCallResponse = ar;

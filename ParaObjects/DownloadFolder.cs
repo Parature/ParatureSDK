@@ -3,7 +3,7 @@ namespace ParatureAPI.ParaObjects
     /// <summary>
     /// Used only for the downloads module folders.
     /// </summary>
-    public partial class DownloadFolder : Folder
+    public class DownloadFolder : Folder
     {
         public bool FullyLoaded = false;
         public string Date_Updated = "";
@@ -20,9 +20,9 @@ namespace ParatureAPI.ParaObjects
 
         public DownloadFolder(DownloadFolder downloadFolder)
         {
-            this.FullyLoaded = downloadFolder.FullyLoaded;
-            this.Date_Updated = downloadFolder.Date_Updated;
-            this.Parent_Folder = new DownloadFolder(downloadFolder.Parent_Folder);
+            FullyLoaded = downloadFolder.FullyLoaded;
+            Date_Updated = downloadFolder.Date_Updated;
+            Parent_Folder = new DownloadFolder(downloadFolder.Parent_Folder);
         }
     }
 }

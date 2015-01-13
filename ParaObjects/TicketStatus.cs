@@ -1,6 +1,6 @@
 namespace ParatureAPI.ParaObjects
 {
-    public partial class TicketStatus : Status
+    public class TicketStatus : Status
     {
         public string Customer_Text = "";
         public ParaEnums.TicketStatusType StatusType = ParaEnums.TicketStatusType.All;
@@ -13,8 +13,8 @@ namespace ParatureAPI.ParaObjects
         public TicketStatus(TicketStatus ticketStatus)
             : base(ticketStatus)
         {
-            this.StatusType = ticketStatus.StatusType;
-            this.Customer_Text = ticketStatus.Customer_Text;
+            StatusType = ticketStatus.StatusType;
+            Customer_Text = ticketStatus.Customer_Text;
         }
     }
 }

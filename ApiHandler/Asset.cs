@@ -55,7 +55,7 @@ namespace ParatureAPI.ApiHandler
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
             doc = XmlGenerator.AssetGenerateXml(Asset);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Asset, doc, 0);
-            Asset.Assetid = ar.Objectid;
+            Asset.Id = ar.Objectid;
             Asset.uniqueIdentifier = ar.Objectid;
             return ar;
         }
@@ -66,7 +66,7 @@ namespace ParatureAPI.ApiHandler
         public static ApiCallResponse AssetUpdate(ParaObjects.Asset Asset, ParaCredentials ParaCredentials)
         {
             ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Asset, XmlGenerator.AssetGenerateXml(Asset), Asset.Assetid);
+            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Asset, XmlGenerator.AssetGenerateXml(Asset), Asset.Id);
             return ar;
         }
 
@@ -136,7 +136,7 @@ namespace ParatureAPI.ApiHandler
             asset.FullyLoaded = true;
 
             asset.ApiCallResponse.xmlReceived = AssetXML;
-            asset.ApiCallResponse.Objectid = asset.Assetid;
+            asset.ApiCallResponse.Objectid = asset.Id;
 
             asset.IsDirty = true;
             return asset;
@@ -324,7 +324,7 @@ namespace ParatureAPI.ApiHandler
             else
             {
                 Asset.FullyLoaded = false;
-                Asset.Assetid = 0;
+                Asset.Id = 0;
             }
             Asset.ApiCallResponse = ar;
             Asset.IsDirty = false;

@@ -2,11 +2,11 @@ using System;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class Eula
+    public class Eula
     {
         // Specific properties for this module
         public string ShortTitle = "";
-        public Int64 EulaID = 0;
+        public Int64 Id = 0;
 
         public Eula()
         {
@@ -14,9 +14,8 @@ namespace ParatureAPI.ParaObjects
 
         public Eula(Eula eula)
         {
-            this.ShortTitle = eula.ShortTitle;
-            this.EulaID = eula.EulaID;
+            ShortTitle = eula.ShortTitle;
+            Id = eula.Id;
         }
-
     }
 }

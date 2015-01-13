@@ -1,11 +1,12 @@
 using System;
+using System.Xml;
 
 namespace ParatureAPI.ParaObjects
 {
     /// <summary>
     /// This class is contains all row information regarding an API call.
     /// </summary>
-    public partial class ApiCallResponse
+    public class ApiCallResponse
     {
         /// <summary>
         /// The url that was called when making the API call.
@@ -30,11 +31,11 @@ namespace ParatureAPI.ParaObjects
         /// <summary>
         /// The XML that was received back from the server. Will only contain data when a proper XML is returned. This will be null if an exception was encountered. Please check first whether there was an exception or not, then check if this XML document is not null, before trying to use it.
         /// </summary>
-        public System.Xml.XmlDocument xmlReceived = new System.Xml.XmlDocument();
+        public XmlDocument xmlReceived = new XmlDocument();
         /// <summary>
         /// The XML that was sent to the server when making the API Call. In case of of a list or a retrieve, there is not XML that is sent. Please check first whether this is a null object or not, before using it.
         /// </summary>
-        public System.Xml.XmlDocument xmlSent = new System.Xml.XmlDocument();
+        public XmlDocument xmlSent = new XmlDocument();
 
         /// <summary>
         /// If you were inserting or updating a record, check this value, if it is more than 0, it means the operations
@@ -53,14 +54,14 @@ namespace ParatureAPI.ParaObjects
 
         public ApiCallResponse(ApiCallResponse apiCallResponse)
         {
-            this.CalledUrl = apiCallResponse.CalledUrl;
-            this.httpCallMethod = apiCallResponse.httpCallMethod;
-            this.httpResponseCode = apiCallResponse.httpResponseCode;
-            this.HasException = apiCallResponse.HasException;
-            this.ExceptionDetails = apiCallResponse.ExceptionDetails;
-            this.xmlReceived = apiCallResponse.xmlReceived;
-            this.xmlSent = apiCallResponse.xmlSent;
-            this.Objectid = apiCallResponse.Objectid;
+            CalledUrl = apiCallResponse.CalledUrl;
+            httpCallMethod = apiCallResponse.httpCallMethod;
+            httpResponseCode = apiCallResponse.httpResponseCode;
+            HasException = apiCallResponse.HasException;
+            ExceptionDetails = apiCallResponse.ExceptionDetails;
+            xmlReceived = apiCallResponse.xmlReceived;
+            xmlSent = apiCallResponse.xmlSent;
+            Objectid = apiCallResponse.Objectid;
         }
     }
 }

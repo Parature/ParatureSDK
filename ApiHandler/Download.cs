@@ -53,7 +53,7 @@ namespace ParatureAPI.ApiHandler
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
             doc = XmlGenerator.DownloadGenerateXML(Download);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Download, doc, 0);
-            Download.Downloadid = ar.Objectid;
+            Download.Id = ar.Objectid;
             Download.uniqueIdentifier = ar.Objectid;
             return ar;
         }
@@ -65,7 +65,7 @@ namespace ParatureAPI.ApiHandler
         {
             ApiCallResponse ar = new ApiCallResponse();
 
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Download, XmlGenerator.DownloadGenerateXML(Download), Download.Downloadid);
+            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Download, XmlGenerator.DownloadGenerateXML(Download), Download.Id);
 
 
             return ar;
@@ -133,7 +133,7 @@ namespace ParatureAPI.ApiHandler
             download.FullyLoaded = true;
 
             download.ApiCallResponse.xmlReceived = DownloadXML;
-            download.ApiCallResponse.Objectid = download.Downloadid;
+            download.ApiCallResponse.Objectid = download.Id;
 
             download.IsDirty = false;
             return download;
@@ -312,7 +312,7 @@ namespace ParatureAPI.ApiHandler
             else
             {
                 Download.FullyLoaded = false;
-                Download.Downloadid = 0;
+                Download.Id = 0;
             }
 
             Download.ApiCallResponse = ar;

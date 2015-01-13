@@ -1,6 +1,6 @@
 namespace ParatureAPI.ParaObjects
 {
-    public partial class CsrStatus : Status
+    public class CsrStatus : Status
     {
 
         public CsrStatus()

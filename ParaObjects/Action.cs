@@ -4,11 +4,10 @@ using System.Collections.Generic;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class Action : ActionBase
+    public class Action : ActionBase
     {
         public bool FullyLoaded;
-        public Int64 ActionID = 0;
-        public string ActionName = "";
+        public string Name = "";
         internal ParaEnums.ActionType actionType;
         public string Comment = "";
         /// <summary>
@@ -42,51 +41,20 @@ namespace ParatureAPI.ParaObjects
 
         public Action(Action action)
         {
-            this.FullyLoaded = action.FullyLoaded;
-            this.ActionID = action.ActionID;
-            this.ActionName = action.ActionName;
-            this.actionType = action.actionType;
-            this.Comment = action.Comment;
-            this.VisibleToCustomer = action.VisibleToCustomer;
-            this.EmailText = action.EmailText;
-            this.EmailListCsr = action.EmailListCsr;
-            this.EmailListCustomers = action.EmailListCustomers;
-            this.TimeSpentHours = action.TimeSpentHours;
-            this.TimeSpentMinutes = action.TimeSpentMinutes;
-            this.AssignToQueueid = action.AssignToQueueid;
-            this.AssigntToCsrid = action.AssigntToCsrid;
-            this.Action_Attachments = action.Action_Attachments;
+            FullyLoaded = action.FullyLoaded;
+            Id = action.Id;
+            Name = action.Name;
+            actionType = action.actionType;
+            Comment = action.Comment;
+            VisibleToCustomer = action.VisibleToCustomer;
+            EmailText = action.EmailText;
+            EmailListCsr = action.EmailListCsr;
+            EmailListCustomers = action.EmailListCustomers;
+            TimeSpentHours = action.TimeSpentHours;
+            TimeSpentMinutes = action.TimeSpentMinutes;
+            AssignToQueueid = action.AssignToQueueid;
+            AssigntToCsrid = action.AssigntToCsrid;
+            Action_Attachments = action.Action_Attachments;
         }
-        ///// <summary>
-        ///// Uploads an attachment to the current ticket. 
-        ///// The attachment will also be added to the current Actions's attachments collection.
-        ///// </summary>
-        ///// <param name="Attachment">
-        ///// The binary Byte array of the attachment you would like to add. 
-        /////</param>
-        //public void AttachmentsAdd(ParaCredentials paracredentials, Byte[] Attachment, string contentType, string FileName)
-        //{
-        //    Action_Attachments.Add(ApiHandler.Ticket.TicketAddAttachment(paracredentials, Attachment, contentType, FileName));
-        //}
-
-        ///// <summary>
-        ///// Uploads a text based file to the current ticket. You need to pass a string, and the mime type of a text based file (html, text, etc...).            
-        ///// </summary>
-        ///// <param name="text">
-        ///// The content of the text based file. 
-        /////</param>           
-        ///// <param name="paracredentials">
-        ///// The parature credentials class for the APIs.
-        ///// </param>            
-        ///// <param name="contentType">
-        ///// The type of content being uploaded, you have to make sure this is the right text.
-        ///// </param>
-        ///// <param name="FileName">
-        ///// The name you woule like the attachment to have.
-        /////</param>
-        //public void AttachmentsAdd(ParaCredentials paracredentials, string text, string contentType, string FileName)
-        //{
-        //    Action_Attachments.Add(ApiHandler.Ticket.TicketAddAttachment(paracredentials, text, contentType, FileName));
-        //}
     }
 }

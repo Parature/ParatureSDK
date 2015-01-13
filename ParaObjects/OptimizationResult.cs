@@ -1,6 +1,6 @@
 namespace ParatureAPI.ParaObjects
 {
-    public partial class OptimizationResult
+    public class OptimizationResult
     {
         public ParaQuery Query;
 
@@ -14,9 +14,9 @@ namespace ParatureAPI.ParaObjects
 
         public OptimizationResult(OptimizationResult optResult)
         {
-            this.Query = optResult.Query;
-            this.objectList = optResult.objectList;
-            this.apiResponse = new ApiCallResponse(optResult.apiResponse);
+            Query = optResult.Query;
+            objectList = optResult.objectList;
+            apiResponse = new ApiCallResponse(optResult.apiResponse);
         }
     }
 }

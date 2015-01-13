@@ -124,7 +124,7 @@ namespace ParatureAPI
             set { m_enforceRequiredFields = value; }
         }
 
-        private Dictionary<string, ObjectBaseProperties> SchemaCache= new Dictionary<string,ObjectBaseProperties>();
+        private Dictionary<string, ParaEntityBaseProperties> SchemaCache= new Dictionary<string,ParaEntityBaseProperties>();
 
         public bool logRetries = false;
 
@@ -192,7 +192,7 @@ namespace ParatureAPI
         /// <summary>
         /// Insert the Schema of an object to the ParaCredentials cache, so that we are able to prevalidated the call before it is placed.
         /// </summary>
-        public void PreValidationSchemaAdd(ParaEnums.ParatureModule module, ObjectBaseProperties moduleSchema)
+        public void PreValidationSchemaAdd(ParaEnums.ParatureModule module, ParaEntityBaseProperties moduleSchema)
         {
             if (moduleSchema != null)
             {

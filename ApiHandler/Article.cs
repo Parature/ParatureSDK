@@ -55,7 +55,7 @@ namespace ParatureAPI.ApiHandler
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
             doc = XmlGenerator.ArticleGenerateXml(Article);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Article, doc, 0);
-            Article.Articleid = ar.Objectid;
+            Article.Id = ar.Objectid;
             Article.uniqueIdentifier = ar.Objectid;
             return ar;
         }
@@ -67,7 +67,7 @@ namespace ParatureAPI.ApiHandler
         {
             ApiCallResponse ar = new ApiCallResponse();
 
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Article, XmlGenerator.ArticleGenerateXml(Article), Article.Articleid);
+            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Article, XmlGenerator.ArticleGenerateXml(Article), Article.Id);
 
 
             return ar;
@@ -129,7 +129,7 @@ namespace ParatureAPI.ApiHandler
             article.FullyLoaded = true;
 
             article.ApiCallResponse.xmlReceived = ArticleXML;
-            article.ApiCallResponse.Objectid = article.Articleid;
+            article.ApiCallResponse.Objectid = article.Id;
 
             article.IsDirty = false;
             return article;
@@ -305,7 +305,7 @@ namespace ParatureAPI.ApiHandler
             else
             {
                 article.FullyLoaded = false;
-                article.Articleid = 0;
+                article.Id = 0;
             }
             article.ApiCallResponse = ar;
             return article;

@@ -1,6 +1,6 @@
 namespace ParatureAPI.ParaObjects
 {
-    public partial class AccountView : View
+    public class AccountView : View
     {
 
 

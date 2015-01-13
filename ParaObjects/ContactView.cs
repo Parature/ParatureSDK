@@ -1,6 +1,6 @@
 namespace ParatureAPI.ParaObjects
 {
-    public partial class ContactView : View
+    public class ContactView : View
     {
 
 

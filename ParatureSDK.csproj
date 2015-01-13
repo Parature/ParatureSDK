@@ -147,7 +147,7 @@
     <Compile Include="ParaObjects\Eula.cs" />
     <Compile Include="ParaObjects\Folder.cs" />
     <Compile Include="ParaObjects\ParaEntity.cs" />
-    <Compile Include="ParaObjects\ObjectBaseProperties.cs" />
+    <Compile Include="ParaObjects\ParaEntityBaseProperties.cs" />
     <Compile Include="ParaObjects\OptimizationResult.cs" />
     <Compile Include="ParaObjects\Product.cs" />
     <Compile Include="ParaObjects\ProductFolder.cs" />

@@ -87,7 +87,7 @@ namespace ParatureAPI.ApiHandler.Entities
             }
             else
             {
-                department.DepartmentID = 0;
+                department.Id = 0;
             }
             department.ApiCallResponse = ar;
 
