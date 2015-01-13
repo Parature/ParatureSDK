@@ -12,7 +12,7 @@ namespace ParatureAPI.ParaHelper
             if (customFieldid <= 0 || fields == null) return false;
             
             var modified = false;
-            var matchingFields = fields.Where(cf => cf.CustomFieldID == customFieldid);
+            var matchingFields = fields.Where(cf => cf.Id == customFieldid);
             
             foreach (var cf in matchingFields)
             {
@@ -25,9 +25,9 @@ namespace ParatureAPI.ParaHelper
                         modified = true;
                     }
                 }
-                if (string.IsNullOrEmpty(cf.CustomFieldValue))
+                if (string.IsNullOrEmpty(cf.Value))
                 {
-                    cf.CustomFieldValue = "";
+                    cf.Value = "";
                     modified = true;
                 }
 

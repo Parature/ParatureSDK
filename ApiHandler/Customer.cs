@@ -59,7 +59,7 @@ namespace ParatureAPI.ApiHandler
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
             doc = XmlGenerator.CustomerGenerateXml(customer);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Customer, doc, 0, arguments);
-            customer.customerid = ar.Objectid;
+            customer.CustomerId = ar.Objectid;
             customer.uniqueIdentifier = ar.Objectid;
             return ar;
         }
@@ -87,7 +87,7 @@ namespace ParatureAPI.ApiHandler
                 //arguments.Add("_include_password_=" + IncludePasswordInNotification.ToString().ToLower());
             }
             ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Customer, XmlGenerator.CustomerGenerateXml(Customer), Customer.customerid, arguments);
+            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Customer, XmlGenerator.CustomerGenerateXml(Customer), Customer.CustomerId, arguments);
             return ar;
         }
 
@@ -146,7 +146,7 @@ namespace ParatureAPI.ApiHandler
             customer.FullyLoaded = true;
 
             customer.ApiCallResponse.xmlReceived = CustomerXML;
-            customer.ApiCallResponse.Objectid = customer.customerid;
+            customer.ApiCallResponse.Objectid = customer.CustomerId;
 
             customer.IsDirty = false;
             return customer;
@@ -328,7 +328,7 @@ namespace ParatureAPI.ApiHandler
             else
             {
                 Customer.FullyLoaded = false;
-                Customer.customerid = 0;
+                Customer.CustomerId = 0;
             }
             Customer.ApiCallResponse = ar;
             Customer.IsDirty = false;

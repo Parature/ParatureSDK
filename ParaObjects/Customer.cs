@@ -1,13 +1,44 @@
 using System;
+using System.Linq;
+using ParatureAPI.Fields;
 
 namespace ParatureAPI.ParaObjects
 {
     /// <summary>
     /// Holds all the properties of the Customer module.
     /// </summary>
-    public partial class Customer : ParaEntity
+    public class Customer : ParaEntity
     {
-        public Int64 customerid = 0;
+        public Int64 CustomerId
+        {
+            get
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "id");
+                var val = 0;
+                try
+                {
+                    return Convert.ToInt64(field.Value);
+                }
+                catch (Exception e) { }
+
+                return val;
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "id");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "id",
+                        DataType = ParaEnums.FieldDataType.Int
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value.ToString();
+            }
+        }
         public Account Account = new Account();
         public Sla Sla = new Sla();
         public DateTime Date_Visited;
@@ -59,25 +90,25 @@ namespace ParatureAPI.ParaObjects
         public Customer(Customer customer)
             : base(customer)
         {
-            this.customerid = customer.customerid;
-            this.Account = new Account(customer.Account);
-            this.Sla = new Sla(customer.Sla);
-            this.Date_Visited = customer.Date_Visited;
-            this.Email = customer.Email;
-            this.User_Name = customer.User_Name;
-            this.First_Name = customer.First_Name;
-            this.Tou = customer.Tou;
-            this.Password = customer.Password;
-            this.Password_Confirm = customer.Password_Confirm;
-            this.Status = new CustomerStatus(customer.Status);
-            this.Customer_Role = new Role(customer.Customer_Role);
+            CustomerId = customer.CustomerId;
+            Account = new Account(customer.Account);
+            Sla = new Sla(customer.Sla);
+            Date_Visited = customer.Date_Visited;
+            Email = customer.Email;
+            User_Name = customer.User_Name;
+            First_Name = customer.First_Name;
+            Tou = customer.Tou;
+            Password = customer.Password;
+            Password_Confirm = customer.Password_Confirm;
+            Status = new CustomerStatus(customer.Status);
+            Customer_Role = new Role(customer.Customer_Role);
         }
 
 
 
         public override string GetReadableName()
         {
-            return this.First_Name + " " + this.Last_Name + "(" + this.Email + ")";
+            return First_Name + " " + Last_Name + "(" + Email + ")";
         }
     }
 }

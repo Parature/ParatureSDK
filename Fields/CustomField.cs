@@ -11,12 +11,7 @@ namespace ParatureAPI.Fields
         /// <summary>
         /// The internal ID of the field
         /// </summary>
-        public Int64 CustomFieldID = 0;
-
-        /// <summary>
-        /// This Value will be populated with the field's value. For example, if this is a textbox field, this will hold the textbox's default field.
-        /// </summary>
-        public string CustomFieldValue = "";
+        public Int64 Id = 0;
 
         public bool MultiValue;
         public bool FlagToDelete = false;
@@ -32,9 +27,9 @@ namespace ParatureAPI.Fields
 
         public CustomField(CustomField customField)
         {
-            CustomFieldID = customField.CustomFieldID;
-            CustomFieldName = customField.CustomFieldName;
-            CustomFieldRequired = customField.CustomFieldRequired;
+            Id = customField.Id;
+            Name = customField.Name;
+            Required = customField.Required;
             Editable = customField.Editable;
             DataType = customField.DataType;
             MultiValue = customField.MultiValue;

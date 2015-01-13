@@ -35,47 +35,47 @@ namespace ParatureAPI.ParaHelper
         /// <summary>
         /// Return the customFieldDataType enum, requires a string. Usually the string comes from the API response.
         /// </summary>
-        internal static ParaEnums.CustomFieldDataType CustomFieldDataTypeProvider(string dt)
+        internal static ParaEnums.FieldDataType CustomFieldDataTypeProvider(string dt)
         {
-            ParaEnums.CustomFieldDataType dataType = ParaEnums.CustomFieldDataType.Unknown;
+            ParaEnums.FieldDataType dataType = ParaEnums.FieldDataType.Unknown;
             switch (dt.ToLower())
             {
                 case "boolean":
 
-                    dataType = ParaEnums.CustomFieldDataType.boolean;
+                    dataType = ParaEnums.FieldDataType.boolean;
                     break;
                 case "float":
 
-                    dataType = ParaEnums.CustomFieldDataType.Float;
+                    dataType = ParaEnums.FieldDataType.Float;
                     break;
                 case "attachment":
 
-                    dataType = ParaEnums.CustomFieldDataType.attachment;
+                    dataType = ParaEnums.FieldDataType.attachment;
                     break;
                 case "datetime":
 
-                    dataType = ParaEnums.CustomFieldDataType.DateTime;
+                    dataType = ParaEnums.FieldDataType.DateTime;
                     break;
                 case "int":
-                    dataType = ParaEnums.CustomFieldDataType.Int;
+                    dataType = ParaEnums.FieldDataType.Int;
 
                     break;
                 case "date":
-                    dataType = ParaEnums.CustomFieldDataType.Date;
+                    dataType = ParaEnums.FieldDataType.Date;
                     break;
 
 
                 case "readonly":
-                    dataType = ParaEnums.CustomFieldDataType.ReadOnly;
+                    dataType = ParaEnums.FieldDataType.ReadOnly;
                     break;
 
 
                 case "string":
-                    dataType = ParaEnums.CustomFieldDataType.String;
+                    dataType = ParaEnums.FieldDataType.String;
                     break;
 
                 case "option":
-                    dataType = ParaEnums.CustomFieldDataType.Option;
+                    dataType = ParaEnums.FieldDataType.Option;
                     break;
 
             }

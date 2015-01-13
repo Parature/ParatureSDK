@@ -361,9 +361,9 @@ namespace ParatureAPI
             {
                 foreach (CustomField cf in baseObject.CustomFields)
                 {
-                    if (cf.DataType == ParaEnums.CustomFieldDataType.String)
+                    if (cf.DataType == ParaEnums.FieldDataType.String)
                     {
-                        cf.CustomFieldValue = "a";
+                        cf.Value = "a";
                     }
                 }
             }
@@ -419,9 +419,9 @@ namespace ParatureAPI
 
                             foreach (CustomField cf in baseObject.CustomFields)
                             {
-                                if (cf.CustomFieldID == long.Parse(id))
+                                if (cf.Id == long.Parse(id))
                                 {
-                                    cf.DataType = ParaEnums.CustomFieldDataType.UsPhone;
+                                    cf.DataType = ParaEnums.FieldDataType.UsPhone;
                                 }
                             }
                         }
@@ -432,9 +432,9 @@ namespace ParatureAPI
 
                             foreach (CustomField cf in baseObject.CustomFields)
                             {
-                                if (cf.CustomFieldID == long.Parse(id))
+                                if (cf.Id == long.Parse(id))
                                 {
-                                    cf.DataType = ParaEnums.CustomFieldDataType.Email;
+                                    cf.DataType = ParaEnums.FieldDataType.Email;
                                 }
                             }
                         }
@@ -445,9 +445,9 @@ namespace ParatureAPI
 
                             foreach (CustomField cf in baseObject.CustomFields)
                             {
-                                if (cf.CustomFieldID == long.Parse(id))
+                                if (cf.Id == long.Parse(id))
                                 {
-                                    cf.DataType = ParaEnums.CustomFieldDataType.InternationalPhone;
+                                    cf.DataType = ParaEnums.FieldDataType.InternationalPhone;
                                 }
                             }
                         }
@@ -459,9 +459,9 @@ namespace ParatureAPI
                             {
                             foreach (CustomField cf in baseObject.CustomFields)
                             {
-                                if (cf.CustomFieldID == long.Parse(id.Trim()))
+                                if (cf.Id == long.Parse(id.Trim()))
                                 {
-                                    cf.DataType = ParaEnums.CustomFieldDataType.Url;
+                                    cf.DataType = ParaEnums.FieldDataType.Url;
                                 }
                             }
                             }

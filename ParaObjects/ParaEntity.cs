@@ -135,7 +135,7 @@ namespace ParatureAPI.ParaObjects
                 List<CustomField> fields = new List<CustomField>();
                 foreach (CustomField cf in CustomFields)
                 {
-                    if (cf.CustomFieldID == customFieldId)
+                    if (cf.Id == customFieldId)
                     {
                         fields.Add(cf);
                         DirtyStateManager(HelperMethods.CustomFieldReset(customFieldId, fields));
@@ -204,7 +204,7 @@ namespace ParatureAPI.ParaObjects
         {
             foreach (CustomField cf in CustomFields)
             {
-                if (cf.CustomFieldID == customFieldId)
+                if (cf.Id == customFieldId)
                 {
                     foreach (CustomFieldOptions cfo in cf.CustomFieldOptionsCollection)
                     {
@@ -244,7 +244,7 @@ namespace ParatureAPI.ParaObjects
         {
             foreach (CustomField cf in CustomFields)
             {
-                if (cf.CustomFieldName == customFieldName)
+                if (cf.Name == customFieldName)
                 {
                     foreach (CustomFieldOptions cfo in cf.CustomFieldOptionsCollection)
                     {
@@ -266,7 +266,7 @@ namespace ParatureAPI.ParaObjects
             List<CustomFieldOptions> SelectedOptions = new List<CustomFieldOptions>();
             foreach (CustomField cf in CustomFields)
             {
-                if (cf.CustomFieldID == customFieldid)
+                if (cf.Id == customFieldid)
                 {
                     foreach (CustomFieldOptions cfo in cf.CustomFieldOptionsCollection)
                     {
@@ -291,7 +291,7 @@ namespace ParatureAPI.ParaObjects
                 
             foreach (CustomField cf in CustomFields)
             {
-                if (cf.CustomFieldID == customFieldId)
+                if (cf.Id == customFieldId)
                 {
                     foreach (CustomFieldOptions cfo in cf.CustomFieldOptionsCollection)
                     {
@@ -329,7 +329,7 @@ namespace ParatureAPI.ParaObjects
             List<CustomFieldOptions> SelectedOptions = new List<CustomFieldOptions>();
             foreach (CustomField cf in CustomFields)
             {
-                if (cf.CustomFieldName == customFieldName)
+                if (cf.Name == customFieldName)
                 {
                     foreach (CustomFieldOptions cfo in cf.CustomFieldOptionsCollection)
                     {
@@ -353,9 +353,9 @@ namespace ParatureAPI.ParaObjects
         {
             foreach (CustomField cf in CustomFields)
             {
-                if (cf.CustomFieldID == customFieldId)
+                if (cf.Id == customFieldId)
                 {
-                    return cf.CustomFieldName;
+                    return cf.Name;
                 }
             }
 
@@ -376,7 +376,7 @@ namespace ParatureAPI.ParaObjects
             {
                 foreach(CustomField cf in this.CustomFields)
                 {
-                    if (cf.CustomFieldName.ToLower() == customFieldName.ToLower())
+                    if (cf.Name.ToLower() == customFieldName.ToLower())
                     {
                         if (customFieldId != -1)
                         {
@@ -385,7 +385,7 @@ namespace ParatureAPI.ParaObjects
                         }
                         else
                         {
-                            customFieldId = cf.CustomFieldID;
+                            customFieldId = cf.Id;
                         }
                     }
                 }
@@ -403,9 +403,9 @@ namespace ParatureAPI.ParaObjects
         {
             foreach (CustomField cf in CustomFields)
             {
-                if (cf.CustomFieldID == customFieldId)
+                if (cf.Id == customFieldId)
                 {
-                    if (cf.DataType == ParaEnums.CustomFieldDataType.Option)
+                    if (cf.DataType == ParaEnums.FieldDataType.Option)
                     {
                         // Custom field is an option field, iterate through the options
 
@@ -428,7 +428,7 @@ namespace ParatureAPI.ParaObjects
                     }
                     else
                     {
-                        return cf.CustomFieldValue;
+                        return cf.Value;
                     }
                 }
             }
@@ -443,9 +443,9 @@ namespace ParatureAPI.ParaObjects
         {
             foreach (CustomField cf in CustomFields)
             {
-                if (cf.CustomFieldName == customFieldName)
+                if (cf.Name == customFieldName)
                 {
-                    return cf.CustomFieldValue;
+                    return cf.Value;
                 }
             }
             return "";
@@ -476,7 +476,7 @@ namespace ParatureAPI.ParaObjects
             {
                 foreach (var cfn in customFields)
                 {
-                    if (cfn.CustomFieldID == customFieldId)
+                    if (cfn.Id == customFieldId)
                     {
                         cf = cfn;
                         found = true;
@@ -487,18 +487,18 @@ namespace ParatureAPI.ParaObjects
                 // Not found in the list of CFs, need to add this field.
                 if (found == false)
                 {
-                    cf.CustomFieldID = customFieldId;
+                    cf.Id = customFieldId;
                     modified = true;
                 }
 
-                if (String.Compare(cf.CustomFieldValue.ToString(), customFieldValue.ToString(), ignoreCase) != 0)
+                if (String.Compare(cf.Value, customFieldValue, ignoreCase) != 0)
                 {
                     modified = true;
                     if (String.IsNullOrEmpty(customFieldValue))
                     {
                         cf.FlagToDelete = true;
                     }
-                    cf.CustomFieldValue = customFieldValue;
+                    cf.Value = customFieldValue;
                 }
 
                 if (found == false)
@@ -519,7 +519,7 @@ namespace ParatureAPI.ParaObjects
             {
                 foreach (CustomField cfn in customFields)
                 {
-                    if (cfn.CustomFieldID == customFieldid)
+                    if (cfn.Id == customFieldid)
                     {
                         foreach (CustomFieldOptions option in cfn.CustomFieldOptionsCollection)
                         {
@@ -546,7 +546,7 @@ namespace ParatureAPI.ParaObjects
                 bool found = false;
                 foreach (var cfn in customFields)
                 {
-                    if (cfn.CustomFieldID == customFieldid)
+                    if (cfn.Id == customFieldid)
                     {
                         found = true;
                         bool optionFound = false;
@@ -593,7 +593,7 @@ namespace ParatureAPI.ParaObjects
                 if (found == false)
                 {
                     CustomField cf = new CustomField();
-                    cf.CustomFieldID = customFieldid;
+                    cf.Id = customFieldid;
                     CustomFieldOptions NewOption = new CustomFieldOptions();
                     NewOption.CustomFieldOptionID = customFieldOptionId;
                     NewOption.IsSelected = true;

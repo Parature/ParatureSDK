@@ -160,7 +160,7 @@ namespace ParatureAPI
         /// <summary>
         /// Represents the data type of the custom field returned.
         /// </summary>
-        public enum CustomFieldDataType
+        public enum FieldDataType
         {
             /// <summary>
             /// Usually a textbox, textarea or a similar field type
