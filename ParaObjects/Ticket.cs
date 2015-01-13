@@ -7,7 +7,7 @@ namespace ParatureAPI.ParaObjects
     /// <summary>
     /// Holds all the properties of the Ticket module.
     /// </summary>
-    public partial class Ticket : ModuleWithCustomFields
+    public partial class Ticket : ParaEntity
     {
         /// <summary>
         /// The unique identifier of the ticket

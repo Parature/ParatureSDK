@@ -6,7 +6,7 @@ namespace ParatureAPI.ParaObjects
     /// <summary>
     /// Holds all the properties of the Chat module.
     /// </summary>
-    public partial class Chat : ModuleWithCustomFields
+    public partial class Chat : ParaEntity
     {
         public Int64 ChatID = 0;
         public Int64 Chat_Number = 0;

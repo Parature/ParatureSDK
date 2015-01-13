@@ -6,7 +6,7 @@ namespace ParatureAPI.ParaObjects
     /// <summary>
     /// Holds all the properties of the Account module.
     /// </summary>
-    public class Account : ModuleWithCustomFields
+    public class Account : ParaEntity
     {
         public Int64 Accountid = 0;
         public string Account_Name = "";

@@ -144,10 +144,9 @@
     <Compile Include="ParaObjects\Download.cs" />
     <Compile Include="ParaObjects\DownloadFolder.cs" />
     <Compile Include="ParaObjects\DownloadFoldersList.cs" />
-    <Compile Include="ParaObjects\Entity.cs" />
     <Compile Include="ParaObjects\Eula.cs" />
     <Compile Include="ParaObjects\Folder.cs" />
-    <Compile Include="ParaObjects\ModuleWithCustomFields.cs" />
+    <Compile Include="ParaObjects\ParaEntity.cs" />
     <Compile Include="ParaObjects\ObjectBaseProperties.cs" />
     <Compile Include="ParaObjects\OptimizationResult.cs" />
     <Compile Include="ParaObjects\Product.cs" />

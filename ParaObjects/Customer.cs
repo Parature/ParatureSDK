@@ -5,7 +5,7 @@ namespace ParatureAPI.ParaObjects
     /// <summary>
     /// Holds all the properties of the Customer module.
     /// </summary>
-    public partial class Customer : ModuleWithCustomFields
+    public partial class Customer : ParaEntity
     {
         public Int64 customerid = 0;
         public Account Account = new Account();

@@ -351,7 +351,7 @@ namespace ParatureAPI
         /// <summary>
         /// Use this method to determine if any custom fields have custom validation
         /// </summary>
-        public static ModuleWithCustomFields ObjectCheckCustomFieldTypes(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ModuleWithCustomFields baseObject)
+        public static ParaEntity ObjectCheckCustomFieldTypes(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ParaEntity baseObject)
         {
             string ApiCallUrl;
             paracredentials.EnforceRequiredFields = false;

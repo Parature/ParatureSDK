@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class Asset : ModuleWithCustomFields
+    public partial class Asset : ParaEntity
     {
         public Int64 Assetid = 0;
         /// <summary>

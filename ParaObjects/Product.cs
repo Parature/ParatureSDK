@@ -2,7 +2,7 @@ using System;
 
 namespace ParatureAPI.ParaObjects
 {
-    public partial class Product : ModuleWithCustomFields
+    public partial class Product : ParaEntity
     {
 
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ParatureAPI.Fields;
 
 namespace ParatureAPI.ParaHelper
@@ -8,33 +9,29 @@ namespace ParatureAPI.ParaHelper
     {
         internal static bool CustomFieldReset(Int64 customFieldid, IEnumerable<CustomField> fields)
         {
-            bool modified = false;
-            if (customFieldid > 0 && fields != null)
+            if (customFieldid <= 0 || fields == null) return false;
+            
+            var modified = false;
+            var matchingFields = fields.Where(cf => cf.CustomFieldID == customFieldid);
+            
+            foreach (var cf in matchingFields)
             {
-                foreach (var cf in fields)
+                if (cf.CustomFieldOptionsCollection.Count > 0)
                 {
-                    if (cf.CustomFieldID == customFieldid)
+                    var selectedFieldsTrue = cf.CustomFieldOptionsCollection.Where(cfo => cfo.IsSelected);
+                    foreach (var cfo in selectedFieldsTrue)
                     {
-                        if (cf.CustomFieldOptionsCollection.Count > 0)
-                        {
-                            foreach (CustomFieldOptions cfo in cf.CustomFieldOptionsCollection)
-                            {
-                                if (cfo.IsSelected == true)
-                                {
-                                    cfo.IsSelected = false;
-                                    modified = true;
-                                }
-                            }
-                        }
-                        if (cf.CustomFieldValue != "")
-                        {
-                            cf.CustomFieldValue = "";
-                            modified = true;
-                        }
-
-                        break;
+                        cfo.IsSelected = false;
+                        modified = true;
                     }
                 }
+                if (string.IsNullOrEmpty(cf.CustomFieldValue))
+                {
+                    cf.CustomFieldValue = "";
+                    modified = true;
+                }
+
+                break;
             }
 
             return modified;
