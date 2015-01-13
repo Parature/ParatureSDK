@@ -56,9 +56,9 @@
     <Compile Include="TicketTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ParatureAPI.csproj">
+    <ProjectReference Include="..\ParatureSDK.csproj">
       <Project>{9debf649-1163-4b2c-b466-8b0c75a784ff}</Project>
-      <Name>ParatureAPI</Name>
+      <Name>ParatureSDK</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
