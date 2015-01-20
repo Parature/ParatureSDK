@@ -28,6 +28,39 @@ namespace ParatureAPI.ParaObjects
         }
 
         /// <summary>
+        /// Retrieve a Field based off of its field name (tag element). 
+        /// This is only for static fields - use an integer to search custom fields.
+        /// </summary>
+        /// <param name="fieldName">Name of the field. Use the tag, not the display name ("Date_Created" rather than "Date Created" for example)</param>
+        /// <returns>StaticField if found, otherwise null</returns>
+        public StaticField this[string fieldName]
+        {
+            get { return StaticFields.FirstOrDefault(f => f.Name == fieldName); }
+            set
+            {
+                Fields.RemoveAll(f => f.Name == fieldName && f is StaticField);
+                Fields.Add(value);
+            }
+        }
+
+        /// <summary>
+        /// Retrieve a Field based off of its custom field Id. 
+        /// This is only for custom fields - use a string to search custom fields.
+        /// </summary>
+        /// <param name="index">Custom Field Id</param>
+        /// <returns>CustomField if found, otherwise null</returns>
+        public CustomField this[int index]
+        {
+            get { return CustomFields.FirstOrDefault(f => f.Id == index); }
+            set
+            {
+                var matchingCustomField = CustomFields.FirstOrDefault(f => f.Id == index);
+                Fields.Remove(matchingCustomField);
+                Fields.Add(value);
+            }
+        }
+
+        /// <summary>
         /// List of all fields for this entity
         /// </summary>
         public List<Field> Fields = new List<Field>();
