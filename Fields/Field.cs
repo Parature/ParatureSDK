@@ -16,7 +16,23 @@ namespace ParatureAPI.Fields
         /// This Value will be populated with the field's value. 
         /// For example, if this is a textbox field, this will hold the textbox's default field.
         /// </summary>
-        public string Value = "";
+        public object Value;
+
+        /// <summary>
+        /// Retrieve the value of this field, typecast to the provided type.
+        /// </summary>
+        /// <typeparam name="T">Type of the value</typeparam>
+        /// <returns>Value of the field, or the default of the Type if the Value is null</returns>
+        /// <exception cref="InvalidCastException">Thrown if the type provided is incorrect</exception>
+        public T GetFieldValue<T>()
+        {
+            if (Value == null)
+            {
+                return default(T);
+            }
+
+            return (T)Value;
+        }
 
         /// <summary>
         /// this indicates whether the field is editable or read only. 

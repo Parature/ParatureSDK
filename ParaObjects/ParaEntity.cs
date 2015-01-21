@@ -47,17 +47,52 @@ namespace ParatureAPI.ParaObjects
         /// Retrieve a Field based off of its custom field Id. 
         /// This is only for custom fields - use a string to search custom fields.
         /// </summary>
-        /// <param name="index">Custom Field Id</param>
+        /// <param name="fieldId">Custom Field Id</param>
         /// <returns>CustomField if found, otherwise null</returns>
-        public CustomField this[int index]
+        public CustomField this[int fieldId]
         {
-            get { return CustomFields.FirstOrDefault(f => f.Id == index); }
+            get { return CustomFields.FirstOrDefault(f => f.Id == fieldId); }
             set
             {
-                var matchingCustomField = CustomFields.FirstOrDefault(f => f.Id == index);
+                var matchingCustomField = CustomFields.FirstOrDefault(f => f.Id == fieldId);
                 Fields.Remove(matchingCustomField);
                 Fields.Add(value);
             }
+        }
+
+        /// <summary>
+        /// Retrieve the value of a specific field, typecast to the provided type.
+        /// </summary>
+        /// <param name="fieldName">Custom Field Id</param>
+        /// <typeparam name="T">Type of the value</typeparam>
+        /// <returns></returns>
+        /// <exception cref="InvalidCastException">Thrown if the type provided is incorrect</exception>
+        public T GetFieldValue<T>(string fieldName)
+        {
+            var field = this[fieldName];
+            if (field != null)
+            {
+                return (T)field.Value;
+            }
+
+            return default(T);
+        }
+
+        /// <summary>
+        /// Retrieve the value of a specific field, typecast to the provided type.
+        /// </summary>
+        /// <param name="fieldId">Custom Field Id</param>
+        /// <typeparam name="T">Type of the value</typeparam>
+        /// <exception cref="InvalidCastException">Thrown if the type provided is incorrect</exception>
+        public T GetFieldValue<T>(int fieldId)
+        {
+            var field = this[fieldId];
+            if (field != null)
+            {
+                return (T)field.Value;
+            }
+
+            return default(T);
         }
 
         /// <summary>
@@ -428,63 +463,6 @@ namespace ParatureAPI.ParaObjects
             return customFieldId;
         }
 
-
-        /// <summary>
-        /// Returns the value for the custom field id you specified. Multiple values will be separated by "||"
-        /// Will return empty string if the custom field was not found.
-        /// </summary>  
-        public string CustomFieldGetValue(Int64 customFieldId)
-        {
-            foreach (CustomField cf in CustomFields)
-            {
-                if (cf.Id == customFieldId)
-                {
-                    if (cf.DataType == ParaEnums.FieldDataType.Option)
-                    {
-                        // Custom field is an option field, iterate through the options
-
-                        string returnValue = "";
-
-                        foreach (CustomFieldOptions cfo in cf.CustomFieldOptionsCollection)
-                        {
-                            if (cfo.IsSelected == true)
-                            {
-                                if (!String.IsNullOrEmpty(returnValue))
-                                {
-                                    returnValue += "||";
-                                }
-
-                                returnValue += cfo.CustomFieldOptionName;
-                            }
-                        }
-
-                        return returnValue;
-                    }
-                    else
-                    {
-                        return cf.Value;
-                    }
-                }
-            }
-            return String.Empty;
-        }
-
-        /// <summary>
-        /// Returns the value for the custom field name you specified. Will return null if the custom field 
-        /// was not found.
-        /// </summary> 
-        public string CustomFieldGetValue(string customFieldName)
-        {
-            foreach (CustomField cf in CustomFields)
-            {
-                if (cf.Name == customFieldName)
-                {
-                    return cf.Value;
-                }
-            }
-            return "";
-        }
-
         public abstract string GetReadableName();
 
         ///  <summary>
@@ -525,7 +503,7 @@ namespace ParatureAPI.ParaObjects
                     modified = true;
                 }
 
-                if (String.Compare(cf.Value, customFieldValue, ignoreCase) != 0)
+                if (String.Compare(cf.GetFieldValue<string>(), customFieldValue, ignoreCase) != 0)
                 {
                     modified = true;
                     if (String.IsNullOrEmpty(customFieldValue))

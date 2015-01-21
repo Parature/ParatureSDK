@@ -1,6 +1,7 @@
 using System;
 using System.Xml;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 
 namespace ParatureAPI.ApiHandler.Entities
 {
@@ -49,7 +50,7 @@ namespace ParatureAPI.ApiHandler.Entities
         public static ParaObjects.CsrStatus CsrStatusGetDetails(XmlDocument csrStatusXml)
         {
             ParaObjects.CsrStatus CsrStatus = new ParaObjects.CsrStatus();
-            CsrStatus = XmlToObjectParser.CsrStatusParser.CsrStatusFill(csrStatusXml);
+            CsrStatus = CsrStatusParser.CsrStatusFill(csrStatusXml);
 
             CsrStatus.ApiCallResponse.xmlReceived = csrStatusXml;
             CsrStatus.ApiCallResponse.Objectid = CsrStatus.StatusID;
@@ -66,7 +67,7 @@ namespace ParatureAPI.ApiHandler.Entities
         public static CsrStatusList CsrStatusGetList(XmlDocument csrStatusListXml)
         {
             CsrStatusList CsrStatussList = new CsrStatusList();
-            CsrStatussList = XmlToObjectParser.CsrStatusParser.CsrStatusFillList(csrStatusListXml);
+            CsrStatussList = CsrStatusParser.CsrStatusFillList(csrStatusListXml);
 
             CsrStatussList.ApiCallResponse.xmlReceived = csrStatusListXml;
 
@@ -84,7 +85,7 @@ namespace ParatureAPI.ApiHandler.Entities
             ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Csr, ParaEnums.ParatureEntity.status, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                CsrStatusList = XmlToObjectParser.CsrStatusParser.CsrStatusFillList(ar.xmlReceived);
+                CsrStatusList = CsrStatusParser.CsrStatusFillList(ar.xmlReceived);
             }
             CsrStatusList.ApiCallResponse = ar;
             return CsrStatusList;
@@ -97,7 +98,7 @@ namespace ParatureAPI.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.CsrStatus, csrStatusId);
             if (ar.HasException == false)
             {
-                CsrStatus = XmlToObjectParser.CsrStatusParser.CsrStatusFill(ar.xmlReceived);
+                CsrStatus = CsrStatusParser.CsrStatusFill(ar.xmlReceived);
             }
             else
             {

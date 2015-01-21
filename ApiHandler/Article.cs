@@ -3,6 +3,7 @@ using System.Threading;
 using System.Xml;
 using ParatureAPI.PagedData;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 
 namespace ParatureAPI.ApiHandler
 {
@@ -22,7 +23,7 @@ namespace ParatureAPI.ApiHandler
 
             if (ar.HasException == false)
             {
-                Article = XmlToObjectParser.ArticleParser.ArticleFill(ar.xmlReceived, 0, false, ParaCredentials);
+                Article = ArticleParser.ArticleFill(ar.xmlReceived, 0, false, ParaCredentials);
             }
 
             Article.ApiCallResponse = ar;
@@ -125,7 +126,7 @@ namespace ParatureAPI.ApiHandler
         public static ParaObjects.Article ArticleGetDetails(XmlDocument ArticleXML)
         {
             ParaObjects.Article article = new ParaObjects.Article();
-            article = XmlToObjectParser.ArticleParser.ArticleFill(ArticleXML, 0, true, null);
+            article = ArticleParser.ArticleFill(ArticleXML, 0, true, null);
             article.FullyLoaded = true;
 
             article.ApiCallResponse.xmlReceived = ArticleXML;
@@ -144,7 +145,7 @@ namespace ParatureAPI.ApiHandler
         public static ArticlesList ArticlesGetList(XmlDocument ArticleListXML)
         {
             ArticlesList articlesList = new ArticlesList();
-            articlesList = XmlToObjectParser.ArticleParser.ArticlesFillList(ArticleListXML, true, 0, null);
+            articlesList = ArticleParser.ArticlesFillList(ArticleListXML, true, 0, null);
 
             articlesList.ApiCallResponse.xmlReceived = ArticleListXML;
 
@@ -217,7 +218,7 @@ namespace ParatureAPI.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Article, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    ArticlesList = XmlToObjectParser.ArticleParser.ArticlesFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                    ArticlesList = ArticleParser.ArticlesFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                 }
                 ArticlesList.ApiCallResponse = ar;
             }
@@ -266,7 +267,7 @@ namespace ParatureAPI.ApiHandler
                             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Article, Query.BuildQueryArguments());
                             if (ar.HasException == false)
                             {
-                                objectlist = XmlToObjectParser.ArticleParser.ArticlesFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                                objectlist = ArticleParser.ArticlesFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                                 ArticlesList.Articles.AddRange(objectlist.Articles);
                                 ArticlesList.ResultsReturned = ArticlesList.Articles.Count;
                                 ArticlesList.PageNumber = Query.PageNumber;
@@ -299,7 +300,7 @@ namespace ParatureAPI.ApiHandler
             ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Article, Articleid);
             if (ar.HasException == false)
             {
-                article = XmlToObjectParser.ArticleParser.ArticleFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
+                article = ArticleParser.ArticleFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
                 article.FullyLoaded = true;
             }
             else
@@ -329,7 +330,7 @@ namespace ParatureAPI.ApiHandler
 
                 if (ar.HasException == false)
                 {
-                    ArticleFolder = XmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFolderFill(ar.xmlReceived, 0, ParaCredentials);
+                    ArticleFolder = ArticleParser.ArticleFolderParser.ArticleFolderFill(ar.xmlReceived, 0, ParaCredentials);
                 }
                 ArticleFolder.ApiCallResponse = ar;
                 return ArticleFolder;
@@ -464,7 +465,7 @@ namespace ParatureAPI.ApiHandler
             public static ParaObjects.ArticleFolder ArticleFolderGetDetails(XmlDocument ArticleFolderXml)
             {
                 ParaObjects.ArticleFolder articleFolder = new ParaObjects.ArticleFolder();
-                articleFolder = XmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFolderFill(ArticleFolderXml, 0, null);
+                articleFolder = ArticleParser.ArticleFolderParser.ArticleFolderFill(ArticleFolderXml, 0, null);
                 articleFolder.FullyLoaded = true;
 
                 articleFolder.ApiCallResponse.xmlReceived = ArticleFolderXml;
@@ -513,7 +514,7 @@ namespace ParatureAPI.ApiHandler
             public static ArticleFoldersList ArticleFoldersGetList(XmlDocument ArticleFoldersListXml)
             {
                 ArticleFoldersList articleFolderList = new ArticleFoldersList();
-                articleFolderList = XmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ArticleFoldersListXml, 0, null);
+                articleFolderList = ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ArticleFoldersListXml, 0, null);
 
                 articleFolderList.ApiCallResponse.xmlReceived = ArticleFoldersListXml;
 
@@ -557,7 +558,7 @@ namespace ParatureAPI.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.ArticleFolder, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    ArticleFoldersList = XmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials);
+                    ArticleFoldersList = ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials);
                 }
 
                 ArticleFoldersList.ApiCallResponse = ar;
@@ -578,7 +579,7 @@ namespace ParatureAPI.ApiHandler
 
                             if (ar.HasException == false)
                             {
-                                ArticleFoldersList.ArticleFolders.AddRange(XmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials).ArticleFolders);
+                                ArticleFoldersList.ArticleFolders.AddRange(ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials).ArticleFolders);
                                 ArticleFoldersList.ResultsReturned = ArticleFoldersList.ArticleFolders.Count;
                                 ArticleFoldersList.PageNumber = Query.PageNumber;
                             }
@@ -610,7 +611,7 @@ namespace ParatureAPI.ApiHandler
                 ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.ArticleFolder, ArticleFolderid);
                 if (ar.HasException == false)
                 {
-                    ArticleFolder = XmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFolderFill(ar.xmlReceived, requestdepth, ParaCredentials);
+                    ArticleFolder = ArticleParser.ArticleFolderParser.ArticleFolderFill(ar.xmlReceived, requestdepth, ParaCredentials);
                     ArticleFolder.FullyLoaded = true;
                 }
                 else

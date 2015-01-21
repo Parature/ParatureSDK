@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using ParatureAPI.PagedData;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 
 namespace ParatureAPI.ApiHandler
 {
@@ -100,7 +101,7 @@ namespace ParatureAPI.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Chat, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    ChatList = XmlToObjectParser.ChatParser.ChatsFillList(ar.xmlReceived, Query.MinimalisticLoad, IncludeTranscripts, requestdepth, ParaCredentials);
+                    ChatList = ChatParser.ChatsFillList(ar.xmlReceived, Query.MinimalisticLoad, IncludeTranscripts, requestdepth, ParaCredentials);
                 }
                 ChatList.ApiCallResponse = ar;
             }
@@ -148,7 +149,7 @@ namespace ParatureAPI.ApiHandler
                             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments());
                             if (ar.HasException == false)
                             {
-                                ChatList.chats.AddRange(XmlToObjectParser.ChatParser.ChatsFillList(ar.xmlReceived, Query.MinimalisticLoad, IncludeTranscripts, requestdepth, ParaCredentials).chats);
+                                ChatList.chats.AddRange(ChatParser.ChatsFillList(ar.xmlReceived, Query.MinimalisticLoad, IncludeTranscripts, requestdepth, ParaCredentials).chats);
                                 ChatList.ResultsReturned = ChatList.chats.Count;
                                 ChatList.PageNumber = Query.PageNumber;
                             }
@@ -186,7 +187,7 @@ namespace ParatureAPI.ApiHandler
             ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Chat, chatid, arl);
             if (ar.HasException == false)
             {
-                chat = XmlToObjectParser.ChatParser.ChatFill(ar.xmlReceived, true, 0, IncludeTranscripts, ParaCredentials);
+                chat = ChatParser.ChatFill(ar.xmlReceived, true, 0, IncludeTranscripts, ParaCredentials);
                 chat.FullyLoaded = true;
             }
             else
@@ -207,7 +208,7 @@ namespace ParatureAPI.ApiHandler
 
             if (ar.HasException == false)
             {
-                chat = XmlToObjectParser.ChatParser.ChatFill(ar.xmlReceived, false, 0,false, ParaCredentials);
+                chat = ChatParser.ChatFill(ar.xmlReceived, false, 0,false, ParaCredentials);
             }
             chat.ApiCallResponse = ar;
             return chat;
@@ -234,7 +235,7 @@ namespace ParatureAPI.ApiHandler
 
             if (ar.HasException == false)
             {
-                transcripts = XmlToObjectParser.ChatParser.ChatTranscriptsFillList(ar.xmlReceived);
+                transcripts = ChatParser.ChatTranscriptsFillList(ar.xmlReceived);
             }
 
             return transcripts;

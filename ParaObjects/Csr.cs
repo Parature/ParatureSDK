@@ -18,15 +18,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Email");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Email");
             }
             set
             {
@@ -48,15 +40,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Fax");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Fax");
             }
             set
             {
@@ -78,15 +62,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Phone_1");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Phone_1");
             }
             set
             {
@@ -108,15 +84,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Phone_2");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Phone_2");
             }
             set
             {
@@ -138,15 +106,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Screen_Name");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Screen_Name");
             }
             set
             {
@@ -164,6 +124,7 @@ namespace ParatureAPI.ParaObjects
                 field.Value = value;
             }
         }
+
         /// <summary>
         /// The following strings are the valid options for Date_Format:
         /// mm/dd/yyyy | mm/dd/yy | dd/mm/yyyy | dd/mm/yy | month dd, yyyy | month dd, yy
@@ -172,15 +133,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Date_Format");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Date_Format");
             }
             set
             {
@@ -198,19 +151,12 @@ namespace ParatureAPI.ParaObjects
                 field.Value = value;
             }
         }
+
         public string Password
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Password");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Password");
             }
             set
             {
@@ -234,15 +180,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Date_Created");
-                var val = DateTime.MinValue;
-                try
-                {
-                    return DateTime.Parse(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<DateTime>("Date_Created");
             }
             set
             {

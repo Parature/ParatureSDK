@@ -14,15 +14,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Date_Created");
-                var val = DateTime.MinValue;
-                try
-                {
-                    return DateTime.Parse(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<DateTime>("Date_Created");
             }
             set
             {
@@ -44,15 +36,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Date_Updated");
-                var val = DateTime.MinValue;
-                try
-                {
-                    return DateTime.Parse(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<DateTime>("Date_Updated");
             }
             set
             {
@@ -78,15 +62,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Answer");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Answer");
             }
             set
             {
@@ -111,15 +87,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Expiration_Date");
-                var val = DateTime.MinValue;
-                try
-                {
-                    return DateTime.Parse(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<DateTime>("Expiration_Date");
             }
             set
             {
@@ -145,15 +113,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Published");
-                var val = false;
-                try
-                {
-                    val = Convert.ToBoolean(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<bool>("Published");
             }
             set
             {
@@ -163,7 +123,7 @@ namespace ParatureAPI.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Published",
-                        DataType = ParaEnums.FieldDataType.boolean
+                        DataType = ParaEnums.FieldDataType.Boolean
                     };
                     Fields.Add(field);
                 }
@@ -179,15 +139,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Question");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Question");
             }
             set
             {
@@ -213,15 +165,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Rating");
-                var val = 0;
-                try
-                {
-                    val = Convert.ToInt32(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<Int32>("Rating");
             }
             set
             {
@@ -247,15 +191,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Times_Viewed");
-                var val = 0;
-                try
-                {
-                    val = Convert.ToInt32(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<Int32>("Times_Viewed");
             }
             set
             {

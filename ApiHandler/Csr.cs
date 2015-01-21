@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Xml;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 
 namespace ParatureAPI.ApiHandler
 {
@@ -21,7 +22,7 @@ namespace ParatureAPI.ApiHandler
 
             if (ar.HasException == false)
             {
-                Csr = XmlToObjectParser.CsrParser.CsrFill(ar.xmlReceived);
+                Csr = CsrParser.CsrFill(ar.xmlReceived);
             }
             Csr.ApiCallResponse = ar;
             Csr.IsDirty = false;
@@ -65,7 +66,7 @@ namespace ParatureAPI.ApiHandler
         public static ParaObjects.Csr CsrGetDetails(XmlDocument CsrXML)
         {
             ParaObjects.Csr csr = new ParaObjects.Csr();
-            csr = XmlToObjectParser.CsrParser.CsrFill(CsrXML);
+            csr = CsrParser.CsrFill(CsrXML);
 
             return csr;
         }
@@ -92,7 +93,7 @@ namespace ParatureAPI.ApiHandler
         public static CsrsList CsrsGetList(XmlDocument CsrListXML)
         {
             CsrsList csrsList = new CsrsList();
-            csrsList = XmlToObjectParser.CsrParser.CsrsFillList(CsrListXML);
+            csrsList = CsrParser.CsrsFillList(CsrListXML);
 
             csrsList.ApiCallResponse.xmlReceived = CsrListXML;
 
@@ -139,7 +140,7 @@ namespace ParatureAPI.ApiHandler
             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Csr, Query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                CsrsList = XmlToObjectParser.CsrParser.CsrsFillList(ar.xmlReceived);
+                CsrsList = CsrParser.CsrsFillList(ar.xmlReceived);
             }
 
             CsrsList.ApiCallResponse = ar;
@@ -162,7 +163,7 @@ namespace ParatureAPI.ApiHandler
 
                         ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Csr, Query.BuildQueryArguments());
 
-                        objectlist = XmlToObjectParser.CsrParser.CsrsFillList(ar.xmlReceived);
+                        objectlist = CsrParser.CsrsFillList(ar.xmlReceived);
 
                         if (objectlist.Csrs.Count == 0)
                         {
@@ -192,7 +193,7 @@ namespace ParatureAPI.ApiHandler
             ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Csr, Csrid);
             if (ar.HasException == false)
             {
-                Csr = XmlToObjectParser.CsrParser.CsrFill(ar.xmlReceived);
+                Csr = CsrParser.CsrFill(ar.xmlReceived);
             }
             else
             {
@@ -236,7 +237,7 @@ namespace ParatureAPI.ApiHandler
             public static ParaObjects.CsrStatus CsrStatusGetDetails(XmlDocument CsrStatusXML)
             {
                 ParaObjects.CsrStatus CsrStatus = new ParaObjects.CsrStatus();
-                CsrStatus = XmlToObjectParser.CsrStatusParser.CsrStatusFill(CsrStatusXML);
+                CsrStatus = CsrStatusParser.CsrStatusFill(CsrStatusXML);
 
                 CsrStatus.ApiCallResponse.xmlReceived = CsrStatusXML;
                 CsrStatus.ApiCallResponse.Objectid = CsrStatus.StatusID;
@@ -253,7 +254,7 @@ namespace ParatureAPI.ApiHandler
             public static CsrStatusList CsrStatusGetList(XmlDocument CsrStatusListXML)
             {
                 CsrStatusList CsrStatussList = new CsrStatusList();
-                CsrStatussList = XmlToObjectParser.CsrStatusParser.CsrStatusFillList(CsrStatusListXML);
+                CsrStatussList = CsrStatusParser.CsrStatusFillList(CsrStatusListXML);
 
                 CsrStatussList.ApiCallResponse.xmlReceived = CsrStatusListXML;
 
@@ -281,7 +282,7 @@ namespace ParatureAPI.ApiHandler
                 ar = ApiCallFactory.ObjectSecondLevelGetList(ParaCredentials, ParaEnums.ParatureModule.Csr, ParaEnums.ParatureEntity.status, new ArrayList(0));
                 if (ar.HasException == false)
                 {
-                    CsrStatusList = XmlToObjectParser.CsrStatusParser.CsrStatusFillList(ar.xmlReceived);
+                    CsrStatusList = CsrStatusParser.CsrStatusFillList(ar.xmlReceived);
                 }
                 CsrStatusList.ApiCallResponse = ar;
                 return CsrStatusList;
@@ -295,7 +296,7 @@ namespace ParatureAPI.ApiHandler
                 ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.CsrStatus, CsrStatusid);
                 if (ar.HasException == false)
                 {
-                    CsrStatus = XmlToObjectParser.CsrStatusParser.CsrStatusFill(ar.xmlReceived);
+                    CsrStatus = CsrStatusParser.CsrStatusFill(ar.xmlReceived);
                 }
                 else
                 {

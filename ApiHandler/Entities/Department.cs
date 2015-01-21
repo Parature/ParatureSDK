@@ -1,6 +1,7 @@
 using System;
 using System.Xml;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 
 namespace ParatureAPI.ApiHandler.Entities
 {
@@ -31,7 +32,7 @@ namespace ParatureAPI.ApiHandler.Entities
         public static ParaObjects.Department DepartmentGetDetails(XmlDocument departmentXml)
         {
             ParaObjects.Department department = new ParaObjects.Department();
-            department = XmlToObjectParser.DepartmentParser.DepartmentFill(departmentXml);
+            department = DepartmentParser.DepartmentFill(departmentXml);
 
             return department;
         }
@@ -45,7 +46,7 @@ namespace ParatureAPI.ApiHandler.Entities
         public static DepartmentsList DepartmentsGetList(XmlDocument departmentListXml)
         {
             DepartmentsList departmentslist = new DepartmentsList();
-            departmentslist = XmlToObjectParser.DepartmentParser.DepartmentsFillList(departmentListXml);
+            departmentslist = DepartmentParser.DepartmentsFillList(departmentListXml);
 
             departmentslist.ApiCallResponse.xmlReceived = departmentListXml;
 
@@ -70,7 +71,7 @@ namespace ParatureAPI.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Department, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                departmentsList = XmlToObjectParser.DepartmentParser.DepartmentsFillList(ar.xmlReceived);
+                departmentsList = DepartmentParser.DepartmentsFillList(ar.xmlReceived);
             }
             departmentsList.ApiCallResponse = ar;
             return departmentsList;
@@ -83,7 +84,7 @@ namespace ParatureAPI.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.Department, departmentid);
             if (ar.HasException == false)
             {
-                department = XmlToObjectParser.DepartmentParser.DepartmentFill(ar.xmlReceived);
+                department = DepartmentParser.DepartmentFill(ar.xmlReceived);
             }
             else
             {

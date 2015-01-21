@@ -44,15 +44,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Browser_Language");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Browser_Language");
             }
             set
             {
@@ -74,15 +66,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Browser_Type");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Browser_Type");
             }
             set
             {
@@ -104,15 +88,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Browser_Version");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Browser_Version");
             }
             set
             {
@@ -135,15 +111,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Date_Created");
-                var val = DateTime.MinValue;
-                try
-                {
-                    return DateTime.Parse(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<DateTime>("Date_Created");
             }
             set
             {
@@ -165,15 +133,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Date_Ended");
-                var val = DateTime.MinValue;
-                try
-                {
-                    return DateTime.Parse(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<DateTime>("Date_Ended");
             }
             set
             {
@@ -196,15 +156,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Email");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Email");
             }
             set
             {
@@ -228,15 +180,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Ip_Address");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Ip_Address");
             }
             set
             {
@@ -258,15 +202,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Is_Anonymous");
-                var val = false;
-                try
-                {
-                    val = Convert.ToBoolean(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<bool>("Is_Anonymous");
             }
             set
             {
@@ -276,7 +212,7 @@ namespace ParatureAPI.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Is_Anonymous",
-                        DataType = ParaEnums.FieldDataType.boolean
+                        DataType = ParaEnums.FieldDataType.Boolean
                     };
                     Fields.Add(field);
                 }
@@ -288,15 +224,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Referrer_Url");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Referrer_Url");
             }
             set
             {
@@ -319,15 +247,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Summary");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Summary");
             }
             set
             {
@@ -349,15 +269,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "User_Agent");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("User_Agent");
             }
             set
             {
@@ -379,15 +291,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Sla_Violation");
-                var val = default(Int32);
-                try
-                {
-                    val = Convert.ToInt32(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<Int32>("Sla_Violation");
             }
             set
             {

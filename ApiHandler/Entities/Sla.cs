@@ -1,6 +1,7 @@
 using System;
 using System.Xml;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 
 namespace ParatureAPI.ApiHandler.Entities
 {
@@ -32,7 +33,7 @@ namespace ParatureAPI.ApiHandler.Entities
         public static ParaObjects.Sla SLAGetDetails(XmlDocument slaXml)
         {
             ParaObjects.Sla sla = new ParaObjects.Sla();
-            sla = XmlToObjectParser.SlaParser.SlaFill(slaXml);
+            sla = SlaParser.SlaFill(slaXml);
 
             return sla;
         }
@@ -62,7 +63,7 @@ namespace ParatureAPI.ApiHandler.Entities
         public static SlasList SLAsGetList(XmlDocument slaListXml)
         {
             SlasList slasList = new SlasList();
-            slasList = XmlToObjectParser.SlaParser.SlasFillList(slaListXml);
+            slasList = SlaParser.SlasFillList(slaListXml);
 
             slasList.ApiCallResponse.xmlReceived = slaListXml;
 
@@ -80,7 +81,7 @@ namespace ParatureAPI.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Sla, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                SlasList = XmlToObjectParser.SlaParser.SlasFillList(ar.xmlReceived);
+                SlasList = SlaParser.SlasFillList(ar.xmlReceived);
             }
             SlasList.ApiCallResponse = ar;
 
@@ -101,7 +102,7 @@ namespace ParatureAPI.ApiHandler.Entities
 
                         ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Sla, query.BuildQueryArguments());
 
-                        objectlist = XmlToObjectParser.SlaParser.SlasFillList(ar.xmlReceived);
+                        objectlist = SlaParser.SlasFillList(ar.xmlReceived);
 
                         if (objectlist.Slas.Count == 0)
                         {
@@ -132,7 +133,7 @@ namespace ParatureAPI.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.Sla, slaId);
             if (ar.HasException == false)
             {
-                Sla = XmlToObjectParser.SlaParser.SlaFill(ar.xmlReceived);
+                Sla = SlaParser.SlaFill(ar.xmlReceived);
             }
             else
             {

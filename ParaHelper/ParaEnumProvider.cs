@@ -42,7 +42,7 @@ namespace ParatureAPI.ParaHelper
             {
                 case "boolean":
 
-                    dataType = ParaEnums.FieldDataType.boolean;
+                    dataType = ParaEnums.FieldDataType.Boolean;
                     break;
                 case "float":
 
@@ -50,7 +50,7 @@ namespace ParatureAPI.ParaHelper
                     break;
                 case "attachment":
 
-                    dataType = ParaEnums.FieldDataType.attachment;
+                    dataType = ParaEnums.FieldDataType.Attachment;
                     break;
                 case "datetime":
 

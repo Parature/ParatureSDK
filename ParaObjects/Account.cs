@@ -14,15 +14,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Account_Name");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Account_Name");
             }
             set
             {
@@ -47,15 +39,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Date_Created");
-                var val = DateTime.MinValue;
-                try
-                {
-                    return DateTime.Parse(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<DateTime>("Date_Created");
             }
             set
             {
@@ -77,15 +61,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Date_Updated");
-                var val = DateTime.MinValue;
-                try
-                {
-                    return DateTime.Parse(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<DateTime>("Date_Updated");
             }
             set
             {

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Xml;
 using ParatureAPI.PagedData;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 using Action = ParatureAPI.ParaObjects.Action;
 
 namespace ParatureAPI.ApiHandler
@@ -25,7 +26,7 @@ namespace ParatureAPI.ApiHandler
 
             if (ar.HasException == false)
             {
-                Asset = XmlToObjectParser.AssetParser.AssetFill(ar.xmlReceived, false, 0, ParaCredentials);
+                Asset = AssetParser.AssetFill(ar.xmlReceived, false, 0, ParaCredentials);
             }
             Asset.ApiCallResponse = ar;
             Asset.IsDirty = false;
@@ -132,7 +133,7 @@ namespace ParatureAPI.ApiHandler
         public static ParaObjects.Asset AssetGetDetails(XmlDocument AssetXML)
         {
             ParaObjects.Asset asset = new ParaObjects.Asset();
-            asset = XmlToObjectParser.AssetParser.AssetFill(AssetXML, true, 0, null);
+            asset = AssetParser.AssetFill(AssetXML, true, 0, null);
             asset.FullyLoaded = true;
 
             asset.ApiCallResponse.xmlReceived = AssetXML;
@@ -151,7 +152,7 @@ namespace ParatureAPI.ApiHandler
         public static AssetsList AssetsGetList(XmlDocument AssetsListXML)
         {
             AssetsList assetsList = new AssetsList();
-            assetsList = XmlToObjectParser.AssetParser.AssetsFillList(AssetsListXML, true, 0, null);
+            assetsList = AssetParser.AssetsFillList(AssetsListXML, true, 0, null);
 
             assetsList.ApiCallResponse.xmlReceived = AssetsListXML;
 
@@ -230,7 +231,7 @@ namespace ParatureAPI.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Asset, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    AssetsList = XmlToObjectParser.AssetParser.AssetsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                    AssetsList = AssetParser.AssetsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                 }
                 AssetsList.ApiCallResponse = ar;
             }
@@ -280,7 +281,7 @@ namespace ParatureAPI.ApiHandler
 
                             if (ar.HasException == false)
                             {
-                                objectlist = XmlToObjectParser.AssetParser.AssetsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                                objectlist = AssetParser.AssetsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                                 AssetsList.Assets.AddRange(objectlist.Assets);
                                 AssetsList.ResultsReturned = AssetsList.Assets.Count;
                                 AssetsList.PageNumber = Query.PageNumber;
@@ -318,7 +319,7 @@ namespace ParatureAPI.ApiHandler
 
             if (ar.HasException == false)
             {
-                Asset = XmlToObjectParser.AssetParser.AssetFill(ar.xmlReceived, true, requestdepth, ParaCredentials);
+                Asset = AssetParser.AssetFill(ar.xmlReceived, true, requestdepth, ParaCredentials);
                 Asset.FullyLoaded = true;
             }
             else

@@ -25,11 +25,6 @@ namespace ParatureAPI.ParaHelper
                         modified = true;
                     }
                 }
-                if (string.IsNullOrEmpty(cf.Value))
-                {
-                    cf.Value = "";
-                    modified = true;
-                }
 
                 break;
             }

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Xml;
 using ParatureAPI.PagedData;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 
 namespace ParatureAPI.ApiHandler
 {
@@ -66,7 +67,7 @@ namespace ParatureAPI.ApiHandler
         public static ParaObjects.Account AccountGetDetails(XmlDocument AccountXML)
         {
             ParaObjects.Account account = new ParaObjects.Account();
-            account = XmlToObjectParser.AccountParser.AccountFill(AccountXML, 0, true, null);
+            account = AccountParser.AccountFill(AccountXML, 0, true, null);
             account.FullyLoaded = true;
 
             account.ApiCallResponse.xmlReceived = AccountXML;
@@ -114,7 +115,7 @@ namespace ParatureAPI.ApiHandler
         public static AccountsList AccountsGetList(XmlDocument AccountListXML)
         {
             AccountsList accountsList = new AccountsList();
-            accountsList = XmlToObjectParser.AccountParser.AccountsFillList(AccountListXML, true, 0, null);
+            accountsList = AccountParser.AccountsFillList(AccountListXML, true, 0, null);
 
             accountsList.ApiCallResponse.xmlReceived = AccountListXML;
 
@@ -202,7 +203,7 @@ namespace ParatureAPI.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Account, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    AccountsList = XmlToObjectParser.AccountParser.AccountsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                    AccountsList = AccountParser.AccountsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                 }
                 AccountsList.ApiCallResponse = ar;
             }
@@ -251,7 +252,7 @@ namespace ParatureAPI.ApiHandler
                             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Account, Query.BuildQueryArguments());
                             if (ar.HasException==false)
                             {
-                                objectlist = XmlToObjectParser.AccountParser.AccountsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                                objectlist = AccountParser.AccountsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                                 AccountsList.Accounts.AddRange(objectlist.Accounts);
                                 AccountsList.ResultsReturned = AccountsList.Accounts.Count;
                                 AccountsList.PageNumber = Query.PageNumber;
@@ -286,7 +287,7 @@ namespace ParatureAPI.ApiHandler
             ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Account, accountid);
             if (ar.HasException == false)
             {
-                account = XmlToObjectParser.AccountParser.AccountFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
+                account = AccountParser.AccountFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
                 account.FullyLoaded = true;
             }
             else
@@ -310,7 +311,7 @@ namespace ParatureAPI.ApiHandler
 
             if (ar.HasException == false)
             {
-                account = XmlToObjectParser.AccountParser.AccountFill(ar.xmlReceived, 0, false, ParaCredentials);
+                account = AccountParser.AccountFill(ar.xmlReceived, 0, false, ParaCredentials);
 
             }
 

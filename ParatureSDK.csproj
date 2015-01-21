@@ -173,7 +173,31 @@
     <Compile Include="ThreadPool.cs" />
     <Compile Include="TrustAllCertificatePolicy.cs" />
     <Compile Include="XmlGenerator.cs" />
-    <Compile Include="XmlToObjectParser.cs" />
+    <Compile Include="XmlToObjectParser\ParserUtils.cs" />
+    <Compile Include="XmlToObjectParser\AccountParser.cs" />
+    <Compile Include="XmlToObjectParser\AccountViewParser.cs" />
+    <Compile Include="XmlToObjectParser\ArticleParser.cs" />
+    <Compile Include="XmlToObjectParser\AssetParser.cs" />
+    <Compile Include="XmlToObjectParser\AttachmentParser.cs" />
+    <Compile Include="XmlToObjectParser\ChatParser.cs" />
+    <Compile Include="XmlToObjectParser\CommonParser.cs" />
+    <Compile Include="XmlToObjectParser\CsrParser.cs" />
+    <Compile Include="XmlToObjectParser\CsrStatusParser.cs" />
+    <Compile Include="XmlToObjectParser\CustomerParser.cs" />
+    <Compile Include="XmlToObjectParser\CustomerStatusParser.cs" />
+    <Compile Include="XmlToObjectParser\CustomerViewParser.cs" />
+    <Compile Include="XmlToObjectParser\DepartmentParser.cs" />
+    <Compile Include="XmlToObjectParser\DownloadParser.cs" />
+    <Compile Include="XmlToObjectParser\EntityParser.cs" />
+    <Compile Include="XmlToObjectParser\ProductParser.cs" />
+    <Compile Include="XmlToObjectParser\QueueParser.cs" />
+    <Compile Include="XmlToObjectParser\RoleParser.cs" />
+    <Compile Include="XmlToObjectParser\SlaParser.cs" />
+    <Compile Include="XmlToObjectParser\StatusParser.cs" />
+    <Compile Include="XmlToObjectParser\TicketParser.cs" />
+    <Compile Include="XmlToObjectParser\TicketStatusParser.cs" />
+    <Compile Include="XmlToObjectParser\TicketViewParser.cs" />
+    <Compile Include="XmlToObjectParser\TimezoneParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

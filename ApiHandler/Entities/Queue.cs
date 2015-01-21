@@ -1,6 +1,7 @@
 using System;
 using System.Xml;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 
 namespace ParatureAPI.ApiHandler.Entities
 {
@@ -29,7 +30,7 @@ namespace ParatureAPI.ApiHandler.Entities
         public static ParaObjects.Queue QueueGetDetails(XmlDocument queueXml)
         {
             ParaObjects.Queue queue = new ParaObjects.Queue();
-            queue = XmlToObjectParser.QueueParser.QueueFill(queueXml);
+            queue = QueueParser.QueueFill(queueXml);
 
             return queue;
         }
@@ -43,7 +44,7 @@ namespace ParatureAPI.ApiHandler.Entities
         public static QueueList QueueGetList(XmlDocument queueListXml)
         {
             QueueList queuesList = new QueueList();
-            queuesList = XmlToObjectParser.QueueParser.QueueFillList(queueListXml);
+            queuesList = QueueParser.QueueFillList(queueListXml);
 
             queuesList.ApiCallResponse.xmlReceived = queueListXml;
 
@@ -76,7 +77,7 @@ namespace ParatureAPI.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Queue, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                QueueList = XmlToObjectParser.QueueParser.QueueFillList(ar.xmlReceived);
+                QueueList = QueueParser.QueueFillList(ar.xmlReceived);
             }
             QueueList.ApiCallResponse = ar;
 
@@ -97,7 +98,7 @@ namespace ParatureAPI.ApiHandler.Entities
 
                         ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Queue, query.BuildQueryArguments());
 
-                        objectlist = XmlToObjectParser.QueueParser.QueueFillList(ar.xmlReceived);
+                        objectlist = QueueParser.QueueFillList(ar.xmlReceived);
 
                         if (objectlist.Queues.Count == 0)
                         {
@@ -127,7 +128,7 @@ namespace ParatureAPI.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.Queue, queueId);
             if (ar.HasException == false)
             {
-                Queue = XmlToObjectParser.QueueParser.QueueFill(ar.xmlReceived);
+                Queue = QueueParser.QueueFill(ar.xmlReceived);
             }
             else
             {

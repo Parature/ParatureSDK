@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Text;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 using Action = ParatureAPI.ParaObjects.Action;
 
 namespace ParatureAPI.ApiHandler
@@ -58,7 +59,7 @@ namespace ParatureAPI.ApiHandler
                     tempAr = ApiCallFactory.ObjectGetList(paraCredentials, module, rtn.Query.BuildQueryArguments());
                     callStopWatch.Stop();
 
-                    XmlToObjectParser.ObjectFillList(tempAr.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
+                    ParserUtils.ObjectFillList(tempAr.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
 
                     testTimePerPage = (int)(callStopWatch.ElapsedMilliseconds);
 
@@ -80,7 +81,7 @@ namespace ParatureAPI.ApiHandler
 
                 //first page call
                 rtn.apiResponse = ApiCallFactory.ObjectGetList(paraCredentials, module, rtn.Query.BuildQueryArguments());
-                rtn.objectList = XmlToObjectParser.ObjectFillList(rtn.apiResponse.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
+                rtn.objectList = ParserUtils.ObjectFillList(rtn.apiResponse.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
             }
             else
             {
@@ -95,7 +96,7 @@ namespace ParatureAPI.ApiHandler
                     tempAr = ApiCallFactory.ObjectGetList(paraCredentials, module, rtn.Query.BuildQueryArguments());
                     callStopWatch.Stop();
 
-                    var tempObjectList = XmlToObjectParser.ObjectFillList(tempAr.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
+                    var tempObjectList = ParserUtils.ObjectFillList(tempAr.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
 
                     testTimePerPage = (int)(callStopWatch.ElapsedMilliseconds);
                     double testTimePagesRequired = (int)Math.Ceiling((double)tempObjectList.TotalItems / (double)pageSizeSampleSet[i]);
@@ -132,13 +133,13 @@ namespace ParatureAPI.ApiHandler
         {
             var postUrlR = ApiCallFactory.FileUploadGetUrl(pc, module);
             var uploadUrlDoc = postUrlR.xmlReceived;
-            var postUrl = XmlToObjectParser.AttachmentParser.AttachmentGetUrlToPost(uploadUrlDoc);
+            var postUrl = AttachmentParser.AttachmentGetUrlToPost(uploadUrlDoc);
 
             var upresp = ApiCallFactory.FilePerformUpload(postUrl, attachment, pc.Instanceid, pc);
 
             var attaDoc = upresp.xmlReceived;
 
-            var attach = XmlToObjectParser.AttachmentParser.AttachmentFill(attaDoc);
+            var attach = AttachmentParser.AttachmentFill(attaDoc);
             return attach;
         }
 
@@ -159,12 +160,12 @@ namespace ParatureAPI.ApiHandler
         {
             Attachment attach;
             var postUrl = "";
-            postUrl = XmlToObjectParser.AttachmentParser.AttachmentGetUrlToPost(ApiCallFactory.FileUploadGetUrl(pc, module).xmlReceived);
+            postUrl = AttachmentParser.AttachmentGetUrlToPost(ApiCallFactory.FileUploadGetUrl(pc, module).xmlReceived);
 
             if (String.IsNullOrEmpty(postUrl) == false)
             {
                 var attaDoc = ApiCallFactory.FilePerformUpload(postUrl, attachment, contentType, fileName, pc.Instanceid, pc).xmlReceived;
-                attach = XmlToObjectParser.AttachmentParser.AttachmentFill(attaDoc);
+                attach = AttachmentParser.AttachmentFill(attaDoc);
             }
             else
             {

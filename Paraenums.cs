@@ -193,11 +193,11 @@ namespace ParatureAPI
             /// <summary>
             /// A Boolean field: a field that holds a True or False value
             /// </summary>
-            boolean = 5,
+            Boolean = 5,
             /// <summary>
             /// An attachment field. Used whenever there is an attachment to an object.
             /// </summary>
-            attachment = 6,
+            Attachment = 6,
             /// <summary>
             /// A float data type
             /// </summary>

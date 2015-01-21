@@ -1,6 +1,7 @@
 using System;
 using System.Xml;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 
 namespace ParatureAPI.ApiHandler.Entities
 {
@@ -32,7 +33,7 @@ namespace ParatureAPI.ApiHandler.Entities
         public static ParaObjects.Timezone TimezoneGetDetails(XmlDocument TimezoneXML)
         {
             ParaObjects.Timezone Timezone = new ParaObjects.Timezone();
-            Timezone = XmlToObjectParser.TimezoneParser.TimezoneFill(TimezoneXML);
+            Timezone = TimezoneParser.TimezoneFill(TimezoneXML);
 
             return Timezone;
         }
@@ -46,7 +47,7 @@ namespace ParatureAPI.ApiHandler.Entities
         public static TimezonesList TimezoneGetList(XmlDocument TimezoneListXML)
         {
             TimezonesList TimezonesList = new TimezonesList();
-            TimezonesList = XmlToObjectParser.TimezoneParser.TimezonesFillList(TimezoneListXML);
+            TimezonesList = TimezoneParser.TimezonesFillList(TimezoneListXML);
 
             TimezonesList.ApiCallResponse.xmlReceived = TimezoneListXML;
 
@@ -78,7 +79,7 @@ namespace ParatureAPI.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.Timezone, Query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                TimezoneList = XmlToObjectParser.TimezoneParser.TimezonesFillList(ar.xmlReceived);
+                TimezoneList = TimezoneParser.TimezonesFillList(ar.xmlReceived);
             }
             TimezoneList.ApiCallResponse = ar;
             return TimezoneList;
@@ -90,7 +91,7 @@ namespace ParatureAPI.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.Timezone, TimezoneId);
             if (ar.HasException == false)
             {
-                Timezone = XmlToObjectParser.TimezoneParser.TimezoneFill(ar.xmlReceived);
+                Timezone = TimezoneParser.TimezoneFill(ar.xmlReceived);
             }
             else
             {

@@ -1,6 +1,7 @@
 using System;
 using System.Xml;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 
 namespace ParatureAPI.ApiHandler.Entities
 {
@@ -45,7 +46,7 @@ namespace ParatureAPI.ApiHandler.Entities
         public static ParaObjects.CustomerStatus CustomerStatusGetDetails(XmlDocument customerStatusXml)
         {
             ParaObjects.CustomerStatus CustomerStatus = new ParaObjects.CustomerStatus();
-            CustomerStatus = XmlToObjectParser.CustomerStatusParser.CustomerStatusFill(customerStatusXml);
+            CustomerStatus = CustomerStatusParser.CustomerStatusFill(customerStatusXml);
 
             CustomerStatus.ApiCallResponse.xmlReceived = customerStatusXml;
             CustomerStatus.ApiCallResponse.Objectid = CustomerStatus.StatusID;
@@ -62,7 +63,7 @@ namespace ParatureAPI.ApiHandler.Entities
         public static CustomerStatusList CustomerStatusGetList(XmlDocument customerStatusListXml)
         {
             CustomerStatusList CustomerStatussList = new CustomerStatusList();
-            CustomerStatussList = XmlToObjectParser.CustomerStatusParser.CustomerStatusFillList(customerStatusListXml);
+            CustomerStatussList = CustomerStatusParser.CustomerStatusFillList(customerStatusListXml);
 
             CustomerStatussList.ApiCallResponse.xmlReceived = customerStatusListXml;
 
@@ -80,7 +81,7 @@ namespace ParatureAPI.ApiHandler.Entities
             ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Customer, ParaEnums.ParatureEntity.status, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                CustomerStatusList = XmlToObjectParser.CustomerStatusParser.CustomerStatusFillList(ar.xmlReceived);
+                CustomerStatusList = CustomerStatusParser.CustomerStatusFillList(ar.xmlReceived);
             }
             CustomerStatusList.ApiCallResponse = ar;
 
@@ -98,7 +99,7 @@ namespace ParatureAPI.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.CustomerStatus, customerStatusId);
             if (ar.HasException == false)
             {
-                CustomerStatus = XmlToObjectParser.CustomerStatusParser.CustomerStatusFill(ar.xmlReceived);
+                CustomerStatus = CustomerStatusParser.CustomerStatusFill(ar.xmlReceived);
             }
             else
             {

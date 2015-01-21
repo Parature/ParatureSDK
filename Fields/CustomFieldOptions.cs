@@ -23,7 +23,7 @@ namespace ParatureAPI.Fields
             set { CustomFieldOptionName = value; }
         }
 
-        public bool dependent = false;
+        public bool Dependent = false;
         public bool IsSelected = false;
 
         /// <summary>
@@ -37,11 +37,11 @@ namespace ParatureAPI.Fields
 
         public CustomFieldOptions(CustomFieldOptions customFieldOptions)
         {
-            this.CustomFieldOptionID = customFieldOptions.CustomFieldOptionID;
-            this.CustomFieldOptionName = customFieldOptions.CustomFieldOptionName;
-            this.IsSelected = customFieldOptions.IsSelected;
-            this.dependent = customFieldOptions.dependent;
-            this.DependantCustomFields = new List<DependantCustomFields>(customFieldOptions.DependantCustomFields);
+            CustomFieldOptionID = customFieldOptions.CustomFieldOptionID;
+            CustomFieldOptionName = customFieldOptions.CustomFieldOptionName;
+            IsSelected = customFieldOptions.IsSelected;
+            Dependent = customFieldOptions.Dependent;
+            DependantCustomFields = new List<DependantCustomFields>(customFieldOptions.DependantCustomFields);
         }
     }
 }

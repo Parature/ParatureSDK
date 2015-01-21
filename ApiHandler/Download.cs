@@ -3,6 +3,7 @@ using System.Threading;
 using System.Xml;
 using ParatureAPI.PagedData;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 
 namespace ParatureAPI.ApiHandler
 {
@@ -22,7 +23,7 @@ namespace ParatureAPI.ApiHandler
 
             if (ar.HasException == false)
             {
-                Download = XmlToObjectParser.DownloadParser.DownloadFill(ar.xmlReceived, 0, false, ParaCredentials);
+                Download = DownloadParser.DownloadFill(ar.xmlReceived, 0, false, ParaCredentials);
             }
 
             Download.ApiCallResponse = ar;
@@ -129,7 +130,7 @@ namespace ParatureAPI.ApiHandler
         public static ParaObjects.Download DownloadGetDetails(XmlDocument DownloadXML)
         {
             ParaObjects.Download download = new ParaObjects.Download(true);
-            download = XmlToObjectParser.DownloadParser.DownloadFill(DownloadXML, 0, true, null);
+            download = DownloadParser.DownloadFill(DownloadXML, 0, true, null);
             download.FullyLoaded = true;
 
             download.ApiCallResponse.xmlReceived = DownloadXML;
@@ -148,7 +149,7 @@ namespace ParatureAPI.ApiHandler
         public static DownloadsList DownloadsGetList(XmlDocument DownloadListXML)
         {
             DownloadsList downloadsList = new DownloadsList();
-            downloadsList = XmlToObjectParser.DownloadParser.DownloadsFillList(DownloadListXML, true, 0, null);
+            downloadsList = DownloadParser.DownloadsFillList(DownloadListXML, true, 0, null);
 
             downloadsList.ApiCallResponse.xmlReceived = DownloadListXML;
 
@@ -223,7 +224,7 @@ namespace ParatureAPI.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Download, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    DownloadsList = XmlToObjectParser.DownloadParser.DownloadsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                    DownloadsList = DownloadParser.DownloadsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                 }
                 DownloadsList.ApiCallResponse = ar;
             }
@@ -273,7 +274,7 @@ namespace ParatureAPI.ApiHandler
 
                             if (ar.HasException == false)
                             {
-                                objectlist = XmlToObjectParser.DownloadParser.DownloadsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                                objectlist = DownloadParser.DownloadsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                                 DownloadsList.Downloads.AddRange(objectlist.Downloads);
                                 DownloadsList.ResultsReturned = DownloadsList.Downloads.Count;
                                 DownloadsList.PageNumber = Query.PageNumber;
@@ -306,7 +307,7 @@ namespace ParatureAPI.ApiHandler
             ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Download, Downloadid);
             if (ar.HasException == false)
             {
-                Download = XmlToObjectParser.DownloadParser.DownloadFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
+                Download = DownloadParser.DownloadFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
                 Download.FullyLoaded = true;
             }
             else
@@ -467,7 +468,7 @@ namespace ParatureAPI.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    DownloadFoldersList = XmlToObjectParser.DownloadParser.DownloadFolderParser.DownloadFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials);
+                    DownloadFoldersList = DownloadParser.DownloadFolderParser.DownloadFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials);
                 }
                 DownloadFoldersList.ApiCallResponse = ar;
 
@@ -489,7 +490,7 @@ namespace ParatureAPI.ApiHandler
 
                             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, Query.BuildQueryArguments());
 
-                            objectlist = XmlToObjectParser.DownloadParser.DownloadFolderParser.DownloadFoldersFillList(ar.xmlReceived,0, ParaCredentials);
+                            objectlist = DownloadParser.DownloadFolderParser.DownloadFoldersFillList(ar.xmlReceived,0, ParaCredentials);
 
                             if (objectlist.DownloadFolders.Count == 0)
                             {
@@ -522,7 +523,7 @@ namespace ParatureAPI.ApiHandler
                 ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, DownloadFolderid);
                 if (ar.HasException == false)
                 {
-                    DownloadFolder = XmlToObjectParser.DownloadParser.DownloadFolderParser.DownloadFolderFill(ar.xmlReceived, requestdepth, ParaCredentials);
+                    DownloadFolder = DownloadParser.DownloadFolderParser.DownloadFolderFill(ar.xmlReceived, requestdepth, ParaCredentials);
                     DownloadFolder.FullyLoaded = true;
                 }
                 else
@@ -544,7 +545,7 @@ namespace ParatureAPI.ApiHandler
             public static ParaObjects.DownloadFolder DownloadFolderGetDetails(XmlDocument DownloadFolderXML)
             {
                 ParaObjects.DownloadFolder downloadFolder = new ParaObjects.DownloadFolder();
-                downloadFolder = XmlToObjectParser.DownloadParser.DownloadFolderParser.DownloadFolderFill(DownloadFolderXML, 0, null);
+                downloadFolder = DownloadParser.DownloadFolderParser.DownloadFolderFill(DownloadFolderXML, 0, null);
                 downloadFolder.FullyLoaded = true;
 
                 downloadFolder.ApiCallResponse.xmlReceived = DownloadFolderXML;
@@ -562,7 +563,7 @@ namespace ParatureAPI.ApiHandler
             public static DownloadFoldersList DownloadFoldersGetList(XmlDocument DownloadFolderListXML)
             {
                 DownloadFoldersList downloadFoldersList = new DownloadFoldersList();
-                downloadFoldersList = XmlToObjectParser.DownloadParser.DownloadFolderParser.DownloadFoldersFillList(DownloadFolderListXML, 0, null);
+                downloadFoldersList = DownloadParser.DownloadFolderParser.DownloadFoldersFillList(DownloadFolderListXML, 0, null);
 
                 downloadFoldersList.ApiCallResponse.xmlReceived = DownloadFolderListXML;
 

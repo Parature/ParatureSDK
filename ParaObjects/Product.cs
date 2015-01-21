@@ -10,15 +10,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Currency");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Currency");
             }
             set
             {
@@ -40,15 +32,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Date_Created");
-                var val = DateTime.MinValue;
-                try
-                {
-                    return DateTime.Parse(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<DateTime>("Date_Created");
             }
             set
             {
@@ -70,15 +54,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Date_Updated");
-                var val = DateTime.MinValue;
-                try
-                {
-                    return DateTime.Parse(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<DateTime>("Date_Updated");
             }
             set
             {
@@ -100,15 +76,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Price");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Price");
             }
             set
             {
@@ -131,15 +99,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "InStock");
-                var val = false;
-                try
-                {
-                    val = Convert.ToBoolean(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<bool>("InStock");
             }
             set
             {
@@ -149,7 +109,7 @@ namespace ParatureAPI.ParaObjects
                     field = new StaticField()
                     {
                         Name = "InStock",
-                        DataType = ParaEnums.FieldDataType.boolean
+                        DataType = ParaEnums.FieldDataType.Boolean
                     };
                     Fields.Add(field);
                 }
@@ -164,15 +124,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Longdesc");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Longdesc");
             }
             set
             {
@@ -194,15 +146,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Name");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Name");
             }
             set
             {
@@ -227,15 +171,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Shortdesc");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Shortdesc");
             }
             set
             {
@@ -257,15 +193,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Sku");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Sku");
             }
             set
             {
@@ -287,15 +215,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Visible");
-                var val = false;
-                try
-                {
-                    val = Convert.ToBoolean(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<bool>("Visible");
             }
             set
             {
@@ -305,7 +225,7 @@ namespace ParatureAPI.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Visible",
-                        DataType = ParaEnums.FieldDataType.boolean
+                        DataType = ParaEnums.FieldDataType.Boolean
                     };
                     Fields.Add(field);
                 }

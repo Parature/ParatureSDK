@@ -4,6 +4,7 @@ using System.Threading;
 using System.Xml;
 using ParatureAPI.PagedData;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 using Action = ParatureAPI.ParaObjects.Action;
 
 namespace ParatureAPI.ApiHandler
@@ -24,7 +25,7 @@ namespace ParatureAPI.ApiHandler
 
             if (ar.HasException == false)
             {
-                Ticket = XmlToObjectParser.TicketParser.TicketFill(ar.xmlReceived, 0, false, ParaCredentials);
+                Ticket = TicketParser.TicketFill(ar.xmlReceived, 0, false, ParaCredentials);
             }
             Ticket.ApiCallResponse = ar;
             return Ticket;
@@ -139,7 +140,7 @@ namespace ParatureAPI.ApiHandler
         public static ParaObjects.Ticket TicketGetDetails(XmlDocument TicketXML)
         {
             ParaObjects.Ticket ticket = new ParaObjects.Ticket();
-            ticket = XmlToObjectParser.TicketParser.TicketFill(TicketXML, 0, true, null);
+            ticket = TicketParser.TicketFill(TicketXML, 0, true, null);
             ticket.FullyLoaded = true;
 
             ticket.ApiCallResponse.xmlReceived = TicketXML;
@@ -158,7 +159,7 @@ namespace ParatureAPI.ApiHandler
         public static TicketsList TicketsGetList(XmlDocument TicketListXML)
         {
             TicketsList ticketsList = new TicketsList();
-            ticketsList = XmlToObjectParser.TicketParser.TicketsFillList(TicketListXML, true, 0, null);
+            ticketsList = TicketParser.TicketsFillList(TicketListXML, true, 0, null);
 
             ticketsList.ApiCallResponse.xmlReceived = TicketListXML;
 
@@ -239,7 +240,7 @@ namespace ParatureAPI.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Ticket, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    TicketsList = XmlToObjectParser.TicketParser.TicketsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                    TicketsList = TicketParser.TicketsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
                 }
                 TicketsList.ApiCallResponse = ar;
             }
@@ -290,7 +291,7 @@ namespace ParatureAPI.ApiHandler
 
                             if (ar.HasException == false)
                             {
-                                objectlist = XmlToObjectParser.TicketParser.TicketsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                                objectlist = TicketParser.TicketsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
 
                                 TicketsList.Tickets.AddRange(objectlist.Tickets);
                                 TicketsList.ResultsReturned = TicketsList.Tickets.Count;
@@ -348,7 +349,7 @@ namespace ParatureAPI.ApiHandler
 
             if (ar.HasException == false)
             {
-                Ticket = XmlToObjectParser.TicketParser.TicketFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
+                Ticket = TicketParser.TicketFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
                 Ticket.FullyLoaded = true;
             }
             else

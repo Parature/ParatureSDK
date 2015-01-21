@@ -1,6 +1,7 @@
 using System;
 using System.Xml;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 
 namespace ParatureAPI.ApiHandler.Entities
 {
@@ -32,7 +33,7 @@ namespace ParatureAPI.ApiHandler.Entities
         public static ParaObjects.Status StatusGetDetails(XmlDocument StatusXML)
         {
             ParaObjects.Status Status = new ParaObjects.Status();
-            Status = XmlToObjectParser.StatusParser.StatusFill(StatusXML);
+            Status = StatusParser.StatusFill(StatusXML);
 
             return Status;
         }
@@ -46,7 +47,7 @@ namespace ParatureAPI.ApiHandler.Entities
         public static StatusList StatusGetList(XmlDocument StatusListXML)
         {
             StatusList StatussList = new StatusList();
-            StatussList = XmlToObjectParser.StatusParser.StatusFillList(StatusListXML);
+            StatussList = StatusParser.StatusFillList(StatusListXML);
 
             StatussList.ApiCallResponse.xmlReceived = StatusListXML;
 
@@ -79,7 +80,7 @@ namespace ParatureAPI.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.status, Query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                StatusList = XmlToObjectParser.StatusParser.StatusFillList(ar.xmlReceived);
+                StatusList = StatusParser.StatusFillList(ar.xmlReceived);
             }
             StatusList.ApiCallResponse = ar;
 
@@ -101,7 +102,7 @@ namespace ParatureAPI.ApiHandler.Entities
 
                         ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.status, Query.BuildQueryArguments());
 
-                        objectlist = XmlToObjectParser.StatusParser.StatusFillList(ar.xmlReceived);
+                        objectlist = StatusParser.StatusFillList(ar.xmlReceived);
 
                         if (objectlist.Statuses.Count == 0)
                         {
@@ -130,7 +131,7 @@ namespace ParatureAPI.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.status, StatusId);
             if (ar.HasException == false)
             {
-                Status = XmlToObjectParser.StatusParser.StatusFill(ar.xmlReceived);
+                Status = StatusParser.StatusFill(ar.xmlReceived);
             }
             else
             {

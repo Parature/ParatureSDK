@@ -19,15 +19,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Ticket_Number");
-                var val = string.Empty;
-                try
-                {
-                    val = field.Value;
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<string>("Ticket_Number");
             }
             set
             {
@@ -97,15 +89,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Email_Notification");
-                var val = false;
-                try
-                {
-                    val = Convert.ToBoolean(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<bool>("Email_Notification");
             }
             set
             {
@@ -115,7 +99,7 @@ namespace ParatureAPI.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Email_Notification",
-                        DataType = ParaEnums.FieldDataType.boolean
+                        DataType = ParaEnums.FieldDataType.Boolean
                     };
                     Fields.Add(field);
                 }
@@ -131,15 +115,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Email_Notification_Additional_Contact");
-                var val = false;
-                try
-                {
-                    val = Convert.ToBoolean(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<bool?>("Email_Notification_Additional_Contact");
             }
             set
             {
@@ -149,7 +125,7 @@ namespace ParatureAPI.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Email_Notification_Additional_Contact",
-                        DataType = ParaEnums.FieldDataType.boolean
+                        DataType = ParaEnums.FieldDataType.Boolean
                     };
                     Fields.Add(field);
                 }
@@ -165,15 +141,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Hide_From_Customer");
-                var val = false;
-                try
-                {
-                    val = Convert.ToBoolean(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<bool?>("Hide_From_Customer");
             }
             set
             {
@@ -183,7 +151,7 @@ namespace ParatureAPI.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Hide_From_Customer",
-                        DataType = ParaEnums.FieldDataType.boolean
+                        DataType = ParaEnums.FieldDataType.Boolean
                     };
                     Fields.Add(field);
                 }
@@ -242,15 +210,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Date_Created");
-                var val = DateTime.MinValue;
-                try
-                {
-                    return DateTime.Parse(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<DateTime>("Date_Created");
             }
             set
             {
@@ -273,15 +233,7 @@ namespace ParatureAPI.ParaObjects
         {
             get
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Date_Updated");
-                var val = DateTime.MinValue;
-                try
-                {
-                    return DateTime.Parse(field.Value);
-                }
-                catch (Exception e) { }
-
-                return val;
+                return GetFieldValue<DateTime>("Date_Updated");
             }
             set
             {

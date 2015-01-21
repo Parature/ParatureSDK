@@ -1,5 +1,6 @@
 using System.Xml;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 
 namespace ParatureAPI.ApiHandler.Entities
 {
@@ -14,7 +15,7 @@ namespace ParatureAPI.ApiHandler.Entities
         public static ContactViewList ViewGetList(XmlDocument viewListXml)
         {
             ContactViewList ViewsList = new ContactViewList();
-            ViewsList = XmlToObjectParser.CustomerViewParser.ViewFillList(viewListXml);
+            ViewsList = CustomerViewParser.ViewFillList(viewListXml);
 
             ViewsList.ApiCallResponse.xmlReceived = viewListXml;
 
@@ -40,7 +41,7 @@ namespace ParatureAPI.ApiHandler.Entities
             ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Customer, ParaEnums.ParatureEntity.view, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                ViewList = XmlToObjectParser.CustomerViewParser.ViewFillList(ar.xmlReceived);
+                ViewList = CustomerViewParser.ViewFillList(ar.xmlReceived);
             }
             ViewList.ApiCallResponse = ar;
             return ViewList;

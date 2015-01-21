@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ParatureAPI.PagedData;
 using ParatureAPI.ParaObjects;
+using ParatureAPI.XmlToObjectParser;
 
 namespace ParatureAPI
 {
@@ -45,7 +46,7 @@ namespace ParatureAPI
             public void Go(CustomersList customerList)
             {
                 ApiCallResponse ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                CustomersList objectlist = XmlToObjectParser.CustomerParser.CustomersFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
+                CustomersList objectlist = CustomerParser.CustomersFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
                 customerList.Customers.AddRange(objectlist.Customers);
                 customerList.ApiCallResponse = ar;
                 sem.Release();
@@ -58,7 +59,7 @@ namespace ParatureAPI
             public void Go(ChatList chatList, Boolean IncludeTranscripts)
             {
                 ApiCallResponse ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                ChatList objectlist = XmlToObjectParser.ChatParser.ChatsFillList(ar.xmlReceived, true, IncludeTranscripts, _requestdepth, _paracredentials);
+                ChatList objectlist = ChatParser.ChatsFillList(ar.xmlReceived, true, IncludeTranscripts, _requestdepth, _paracredentials);
                 chatList.chats.AddRange(objectlist.chats);
                 chatList.ApiCallResponse = ar;
                 sem.Release();
@@ -71,7 +72,7 @@ namespace ParatureAPI
             public void Go(AccountsList accountList)
             {
                 ApiCallResponse ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                AccountsList objectlist = XmlToObjectParser.AccountParser.AccountsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
+                AccountsList objectlist = AccountParser.AccountsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
                 accountList.Accounts.AddRange(objectlist.Accounts);
                 accountList.ApiCallResponse = ar;
                 sem.Release();
@@ -84,7 +85,7 @@ namespace ParatureAPI
             public void Go(TicketsList ticketList)
             {
                 ApiCallResponse ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                TicketsList objectlist = XmlToObjectParser.TicketParser.TicketsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
+                TicketsList objectlist = TicketParser.TicketsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
                 ticketList.Tickets.AddRange(objectlist.Tickets);
                 ticketList.ApiCallResponse = ar;
                 sem.Release();
@@ -97,7 +98,7 @@ namespace ParatureAPI
             public void Go(ProductsList productList)
             {
                 ApiCallResponse ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                ProductsList objectlist = XmlToObjectParser.ProductParser.ProductsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
+                ProductsList objectlist = ProductParser.ProductsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
                 productList.Products.AddRange(objectlist.Products);
                 productList.ApiCallResponse = ar;
                 sem.Release();
@@ -110,7 +111,7 @@ namespace ParatureAPI
             public void Go(AssetsList assetList)
             {
                 ApiCallResponse ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                AssetsList objectlist = XmlToObjectParser.AssetParser.AssetsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
+                AssetsList objectlist = AssetParser.AssetsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
                 assetList.Assets.AddRange(objectlist.Assets);
                 assetList.ApiCallResponse = ar;
                 sem.Release();
@@ -123,7 +124,7 @@ namespace ParatureAPI
             public void Go(DownloadsList downloadList)
             {
                 ApiCallResponse ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                DownloadsList objectlist = XmlToObjectParser.DownloadParser.DownloadsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
+                DownloadsList objectlist = DownloadParser.DownloadsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
                 downloadList.Downloads.AddRange(objectlist.Downloads);
                 downloadList.ApiCallResponse = ar;
                 sem.Release();
@@ -136,7 +137,7 @@ namespace ParatureAPI
             public void Go(ArticlesList articleList)
             {
                 ApiCallResponse ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                ArticlesList objectlist = XmlToObjectParser.ArticleParser.ArticlesFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
+                ArticlesList objectlist = ArticleParser.ArticlesFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
                 articleList.Articles.AddRange(objectlist.Articles);
                 articleList.ApiCallResponse = ar;
                 sem.Release();
