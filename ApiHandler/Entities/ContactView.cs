@@ -12,9 +12,9 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <param name="viewListXml">
         /// The View List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ContactViewList ViewGetList(XmlDocument viewListXml)
+        public static ViewList ViewGetList(XmlDocument viewListXml)
         {
-            ContactViewList ViewsList = new ContactViewList();
+            var ViewsList = new ViewList();
             ViewsList = CustomerViewParser.ViewFillList(viewListXml);
 
             ViewsList.ApiCallResponse.xmlReceived = viewListXml;
@@ -25,7 +25,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of Views from within your Parature license.
         /// </summary>
-        public static ContactViewList ViewGetList(ParaCredentials paraCredentials, EntityQuery.ViewQuery query)
+        public static ViewList ViewGetList(ParaCredentials paraCredentials, EntityQuery.ViewQuery query)
         {
             return ViewFillList(paraCredentials, query);
         }
@@ -33,10 +33,10 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Fills a View List object.
         /// </summary>
-        private static ContactViewList ViewFillList(ParaCredentials paraCredentials, EntityQuery.ViewQuery query)
+        private static ViewList ViewFillList(ParaCredentials paraCredentials, EntityQuery.ViewQuery query)
         {
 
-            ContactViewList ViewList = new ContactViewList();
+            var ViewList = new ViewList();
             ApiCallResponse ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Customer, ParaEnums.ParatureEntity.view, query.BuildQueryArguments());
             if (ar.HasException == false)

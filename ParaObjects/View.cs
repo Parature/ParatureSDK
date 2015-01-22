@@ -2,7 +2,7 @@ using System;
 
 namespace ParatureAPI.ParaObjects
 {
-    public abstract class View
+    public class View
     {
         // Specific properties for this module
         //private Int64 id
