@@ -204,6 +204,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CONTRIBUTING.md" />
+    <None Include="Microsoft-Contribution-License-Agreement.docx" />
+    <None Include="Microsoft-Contribution-License-Agreement.pdf" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup />
