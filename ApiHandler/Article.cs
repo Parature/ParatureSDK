@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Xml;
 using ParatureAPI.PagedData;
@@ -351,9 +352,9 @@ namespace ParatureAPI.ApiHandler
                 Int64 id = 0;
                 EntityQuery.ArticleFolderQuery afQuery = new EntityQuery.ArticleFolderQuery();
                 afQuery.PageSize = 5000;
-                ArticleFoldersList Folders = new ArticleFoldersList();
+                var Folders = new ParaEntityList<ParaObjects.ArticleFolder>();
                 Folders = ArticleFoldersGetList(paracredentials, afQuery);
-                foreach (ParaObjects.ArticleFolder folder in Folders.ArticleFolders)
+                foreach (ParaObjects.ArticleFolder folder in Folders.Data)
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
                     {
@@ -383,9 +384,9 @@ namespace ParatureAPI.ApiHandler
                 EntityQuery.ArticleFolderQuery afQuery = new EntityQuery.ArticleFolderQuery();
                 afQuery.AddStaticFieldFilter(EntityQuery.ArticleFolderQuery.ArticleFolderStaticFields.Name, ParaEnums.QueryCriteria.Equal, ParentFolderId.ToString());
                 afQuery.PageSize = 5000;
-                ArticleFoldersList Folders = new ArticleFoldersList();
+                var Folders = new ParaEntityList<ParaObjects.ArticleFolder>();
                 Folders = ArticleFoldersGetList(paracredentials, afQuery);
-                foreach (ParaObjects.ArticleFolder folder in Folders.ArticleFolders)
+                foreach (ParaObjects.ArticleFolder folder in Folders.Data)
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
                     {
@@ -477,7 +478,7 @@ namespace ParatureAPI.ApiHandler
             /// <summary>
             /// Provides you with the capability to list Article Folders.
             /// </summary>
-            public static ArticleFoldersList ArticleFoldersGetList(ParaCredentials ParaCredentials)
+            public static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersGetList(ParaCredentials ParaCredentials)
             {
                 EntityQuery.ArticleFolderQuery eq = new EntityQuery.ArticleFolderQuery();
                 eq.RetrieveAllRecords = true;
@@ -488,7 +489,7 @@ namespace ParatureAPI.ApiHandler
             /// Provides you with the capability to list Article Folders, following criteria you would set
             /// by instantiating a ModuleQuery.DownloadQuery object
             /// </summary>
-            public static ArticleFoldersList ArticleFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ArticleFolderQuery Query)
+            public static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ArticleFolderQuery Query)
             {
                 return ArticleFoldersFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
             }
@@ -500,7 +501,7 @@ namespace ParatureAPI.ApiHandler
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ArticleFoldersList ArticleFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            public static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 return ArticleFoldersFillList(ParaCredentials, Query, RequestDepth);
             }
@@ -511,9 +512,9 @@ namespace ParatureAPI.ApiHandler
             /// <param name="ArticleFoldersListXml">
             /// The Article Folder List XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ArticleFoldersList ArticleFoldersGetList(XmlDocument ArticleFoldersListXml)
+            public static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersGetList(XmlDocument ArticleFoldersListXml)
             {
-                ArticleFoldersList articleFolderList = new ArticleFoldersList();
+                var articleFolderList = new ParaEntityList<ParaObjects.ArticleFolder>();
                 articleFolderList = ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ArticleFoldersListXml, 0, null);
 
                 articleFolderList.ApiCallResponse.xmlReceived = ArticleFoldersListXml;
@@ -524,28 +525,8 @@ namespace ParatureAPI.ApiHandler
             /// <summary>
             /// Fills an Article list object.
             /// </summary>
-            private static ArticleFoldersList ArticleFoldersFillList(ParaCredentials ParaCredentials, EntityQuery.ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            private static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersFillList(ParaCredentials ParaCredentials, EntityQuery.ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
-                /*
-                    int requestdepth = (int)RequestDepth;
-                    ParaObjects.ArticleFoldersList ArticleFoldersList = new ParaObjects.ArticleFoldersList();
-                    ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.ArticleFolder, Query.BuildQueryArguments());
-                    if (ar.HasException == false)
-                    {
-                        ArticleFoldersList = xmlToObjectParser.ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials);
-                    }
-
-
-
-                    ArticleFoldersList.ApiCallResponse = ar;
-                    return ArticleFoldersList;
-                    */
-
-
-
-
-
                 int requestdepth = (int)RequestDepth;
                 if (Query == null)
                 {
@@ -553,7 +534,7 @@ namespace ParatureAPI.ApiHandler
                 }
 
                 ApiCallResponse ar = new ApiCallResponse();
-                ArticleFoldersList ArticleFoldersList = new ArticleFoldersList();
+                var ArticleFoldersList = new ParaEntityList<ParaObjects.ArticleFolder>();
 
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.ArticleFolder, Query.BuildQueryArguments());
                 if (ar.HasException == false)
@@ -570,7 +551,7 @@ namespace ParatureAPI.ApiHandler
                     while (continueCalling)
                     {
 
-                        if (ArticleFoldersList.TotalItems > ArticleFoldersList.ArticleFolders.Count)
+                        if (ArticleFoldersList.TotalItems > ArticleFoldersList.Data.Count)
                         {
                             // Getting next page's data
                             Query.PageNumber = Query.PageNumber + 1;
@@ -579,8 +560,8 @@ namespace ParatureAPI.ApiHandler
 
                             if (ar.HasException == false)
                             {
-                                ArticleFoldersList.ArticleFolders.AddRange(ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials).ArticleFolders);
-                                ArticleFoldersList.ResultsReturned = ArticleFoldersList.ArticleFolders.Count;
+                                ArticleFoldersList.Data.AddRange(ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials).Data);
+                                ArticleFoldersList.ResultsReturned = ArticleFoldersList.Data.Count;
                                 ArticleFoldersList.PageNumber = Query.PageNumber;
                             }
                             else

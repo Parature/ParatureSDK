@@ -45,9 +45,9 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <param name="RoleListXML">
         /// The Role List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static RolesList RolesGetList(XmlDocument RoleListXML)
+        public static ParaEntityList<ParaObjects.Role> RolesGetList(XmlDocument RoleListXML)
         {
-            RolesList rolesList = new RolesList();
+            var rolesList = new ParaEntityList<ParaObjects.Role>();
             rolesList = RoleParser.RolesFillList(RoleListXML);
 
             rolesList.ApiCallResponse.xmlReceived = RoleListXML;
@@ -61,13 +61,13 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <param name="ParaCredentials"></param>
         /// <param name="Query"></param>
         /// <returns></returns>
-        public static RolesList RolesGetList(ParaCredentials ParaCredentials, EntityQuery.RoleQuery Query, ParaEnums.ParatureModule Module)
+        public static ParaEntityList<ParaObjects.Role> RolesGetList(ParaCredentials ParaCredentials, EntityQuery.RoleQuery Query, ParaEnums.ParatureModule Module)
         {
             return RoleFillList(ParaCredentials, Query, Module);
         }
 
 
-        public static RolesList RolesGetList(ParaCredentials ParaCredentials, ParaEnums.ParatureModule Module)
+        public static ParaEntityList<ParaObjects.Role> RolesGetList(ParaCredentials ParaCredentials, ParaEnums.ParatureModule Module)
         {
             return RoleFillList(ParaCredentials, new EntityQuery.RoleQuery(), Module);
         }
@@ -79,9 +79,9 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <param name="query"></param>
         /// <param name="Module"></param>
         /// <returns></returns>
-        private static RolesList RoleFillList(ParaCredentials paraCredentials, EntityQuery.RoleQuery query, ParaEnums.ParatureModule Module)
+        private static ParaEntityList<ParaObjects.Role> RoleFillList(ParaCredentials paraCredentials, EntityQuery.RoleQuery query, ParaEnums.ParatureModule Module)
         {
-            RolesList RolesList = new RolesList();
+            var RolesList = new ParaEntityList<ParaObjects.Role>();
             ApiCallResponse ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, Module, ParaEnums.ParatureEntity.role, query.BuildQueryArguments());
             if (ar.HasException == false)
@@ -96,9 +96,9 @@ namespace ParatureAPI.ApiHandler.Entities
                 bool continueCalling = true;
                 while (continueCalling)
                 {
-                    RolesList objectlist = new RolesList();
+                    var objectlist = new ParaEntityList<ParaObjects.Role>();
 
-                    if (RolesList.TotalItems > RolesList.Roles.Count)
+                    if (RolesList.TotalItems > RolesList.Data.Count)
                     {
                         // We still need to pull data
 
@@ -109,13 +109,13 @@ namespace ParatureAPI.ApiHandler.Entities
 
                         objectlist = RoleParser.RolesFillList(ar.xmlReceived);
 
-                        if (objectlist.Roles.Count == 0)
+                        if (objectlist.Data.Count == 0)
                         {
                             continueCalling = false;
                         }
 
-                        RolesList.Roles.AddRange(objectlist.Roles);
-                        RolesList.ResultsReturned = RolesList.Roles.Count;
+                        RolesList.Data.AddRange(objectlist.Data);
+                        RolesList.ResultsReturned = RolesList.Data.Count;
                         RolesList.PageNumber = query.PageNumber;
                     }
                     else

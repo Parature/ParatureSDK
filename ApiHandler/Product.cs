@@ -353,9 +353,9 @@ namespace ParatureAPI.ApiHandler
                 Int64 id = 0;
                 EntityQuery.DownloadFolderQuery dfQuery = new EntityQuery.DownloadFolderQuery();
                 dfQuery.PageSize = 5000;
-                DownloadFoldersList Folders = new DownloadFoldersList();
+                var Folders = new ParaEntityList<ParaObjects.DownloadFolder>();
                 Folders = Download.DownloadFolder.DownloadFoldersGetList(paracredentials, dfQuery);
-                foreach (DownloadFolder folder in Folders.DownloadFolders)
+                foreach (DownloadFolder folder in Folders.Data)
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
                     {
@@ -385,9 +385,9 @@ namespace ParatureAPI.ApiHandler
                 EntityQuery.DownloadFolderQuery dfQuery = new EntityQuery.DownloadFolderQuery();
                 dfQuery.AddStaticFieldFilter(EntityQuery.DownloadFolderQuery.DownloadFolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, ParentFolderId.ToString());
                 dfQuery.PageSize = 5000;
-                DownloadFoldersList Folders = new DownloadFoldersList();
+                var Folders = new ParaEntityList<ParaObjects.DownloadFolder>();
                 Folders = Download.DownloadFolder.DownloadFoldersGetList(paracredentials, dfQuery);
-                foreach (DownloadFolder folder in Folders.DownloadFolders)
+                foreach (DownloadFolder folder in Folders.Data)
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
                     {
@@ -472,7 +472,7 @@ namespace ParatureAPI.ApiHandler
             /// <summary>
             /// Provides you with the capability to list Product Folders
             /// </summary>
-            public static ProductFoldersList ProductFoldersGetList(ParaCredentials ParaCredentials)
+            public static ParaEntityList<ParaObjects.ProductFolder> ProductFoldersGetList(ParaCredentials ParaCredentials)
             {
                 return ProductFoldersFillList(ParaCredentials, new EntityQuery.ProductFolderQuery(), ParaEnums.RequestDepth.Standard);
             }
@@ -481,7 +481,7 @@ namespace ParatureAPI.ApiHandler
             /// Provides you with the capability to list Downloads, following criteria you would set
             /// by instantiating a ModuleQuery.DownloadQuery object
             /// </summary>
-            public static ProductFoldersList ProductFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ProductFolderQuery Query)
+            public static ParaEntityList<ParaObjects.ProductFolder> ProductFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ProductFolderQuery Query)
             {
                 return ProductFoldersFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
             }
@@ -493,7 +493,7 @@ namespace ParatureAPI.ApiHandler
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ProductFoldersList ProductFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ProductFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            public static ParaEntityList<ParaObjects.ProductFolder> ProductFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ProductFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 return ProductFoldersFillList(ParaCredentials, Query, RequestDepth);
             }
@@ -504,9 +504,9 @@ namespace ParatureAPI.ApiHandler
             /// <param name="ProductFolderListXML">
             /// The ProductFolder List XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ProductFoldersList ProductFoldersGetList(XmlDocument ProductFolderListXML)
+            public static ParaEntityList<ParaObjects.ProductFolder> ProductFoldersGetList(XmlDocument ProductFolderListXML)
             {
-                ProductFoldersList productFoldersList = new ProductFoldersList();
+                var productFoldersList = new ParaEntityList<ParaObjects.ProductFolder>();
                 productFoldersList = ProductParser.ProductFolderParser.ProductFoldersFillList(ProductFolderListXML, 0, null);
 
                 productFoldersList.ApiCallResponse.xmlReceived = ProductFolderListXML;
@@ -517,22 +517,8 @@ namespace ParatureAPI.ApiHandler
             /// <summary>
             /// Fills a ProductFolderList object.
             /// </summary>
-            private static ProductFoldersList ProductFoldersFillList(ParaCredentials ParaCredentials, EntityQuery.ProductFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            private static ParaEntityList<ParaObjects.ProductFolder> ProductFoldersFillList(ParaCredentials ParaCredentials, EntityQuery.ProductFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
-                /*
-                    int requestdepth = (int)RequestDepth;
-                    ParaObjects.ProductFoldersList ProductFoldersList = new ParaObjects.ProductFoldersList();
-                    ParaObjects.ApiCallResponse ar = new ParaObjects.ApiCallResponse();
-                    ar = ApiCallFactory.ObjectGetList(ParaCredentials, Paraenums.ParatureEntity.ProductFolder, Query.BuildQueryArguments());
-                    if (ar.HasException == false)
-                    {
-                        ProductFoldersList = xmlToObjectParser.ProductParser.ProductFolderParser.ProductFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials);
-                    }
-                    ProductFoldersList.ApiCallResponse = ar;                   
-                    return ProductFoldersList;
-                     */
-
-
                 int requestdepth = (int)RequestDepth;
                 if (Query == null)
                 {
@@ -540,17 +526,10 @@ namespace ParatureAPI.ApiHandler
                 }
 
                 ApiCallResponse ar = new ApiCallResponse();
-                ProductFoldersList ProductFoldersList = new ProductFoldersList();
+                var ProductFoldersList = new ParaEntityList<ParaObjects.ProductFolder>();
 
                 if (Query.RetrieveAllRecords && Query.OptimizePageSize)
                 {
-                    /*
-                        ParaObjects.OptimizationResult rslt = optimizeObjectPageSize(ProductFolderList, Query, ParaCredentials, requestdepth, Paraenums.ParatureModule.Customer);
-                        ar = rslt.apiResponse;
-                        Query = (ModuleQuery.CustomerQuery)rslt.Query;
-                        CustomersList = ((ParaObjects.CustomersList)rslt.objectList);
-                        rslt = null;
-                        */ 
                 }
                 else
                 {
@@ -558,7 +537,6 @@ namespace ParatureAPI.ApiHandler
                     if (ar.HasException == false)
                     {
                         ProductFoldersList = ProductParser.ProductFolderParser.ProductFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials);
-                        //CustomersList = xmlToObjectParser.CustomerParser.CustomersFillList(ar.xmlReceived, requestdepth, ParaCredentials);
                     }
                     ProductFoldersList.ApiCallResponse = ar;
                 }
@@ -566,39 +544,11 @@ namespace ParatureAPI.ApiHandler
                 // Checking if the system needs to recursively call all of the data returned.
                 if (Query.RetrieveAllRecords && !ar.HasException)
                 {
-                    // A flag variable to check if we need to make more calls
-                    /*
-                        if (Query.OptimizeCalls)
-                        {
-                            System.Threading.Thread t;
-                            ThreadPool.ObjectList instance = null;
-                            int callsRequired = (int)Math.Ceiling((double)(ProductFoldersList.TotalItems / (double)ProductFoldersList.PageSize));
-                            for (int i = 2; i <= callsRequired; i++)
-                            {
-                                //ApiCallFactory.waitCheck(ParaCredentials.Accountid);
-                                Query.PageNumber = i;
-                                //implement semaphore right here (in the thread pool instance to control the generation of threads
-                                instance = new ThreadPool.ObjectList(ParaCredentials, Paraenums.ParatureEntity.ProductFolder, Query.BuildQueryArguments(), requestdepth);
-                                t = new System.Threading.Thread(delegate() { instance.Go(ProductFoldersList); });
-                                t.Start();
-                            }
-
-                            while (CustomersList.TotalItems > CustomersList.Customers.Count)
-                            {
-                                System.Threading.Thread.Sleep(500);
-                            }
-
-                            CustomersList.ResultsReturned = CustomersList.Customers.Count;
-                            CustomersList.PageNumber = callsRequired;
-                        }
-                        else
-                        {
-                         */ 
                     bool continueCalling = true;
                     while (continueCalling)
                     {
 
-                        if (ProductFoldersList.TotalItems > ProductFoldersList.ProductFolders.Count)
+                        if (ProductFoldersList.TotalItems > ProductFoldersList.Data.Count)
                         {
                             // We still need to pull data
 
@@ -606,8 +556,8 @@ namespace ParatureAPI.ApiHandler
                             Query.PageNumber = Query.PageNumber + 1;
 
                             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.ProductFolder, Query.BuildQueryArguments());
-                            ProductFoldersList.ProductFolders.AddRange(ProductParser.ProductFolderParser.ProductFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials).ProductFolders);
-                            ProductFoldersList.ResultsReturned = ProductFoldersList.ProductFolders.Count;
+                            ProductFoldersList.Data.AddRange(ProductParser.ProductFolderParser.ProductFoldersFillList(ar.xmlReceived, requestdepth, ParaCredentials).Data);
+                            ProductFoldersList.ResultsReturned = ProductFoldersList.Data.Count;
                             ProductFoldersList.PageNumber = Query.PageNumber;
                         }
                         else

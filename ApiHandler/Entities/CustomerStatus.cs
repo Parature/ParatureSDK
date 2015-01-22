@@ -24,7 +24,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of Customers from within your Parature license.
         /// </summary>
-        public static CustomerStatusList CustomerStatusGetList(ParaCredentials paraCredentials)
+        public static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusGetList(ParaCredentials paraCredentials)
         {
             return CustomerStatusFillList(paraCredentials, new EntityQuery.CustomerStatusQuery());
         }
@@ -32,7 +32,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of Customers from within your Parature license.
         /// </summary>
-        public static CustomerStatusList CustomerStatusGetList(ParaCredentials paraCredentials, EntityQuery.CustomerStatusQuery query)
+        public static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusGetList(ParaCredentials paraCredentials, EntityQuery.CustomerStatusQuery query)
         {
             return CustomerStatusFillList(paraCredentials, query);
         }
@@ -60,9 +60,9 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <param name="customerStatusListXml">
         /// The CustomerStatus List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static CustomerStatusList CustomerStatusGetList(XmlDocument customerStatusListXml)
+        public static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusGetList(XmlDocument customerStatusListXml)
         {
-            CustomerStatusList CustomerStatussList = new CustomerStatusList();
+            var CustomerStatussList = new ParaEntityList<ParaObjects.CustomerStatus>();
             CustomerStatussList = CustomerStatusParser.CustomerStatusFillList(customerStatusListXml);
 
             CustomerStatussList.ApiCallResponse.xmlReceived = customerStatusListXml;
@@ -73,10 +73,10 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Fills a Sla list object.
         /// </summary>
-        private static CustomerStatusList CustomerStatusFillList(ParaCredentials paraCredentials, EntityQuery.CustomerStatusQuery query)
+        private static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusFillList(ParaCredentials paraCredentials, EntityQuery.CustomerStatusQuery query)
         {
 
-            CustomerStatusList CustomerStatusList = new CustomerStatusList();
+            var CustomerStatusList = new ParaEntityList<ParaObjects.CustomerStatus>();
             ApiCallResponse ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Customer, ParaEnums.ParatureEntity.status, query.BuildQueryArguments());
             if (ar.HasException == false)

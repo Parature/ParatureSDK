@@ -26,9 +26,9 @@ namespace ParatureAPI.XmlToObjectParser
         /// </summary>
         /// <param name="xmlresp"></param>
         /// <returns></returns>
-        static internal TimezonesList TimezonesFillList(XmlDocument xmlresp)
+        static internal ParaEntityList<ParaObjects.Timezone> TimezonesFillList(XmlDocument xmlresp)
         {
-            TimezonesList TimezonesList = new TimezonesList();
+            var TimezonesList = new ParaEntityList<ParaObjects.Timezone>();
             XmlNode DocNode = xmlresp.DocumentElement;
 
             TimezonesList.TotalItems = Int32.Parse(DocNode.Attributes["total"].InnerText.ToString());
@@ -43,7 +43,7 @@ namespace ParatureAPI.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                TimezonesList.Timezones.Add(TimezoneFillNode(xn));
+                TimezonesList.Data.Add(TimezoneFillNode(xn));
             }
             return TimezonesList;
         }

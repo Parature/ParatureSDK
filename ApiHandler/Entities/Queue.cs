@@ -41,9 +41,9 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <param name="queueListXml">
         /// The Queue List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static QueueList QueueGetList(XmlDocument queueListXml)
+        public static ParaEntityList<ParaObjects.Queue> QueueGetList(XmlDocument queueListXml)
         {
-            QueueList queuesList = new QueueList();
+            var queuesList = new ParaEntityList<ParaObjects.Queue>();
             queuesList = QueueParser.QueueFillList(queueListXml);
 
             queuesList.ApiCallResponse.xmlReceived = queueListXml;
@@ -54,7 +54,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of Queues from within your Parature license.
         /// </summary>
-        public static QueueList QueueGetList(ParaCredentials paraCredentials)
+        public static ParaEntityList<ParaObjects.Queue> QueueGetList(ParaCredentials paraCredentials)
         {
             return QueueFillList(paraCredentials, new EntityQuery.QueueQuery());
         }
@@ -62,17 +62,17 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of Queues from within your Parature license.
         /// </summary>
-        public static QueueList QueueGetList(ParaCredentials paraCredentials, EntityQuery.QueueQuery query)
+        public static ParaEntityList<ParaObjects.Queue> QueueGetList(ParaCredentials paraCredentials, EntityQuery.QueueQuery query)
         {
             return QueueFillList(paraCredentials, query);
         }
         /// <summary>
         /// Fills a Queue List object.
         /// </summary>
-        private static QueueList QueueFillList(ParaCredentials paraCredentials, EntityQuery.QueueQuery query)
+        private static ParaEntityList<ParaObjects.Queue> QueueFillList(ParaCredentials paraCredentials, EntityQuery.QueueQuery query)
         {
 
-            QueueList QueueList = new QueueList();
+            var QueueList = new ParaEntityList<ParaObjects.Queue>();
             ApiCallResponse ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Queue, query.BuildQueryArguments());
             if (ar.HasException == false)
@@ -87,9 +87,9 @@ namespace ParatureAPI.ApiHandler.Entities
                 bool continueCalling = true;
                 while (continueCalling)
                 {
-                    QueueList objectlist = new QueueList();
+                    var objectlist = new ParaEntityList<ParaObjects.Queue>();
 
-                    if (QueueList.TotalItems > QueueList.Queues.Count)
+                    if (QueueList.TotalItems > QueueList.Data.Count)
                     {
                         // We still need to pull data
 
@@ -100,13 +100,13 @@ namespace ParatureAPI.ApiHandler.Entities
 
                         objectlist = QueueParser.QueueFillList(ar.xmlReceived);
 
-                        if (objectlist.Queues.Count == 0)
+                        if (objectlist.Data.Count == 0)
                         {
                             continueCalling = false;
                         }
 
-                        QueueList.Queues.AddRange(objectlist.Queues);
-                        QueueList.ResultsReturned = QueueList.Queues.Count;
+                        QueueList.Data.AddRange(objectlist.Data);
+                        QueueList.ResultsReturned = QueueList.Data.Count;
                         QueueList.PageNumber = query.PageNumber;
                     }
                     else

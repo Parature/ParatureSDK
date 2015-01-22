@@ -342,9 +342,9 @@ namespace ParatureAPI.ApiHandler
                 Int64 id = 0;
                 EntityQuery.DownloadFolderQuery dfQuery = new EntityQuery.DownloadFolderQuery();
                 dfQuery.PageSize = 5000;
-                DownloadFoldersList Folders = new DownloadFoldersList();
+                var Folders = new ParaEntityList<ParaObjects.DownloadFolder>();
                 Folders = DownloadFoldersGetList(paracredentials, dfQuery);
-                foreach (ParaObjects.DownloadFolder folder in Folders.DownloadFolders)
+                foreach (ParaObjects.DownloadFolder folder in Folders.Data)
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
                     {
@@ -374,9 +374,9 @@ namespace ParatureAPI.ApiHandler
                 EntityQuery.DownloadFolderQuery dfQuery = new EntityQuery.DownloadFolderQuery();
                 dfQuery.AddStaticFieldFilter(EntityQuery.DownloadFolderQuery.DownloadFolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, ParentFolderId.ToString());
                 dfQuery.PageSize = 5000;
-                DownloadFoldersList Folders = new DownloadFoldersList();
+                var Folders = new ParaEntityList<ParaObjects.DownloadFolder>();
                 Folders = DownloadFoldersGetList(paracredentials, dfQuery);
-                foreach (ParaObjects.DownloadFolder folder in Folders.DownloadFolders)
+                foreach (ParaObjects.DownloadFolder folder in Folders.Data)
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
                     {
@@ -439,7 +439,7 @@ namespace ParatureAPI.ApiHandler
             /// Provides you with the capability to list Downloads, following criteria you would set
             /// by instantiating a ModuleQuery.DownloadQuery object
             /// </summary>
-            public static DownloadFoldersList DownloadFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.DownloadFolderQuery Query)
+            public static ParaEntityList<ParaObjects.DownloadFolder> DownloadFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.DownloadFolderQuery Query)
             {
                 return DownloadFoldersFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
             }
@@ -451,7 +451,7 @@ namespace ParatureAPI.ApiHandler
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static DownloadFoldersList DownloadFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.DownloadFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            public static ParaEntityList<ParaObjects.DownloadFolder> DownloadFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.DownloadFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 return DownloadFoldersFillList(ParaCredentials, Query, RequestDepth);
             }
@@ -459,10 +459,10 @@ namespace ParatureAPI.ApiHandler
             /// <summary>
             /// Fills an Download list object.
             /// </summary>
-            private static DownloadFoldersList DownloadFoldersFillList(ParaCredentials ParaCredentials, EntityQuery.DownloadFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            private static ParaEntityList<ParaObjects.DownloadFolder> DownloadFoldersFillList(ParaCredentials ParaCredentials, EntityQuery.DownloadFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
-                DownloadFoldersList DownloadFoldersList = new DownloadFoldersList();
+                var DownloadFoldersList = new ParaEntityList<ParaObjects.DownloadFolder>();
                 //DownloadsList = null;
                 ApiCallResponse ar = new ApiCallResponse();
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, Query.BuildQueryArguments());
@@ -479,9 +479,9 @@ namespace ParatureAPI.ApiHandler
                     bool continueCalling = true;
                     while (continueCalling)
                     {
-                        DownloadFoldersList objectlist = new DownloadFoldersList();
+                        var objectlist = new ParaEntityList<ParaObjects.DownloadFolder>();
 
-                        if (DownloadFoldersList.TotalItems > DownloadFoldersList.DownloadFolders.Count)
+                        if (DownloadFoldersList.TotalItems > DownloadFoldersList.Data.Count)
                         {
                             // We still need to pull data
 
@@ -492,13 +492,13 @@ namespace ParatureAPI.ApiHandler
 
                             objectlist = DownloadParser.DownloadFolderParser.DownloadFoldersFillList(ar.xmlReceived,0, ParaCredentials);
 
-                            if (objectlist.DownloadFolders.Count == 0)
+                            if (objectlist.Data.Count == 0)
                             {
                                 continueCalling = false;
                             }
 
-                            DownloadFoldersList.DownloadFolders.AddRange(objectlist.DownloadFolders);
-                            DownloadFoldersList.ResultsReturned = DownloadFoldersList.DownloadFolders.Count;
+                            DownloadFoldersList.Data.AddRange(objectlist.Data);
+                            DownloadFoldersList.ResultsReturned = DownloadFoldersList.Data.Count;
                             DownloadFoldersList.PageNumber = Query.PageNumber;
                         }
                         else
@@ -560,9 +560,9 @@ namespace ParatureAPI.ApiHandler
             /// <param name="DownloadFolderListXML">
             /// The DownloadFolder List XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static DownloadFoldersList DownloadFoldersGetList(XmlDocument DownloadFolderListXML)
+            public static ParaEntityList<ParaObjects.DownloadFolder> DownloadFoldersGetList(XmlDocument DownloadFolderListXML)
             {
-                DownloadFoldersList downloadFoldersList = new DownloadFoldersList();
+                var downloadFoldersList = new ParaEntityList<ParaObjects.DownloadFolder>();
                 downloadFoldersList = DownloadParser.DownloadFolderParser.DownloadFoldersFillList(DownloadFolderListXML, 0, null);
 
                 downloadFoldersList.ApiCallResponse.xmlReceived = DownloadFolderListXML;

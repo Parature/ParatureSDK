@@ -20,9 +20,9 @@ namespace ParatureAPI.XmlToObjectParser
         /// <summary>
         /// This method requires a Queue list xml file and returns a Queue object. It should only by used for a List operation.
         /// </summary>
-        static internal QueueList QueueFillList(XmlDocument xmlresp)
+        static internal ParaEntityList<ParaObjects.Queue> QueueFillList(XmlDocument xmlresp)
         {
-            QueueList queueList = new QueueList();
+            var queueList = new ParaEntityList<ParaObjects.Queue>();
             XmlNode DocNode = xmlresp.DocumentElement;
 
 
@@ -39,7 +39,7 @@ namespace ParatureAPI.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                queueList.Queues.Add(QueueFillNode(xn));
+                queueList.Data.Add(QueueFillNode(xn));
             }
             return queueList;
         }

@@ -41,7 +41,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of SLAs from within your Parature license.
         /// </summary>
-        public static SlasList SLAsGetList(ParaCredentials paraCredentials)
+        public static ParaEntityList<ParaObjects.Sla> SLAsGetList(ParaCredentials paraCredentials)
         {
             return SlaFillList(paraCredentials, new EntityQuery.SlaQuery());
         }
@@ -49,7 +49,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of SLAs from within your Parature license.
         /// </summary>
-        public static SlasList SLAsGetList(ParaCredentials paraCredentials, EntityQuery.SlaQuery query)
+        public static ParaEntityList<ParaObjects.Sla> SLAsGetList(ParaCredentials paraCredentials, EntityQuery.SlaQuery query)
         {
             return SlaFillList(paraCredentials, query);
         }
@@ -60,9 +60,9 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <param name="slaListXml">
         /// The Sla List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static SlasList SLAsGetList(XmlDocument slaListXml)
+        public static ParaEntityList<ParaObjects.Sla> SLAsGetList(XmlDocument slaListXml)
         {
-            SlasList slasList = new SlasList();
+            var slasList = new ParaEntityList<ParaObjects.Sla>();
             slasList = SlaParser.SlasFillList(slaListXml);
 
             slasList.ApiCallResponse.xmlReceived = slaListXml;
@@ -73,10 +73,10 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Fills a Sla list object.
         /// </summary>
-        private static SlasList SlaFillList(ParaCredentials paraCredentials, EntityQuery.SlaQuery query)
+        private static ParaEntityList<ParaObjects.Sla> SlaFillList(ParaCredentials paraCredentials, EntityQuery.SlaQuery query)
         {
 
-            SlasList SlasList = new SlasList();
+            var SlasList = new ParaEntityList<ParaObjects.Sla>();
             ApiCallResponse ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Sla, query.BuildQueryArguments());
             if (ar.HasException == false)
@@ -91,9 +91,9 @@ namespace ParatureAPI.ApiHandler.Entities
                 bool continueCalling = true;
                 while (continueCalling)
                 {
-                    SlasList objectlist = new SlasList();
+                    var objectlist = new ParaEntityList<ParaObjects.Sla>();
 
-                    if (SlasList.TotalItems > SlasList.Slas.Count)
+                    if (SlasList.TotalItems > SlasList.Data.Count)
                     {
                         // We still need to pull data
 
@@ -104,13 +104,13 @@ namespace ParatureAPI.ApiHandler.Entities
 
                         objectlist = SlaParser.SlasFillList(ar.xmlReceived);
 
-                        if (objectlist.Slas.Count == 0)
+                        if (objectlist.Data.Count == 0)
                         {
                             continueCalling = false;
                         }
 
-                        SlasList.Slas.AddRange(objectlist.Slas);
-                        SlasList.ResultsReturned = SlasList.Slas.Count;
+                        SlasList.Data.AddRange(objectlist.Data);
+                        SlasList.ResultsReturned = SlasList.Data.Count;
                         SlasList.PageNumber = query.PageNumber;
                     }
                     else

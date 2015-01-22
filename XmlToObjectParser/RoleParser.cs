@@ -26,9 +26,9 @@ namespace ParatureAPI.XmlToObjectParser
         /// </summary>
         /// <param name="xmlresp"></param>
         /// <returns></returns>
-        static internal RolesList RolesFillList(XmlDocument xmlresp)
+        static internal ParaEntityList<ParaObjects.Role> RolesFillList(XmlDocument xmlresp)
         {
-            RolesList RolesList = new RolesList();
+            var RolesList = new ParaEntityList<ParaObjects.Role>();
             XmlNode DocNode = xmlresp.DocumentElement;
 
             RolesList.TotalItems = Int32.Parse(DocNode.Attributes["total"].InnerText.ToString());
@@ -43,7 +43,7 @@ namespace ParatureAPI.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                RolesList.Roles.Add(RoleFillNode(xn));
+                RolesList.Data.Add(RoleFillNode(xn));
             }
             return RolesList;
         }

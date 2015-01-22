@@ -44,9 +44,9 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <param name="TimezoneListXML">
         /// The Timezone List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static TimezonesList TimezoneGetList(XmlDocument TimezoneListXML)
+        public static ParaEntityList<ParaObjects.Timezone> TimezoneGetList(XmlDocument TimezoneListXML)
         {
-            TimezonesList TimezonesList = new TimezonesList();
+            var TimezonesList = new ParaEntityList<ParaObjects.Timezone>();
             TimezonesList = TimezoneParser.TimezonesFillList(TimezoneListXML);
 
             TimezonesList.ApiCallResponse.xmlReceived = TimezoneListXML;
@@ -56,7 +56,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of Timezones from within your Parature license.
         /// </summary>
-        public static TimezonesList TimezoneGetList(ParaCredentials ParaCredentials)
+        public static ParaEntityList<ParaObjects.Timezone> TimezoneGetList(ParaCredentials ParaCredentials)
         {
             return TimezoneFillList(ParaCredentials, new EntityQuery.TimezoneQuery());
         }
@@ -64,17 +64,17 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of Timezones from within your Parature license.
         /// </summary>
-        public static TimezonesList TimezoneGetList(ParaCredentials ParaCredentials, EntityQuery.TimezoneQuery Query)
+        public static ParaEntityList<ParaObjects.Timezone> TimezoneGetList(ParaCredentials ParaCredentials, EntityQuery.TimezoneQuery Query)
         {
             return TimezoneFillList(ParaCredentials, Query);
         }
         /// <summary>
         /// Fills a Timezone List object.
         /// </summary>
-        private static TimezonesList TimezoneFillList(ParaCredentials ParaCredentials, EntityQuery.TimezoneQuery Query)
+        private static ParaEntityList<ParaObjects.Timezone> TimezoneFillList(ParaCredentials ParaCredentials, EntityQuery.TimezoneQuery Query)
         {
 
-            TimezonesList TimezoneList = new TimezonesList();
+            var TimezoneList = new ParaEntityList<ParaObjects.Timezone>();
             ApiCallResponse ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.Timezone, Query.BuildQueryArguments());
             if (ar.HasException == false)

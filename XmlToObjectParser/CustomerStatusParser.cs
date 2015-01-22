@@ -26,9 +26,9 @@ namespace ParatureAPI.XmlToObjectParser
         /// </summary>
         /// <param name="xmlresp"></param>
         /// <returns></returns>
-        static internal CustomerStatusList CustomerStatusFillList(XmlDocument xmlresp)
+        static internal ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusFillList(XmlDocument xmlresp)
         {
-            CustomerStatusList CustomerStatusList = new CustomerStatusList();
+            var CustomerStatusList = new ParaEntityList<ParaObjects.CustomerStatus>();
             XmlNode DocNode = xmlresp.DocumentElement;
 
             CustomerStatusList.TotalItems = Int32.Parse(DocNode.Attributes["total"].InnerText.ToString());
@@ -43,7 +43,7 @@ namespace ParatureAPI.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                CustomerStatusList.CustomerStatuses.Add(CustomerStatusFillNode(xn));
+                CustomerStatusList.Data.Add(CustomerStatusFillNode(xn));
             }
             return CustomerStatusList;
         }

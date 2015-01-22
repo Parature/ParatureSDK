@@ -44,9 +44,9 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <param name="StatusListXML">
         /// The Status List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static StatusList StatusGetList(XmlDocument StatusListXML)
+        public static ParaEntityList<ParaObjects.Status> StatusGetList(XmlDocument StatusListXML)
         {
-            StatusList StatussList = new StatusList();
+            var StatussList = new ParaEntityList<ParaObjects.Status>();
             StatussList = StatusParser.StatusFillList(StatusListXML);
 
             StatussList.ApiCallResponse.xmlReceived = StatusListXML;
@@ -57,7 +57,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of Statuss from within your Parature license.
         /// </summary>
-        public static StatusList StatusGetList(ParaCredentials ParaCredentials)
+        public static ParaEntityList<ParaObjects.Status> StatusGetList(ParaCredentials ParaCredentials)
         {
             return StatusFillList(ParaCredentials, new EntityQuery.StatusQuery());
         }
@@ -65,17 +65,17 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of Statuss from within your Parature license.
         /// </summary>
-        public static StatusList StatusGetList(ParaCredentials ParaCredentials, EntityQuery.StatusQuery Query)
+        public static ParaEntityList<ParaObjects.Status> StatusGetList(ParaCredentials ParaCredentials, EntityQuery.StatusQuery Query)
         {
             return StatusFillList(ParaCredentials, Query);
         }
         /// <summary>
         /// Fills a Status List object.
         /// </summary>
-        private static StatusList StatusFillList(ParaCredentials ParaCredentials, EntityQuery.StatusQuery Query)
+        private static ParaEntityList<ParaObjects.Status> StatusFillList(ParaCredentials ParaCredentials, EntityQuery.StatusQuery Query)
         {
 
-            StatusList StatusList = new StatusList();
+            var StatusList = new ParaEntityList<ParaObjects.Status>();
             ApiCallResponse ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.status, Query.BuildQueryArguments());
             if (ar.HasException == false)
@@ -91,9 +91,9 @@ namespace ParatureAPI.ApiHandler.Entities
                 bool continueCalling = true;
                 while (continueCalling)
                 {
-                    StatusList objectlist = new StatusList();
+                    var objectlist = new ParaEntityList<ParaObjects.Status>();
 
-                    if (StatusList.TotalItems > StatusList.Statuses.Count)
+                    if (StatusList.TotalItems > StatusList.Data.Count)
                     {
                         // We still need to pull data
 
@@ -104,13 +104,13 @@ namespace ParatureAPI.ApiHandler.Entities
 
                         objectlist = StatusParser.StatusFillList(ar.xmlReceived);
 
-                        if (objectlist.Statuses.Count == 0)
+                        if (objectlist.Data.Count == 0)
                         {
                             continueCalling = false;
                         }
 
-                        StatusList.Statuses.AddRange(objectlist.Statuses);
-                        StatusList.ResultsReturned = StatusList.Statuses.Count;
+                        StatusList.Data.AddRange(objectlist.Data);
+                        StatusList.ResultsReturned = StatusList.Data.Count;
                         StatusList.PageNumber = Query.PageNumber;
                     }
                     else

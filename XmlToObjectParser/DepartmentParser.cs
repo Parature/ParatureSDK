@@ -23,9 +23,9 @@ namespace ParatureAPI.XmlToObjectParser
         /// <summary>
         /// This method requires a Department list xml file and returns a Department object. It should only by used for a List operation.
         /// </summary>
-        static internal DepartmentsList DepartmentsFillList(XmlDocument xmlresp)
+        static internal ParaEntityList<ParaObjects.Department> DepartmentsFillList(XmlDocument xmlresp)
         {
-            DepartmentsList departmentsList = new DepartmentsList();
+            var departmentsList = new ParaEntityList<ParaObjects.Department>();
             XmlNode DocNode = xmlresp.DocumentElement;
 
             departmentsList.TotalItems = Int32.Parse(DocNode.Attributes["total"].InnerText.ToString());
@@ -40,7 +40,7 @@ namespace ParatureAPI.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                departmentsList.Departments.Add(DepartmentFillNode(xn));
+                departmentsList.Data.Add(DepartmentFillNode(xn));
             }
             return departmentsList;
         }

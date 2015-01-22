@@ -179,9 +179,9 @@ namespace ParatureAPI.XmlToObjectParser
             /// <summary>
             /// This method requires a ProductFolder list xml file and returns a ProductFoldersList object. It should only by used for a List operation.
             /// </summary>
-            static internal ProductFoldersList ProductFoldersFillList(XmlDocument xmlresp, int requestdepth, ParaCredentials ParaCredentials)
+            static internal ParaEntityList<ParaObjects.ProductFolder> ProductFoldersFillList(XmlDocument xmlresp, int requestdepth, ParaCredentials ParaCredentials)
             {
-                ProductFoldersList ProductFoldersList = new ProductFoldersList();
+                var ProductFoldersList = new ParaEntityList<ParaObjects.ProductFolder>();
                 XmlNode DocNode = xmlresp.DocumentElement;
 
                 // Setting up the request level for all child items of a DownloadFolder.
@@ -204,7 +204,7 @@ namespace ParatureAPI.XmlToObjectParser
 
                 foreach (XmlNode xn in DocNode.ChildNodes)
                 {
-                    ProductFoldersList.ProductFolders.Add(ProductFolderFillNode(xn, childDepth, ParaCredentials));
+                    ProductFoldersList.Data.Add(ProductFolderFillNode(xn, childDepth, ParaCredentials));
                 }
                 return ProductFoldersList;
             }

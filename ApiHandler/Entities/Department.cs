@@ -43,9 +43,9 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <param name="departmentListXml">
         /// The Departments List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static DepartmentsList DepartmentsGetList(XmlDocument departmentListXml)
+        public static ParaEntityList<ParaObjects.Department> DepartmentsGetList(XmlDocument departmentListXml)
         {
-            DepartmentsList departmentslist = new DepartmentsList();
+            var departmentslist = new ParaEntityList<ParaObjects.Department>();
             departmentslist = DepartmentParser.DepartmentsFillList(departmentListXml);
 
             departmentslist.ApiCallResponse.xmlReceived = departmentListXml;
@@ -56,17 +56,17 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of Departments from within your Parature license.
         /// </summary>
-        public static DepartmentsList DepartmentsGetList(ParaCredentials paraCredentials, EntityQuery.DepartmentQuery query)
+        public static ParaEntityList<ParaObjects.Department> DepartmentsGetList(ParaCredentials paraCredentials, EntityQuery.DepartmentQuery query)
         {
             return DepartmentFillList(paraCredentials, query);
         }
         /// <summary>
         /// Fills a Departmentslist object.
         /// </summary>
-        private static DepartmentsList DepartmentFillList(ParaCredentials paraCredentials, EntityQuery.DepartmentQuery query)
+        private static ParaEntityList<ParaObjects.Department> DepartmentFillList(ParaCredentials paraCredentials, EntityQuery.DepartmentQuery query)
         {
 
-            DepartmentsList departmentsList = new DepartmentsList();
+            var departmentsList = new ParaEntityList<ParaObjects.Department>();
             ApiCallResponse ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Department, query.BuildQueryArguments());
             if (ar.HasException == false)

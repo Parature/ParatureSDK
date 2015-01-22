@@ -28,7 +28,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of Csrs from within your Parature license.
         /// </summary>
-        public static CsrStatusList CsrStatusGetList(ParaCredentials paraCredentials)
+        public static ParaEntityList<ParaObjects.CsrStatus> CsrStatusGetList(ParaCredentials paraCredentials)
         {
             return CsrStatusFillList(paraCredentials, new EntityQuery.CsrStatusQuery());
         }
@@ -36,7 +36,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of Csrs from within your Parature license.
         /// </summary>
-        public static CsrStatusList CsrStatusGetList(ParaCredentials paraCredentials, EntityQuery.CsrStatusQuery query)
+        public static ParaEntityList<ParaObjects.CsrStatus> CsrStatusGetList(ParaCredentials paraCredentials, EntityQuery.CsrStatusQuery query)
         {
             return CsrStatusFillList(paraCredentials, query);
         }
@@ -64,9 +64,9 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <param name="csrStatusListXml">
         /// The CsrStatus List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static CsrStatusList CsrStatusGetList(XmlDocument csrStatusListXml)
+        public static ParaEntityList<ParaObjects.CsrStatus> CsrStatusGetList(XmlDocument csrStatusListXml)
         {
-            CsrStatusList CsrStatussList = new CsrStatusList();
+            var CsrStatussList = new ParaEntityList<ParaObjects.CsrStatus>();
             CsrStatussList = CsrStatusParser.CsrStatusFillList(csrStatusListXml);
 
             CsrStatussList.ApiCallResponse.xmlReceived = csrStatusListXml;
@@ -77,10 +77,10 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Fills a Sla list object.
         /// </summary>
-        private static CsrStatusList CsrStatusFillList(ParaCredentials paraCredentials, EntityQuery.CsrStatusQuery query)
+        private static ParaEntityList<ParaObjects.CsrStatus> CsrStatusFillList(ParaCredentials paraCredentials, EntityQuery.CsrStatusQuery query)
         {
 
-            CsrStatusList CsrStatusList = new CsrStatusList();
+            var CsrStatusList = new ParaEntityList<ParaObjects.CsrStatus>();
             ApiCallResponse ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Csr, ParaEnums.ParatureEntity.status, query.BuildQueryArguments());
             if (ar.HasException == false)

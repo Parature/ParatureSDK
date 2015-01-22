@@ -20,9 +20,9 @@ namespace ParatureAPI.XmlToObjectParser
         /// <summary>
         /// This method requires a Ticket Status list xml file and returns a Ticket Status object. It should only by used for a List operation.
         /// </summary>
-        static internal TicketStatusList TicketStatusFillList(XmlDocument xmlresp)
+        static internal ParaEntityList<ParaObjects.TicketStatus> TicketStatusFillList(XmlDocument xmlresp)
         {
-            TicketStatusList ticketStatusList = new TicketStatusList();
+            var ticketStatusList = new ParaEntityList<ParaObjects.TicketStatus>();
             XmlNode DocNode = xmlresp.DocumentElement;
 
 
@@ -38,7 +38,7 @@ namespace ParatureAPI.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                ticketStatusList.TicketStatuses.Add(TicketStatusFillNode(xn));
+                ticketStatusList.Data.Add(TicketStatusFillNode(xn));
             }
             return ticketStatusList;
         }

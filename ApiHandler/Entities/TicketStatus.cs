@@ -24,14 +24,14 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of Csrs from within your Parature license.
         /// </summary>
-        public static TicketStatusList TicketStatusGetList(ParaCredentials paraCredentials)
+        public static ParaEntityList<ParaObjects.TicketStatus> TicketStatusGetList(ParaCredentials paraCredentials)
         {
             return TicketStatusFillList(paraCredentials, new EntityQuery.TicketStatusQuery());
         }
         /// <summary>
         /// Get the list of Csrs from within your Parature license.
         /// </summary>
-        public static TicketStatusList TicketStatusGetList(ParaCredentials paraCredentials, EntityQuery.TicketStatusQuery query)
+        public static ParaEntityList<ParaObjects.TicketStatus> TicketStatusGetList(ParaCredentials paraCredentials, EntityQuery.TicketStatusQuery query)
         {
             return TicketStatusFillList(paraCredentials, query);
         }
@@ -59,9 +59,9 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <param name="ticketStatusListXml">
         /// The TicketStatus List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static TicketStatusList TicketStatusGetList(XmlDocument ticketStatusListXml)
+        public static ParaEntityList<ParaObjects.TicketStatus> TicketStatusGetList(XmlDocument ticketStatusListXml)
         {
-            TicketStatusList ticketStatussList = new TicketStatusList();
+            var ticketStatussList = new ParaEntityList<ParaObjects.TicketStatus>();
             ticketStatussList = TicketStatusParser.TicketStatusFillList(ticketStatusListXml);
 
             ticketStatussList.ApiCallResponse.xmlReceived = ticketStatusListXml;
@@ -72,10 +72,10 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Fills a Sla list object.
         /// </summary>
-        private static TicketStatusList TicketStatusFillList(ParaCredentials paraCredentials, EntityQuery.TicketStatusQuery query)
+        private static ParaEntityList<ParaObjects.TicketStatus> TicketStatusFillList(ParaCredentials paraCredentials, EntityQuery.TicketStatusQuery query)
         {
 
-            TicketStatusList TicketStatusList = new TicketStatusList();
+            var TicketStatusList = new ParaEntityList<ParaObjects.TicketStatus>();
             ApiCallResponse ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Ticket, ParaEnums.ParatureEntity.status, query.BuildQueryArguments());
             if (ar.HasException == false)
@@ -90,9 +90,9 @@ namespace ParatureAPI.ApiHandler.Entities
                 bool continueCalling = true;
                 while (continueCalling)
                 {
-                    TicketStatusList objectlist = new TicketStatusList();
+                    var objectlist = new ParaEntityList<ParaObjects.TicketStatus>();
 
-                    if (TicketStatusList.TotalItems > TicketStatusList.TicketStatuses.Count)
+                    if (TicketStatusList.TotalItems > TicketStatusList.Data.Count)
                     {
                         // We still need to pull data
 
@@ -103,13 +103,13 @@ namespace ParatureAPI.ApiHandler.Entities
 
                         objectlist = TicketStatusParser.TicketStatusFillList(ar.xmlReceived);
 
-                        if (objectlist.TicketStatuses.Count == 0)
+                        if (objectlist.Data.Count == 0)
                         {
                             continueCalling = false;
                         }
 
-                        TicketStatusList.TicketStatuses.AddRange(objectlist.TicketStatuses);
-                        TicketStatusList.ResultsReturned = TicketStatusList.TicketStatuses.Count;
+                        TicketStatusList.Data.AddRange(objectlist.Data);
+                        TicketStatusList.ResultsReturned = TicketStatusList.Data.Count;
                         TicketStatusList.PageNumber = query.PageNumber;
                     }
                     else

@@ -23,9 +23,9 @@ namespace ParatureAPI.XmlToObjectParser
         /// <summary>
         /// This method requires an Sla list xml file and returns a Sla object. It should only by used for a List operation.
         /// </summary>
-        static internal SlasList SlasFillList(XmlDocument xmlresp)
+        static internal ParaEntityList<ParaObjects.Sla> SlasFillList(XmlDocument xmlresp)
         {
-            SlasList SlasList = new SlasList();
+            var SlasList = new ParaEntityList<ParaObjects.Sla>();
             XmlNode DocNode = xmlresp.DocumentElement;
 
             SlasList.TotalItems = Int32.Parse(DocNode.Attributes["total"].InnerText.ToString());
@@ -42,7 +42,7 @@ namespace ParatureAPI.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                SlasList.Slas.Add(SlaFillNode(xn));
+                SlasList.Data.Add(SlaFillNode(xn));
             }
             return SlasList;
         }

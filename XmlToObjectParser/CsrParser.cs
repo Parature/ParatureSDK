@@ -23,9 +23,9 @@ namespace ParatureAPI.XmlToObjectParser
         /// <summary>
         /// This method requires a Csr list xml file and returns a Csr object. It should only by used for a List operation.
         /// </summary>
-        static internal CsrsList CsrsFillList(XmlDocument xmlresp)
+        static internal ParaEntityList<ParaObjects.Csr> CsrsFillList(XmlDocument xmlresp)
         {
-            CsrsList CsrsList = new CsrsList();
+            var CsrsList = new ParaEntityList<ParaObjects.Csr>();
             XmlNode DocNode = xmlresp.DocumentElement;
 
 
@@ -45,7 +45,7 @@ namespace ParatureAPI.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                CsrsList.Csrs.Add(CsrFillNode(xn));
+                CsrsList.Data.Add(CsrFillNode(xn));
             }
             return CsrsList;
         }

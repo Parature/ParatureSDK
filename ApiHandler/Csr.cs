@@ -90,9 +90,9 @@ namespace ParatureAPI.ApiHandler
         /// <param name="CsrListXML">
         /// The Csr List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static CsrsList CsrsGetList(XmlDocument CsrListXML)
+        public static ParaEntityList<ParaObjects.Csr> CsrsGetList(XmlDocument CsrListXML)
         {
-            CsrsList csrsList = new CsrsList();
+            var csrsList = new ParaEntityList<ParaObjects.Csr>();
             csrsList = CsrParser.CsrsFillList(CsrListXML);
 
             csrsList.ApiCallResponse.xmlReceived = CsrListXML;
@@ -103,7 +103,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Get the list of Csrs from within your Parature license.
         /// </summary>
-        public static CsrsList CsrsGetList(ParaCredentials ParaCredentials)
+        public static ParaEntityList<ParaObjects.Csr> CsrsGetList(ParaCredentials ParaCredentials)
         {
             return CsrFillList(ParaCredentials, new ModuleQuery.CsrQuery());
         }
@@ -125,17 +125,17 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Get the list of Csrs from within your Parature license.
         /// </summary>
-        public static CsrsList CsrsGetList(ParaCredentials ParaCredentials, ModuleQuery.CsrQuery Query)
+        public static ParaEntityList<ParaObjects.Csr> CsrsGetList(ParaCredentials ParaCredentials, ModuleQuery.CsrQuery Query)
         {
             return CsrFillList(ParaCredentials, Query);
         }
         /// <summary>
         /// Fills a Sla list object.
         /// </summary>
-        private static CsrsList CsrFillList(ParaCredentials ParaCredentials, ModuleQuery.CsrQuery Query)
+        private static ParaEntityList<ParaObjects.Csr> CsrFillList(ParaCredentials ParaCredentials, ModuleQuery.CsrQuery Query)
         {
 
-            CsrsList CsrsList = new CsrsList();
+            var CsrsList = new ParaEntityList<ParaObjects.Csr>();
             ApiCallResponse ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Csr, Query.BuildQueryArguments());
             if (ar.HasException == false)
@@ -152,9 +152,9 @@ namespace ParatureAPI.ApiHandler
                 bool continueCalling = true;
                 while (continueCalling)
                 {
-                    CsrsList objectlist = new CsrsList();
+                    var objectlist = new ParaEntityList<ParaObjects.Csr>();
 
-                    if (CsrsList.TotalItems > CsrsList.Csrs.Count)
+                    if (CsrsList.TotalItems > CsrsList.Data.Count)
                     {
                         // We still need to pull data
 
@@ -165,13 +165,13 @@ namespace ParatureAPI.ApiHandler
 
                         objectlist = CsrParser.CsrsFillList(ar.xmlReceived);
 
-                        if (objectlist.Csrs.Count == 0)
+                        if (objectlist.Data.Count == 0)
                         {
                             continueCalling = false;
                         }
 
-                        CsrsList.Csrs.AddRange(objectlist.Csrs);
-                        CsrsList.ResultsReturned = CsrsList.Csrs.Count;
+                        CsrsList.Data.AddRange(objectlist.Data);
+                        CsrsList.ResultsReturned = CsrsList.Data.Count;
                         CsrsList.PageNumber = Query.PageNumber;
                     }
                     else
@@ -251,9 +251,9 @@ namespace ParatureAPI.ApiHandler
             /// <param name="CsrStatusListXML">
             /// The CsrStatus List XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static CsrStatusList CsrStatusGetList(XmlDocument CsrStatusListXML)
+            public static ParaEntityList<ParaObjects.CsrStatus> CsrStatusGetList(XmlDocument CsrStatusListXML)
             {
-                CsrStatusList CsrStatussList = new CsrStatusList();
+                var CsrStatussList = new ParaEntityList<ParaObjects.CsrStatus>();
                 CsrStatussList = CsrStatusParser.CsrStatusFillList(CsrStatusListXML);
 
                 CsrStatussList.ApiCallResponse.xmlReceived = CsrStatusListXML;
@@ -264,7 +264,7 @@ namespace ParatureAPI.ApiHandler
             /// <summary>
             /// Provides you with the capability to list statuses
             /// </summary>
-            public static CsrStatusList CsrStatusGetList(ParaCredentials ParaCredentials)
+            public static ParaEntityList<ParaObjects.CsrStatus> CsrStatusGetList(ParaCredentials ParaCredentials)
             {
                 return CsrStatusFillList(ParaCredentials);
             }
@@ -273,10 +273,10 @@ namespace ParatureAPI.ApiHandler
             /// <summary>
             /// Fills an Csr Status object.
             /// </summary>
-            private static CsrStatusList CsrStatusFillList(ParaCredentials ParaCredentials)
+            private static ParaEntityList<ParaObjects.CsrStatus> CsrStatusFillList(ParaCredentials ParaCredentials)
             {
 
-                CsrStatusList CsrStatusList = new CsrStatusList();
+                var CsrStatusList = new ParaEntityList<ParaObjects.CsrStatus>();
                 //DownloadsList = null;
                 ApiCallResponse ar = new ApiCallResponse();
                 ar = ApiCallFactory.ObjectSecondLevelGetList(ParaCredentials, ParaEnums.ParatureModule.Csr, ParaEnums.ParatureEntity.status, new ArrayList(0));
