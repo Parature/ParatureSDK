@@ -14,6 +14,13 @@ The ParatureAPI library is merely a layer over the Parature REST API, so no new 
 * Create, update, delete, or retrieve all entities
 * Classes for building complex queries
 
+## NuGet
+We are available on [NuGet](https://www.nuget.org/packages/ParatureSDK/)!
+To install using the console:
+```
+PM> Install-Package ParatureSDK
+```
+
 # Sample Usage
 Connection information is stored in an instantiated ParaCredentials object. Instantiating is easy:
 
