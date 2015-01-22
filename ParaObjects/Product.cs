@@ -94,7 +94,28 @@ namespace ParatureAPI.ParaObjects
                 field.Value = value;
             }
         }
-        public ProductFolder Folder = new ProductFolder();
+        public ProductFolder Folder
+        {
+            get
+            {
+                return GetFieldValue<ProductFolder>("Folder");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Folder");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Folder",
+                        DataType = ParaEnums.FieldDataType.Folder
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
         public bool InStock
         {
             get

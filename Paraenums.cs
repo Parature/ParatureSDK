@@ -158,7 +158,7 @@ namespace ParatureAPI
 
 
         /// <summary>
-        /// Represents the data type of the custom field returned.
+        /// Represents the data type of the field returned.
         /// </summary>
         public enum FieldDataType
         {
@@ -221,7 +221,21 @@ namespace ParatureAPI
             /// <summary>
             /// Returns this value only if it couldn't determine the type of the field. Please let us know if you encounter a field of this type.
             /// </summary>            
-            Unknown = 7
+            Unknown = 7,
+            /// <summary>
+            /// Reference to another Parature Module
+            /// </summary>
+            EntityReference = 15,
+            Role = 16,
+            Sla = 17,
+            Folder = 18,
+            Status = 19,
+            Action = 20,
+            Timezone = 21,
+            Eula = 22,
+            Department = 23,
+            Queue = 24,
+            History = 25,
         }
 
 

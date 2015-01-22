@@ -32,9 +32,73 @@ namespace ParatureAPI.ParaObjects
                 field.Value = value;
             }
         }
-        public Csr Modified_By = new Csr();
-        public Csr Owned_By = new Csr();
-        public Sla Sla = new Sla();
+
+        public Csr Modified_By
+        {
+            get
+            {
+                return GetFieldValue<Csr>("Modified_By"); 
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Modified_By");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Modified_By",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+        public Csr Owned_By
+        {
+            get
+            {
+                return GetFieldValue<Csr>("Owned_By");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Owned_By");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Owned_By",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+        public Sla Sla
+        {
+            get
+            {
+                return GetFieldValue<Sla>("Sla");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Sla");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Sla",
+                        DataType = ParaEnums.FieldDataType.Sla
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
         public DateTime Date_Created
         {
             get
@@ -79,11 +143,53 @@ namespace ParatureAPI.ParaObjects
                 field.Value = value.ToString();
             }
         }
-        public Role Default_Customer_Role = new Role();
+        public Role Default_Customer_Role
+        {
+            get
+            {
+                return GetFieldValue<Role>("Role");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Role");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Role",
+                        DataType = ParaEnums.FieldDataType.Role
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
         /// <summary>
         /// The list of all the other Viewable accounts, only available to certain configs.
         /// </summary>
-        public List<Account> Viewable_Account = new List<Account>();
+        public List<Account> Viewable_Account
+        {
+            get
+            {
+                return GetFieldValue<List<Account>>("Viewable_Account");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Viewable_Account");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Viewable_Account",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         public Account()
         {

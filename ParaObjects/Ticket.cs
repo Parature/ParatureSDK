@@ -41,46 +41,235 @@ namespace ParatureAPI.ParaObjects
         /// <summary>
         /// The product associated to a ticket. It will only be populated in certain configurations.
         /// </summary>
-        public Product Ticket_Product = new Product();
+        public Product Ticket_Product
+        {
+            get
+            {
+                return GetFieldValue<Product>("Ticket_Product");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Ticket_Product");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Ticket_Product",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The status of the ticket
         /// </summary>
-        public TicketStatus Ticket_Status = new TicketStatus();
+        public TicketStatus Ticket_Status
+        {
+            get
+            {
+                return GetFieldValue<TicketStatus>("Ticket_Status");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Ticket_Status");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Ticket_Status",
+                        DataType = ParaEnums.FieldDataType.Status
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The asset linked to the ticket. this is only populated for certain Product/Asset configurations, when the ticket is linked to an Asset.
         /// </summary>
-        public Asset Ticket_Asset = new Asset();
+        public Asset Ticket_Asset
+        {
+            get
+            {
+                return GetFieldValue<Asset>("Ticket_Asset");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Ticket_Asset");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Ticket_Asset",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
 
-        public Sla Ticket_Sla = new Sla();
+                field.Value = value;
+            }
+        }
+
+        public Sla Ticket_Sla
+        {
+            get
+            {
+                return GetFieldValue<Sla>("Ticket_Sla");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Ticket_Sla");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Ticket_Sla",
+                        DataType = ParaEnums.FieldDataType.Sla
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The department the tickets belongs to. While you specified already the department id in your
         /// credentials class, it could be that the user you are passing the Token of has access to multiple
         /// departments. In which case, the tickets that account has access to will be visible (no matter their departments).
         /// </summary>
-        public Department Department = new Department();
+        public Department Department
+        {
+            get
+            {
+                return GetFieldValue<Department>("Department");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Department");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Department",
+                        DataType = ParaEnums.FieldDataType.Department
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The customer that owns the ticket. If your only requested a standard Ticket read, only the customer id is returned withing the Customer class.
         /// </summary>
-        public Customer Ticket_Customer = new Customer();
+        public Customer Ticket_Customer
+        {
+            get
+            {
+                return GetFieldValue<Customer>("Ticket_Customer");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Ticket_Customer");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Ticket_Customer",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The additional contact associated to this ticket.
         /// </summary>
-        public Customer Additional_Contact = new Customer();
+        public Customer Additional_Contact
+        {
+            get
+            {
+                return GetFieldValue<Customer>("Additional_Contact");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Additional_Contact");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Additional_Contact",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The CSR that has entered this ticket (this class is filled only when a Ticket has been created by a CSR). Only the CSR id and Name are filled in case of a standard ticket read.
         /// </summary>
-        public Csr Entered_By = new Csr();
+        public Csr Entered_By
+        {
+            get
+            {
+                return GetFieldValue<Csr>("Entered_By");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Entered_By");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Entered_By",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The CSR that is has this ticket assigned to. This class is only filled if the ticket is assigned to a CSR (as opposed to a Queue). If the ticket is assigned to a CSR, this class will only be filled with the ID of the CSR (unless you requested an appropriate request depth.
         /// </summary>
-        public Csr Assigned_To = new Csr();
+        public Csr Assigned_To
+        {
+            get
+            {
+                return GetFieldValue<Csr>("Assigned_To");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Assigned_To");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Assigned_To",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// Whether email notification is turned on or off.
@@ -163,48 +352,237 @@ namespace ParatureAPI.ParaObjects
         /// <summary>
         /// An optional string array of CSR emails that are CCed when an email notification is sent.
         /// </summary>
-        public ArrayList Cc_Csr = new ArrayList();
+        public List<string> Cc_Csr
+        {
+            get
+            {
+                return GetFieldValue<List<string>>("Cc_Csr");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Cc_Csr");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Cc_Csr",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// An optional string array of customer emails that are CCed when an email notification is sent.
         /// </summary>
-        public ArrayList Cc_Customer = new ArrayList();
+        public List<string> Cc_Customer
+        {
+            get
+            {
+                return GetFieldValue<List<string>>("Cc_Customer");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Cc_Customer");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Cc_Customer",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The Queue that has this ticket assigned to. This class is only filled if the ticket is assigned to a Queue (as opposed to a CSR).
         /// </summary>
-        public Queue Ticket_Queue = new Queue();
+        public Queue Ticket_Queue
+        {
+            get
+            {
+                return GetFieldValue<Queue>("Ticket_Queue");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Ticket_Queue");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Ticket_Queue",
+                        DataType = ParaEnums.FieldDataType.Queue
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// Parent Ticket of this ticket. Only filled whenever there is a parent ticket. Also, only the ticket id will be filled. Please make sure
         /// </summary>
-        public Ticket Ticket_Parent;
+        public Ticket Ticket_Parent
+        {
+            get
+            {
+                return GetFieldValue<Ticket>("Ticket_Parent");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Ticket_Parent");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Ticket_Parent",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The list, if any exists, of all the child tickets. Please note that, by default, only the ticket id is filled.
         /// </summary>
-        public List<Ticket> Ticket_Children;
+        public List<Ticket> Ticket_Children
+        {
+            get
+            {
+                return GetFieldValue<List<Ticket>>("Ticket_Children");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Ticket_Children");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Ticket_Children",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The list, if any exists, of all the related chats.
         /// </summary>
-        public List<Chat> Related_Chats;
+        public List<Chat> Related_Chats
+        {
+            get
+            {
+                return GetFieldValue<List<Chat>>("Related_Chats");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Related_Chats");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Related_Chats",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The list, if any exists, of all the Attachments of this ticket.
         /// </summary>
-        public List<Attachment> Ticket_Attachments = new List<Attachment>();
+        public List<Attachment> Ticket_Attachments
+        {
+            get
+            {
+                return GetFieldValue<List<Attachment>>("Ticket_Attachments");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Ticket_Attachments");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Ticket_Attachments",
+                        DataType = ParaEnums.FieldDataType.Attachment
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The list, if any exists, of all the available actions that can be run agains this ticket.
         /// Only the id and the name of the action
         /// </summary>
-        public List<Action> Actions = new List<Action>();
+        public List<Action> Actions
+        {
+            get
+            {
+                return GetFieldValue<List<Action>>("Actions");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Actions");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Actions",
+                        DataType = ParaEnums.FieldDataType.Action
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The actions that ran on this ticket. This is only populated if you requested the ticket action history.
         /// </summary>
-        public List<ActionHistory> ActionHistory = new List<ActionHistory>();
+        public List<ActionHistory> ActionHistory
+        {
+            get
+            {
+                return GetFieldValue<List<ActionHistory>>("ActionHistory");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "ActionHistory");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "ActionHistory",
+                        DataType = ParaEnums.FieldDataType.History
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         public DateTime Date_Created
         {
@@ -345,8 +723,8 @@ namespace ParatureAPI.ParaObjects
                 Actions = new List<Action>(ticket.Actions);
                 Additional_Contact = new Customer(ticket.Additional_Contact);
                 Assigned_To = new Csr(ticket.Assigned_To);
-                Cc_Csr = new ArrayList(ticket.Cc_Csr);
-                Cc_Customer = new ArrayList(ticket.Cc_Customer);
+                Cc_Csr = ticket.Cc_Csr.ToList();
+                Cc_Customer = ticket.Cc_Customer.ToList();
                 Date_Created = ticket.Date_Created;
                 Date_Updated = ticket.Date_Updated;
                 Department = new Department(ticket.Department);

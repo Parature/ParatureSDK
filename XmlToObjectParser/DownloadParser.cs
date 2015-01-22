@@ -95,12 +95,12 @@ namespace ParatureAPI.XmlToObjectParser
                 {
                     if (child.LocalName.ToLower() == "date_created")
                     {
-                        Download.Date_Created = ParserUtils.NodeGetInnerText(child);
+                        Download.Date_Created = DateTime.Parse(ParserUtils.NodeGetInnerText(child));
                     }
 
                     if (child.LocalName.ToLower() == "date_updated")
                     {
-                        Download.Date_Updated = ParserUtils.NodeGetInnerText(child);
+                        Download.Date_Updated = DateTime.Parse(ParserUtils.NodeGetInnerText(child));
                     }
 
                     if (child.LocalName.ToLower() == "file_size")

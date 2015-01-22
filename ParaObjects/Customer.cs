@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ParatureAPI.Fields;
 
@@ -9,8 +10,50 @@ namespace ParatureAPI.ParaObjects
     /// </summary>
     public class Customer : ParaEntity
     {
-        public Account Account = new Account();
-        public Sla Sla = new Sla();
+        public Account Account
+        {
+            get
+            {
+                return GetFieldValue<Account>("Account");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Account");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Account",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+        public Sla Sla
+        {
+            get
+            {
+                return GetFieldValue<Sla>("Sla");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Sla");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Sla",
+                        DataType = ParaEnums.FieldDataType.Sla
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
         public DateTime Date_Visited
         {
             get
@@ -99,8 +142,28 @@ namespace ParatureAPI.ParaObjects
                 field.Value = value;
             }
         }
-        public Role Customer_Role = new Role();
+        public Role Customer_Role
+        {
+            get
+            {
+                return GetFieldValue<Role>("Customer_Role");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Customer_Role");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Customer_Role",
+                        DataType = ParaEnums.FieldDataType.Role
+                    };
+                    Fields.Add(field);
+                }
 
+                field.Value = value;
+            }
+        }
         /// <summary>
         /// Only used when you use "Username" as the identifier of your account.
         /// </summary>
@@ -255,7 +318,28 @@ namespace ParatureAPI.ParaObjects
         }
 
 
-        public CustomerStatus Status = new CustomerStatus();
+        public CustomerStatus Status
+        {
+            get
+            {
+                return GetFieldValue<CustomerStatus>("Status");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Status");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Status",
+                        DataType = ParaEnums.FieldDataType.Status
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         public Customer()
             : base()

@@ -106,7 +106,28 @@ namespace ParatureAPI.ParaObjects
                 field.Value = value;
             }
         }
-        public Customer Customer = new Customer();
+        public Customer Customer
+        {
+            get
+            {
+                return GetFieldValue<Customer>("Customer");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Customer");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Customer",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
         public DateTime Date_Created
         {
             get
@@ -151,7 +172,28 @@ namespace ParatureAPI.ParaObjects
                 field.Value = value.ToString();
             }
         }
-        public List<Ticket> Related_Tickets = new List<Ticket>();
+        public List<Ticket> Related_Tickets
+        {
+            get
+            {
+                return GetFieldValue<List<Ticket>>("Related_Tickets");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Related_Tickets");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Related_Tickets",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
         public string Email
         {
             get
@@ -174,8 +216,50 @@ namespace ParatureAPI.ParaObjects
                 field.Value = value;
             }
         }
-        public Csr Initial_Csr = new Csr();
-        public Role Customer_Role = new Role();
+        public Csr Initial_Csr
+        {
+            get
+            {
+                return GetFieldValue<Csr>("Initial_Csr");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Initial_Csr");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Initial_Csr",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+        public Role Customer_Role
+        {
+            get
+            {
+                return GetFieldValue<Role>("Customer_Role");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Customer_Role");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Customer_Role",
+                        DataType = ParaEnums.FieldDataType.Role
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
         public string Ip_Address
         {
             get
@@ -242,7 +326,28 @@ namespace ParatureAPI.ParaObjects
                 field.Value = value;
             }
         }
-        public Status Status = new Status();
+        public Status Status
+        {
+            get
+            {
+                return GetFieldValue<Status>("Status");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Status");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Status",
+                        DataType = ParaEnums.FieldDataType.Status
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
         public string Summary
         {
             get
@@ -309,7 +414,28 @@ namespace ParatureAPI.ParaObjects
                 field.Value = value.ToString();
             }
         }
-        public List<ChatTranscript> ChatTranscripts = new List<ChatTranscript>();
+        public List<ChatTranscript> ChatTranscripts
+        {
+            get
+            {
+                return GetFieldValue<List<ChatTranscript>>("ChatTranscripts");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "ChatTranscripts");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "ChatTranscripts",
+                        DataType = ParaEnums.FieldDataType.History
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         public Chat()
             : base()

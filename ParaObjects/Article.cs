@@ -209,23 +209,128 @@ namespace ParatureAPI.ParaObjects
                 field.Value = value.ToString();
             }
         }
-        public Csr Modified_By = new Csr();
-        public Csr Created_By = new Csr();
+        public Csr Modified_By 
+        {
+            get
+            {
+                return GetFieldValue<Csr>("Modified_By");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Modified_By");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Modified_By",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+        public Csr Created_By
+        {
+            get
+            {
+                return GetFieldValue<Csr>("Created_By");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Created_By");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Created_By",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// List of Folders under which this article is listed.
         /// </summary>
-        public List<Folder> Folders = new List<Folder>();
+        public List<Folder> Folders
+        {
+            get
+            {
+                return GetFieldValue<List<Folder>>("Folders");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Folders");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Folders",
+                        DataType = ParaEnums.FieldDataType.Folder
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// List of Sla type objects. These SLAs are the ones allowed to see this article.
         /// </summary>
-        public List<Sla> Permissions = new List<Sla>();
+        public List<Sla> Permissions
+        {
+            get
+            {
+                return GetFieldValue<List<Sla>>("Permissions");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Permissions");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Permissions",
+                        DataType = ParaEnums.FieldDataType.Sla
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// List of products that are linked to this article. In case your config uses this feature.
         /// </summary>
-        public List<Product> Products = new List<Product>();
+        public List<Product> Products
+        {
+            get
+            {
+                return GetFieldValue<List<Product>>("Products");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Products");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Products",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         public Article()
         {

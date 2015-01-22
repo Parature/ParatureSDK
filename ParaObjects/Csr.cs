@@ -7,12 +7,27 @@ namespace ParatureAPI.ParaObjects
 {
     public class Csr : ParaEntity
     {
-        private string _Full_Name = "";
-
         public string Full_Name
         {
-            get { return _Full_Name; }
-            set { _Full_Name = value; }
+            get
+            {
+                return GetFieldValue<string>("Full_Name");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Full_Name");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Full_Name",
+                        DataType = ParaEnums.FieldDataType.String
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
         }
         public string Email
         {
@@ -124,7 +139,6 @@ namespace ParatureAPI.ParaObjects
                 field.Value = value;
             }
         }
-
         /// <summary>
         /// The following strings are the valid options for Date_Format:
         /// mm/dd/yyyy | mm/dd/yy | dd/mm/yyyy | dd/mm/yy | month dd, yyyy | month dd, yy
@@ -174,8 +188,50 @@ namespace ParatureAPI.ParaObjects
                 field.Value = value;
             }
         }
-        public Timezone Timezone = new Timezone();
-        public Status Status = new Status();
+        public Timezone Timezone
+        {
+            get
+            {
+                return GetFieldValue<Timezone>("Timezone");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Timezone");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Timezone",
+                        DataType = ParaEnums.FieldDataType.Timezone
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+        public Status Status
+        {
+            get
+            {
+                return GetFieldValue<Status>("Status");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Status");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Status",
+                        DataType = ParaEnums.FieldDataType.Status
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
         public DateTime Date_Created
         {
             get
@@ -198,7 +254,28 @@ namespace ParatureAPI.ParaObjects
                 field.Value = value.ToString();
             }
         }
-        public List<Role> Role = new List<Role>();
+        public List<Role> Role
+        {
+            get
+            {
+                return GetFieldValue<List<Role>>("Role");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Role");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Role",
+                        DataType = ParaEnums.FieldDataType.Role
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         public Csr()
         {

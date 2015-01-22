@@ -10,22 +10,106 @@ namespace ParatureAPI.ParaObjects
         /// <summary>
         /// The account that owns the asset, if any.
         /// </summary>
-        public Account Account_Owner = new Account();
+        public Account Account_Owner
+        {
+            get
+            {
+                return GetFieldValue<Account>("Account_Owner");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Account_Owner");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Account_Owner",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The CSR that created the asset.
         /// </summary>
-        public Csr Created_By = new Csr();
+        public Csr Created_By
+        {
+            get
+            {
+                return GetFieldValue<Csr>("Created_By");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Created_By");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Created_By",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The customer that owns the asset, if any.
         /// </summary>
-        public Customer Customer_Owner = new Customer();
+        public Customer Customer_Owner
+        {
+            get
+            {
+                return GetFieldValue<Customer>("Customer_Owner");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Customer_Owner");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Customer_Owner",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The CSR that last modified the asset.
         /// </summary>
-        public Csr Modified_By = new Csr();
+        public Csr Modified_By
+        {
+            get
+            {
+                return GetFieldValue<Csr>("Modified_By");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Modified_By");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Modified_By",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         /// <summary>
         /// The name of the Asset.
@@ -56,7 +140,28 @@ namespace ParatureAPI.ParaObjects
         /// <summary>
         /// The product this asset is derived from.
         /// </summary>
-        public Product Product = new Product();
+        public Product Product
+        {
+            get
+            {
+                return GetFieldValue<Product>("Product");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Product");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Product",
+                        DataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         public string Serial_Number
         {
@@ -84,7 +189,28 @@ namespace ParatureAPI.ParaObjects
         /// <summary>
         /// The status of the Asset.
         /// </summary>           
-        public AssetStatus Status = new AssetStatus();
+        public AssetStatus Status
+        {
+            get
+            {
+                return GetFieldValue<AssetStatus>("Status");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Status");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Status",
+                        DataType = ParaEnums.FieldDataType.Status
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         public DateTime Date_Created
         {
@@ -136,7 +262,28 @@ namespace ParatureAPI.ParaObjects
         /// The list, if any exists, of all the available actions that can be run agains this ticket.
         /// Only the id and the name of the action
         /// </summary>
-        public List<Action> AvailableActions = new List<Action>();
+        public List<Action> AvailableActions
+        {
+            get
+            {
+                return GetFieldValue<List<Action>>("AvailableActions");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "AvailableActions");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "AvailableActions",
+                        DataType = ParaEnums.FieldDataType.Action
+                    };
+                    Fields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
 
         // No vendors for now.
         ///// <summary>
