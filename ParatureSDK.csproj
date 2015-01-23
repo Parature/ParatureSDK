@@ -113,7 +113,6 @@
     <Compile Include="ParaEnums.cs" />
     <Compile Include="ParaHelper\HelperMethods.cs" />
     <Compile Include="ParaHelper\ParaEnumProvider.cs" />
-    <Compile Include="ParaHelper\ParaThrottler.cs" />
     <Compile Include="ParaObjects\Account.cs" />
     <Compile Include="ParaObjects\Action.cs" />
     <Compile Include="ParaObjects\ActionBase.cs" />
