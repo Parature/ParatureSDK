@@ -69,11 +69,11 @@ namespace ParatureAPI
             /// 
             /// </summary>
             /// <param name="accountList"></param>
-            public void Go(AccountsList accountList)
+            public void Go(ParaEntityList<ParaObjects.Account> accountList)
             {
                 ApiCallResponse ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                AccountsList objectlist = AccountParser.AccountsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
-                accountList.Accounts.AddRange(objectlist.Accounts);
+                var objectlist = AccountParser.AccountsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
+                accountList.Data.AddRange(objectlist.Data);
                 accountList.ApiCallResponse = ar;
                 sem.Release();
             }
@@ -138,7 +138,7 @@ namespace ParatureAPI
             {
                 ApiCallResponse ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
                 ArticlesList objectlist = ArticleParser.ArticlesFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
-                articleList.Articles.AddRange(objectlist.Articles);
+                articleList.Data.AddRange(objectlist.Data);
                 articleList.ApiCallResponse = ar;
                 sem.Release();
             }

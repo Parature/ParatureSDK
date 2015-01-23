@@ -10,9 +10,9 @@ namespace ParatureAPI.XmlToObjectParser
         /// <summary>
         /// This method requires a View list xml file and returns a ViewList object. It should only by used for a List operation.
         /// </summary>
-        static internal ViewList ViewFillList(XmlDocument xmlresp)
+        static internal ParaEntityList<ParaObjects.View> ViewFillList(XmlDocument xmlresp)
         {
-            var viewList = new ViewList();
+            var viewList = new ParaEntityList<ParaObjects.View>();
             XmlNode DocNode = xmlresp.DocumentElement;
 
 
@@ -28,7 +28,7 @@ namespace ParatureAPI.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                viewList.views.Add(ViewFillNode(xn));
+                viewList.Data.Add(ViewFillNode(xn));
             }
             return viewList;
         }

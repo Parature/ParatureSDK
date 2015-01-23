@@ -100,7 +100,6 @@
     <Compile Include="Fields\DependantCustomFields.cs" />
     <Compile Include="Fields\Field.cs" />
     <Compile Include="Fields\StaticField.cs" />
-    <Compile Include="PagedData\AccountsList.cs" />
     <Compile Include="PagedData\ArticlesList.cs" />
     <Compile Include="PagedData\AssetsList.cs" />
     <Compile Include="PagedData\ChatList.cs" />
@@ -149,7 +148,6 @@
     <Compile Include="ParaObjects\TicketStatus.cs" />
     <Compile Include="ParaObjects\Timezone.cs" />
     <Compile Include="ParaObjects\View.cs" />
-    <Compile Include="ParaObjects\ViewList.cs" />
     <Compile Include="ParaQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThreadPool.cs" />

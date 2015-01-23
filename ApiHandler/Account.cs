@@ -101,7 +101,7 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list accounts, following criteria you would set
         /// by instantiating a ModuleQuery.AccountQuery object
         /// </summary>
-        public static AccountsList AccountsGetList(ParaCredentials ParaCredentials, ModuleQuery.AccountQuery Query)
+        public static ParaEntityList<ParaObjects.Account> AccountsGetList(ParaCredentials ParaCredentials, ModuleQuery.AccountQuery Query)
         {
             return AccountsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
@@ -112,9 +112,9 @@ namespace ParatureAPI.ApiHandler
         /// <param name="AccountListXML">
         /// The Account List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static AccountsList AccountsGetList(XmlDocument AccountListXML)
+        public static ParaEntityList<ParaObjects.Account> AccountsGetList(XmlDocument AccountListXML)
         {
-            AccountsList accountsList = new AccountsList();
+            var accountsList = new ParaEntityList<ParaObjects.Account>();
             accountsList = AccountParser.AccountsFillList(AccountListXML, true, 0, null);
 
             accountsList.ApiCallResponse.xmlReceived = AccountListXML;
@@ -129,7 +129,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static AccountsList AccountsGetList(ParaCredentials ParaCredentials, ModuleQuery.AccountQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Account> AccountsGetList(ParaCredentials ParaCredentials, ModuleQuery.AccountQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             return AccountsFillList(ParaCredentials, Query, RequestDepth);
         }
@@ -140,14 +140,14 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>  
-        public static AccountsList AccountsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Account> AccountsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
             return AccountsFillList(ParaCredentials, null, RequestDepth);
         }
         /// <summary>
         /// Will return the first 25 accounts returned by the APIs.
         /// </summary>            
-        public static AccountsList AccountsGetList(ParaCredentials ParaCredentials)
+        public static ParaEntityList<ParaObjects.Account> AccountsGetList(ParaCredentials ParaCredentials)
         {
             return AccountsFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
         }
@@ -172,7 +172,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Fills an account list object.
         /// </summary>
-        private static AccountsList AccountsFillList(ParaCredentials ParaCredentials, ModuleQuery.AccountQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Account> AccountsFillList(ParaCredentials ParaCredentials, ModuleQuery.AccountQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
@@ -188,14 +188,14 @@ namespace ParatureAPI.ApiHandler
                 Query.IncludeCustomField(objschem.CustomFields);
             }
             ApiCallResponse ar = new ApiCallResponse();
-            AccountsList AccountsList = new AccountsList();
+            var AccountsList = new ParaEntityList<ParaObjects.Account>();
 
             if (Query.RetrieveAllRecords && Query.OptimizePageSize)
             {
                 OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(AccountsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Account);
                 ar = rslt.apiResponse;
                 Query = (ModuleQuery.AccountQuery)rslt.Query;
-                AccountsList = ((AccountsList)rslt.objectList);
+                AccountsList = ((ParaEntityList<ParaObjects.Account>)rslt.objectList);
                 rslt = null;
             }
             else
@@ -227,12 +227,12 @@ namespace ParatureAPI.ApiHandler
                         t.Start();
                     }
 
-                    while (AccountsList.TotalItems > AccountsList.Accounts.Count)
+                    while (AccountsList.TotalItems > AccountsList.Data.Count)
                     {
                         Thread.Sleep(500);
                     }
 
-                    AccountsList.ResultsReturned = AccountsList.Accounts.Count;
+                    AccountsList.ResultsReturned = AccountsList.Data.Count;
                     AccountsList.PageNumber = callsRequired;
                 }
                 else
@@ -240,9 +240,9 @@ namespace ParatureAPI.ApiHandler
                     bool continueCalling = true;
                     while (continueCalling)
                     {
-                        AccountsList objectlist = new AccountsList();
+                        var objectlist = new ParaEntityList<ParaObjects.Account>();
 
-                        if (AccountsList.TotalItems > AccountsList.Accounts.Count)
+                        if (AccountsList.TotalItems > AccountsList.Data.Count)
                         {
                             // We still need to pull data
 
@@ -253,8 +253,8 @@ namespace ParatureAPI.ApiHandler
                             if (ar.HasException==false)
                             {
                                 objectlist = AccountParser.AccountsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
-                                AccountsList.Accounts.AddRange(objectlist.Accounts);
-                                AccountsList.ResultsReturned = AccountsList.Accounts.Count;
+                                AccountsList.Data.AddRange(objectlist.Data);
+                                AccountsList.ResultsReturned = AccountsList.Data.Count;
                                 AccountsList.PageNumber = Query.PageNumber;
                             }
                             else

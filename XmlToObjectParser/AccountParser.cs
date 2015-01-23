@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
-using ParatureAPI.ApiHandler;
 using ParatureAPI.PagedData;
 using ParatureAPI.ParaHelper;
+using ParatureAPI.ParaObjects;
+using Account = ParatureAPI.ApiHandler.Account;
 
 namespace ParatureAPI.XmlToObjectParser
 {
@@ -35,9 +36,9 @@ namespace ParatureAPI.XmlToObjectParser
         /// <summary>
         /// This methods requires an account list xml file and returns an AccountsList oject. It should only by used for a List operation.
         /// </summary>
-        static internal AccountsList AccountsFillList(XmlDocument xmlresp, Boolean MinimalisticLoad, int requestdepth, ParaCredentials ParaCredentials)
+        static internal ParaEntityList<ParaObjects.Account> AccountsFillList(XmlDocument xmlresp, Boolean MinimalisticLoad, int requestdepth, ParaCredentials ParaCredentials)
         {
-            AccountsList AccountsList = new AccountsList();
+            var AccountsList = new ParaEntityList<ParaObjects.Account>();
             XmlNode DocNode = xmlresp.DocumentElement;
 
             // Setting up the request level for all child items of an account.
@@ -61,7 +62,7 @@ namespace ParatureAPI.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                AccountsList.Accounts.Add(AccountFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
+                AccountsList.Data.Add(AccountFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
             }
             return AccountsList;
         }

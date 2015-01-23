@@ -243,12 +243,12 @@ namespace ParatureAPI.ApiHandler
                         t.Start();
                     }
 
-                    while (ArticlesList.TotalItems > ArticlesList.Articles.Count)
+                    while (ArticlesList.TotalItems > ArticlesList.Data.Count)
                     {
                         Thread.Sleep(500);
                     }
 
-                    ArticlesList.ResultsReturned = ArticlesList.Articles.Count;
+                    ArticlesList.ResultsReturned = ArticlesList.Data.Count;
                     ArticlesList.PageNumber = callsRequired;
                 }
                 else
@@ -258,7 +258,7 @@ namespace ParatureAPI.ApiHandler
                     {
                         ArticlesList objectlist = new ArticlesList();
 
-                        if (ArticlesList.TotalItems > ArticlesList.Articles.Count)
+                        if (ArticlesList.TotalItems > ArticlesList.Data.Count)
                         {
                             // We still need to pull data
 
@@ -269,8 +269,8 @@ namespace ParatureAPI.ApiHandler
                             if (ar.HasException == false)
                             {
                                 objectlist = ArticleParser.ArticlesFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
-                                ArticlesList.Articles.AddRange(objectlist.Articles);
-                                ArticlesList.ResultsReturned = ArticlesList.Articles.Count;
+                                ArticlesList.Data.AddRange(objectlist.Data);
+                                ArticlesList.ResultsReturned = ArticlesList.Data.Count;
                                 ArticlesList.PageNumber = Query.PageNumber;
                             }
                             else

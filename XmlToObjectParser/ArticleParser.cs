@@ -60,7 +60,7 @@ namespace ParatureAPI.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                ArticlesList.Articles.Add(ArticleFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
+                ArticlesList.Data.Add(ArticleFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
             }
             return ArticlesList;
         }
