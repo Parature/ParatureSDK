@@ -143,9 +143,9 @@ namespace ParatureAPI.ApiHandler
         /// <param name="ArticleListXML">
         /// The Article List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ArticlesList ArticlesGetList(XmlDocument ArticleListXML)
+        public static ParaEntityList<ParaObjects.Article> ArticlesGetList(XmlDocument ArticleListXML)
         {
-            ArticlesList articlesList = new ArticlesList();
+            var articlesList = new ParaEntityList<ParaObjects.Article>();
             articlesList = ArticleParser.ArticlesFillList(ArticleListXML, true, 0, null);
 
             articlesList.ApiCallResponse.xmlReceived = ArticleListXML;
@@ -157,7 +157,7 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Customers, following criteria you would set
         /// by instantiating a ModuleQuery.CustomerQuery object
         /// </summary>
-        public static ArticlesList ArticlesGetList(ParaCredentials ParaCredentials, ModuleQuery.ArticleQuery Query)
+        public static ParaEntityList<ParaObjects.Article> ArticlesGetList(ParaCredentials ParaCredentials, ModuleQuery.ArticleQuery Query)
         {
             return ArticlesFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
@@ -169,7 +169,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ArticlesList ArticlesGetList(ParaCredentials ParaCredentials, ModuleQuery.ArticleQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Article> ArticlesGetList(ParaCredentials ParaCredentials, ModuleQuery.ArticleQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             return ArticlesFillList(ParaCredentials, Query, RequestDepth);
         }
@@ -179,14 +179,14 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>           
-        public static ArticlesList ArticlesGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Article> ArticlesGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
             return ArticlesFillList(ParaCredentials, null, RequestDepth);
         }
         /// <summary>
         /// Returns the first 25 Articles returned by the APIs.           
         /// </summary>
-        public static ArticlesList ArticlesGetList(ParaCredentials ParaCredentials)
+        public static ParaEntityList<ParaObjects.Article> ArticlesGetList(ParaCredentials ParaCredentials)
         {
             return ArticlesFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
         }
@@ -194,7 +194,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Fills an Article list object.
         /// </summary>
-        private static ArticlesList ArticlesFillList(ParaCredentials ParaCredentials, ModuleQuery.ArticleQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Article> ArticlesFillList(ParaCredentials ParaCredentials, ModuleQuery.ArticleQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
@@ -204,14 +204,14 @@ namespace ParatureAPI.ApiHandler
 
 
             ApiCallResponse ar = new ApiCallResponse();
-            ArticlesList ArticlesList = new ArticlesList();
+            var ArticlesList = new ParaEntityList<ParaObjects.Article>();
 
             if (Query.RetrieveAllRecords && Query.OptimizePageSize)
             {
                 OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(ArticlesList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Article);
                 ar = rslt.apiResponse;
                 Query = (ModuleQuery.ArticleQuery)rslt.Query;
-                ArticlesList = ((ArticlesList)rslt.objectList);
+                ArticlesList = ((ParaEntityList<ParaObjects.Article>)rslt.objectList);
                 rslt = null;
             }
             else
@@ -256,7 +256,7 @@ namespace ParatureAPI.ApiHandler
                     bool continueCalling = true;
                     while (continueCalling)
                     {
-                        ArticlesList objectlist = new ArticlesList();
+                        var objectlist = new ParaEntityList<ParaObjects.Article>();
 
                         if (ArticlesList.TotalItems > ArticlesList.Data.Count)
                         {

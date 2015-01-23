@@ -156,9 +156,9 @@ namespace ParatureAPI.ApiHandler
         /// <param name="TicketListXML">
         /// The Ticket List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static TicketsList TicketsGetList(XmlDocument TicketListXML)
+        public static ParaEntityList<ParaObjects.Ticket> TicketsGetList(XmlDocument TicketListXML)
         {
-            TicketsList ticketsList = new TicketsList();
+            var ticketsList = new ParaEntityList<ParaObjects.Ticket>();
             ticketsList = TicketParser.TicketsFillList(TicketListXML, true, 0, null);
 
             ticketsList.ApiCallResponse.xmlReceived = TicketListXML;
@@ -172,7 +172,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static TicketsList TicketsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Ticket> TicketsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
             return TicketsFillList(ParaCredentials, null, RequestDepth);
         }
@@ -180,7 +180,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Provides you with the capability to list Tickets. This will only list the first 25 tickets returned by the Api.
         /// </summary>
-        public static TicketsList TicketsGetList(ParaCredentials ParaCredentials)
+        public static ParaEntityList<ParaObjects.Ticket> TicketsGetList(ParaCredentials ParaCredentials)
         {
             return TicketsFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
         }
@@ -189,7 +189,7 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Tickets, following criteria you would set
         /// by instantiating a ModuleQuery.CustomerQuery object
         /// </summary>
-        public static TicketsList TicketsGetList(ParaCredentials ParaCredentials, ModuleQuery.TicketQuery Query)
+        public static ParaEntityList<ParaObjects.Ticket> TicketsGetList(ParaCredentials ParaCredentials, ModuleQuery.TicketQuery Query)
         {
             return TicketsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
@@ -201,7 +201,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static TicketsList TicketsGetList(ParaCredentials ParaCredentials, ModuleQuery.TicketQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Ticket> TicketsGetList(ParaCredentials ParaCredentials, ModuleQuery.TicketQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             return TicketsFillList(ParaCredentials, Query, RequestDepth);
         }
@@ -209,7 +209,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Fills an Ticket list object.
         /// </summary>
-        private static TicketsList TicketsFillList(ParaCredentials ParaCredentials, ModuleQuery.TicketQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Ticket> TicketsFillList(ParaCredentials ParaCredentials, ModuleQuery.TicketQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
@@ -225,14 +225,14 @@ namespace ParatureAPI.ApiHandler
                 Query.IncludeCustomField(objschem.CustomFields);
             }
             ApiCallResponse ar = new ApiCallResponse();
-            TicketsList TicketsList = new TicketsList();
+            var TicketsList = new ParaEntityList<ParaObjects.Ticket>();
 
             if (Query.RetrieveAllRecords && Query.OptimizePageSize)
             {
                 OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(TicketsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Ticket);
                 ar = rslt.apiResponse;
                 Query = (ModuleQuery.TicketQuery)rslt.Query;
-                TicketsList = ((TicketsList)rslt.objectList);
+                TicketsList = ((ParaEntityList<ParaObjects.Ticket>)rslt.objectList);
                 rslt = null;
             }
             else
@@ -264,12 +264,12 @@ namespace ParatureAPI.ApiHandler
                         t.Start();
                     }
 
-                    while (TicketsList.TotalItems > TicketsList.Tickets.Count)
+                    while (TicketsList.TotalItems > TicketsList.Data.Count)
                     {
                         Thread.Sleep(500);
                     }
 
-                    TicketsList.ResultsReturned = TicketsList.Tickets.Count;
+                    TicketsList.ResultsReturned = TicketsList.Data.Count;
                     TicketsList.PageNumber = callsRequired;
                 }
                 else
@@ -277,9 +277,9 @@ namespace ParatureAPI.ApiHandler
                     bool continueCalling = true;
                     while (continueCalling)
                     {
-                        TicketsList objectlist = new TicketsList();
+                        var objectlist = new ParaEntityList<ParaObjects.Ticket>();
 
-                        if (TicketsList.TotalItems > TicketsList.Tickets.Count)
+                        if (TicketsList.TotalItems > TicketsList.Data.Count)
                         {
                             // We still need to pull data
 
@@ -293,8 +293,8 @@ namespace ParatureAPI.ApiHandler
                             {
                                 objectlist = TicketParser.TicketsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
 
-                                TicketsList.Tickets.AddRange(objectlist.Tickets);
-                                TicketsList.ResultsReturned = TicketsList.Tickets.Count;
+                                TicketsList.Data.AddRange(objectlist.Data);
+                                TicketsList.ResultsReturned = TicketsList.Data.Count;
                                 TicketsList.PageNumber = Query.PageNumber;
                             }
                             else

@@ -100,14 +100,7 @@
     <Compile Include="Fields\DependantCustomFields.cs" />
     <Compile Include="Fields\Field.cs" />
     <Compile Include="Fields\StaticField.cs" />
-    <Compile Include="PagedData\ArticlesList.cs" />
-    <Compile Include="PagedData\AssetsList.cs" />
-    <Compile Include="PagedData\ChatList.cs" />
-    <Compile Include="PagedData\CustomersList.cs" />
-    <Compile Include="PagedData\DownloadsList.cs" />
     <Compile Include="PagedData\PagedData.cs" />
-    <Compile Include="PagedData\ProductsList.cs" />
-    <Compile Include="PagedData\TicketsList.cs" />
     <Compile Include="ParaCredentials.cs" />
     <Compile Include="ParaEnums.cs" />
     <Compile Include="ParaHelper\HelperMethods.cs" />

@@ -129,7 +129,7 @@ namespace ParatureAPI.ApiHandler
         /// </param>
         public static ParaObjects.Download DownloadGetDetails(XmlDocument DownloadXML)
         {
-            ParaObjects.Download download = new ParaObjects.Download(true);
+            var download = new ParaObjects.Download(true);
             download = DownloadParser.DownloadFill(DownloadXML, 0, true, null);
             download.FullyLoaded = true;
 
@@ -146,9 +146,9 @@ namespace ParatureAPI.ApiHandler
         /// <param name="DownloadListXML">
         /// The Download List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static DownloadsList DownloadsGetList(XmlDocument DownloadListXML)
+        public static ParaEntityList<ParaObjects.Download> DownloadsGetList(XmlDocument DownloadListXML)
         {
-            DownloadsList downloadsList = new DownloadsList();
+            var downloadsList = new ParaEntityList<ParaObjects.Download>();
             downloadsList = DownloadParser.DownloadsFillList(DownloadListXML, true, 0, null);
 
             downloadsList.ApiCallResponse.xmlReceived = DownloadListXML;
@@ -160,7 +160,7 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Downloads, following criteria you would set
         /// by instantiating a ModuleQuery.DownloadQuery object
         /// </summary>
-        public static DownloadsList DownloadsGetList(ParaCredentials ParaCredentials, ModuleQuery.DownloadQuery Query)
+        public static ParaEntityList<ParaObjects.Download> DownloadsGetList(ParaCredentials ParaCredentials, ModuleQuery.DownloadQuery Query)
         {
             return DownloadsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
@@ -172,15 +172,15 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static DownloadsList DownloadsGetList(ParaCredentials ParaCredentials, ModuleQuery.DownloadQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Download> DownloadsGetList(ParaCredentials ParaCredentials, ModuleQuery.DownloadQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             return DownloadsFillList(ParaCredentials, Query, RequestDepth);
         }
         /// <summary>
         /// Returns a list of the first 25 Downloads returned by the APIs.
         /// </summary>
-        
-        public static DownloadsList DownloadsGetList(ParaCredentials ParaCredentials)
+
+        public static ParaEntityList<ParaObjects.Download> DownloadsGetList(ParaCredentials ParaCredentials)
         {
             return DownloadsFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
         }
@@ -190,8 +190,8 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        
-        public static DownloadsList DownloadsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+
+        public static ParaEntityList<ParaObjects.Download> DownloadsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
             return DownloadsFillList(ParaCredentials, null, RequestDepth);
         }
@@ -199,7 +199,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Fills a Download list object.
         /// </summary>
-        private static DownloadsList DownloadsFillList(ParaCredentials ParaCredentials, ModuleQuery.DownloadQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Download> DownloadsFillList(ParaCredentials ParaCredentials, ModuleQuery.DownloadQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
@@ -209,14 +209,14 @@ namespace ParatureAPI.ApiHandler
 
 
             ApiCallResponse ar = new ApiCallResponse();
-            DownloadsList DownloadsList = new DownloadsList();
+            var DownloadsList = new ParaEntityList<ParaObjects.Download>();
 
             if (Query.RetrieveAllRecords && Query.OptimizePageSize)
             {
                 OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(DownloadsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Download);
                 ar = rslt.apiResponse;
                 Query = (ModuleQuery.DownloadQuery)rslt.Query;
-                DownloadsList = ((DownloadsList)rslt.objectList);
+                DownloadsList = ((ParaEntityList<ParaObjects.Download>)rslt.objectList);
                 rslt = null;
             }
             else
@@ -248,12 +248,12 @@ namespace ParatureAPI.ApiHandler
                         t.Start();
                     }
 
-                    while (DownloadsList.TotalItems > DownloadsList.Downloads.Count)
+                    while (DownloadsList.TotalItems > DownloadsList.Data.Count)
                     {
                         Thread.Sleep(500);
                     }
 
-                    DownloadsList.ResultsReturned = DownloadsList.Downloads.Count;
+                    DownloadsList.ResultsReturned = DownloadsList.Data.Count;
                     DownloadsList.PageNumber = callsRequired;
                 }
                 else
@@ -261,9 +261,9 @@ namespace ParatureAPI.ApiHandler
                     bool continueCalling = true;
                     while (continueCalling)
                     {
-                        DownloadsList objectlist = new DownloadsList();
+                        var objectlist = new ParaEntityList<ParaObjects.Download>();
 
-                        if (DownloadsList.TotalItems > DownloadsList.Downloads.Count)
+                        if (DownloadsList.TotalItems > DownloadsList.Data.Count)
                         {
                             // We still need to pull data
 
@@ -275,8 +275,8 @@ namespace ParatureAPI.ApiHandler
                             if (ar.HasException == false)
                             {
                                 objectlist = DownloadParser.DownloadsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
-                                DownloadsList.Downloads.AddRange(objectlist.Downloads);
-                                DownloadsList.ResultsReturned = DownloadsList.Downloads.Count;
+                                DownloadsList.Data.AddRange(objectlist.Data);
+                                DownloadsList.ResultsReturned = DownloadsList.Data.Count;
                                 DownloadsList.PageNumber = Query.PageNumber;
                             }
                             else

@@ -35,9 +35,9 @@ namespace ParatureAPI.XmlToObjectParser
         /// <summary>
         /// This methods requires a Ticket list xml file and returns a TicketsList oject. It should only by used for a List operation.
         /// </summary>
-        static internal TicketsList TicketsFillList(XmlDocument xmlresp, Boolean MinimalisticLoad, int requestdepth, ParaCredentials ParaCredentials)
+        static internal ParaEntityList<ParaObjects.Ticket> TicketsFillList(XmlDocument xmlresp, Boolean MinimalisticLoad, int requestdepth, ParaCredentials ParaCredentials)
         {
-            TicketsList TicketsList = new TicketsList();
+            var TicketsList = new ParaEntityList<ParaObjects.Ticket>();
             XmlNode DocNode = xmlresp.DocumentElement;
 
             int childDepth = 0;
@@ -59,7 +59,7 @@ namespace ParatureAPI.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                TicketsList.Tickets.Add(TicketFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
+                TicketsList.Data.Add(TicketFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
             }
             return TicketsList;
         }

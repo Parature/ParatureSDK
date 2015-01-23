@@ -33,9 +33,9 @@ namespace ParatureAPI.XmlToObjectParser
         /// <summary>
         /// This methods requires a Article list xml file and returns a ArticlesList oject. It should only by used for a List operation.
         /// </summary>
-        static internal ArticlesList ArticlesFillList(XmlDocument xmlresp, Boolean MinimalisticLoad, int requestdepth, ParaCredentials ParaCredentials)
+        static internal ParaEntityList<ParaObjects.Article> ArticlesFillList(XmlDocument xmlresp, Boolean MinimalisticLoad, int requestdepth, ParaCredentials ParaCredentials)
         {
-            ArticlesList ArticlesList = new ArticlesList();
+            var ArticlesList = new ParaEntityList<ParaObjects.Article>();
             XmlNode DocNode = xmlresp.DocumentElement;
 
             // Setting up the request level for all child items of a Download.

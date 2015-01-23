@@ -59,19 +59,19 @@ namespace ParatureAPI.ApiHandler
         }
 
 
-        public static ChatList ChatGetList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ModuleQuery.ChatQuery Query)
+        public static ParaEntityList<ParaObjects.Chat> ChatGetList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ModuleQuery.ChatQuery Query)
         {
             return ChatFillList(ParaCredentials, IncludeTranscripts, Query, ParaEnums.RequestDepth.Standard);
         }
 
 
-        public static ChatList ChatGetList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, Boolean IncludeHistory)
+        public static ParaEntityList<ParaObjects.Chat> ChatGetList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, Boolean IncludeHistory)
         {
             return ChatFillList(ParaCredentials, IncludeTranscripts, null, ParaEnums.RequestDepth.Standard);
         }
 
 
-        private static ChatList ChatFillList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ModuleQuery.ChatQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Chat> ChatFillList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ModuleQuery.ChatQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
@@ -86,14 +86,14 @@ namespace ParatureAPI.ApiHandler
                 Query.IncludeCustomField(objschem.CustomFields);
             }
             ApiCallResponse ar = new ApiCallResponse();
-            ChatList ChatList = new ChatList();
+            var ChatList = new ParaEntityList<ParaObjects.Chat>();
 
             if (Query.RetrieveAllRecords && Query.OptimizePageSize)
             {
                 OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(ChatList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Customer);
                 ar = rslt.apiResponse;
                 Query = (ModuleQuery.ChatQuery)rslt.Query;
-                ChatList = ((ChatList)rslt.objectList);
+                ChatList = ((ParaEntityList<ParaObjects.Chat>)rslt.objectList);
                 rslt = null;
             }
             else
@@ -125,12 +125,12 @@ namespace ParatureAPI.ApiHandler
                         t.Start();
                     }
 
-                    while (ChatList.TotalItems > ChatList.chats.Count)
+                    while (ChatList.TotalItems > ChatList.Data.Count)
                     {
                         Thread.Sleep(500);
                     }
 
-                    ChatList.ResultsReturned = ChatList.chats.Count;
+                    ChatList.ResultsReturned = ChatList.Data.Count;
                     ChatList.PageNumber = callsRequired;
                 }
                 else
@@ -139,7 +139,7 @@ namespace ParatureAPI.ApiHandler
                     while (continueCalling)
                     {
 
-                        if (ChatList.TotalItems > ChatList.chats.Count)
+                        if (ChatList.TotalItems > ChatList.Data.Count)
                         {
                             // We still need to pull data
 
@@ -149,8 +149,8 @@ namespace ParatureAPI.ApiHandler
                             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments());
                             if (ar.HasException == false)
                             {
-                                ChatList.chats.AddRange(ChatParser.ChatsFillList(ar.xmlReceived, Query.MinimalisticLoad, IncludeTranscripts, requestdepth, ParaCredentials).chats);
-                                ChatList.ResultsReturned = ChatList.chats.Count;
+                                ChatList.Data.AddRange(ChatParser.ChatsFillList(ar.xmlReceived, Query.MinimalisticLoad, IncludeTranscripts, requestdepth, ParaCredentials).Data);
+                                ChatList.ResultsReturned = ChatList.Data.Count;
                                 ChatList.PageNumber = Query.PageNumber;
                             }
                             else

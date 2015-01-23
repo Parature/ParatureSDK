@@ -35,9 +35,9 @@ namespace ParatureAPI.XmlToObjectParser
         /// <summary>
         /// This methods requires a Product list xml file and returns a ProductsList oject. It should only by used for a List operation.
         /// </summary>
-        static internal ProductsList ProductsFillList(XmlDocument xmlresp, Boolean MinimalisticLoad, int requestdepth, ParaCredentials ParaCredentials)
+        static internal ParaEntityList<ParaObjects.Product> ProductsFillList(XmlDocument xmlresp, Boolean MinimalisticLoad, int requestdepth, ParaCredentials ParaCredentials)
         {
-            ProductsList ProductsList = new ProductsList();
+            var ProductsList = new ParaEntityList<ParaObjects.Product>();
             XmlNode DocNode = xmlresp.DocumentElement;
 
             // Setting up the request level for all child items of an account.
@@ -59,7 +59,7 @@ namespace ParatureAPI.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                ProductsList.Products.Add(ProductFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
+                ProductsList.Data.Add(ProductFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
             }
             return ProductsList;
         }
@@ -70,7 +70,7 @@ namespace ParatureAPI.XmlToObjectParser
         static internal ParaObjects.Product ProductFillNode(XmlNode Node, int childDepth, bool MinimalisticLoad, ParaCredentials ParaCredentials)
         {
 
-            ParaObjects.Product Product = new ParaObjects.Product();
+            var Product = new ParaObjects.Product();
             bool isSchema = false;
 
             if (Node.Attributes["id"] != null)

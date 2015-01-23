@@ -149,9 +149,9 @@ namespace ParatureAPI.ApiHandler
         /// <param name="AssetsListXML">
         /// The Asset List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static AssetsList AssetsGetList(XmlDocument AssetsListXML)
+        public static ParaEntityList<ParaObjects.Asset> AssetsGetList(XmlDocument AssetsListXML)
         {
-            AssetsList assetsList = new AssetsList();
+            var assetsList = new ParaEntityList<ParaObjects.Asset>();
             assetsList = AssetParser.AssetsFillList(AssetsListXML, true, 0, null);
 
             assetsList.ApiCallResponse.xmlReceived = AssetsListXML;
@@ -163,7 +163,7 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Assets, following criteria you would set
         /// by instantiating a ModuleQuery.AssetQuery object
         /// </summary>
-        public static AssetsList AssetsGetList(ParaCredentials ParaCredentials, ModuleQuery.AssetQuery Query)
+        public static ParaEntityList<ParaObjects.Asset> AssetsGetList(ParaCredentials ParaCredentials, ModuleQuery.AssetQuery Query)
         {
             return AssetsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
@@ -174,14 +174,14 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static AssetsList AssetsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Asset> AssetsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
             return AssetsFillList(ParaCredentials, null, RequestDepth);
         }
         /// <summary>
         /// Gets the first 25 assets returned by the API.
         /// </summary>            
-        public static AssetsList AssetsGetList(ParaCredentials ParaCredentials)
+        public static ParaEntityList<ParaObjects.Asset> AssetsGetList(ParaCredentials ParaCredentials)
         {
             return AssetsFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
         }
@@ -192,7 +192,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static AssetsList AssetsGetList(ParaCredentials ParaCredentials, ModuleQuery.AssetQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Asset> AssetsGetList(ParaCredentials ParaCredentials, ModuleQuery.AssetQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             return AssetsFillList(ParaCredentials, Query, RequestDepth);
         }
@@ -200,7 +200,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Fills an Asset list object.
         /// </summary>
-        private static AssetsList AssetsFillList(ParaCredentials ParaCredentials, ModuleQuery.AssetQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Asset> AssetsFillList(ParaCredentials ParaCredentials, ModuleQuery.AssetQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
@@ -216,14 +216,14 @@ namespace ParatureAPI.ApiHandler
             }
 
             ApiCallResponse ar = new ApiCallResponse();
-            AssetsList AssetsList = new AssetsList();
+            var AssetsList = new ParaEntityList<ParaObjects.Asset>();
 
             if (Query.RetrieveAllRecords && Query.OptimizePageSize)
             {
                 OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(AssetsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Asset);
                 ar = rslt.apiResponse;
                 Query = (ModuleQuery.AssetQuery)rslt.Query;
-                AssetsList = ((AssetsList)rslt.objectList);
+                AssetsList = ((ParaEntityList<ParaObjects.Asset>)rslt.objectList);
                 rslt = null;
             }
             else
@@ -255,12 +255,12 @@ namespace ParatureAPI.ApiHandler
                         t.Start();
                     }
 
-                    while (AssetsList.TotalItems > AssetsList.Assets.Count)
+                    while (AssetsList.TotalItems > AssetsList.Data.Count)
                     {
                         Thread.Sleep(500);
                     }
 
-                    AssetsList.ResultsReturned = AssetsList.Assets.Count;
+                    AssetsList.ResultsReturned = AssetsList.Data.Count;
                     AssetsList.PageNumber = callsRequired;
                 }
                 else
@@ -268,9 +268,9 @@ namespace ParatureAPI.ApiHandler
                     bool continueCalling = true;
                     while (continueCalling)
                     {
-                        AssetsList objectlist = new AssetsList();
+                        var objectlist = new ParaEntityList<ParaObjects.Asset>();
 
-                        if (AssetsList.TotalItems > AssetsList.Assets.Count)
+                        if (AssetsList.TotalItems > AssetsList.Data.Count)
                         {
                             // We still need to pull data
 
@@ -282,8 +282,8 @@ namespace ParatureAPI.ApiHandler
                             if (ar.HasException == false)
                             {
                                 objectlist = AssetParser.AssetsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
-                                AssetsList.Assets.AddRange(objectlist.Assets);
-                                AssetsList.ResultsReturned = AssetsList.Assets.Count;
+                                AssetsList.Data.AddRange(objectlist.Data);
+                                AssetsList.ResultsReturned = AssetsList.Data.Count;
                                 AssetsList.PageNumber = Query.PageNumber;
                             }
                             else

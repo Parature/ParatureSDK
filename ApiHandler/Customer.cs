@@ -142,7 +142,7 @@ namespace ParatureAPI.ApiHandler
         /// </param>
         public static ParaObjects.Customer CustomerGetDetails(XmlDocument CustomerXML)
         {
-            ParaObjects.Customer customer = new ParaObjects.Customer();
+            var customer = new ParaObjects.Customer();
             customer = CustomerParser.CustomerFill(CustomerXML, 0, true, null);
             customer.FullyLoaded = true;
 
@@ -159,9 +159,9 @@ namespace ParatureAPI.ApiHandler
         /// <param name="CustomerListXML">
         /// The Customer List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static CustomersList CustomersGetList(XmlDocument CustomerListXML)
+        public static ParaEntityList<ParaObjects.Customer> CustomersGetList(XmlDocument CustomerListXML)
         {
-            CustomersList customersList = new CustomersList();
+            var customersList = new ParaEntityList<ParaObjects.Customer>();
             customersList = CustomerParser.CustomersFillList(CustomerListXML, true, 0, null);
 
             customersList.ApiCallResponse.xmlReceived = CustomerListXML;
@@ -173,7 +173,7 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Customers, following criteria you would set
         /// by instantiating a ModuleQuery.CustomerQuery object
         /// </summary>
-        public static CustomersList CustomersGetList(ParaCredentials ParaCredentials, ModuleQuery.CustomerQuery Query)
+        public static ParaEntityList<ParaObjects.Customer> CustomersGetList(ParaCredentials ParaCredentials, ModuleQuery.CustomerQuery Query)
         {
             return CustomersFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
@@ -185,7 +185,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static CustomersList CustomersGetList(ParaCredentials ParaCredentials, ModuleQuery.CustomerQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Customer> CustomersGetList(ParaCredentials ParaCredentials, ModuleQuery.CustomerQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             return CustomersFillList(ParaCredentials, Query, RequestDepth);
         }
@@ -196,7 +196,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>            
-        public static CustomersList CustomersGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Customer> CustomersGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
             return CustomersFillList(ParaCredentials, null, RequestDepth);
         }
@@ -204,7 +204,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Returns the list of the first 25 customers returned by the API.
         /// </summary>
-        public static CustomersList CustomersGetList(ParaCredentials ParaCredentials)
+        public static ParaEntityList<ParaObjects.Customer> CustomersGetList(ParaCredentials ParaCredentials)
         {
             return CustomersFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
         }
@@ -212,7 +212,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Fills an Customer list object.
         /// </summary>
-        private static CustomersList CustomersFillList(ParaCredentials ParaCredentials, ModuleQuery.CustomerQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Customer> CustomersFillList(ParaCredentials ParaCredentials, ModuleQuery.CustomerQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
@@ -227,14 +227,14 @@ namespace ParatureAPI.ApiHandler
                 Query.IncludeCustomField(objschem.CustomFields);
             }
             ApiCallResponse ar = new ApiCallResponse();
-            CustomersList CustomersList = new CustomersList();
+            var CustomersList = new ParaEntityList<ParaObjects.Customer>();
 
             if (Query.RetrieveAllRecords && Query.OptimizePageSize)
             {
                 OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(CustomersList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Customer);
                 ar = rslt.apiResponse;
                 Query = (ModuleQuery.CustomerQuery)rslt.Query;
-                CustomersList = ((CustomersList)rslt.objectList);
+                CustomersList = ((ParaEntityList<ParaObjects.Customer>)rslt.objectList);
                 rslt = null;
             }
             else
@@ -266,12 +266,12 @@ namespace ParatureAPI.ApiHandler
                         t.Start();
                     }
 
-                    while (CustomersList.TotalItems > CustomersList.Customers.Count)
+                    while (CustomersList.TotalItems > CustomersList.Data.Count)
                     {
                         Thread.Sleep(500);
                     }
 
-                    CustomersList.ResultsReturned = CustomersList.Customers.Count;
+                    CustomersList.ResultsReturned = CustomersList.Data.Count;
                     CustomersList.PageNumber = callsRequired;
                 }
                 else
@@ -280,7 +280,7 @@ namespace ParatureAPI.ApiHandler
                     while (continueCalling)
                     {
 
-                        if (CustomersList.TotalItems > CustomersList.Customers.Count)
+                        if (CustomersList.TotalItems > CustomersList.Data.Count)
                         {
                             // We still need to pull data
 
@@ -290,8 +290,8 @@ namespace ParatureAPI.ApiHandler
                             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments());
                             if (ar.HasException == false)
                             {
-                                CustomersList.Customers.AddRange(CustomerParser.CustomersFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials).Customers);
-                                CustomersList.ResultsReturned = CustomersList.Customers.Count;
+                                CustomersList.Data.AddRange(CustomerParser.CustomersFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials).Data);
+                                CustomersList.ResultsReturned = CustomersList.Data.Count;
                                 CustomersList.PageNumber = Query.PageNumber;
                             }
                             else

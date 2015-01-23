@@ -34,9 +34,9 @@ namespace ParatureAPI.XmlToObjectParser
         /// <summary>
         /// This methods requires a Chat list xml file and returns a ChatsList oject. It should only by used for a List operation.
         /// </summary>
-        static internal ChatList ChatsFillList(XmlDocument xmlresp, Boolean MinimalisticLoad, bool includeTranscripts, int requestdepth, ParaCredentials ParaCredentials)
+        static internal ParaEntityList<ParaObjects.Chat> ChatsFillList(XmlDocument xmlresp, Boolean MinimalisticLoad, bool includeTranscripts, int requestdepth, ParaCredentials ParaCredentials)
         {
-            ChatList ChatsList = new ChatList();
+            var ChatsList = new ParaEntityList<ParaObjects.Chat>();
             XmlNode DocNode = xmlresp.DocumentElement;
 
             // Setting up the request level for all child items of an account.
@@ -65,7 +65,7 @@ namespace ParatureAPI.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                ChatsList.chats.Add(ChatFillNode(xn, MinimalisticLoad, childDepth, includeTranscripts, ParaCredentials));
+                ChatsList.Data.Add(ChatFillNode(xn, MinimalisticLoad, childDepth, includeTranscripts, ParaCredentials));
             }
             return ChatsList;
         }

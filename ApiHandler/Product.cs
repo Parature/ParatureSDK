@@ -149,9 +149,9 @@ namespace ParatureAPI.ApiHandler
         /// <param name="ProductListXML">
         /// The Product List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ProductsList ProductsGetList(XmlDocument ProductListXML)
+        public static ParaEntityList<ParaObjects.Product> ProductsGetList(XmlDocument ProductListXML)
         {
-            ProductsList productsList = new ProductsList();
+            var productsList = new ParaEntityList<ParaObjects.Product>();
             productsList = ProductParser.ProductsFillList(ProductListXML, true, 0, null);
 
             productsList.ApiCallResponse.xmlReceived = ProductListXML;
@@ -163,7 +163,7 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Products, following criteria you would set
         /// by instantiating a ModuleQuery.ProductQuery object
         /// </summary>
-        public static ProductsList ProductsGetList(ParaCredentials ParaCredentials, ModuleQuery.ProductQuery Query)
+        public static ParaEntityList<ParaObjects.Product> ProductsGetList(ParaCredentials ParaCredentials, ModuleQuery.ProductQuery Query)
         {
             return ProductsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
@@ -175,7 +175,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ProductsList ProductsGetList(ParaCredentials ParaCredentials, ModuleQuery.ProductQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Product> ProductsGetList(ParaCredentials ParaCredentials, ModuleQuery.ProductQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             return ProductsFillList(ParaCredentials, Query, RequestDepth);
         }
@@ -186,7 +186,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>            
-        public static ProductsList ProductsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Product> ProductsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
             return ProductsFillList(ParaCredentials, null, RequestDepth);
         }
@@ -194,7 +194,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Returns the list of the first 25 Products returned by the API.
         /// </summary>
-        public static ProductsList ProductsGetList(ParaCredentials ParaCredentials)
+        public static ParaEntityList<ParaObjects.Product> ProductsGetList(ParaCredentials ParaCredentials)
         {
             return ProductsFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
         }
@@ -202,7 +202,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Fills an Customer list object.
         /// </summary>
-        private static ProductsList ProductsFillList(ParaCredentials ParaCredentials, ModuleQuery.ProductQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Product> ProductsFillList(ParaCredentials ParaCredentials, ModuleQuery.ProductQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
@@ -218,14 +218,14 @@ namespace ParatureAPI.ApiHandler
             }
 
             ApiCallResponse ar = new ApiCallResponse();
-            ProductsList ProductsList = new ProductsList();
+            var ProductsList = new ParaEntityList<ParaObjects.Product>();
 
             if (Query.RetrieveAllRecords && Query.OptimizePageSize)
             {
                 OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(ProductsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Product);
                 ar = rslt.apiResponse;
                 Query = (ModuleQuery.ProductQuery)rslt.Query;
-                ProductsList = ((ProductsList)rslt.objectList);
+                ProductsList = ((ParaEntityList<ParaObjects.Product>)rslt.objectList);
                 rslt = null;
             }
             else
@@ -257,12 +257,12 @@ namespace ParatureAPI.ApiHandler
                         t.Start();
                     }
 
-                    while (ProductsList.TotalItems > ProductsList.Products.Count)
+                    while (ProductsList.TotalItems > ProductsList.Data.Count)
                     {
                         Thread.Sleep(500);
                     }
 
-                    ProductsList.ResultsReturned = ProductsList.Products.Count;
+                    ProductsList.ResultsReturned = ProductsList.Data.Count;
                     ProductsList.PageNumber = callsRequired;
                 }
                 else
@@ -270,9 +270,9 @@ namespace ParatureAPI.ApiHandler
                     bool continueCalling = true;
                     while (continueCalling)
                     {
-                        ProductsList objectlist = new ProductsList();
+                        var objectlist = new ParaEntityList<ParaObjects.Product>();
 
-                        if (ProductsList.TotalItems > ProductsList.Products.Count)
+                        if (ProductsList.TotalItems > ProductsList.Data.Count)
                         {
                             // We still need to pull data
 
@@ -284,8 +284,8 @@ namespace ParatureAPI.ApiHandler
                             if (ar.HasException == false)
                             {
                                 objectlist = ProductParser.ProductsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
-                                ProductsList.Products.AddRange(objectlist.Products);
-                                ProductsList.ResultsReturned = ProductsList.Products.Count;
+                                ProductsList.Data.AddRange(objectlist.Data);
+                                ProductsList.ResultsReturned = ProductsList.Data.Count;
                                 ProductsList.PageNumber = Query.PageNumber;
                             }
                             else
@@ -312,9 +312,9 @@ namespace ParatureAPI.ApiHandler
         private static ParaObjects.Product ProductFillDetails(Int64 Productid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
         {
             int requestdepth = (int)RequestDepth;
-            ParaObjects.Product Product = new ParaObjects.Product();
+            var Product = new ParaObjects.Product();
             //Product = null;
-            ApiCallResponse ar = new ApiCallResponse();
+            var ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Product, Productid);
             if (ar.HasException == false)
             {
