@@ -144,8 +144,8 @@ namespace ParatureAPI.XmlToObjectParser
                     {
                         Download.MultipleFolders = false;
                         DownloadFolder folder = new DownloadFolder();
-                        folder.FolderID = Int64.Parse(child.Attributes["id"].Value);
-                        folder.Name = child.InnerText.ToString();
+                        folder.FolderID = Int64.Parse(child.FirstChild.Attributes["id"].Value);
+                        folder.Name = child.FirstChild.InnerText.ToString();
                         Download.Folders.Add(folder);
                     }
 
