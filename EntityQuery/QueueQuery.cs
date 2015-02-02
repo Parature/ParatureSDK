@@ -1,8 +1,8 @@
 namespace ParatureAPI.EntityQuery
 {
-    public partial class QueueQuery : ParaQuery
+    public class QueueQuery : ParaQuery
     {
-        protected override void buildModuleSpecificFilter()
+        protected override void BuildModuleSpecificFilter()
         {
 
         }

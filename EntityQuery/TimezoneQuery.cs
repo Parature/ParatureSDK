@@ -1,8 +1,8 @@
 namespace ParatureAPI.EntityQuery
 {
-    public partial class TimezoneQuery : ParaQuery
+    public class TimezoneQuery : ParaQuery
     {
-        protected override void buildModuleSpecificFilter()
+        protected override void BuildModuleSpecificFilter()
         {
             PageSize = 250;
         }

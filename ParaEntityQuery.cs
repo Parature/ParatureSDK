@@ -1,150 +1,136 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using ParatureAPI.Fields;
 
 namespace ParatureAPI
 {
-    public abstract class ParaQueryModuleWithCustomField : ParaQuery
+    public abstract class ParaEntityQuery : ParaQuery
     {
-
-
         /// <summary>
         /// If you set this property to "True", ParaConnect will perform a schema call, determine the custom fields, then will make a call including all the of the objects custom fields.
         /// Caution: do not use the "IncludeCustomField" methods if you are setting this one to true, as the "IncludeCustomField" methods will be ignored.
         /// </summary>        
-        public bool IncludeAllCustomFields
+        public bool IncludeAllCustomFields { get; set; }
+
+        public ParaEntityQuery()
         {
-            get { return _includeAllCustomFields; }
-            set
-            {
-                _includeAllCustomFields = value;
-            }
+            IncludeAllCustomFields = false;
         }
-        private bool _includeAllCustomFields = false;
 
         /// <summary>
         /// Adds a custom field based filter to the query. Use this method for Custom Fields that are date based. 
         /// </summary>
-        /// <param name="CustomFieldID">
+        /// <param name="customFieldId">
         /// The id of the custom field you would like to filter your query on.
         /// </param>
-        /// <param name="Criteria">
+        /// <param name="criteria">
         /// The criteria you would like to apply to this custom field
         /// </param>
         /// <param name="value">
         /// The Date you would like to base your filter off.
         /// </param>        
-        public void AddCustomFieldFilter(Int64 CustomFieldID, ParaEnums.QueryCriteria Criteria, DateTime value)
+        public void AddCustomFieldFilter(Int64 customFieldId, ParaEnums.QueryCriteria criteria, DateTime value)
         {
-            QueryFilterAdd("FID" + CustomFieldID.ToString(), Criteria, value.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            QueryFilterAdd("FID" + customFieldId.ToString(), criteria, value.ToString("yyyy-MM-ddTHH:mm:ssZ"));
         }
 
         /// <summary>
         /// Adds a custom field based filter to the query. Use this method for Custom Fields that are NOT multi values. 
         /// </summary>
-        /// <param name="CustomFieldID">
+        /// <param name="customFieldId">
         /// The id of the custom field you would like to filter your query on.
         /// </param>
-        /// <param name="Criteria">
+        /// <param name="criteria">
         /// The criteria you would like to apply to this custom field
         /// </param>
         /// <param name="value">
         /// The value you would like the custom field to have, for this filter.
         /// </param>
-        public void AddCustomFieldFilter(Int64 CustomFieldID, ParaEnums.QueryCriteria Criteria, string value)
-        {
-            //QueryFilterAdd("FID" + CustomFieldID, Criteria, HttpUtility.UrlEncode(value));          
-            QueryFilterAdd("FID" + CustomFieldID, Criteria, ProcessEncoding(value));
+        public void AddCustomFieldFilter(Int64 customFieldId, ParaEnums.QueryCriteria criteria, string value)
+        {        
+            QueryFilterAdd("FID" + customFieldId, criteria, ProcessEncoding(value));
         }
 
         /// <summary>
         /// Adds a custom field based filter to the query. Use this method for Custom Fields that are NOT multi values. 
         /// </summary>
-        /// <param name="CustomFieldID">
+        /// <param name="customFieldId">
         /// The id of the custom field you would like to filter your query on.
         /// </param>
-        /// <param name="Criteria">
+        /// <param name="criteria">
         /// The criteria you would like to apply to this custom field
         /// </param>
         /// <param name="value">
         /// The value you would like the custom field to have, for this filter.
         /// </param>
-        public void AddCustomFieldFilter(Int64 CustomFieldID, ParaEnums.QueryCriteria Criteria, bool value)
+        public void AddCustomFieldFilter(Int64 customFieldId, ParaEnums.QueryCriteria criteria, bool value)
         {
-            string filter = "0";
-            if (value)
-            {
-                filter = "1";
-            }
-            else
-            {
-                filter = "0";
-            }
-            QueryFilterAdd("FID" + CustomFieldID, Criteria, filter);
+            var filter = value 
+                ? "1" 
+                : "0";
+            QueryFilterAdd("FID" + customFieldId, criteria, filter);
         }
 
         /// <summary>
         /// Adds a custom field based filter to the query. Use this method for Custom Fields that are multi values (dropdown, radio buttons, etc). 
         /// </summary>
-        /// <param name="CustomFieldID">
+        /// <param name="customFieldId">
         /// The id of the multi value custom field you would like to filter your query on.
         /// </param>
-        /// <param name="Criteria">
+        /// <param name="criteria">
         /// The criteria you would like to apply to this custom field
         /// </param>
-        /// <param name="CustomFieldOptionID">
+        /// <param name="customFieldOptionId">
         /// The list of all custom field options (for the customFieldID you specified) that need to be selected for an item to qualify to be returned when you run your query.
         /// </param>
-        public void AddCustomFieldFilter(Int64 CustomFieldID, ParaEnums.QueryCriteria Criteria, Int64[] CustomFieldOptionID)
+        public void AddCustomFieldFilter(Int64 customFieldId, ParaEnums.QueryCriteria criteria, Int64[] customFieldOptionId)
         {
-            if (CustomFieldOptionID.Length > 0)
+            if (customFieldOptionId.Length <= 0) return;
+
+            var filtering = "";
+
+            for (var i = 0; i < customFieldOptionId.Length; i++)
             {
-                int i = 0;
-                string filtering = "";
-                string separator = "";
-
-                for (i = 0; i < CustomFieldOptionID.Length; i++)
+                var separator = ",";
+                if (i == 0)
                 {
-                    separator = ",";
-                    if (i == 0)
+                    if (customFieldOptionId.Length > 1)
                     {
-                        if (CustomFieldOptionID.Length > 1)
-                        {
-                            separator = "";
-                        }
+                        separator = "";
                     }
-                    filtering = filtering + separator + CustomFieldOptionID[i].ToString();
                 }
-
-                QueryFilterAdd("FID" + CustomFieldID, Criteria, filtering);
+                filtering = filtering + separator + customFieldOptionId[i].ToString();
             }
+
+            QueryFilterAdd("FID" + customFieldId, criteria, filtering);
         }
 
         /// <summary>
         /// Adds a custom field based filter to the query. Use this method for Custom Fields that are multi values (dropdown, radio buttons, etc).
         /// </summary>
-        /// <param name="CustomFieldID">
+        /// <param name="customFieldId">
         /// The id of the multi value custom field you would like to filter your query on.
         /// </param>
-        /// <param name="Criteria">
+        /// <param name="criteria">
         /// The criteria you would like to apply to this custom field
         /// </param>
-        /// <param name="CustomFieldOptionID">
+        /// <param name="customFieldOptionId">
         /// The custom field option (for the customFieldID you specified) that need to be selected for an item to qualify to be returned when you run your query.
         /// </param>
-        public void AddCustomFieldFilter(Int64 CustomFieldID, ParaEnums.QueryCriteria Criteria, Int64 CustomFieldOptionID)
+        public void AddCustomFieldFilter(Int64 customFieldId, ParaEnums.QueryCriteria criteria, Int64 customFieldOptionId)
         {
-            QueryFilterAdd("FID" + CustomFieldID, Criteria, CustomFieldOptionID.ToString());
+            QueryFilterAdd("FID" + customFieldId, criteria, customFieldOptionId.ToString());
         }
 
         /// <summary>
         /// Add a custom field to the query returned returned 
         /// </summary>
-        public void IncludeCustomField(Int64 CustomFieldid)
+        public void IncludeCustomField(Int64 customFieldid)
         {
-            IncludedFieldsCheckAndDeleteRecord(CustomFieldid.ToString());
-            _IncludedFields.Add(CustomFieldid.ToString());
+            IncludedFieldsCheckAndDeleteRecord(customFieldid.ToString());
+            _IncludedFields.Add(customFieldid.ToString());
         }
 
         /// <summary>
@@ -152,9 +138,9 @@ namespace ParatureAPI
         /// to the api call. These custom fields will be returned with the objects receiveds from the APIs.
         /// This is very useful if you have a schema objects and would like to query with all custom fields returned.
         /// </summary>
-        public void IncludeCustomField(IEnumerable<CustomField> CustomFields)
+        public void IncludeCustomField(IEnumerable<CustomField> customFields)
         {
-            foreach (var cf in CustomFields)
+            foreach (var cf in customFields)
             {
                 IncludeCustomField(cf.Id);
             }
@@ -168,7 +154,6 @@ namespace ParatureAPI
         {
             ArrayCheckAndDeleteRecord(_IncludedFields, nameValue);
         }
-
 
         /// <summary>
         /// Provides the string array of all dynamic filtering and fields to include that will be further processed
@@ -185,7 +170,6 @@ namespace ParatureAPI
             BuildParaQueryArguments();
 
             return _QueryFilters;
-
         }
 
         /// <summary>
@@ -193,63 +177,49 @@ namespace ParatureAPI
         /// </summary>
         private void BuildCustomFieldQueryArguments()
         {
-            bool dontAdd = false;
-            if (TotalOnly == false)
+            var dontAdd = false;
+            IncludeAllCustomFields = false;
+
+            if (TotalOnly == true
+                || _IncludedFields == null
+                || _IncludedFields.Count <= 0)
             {
-
-                //Reset the query filters.
-
-                if (_IncludedFields != null)
-                {
-                    if (_IncludedFields.Count > 0)
-                    {
-                        string fieldsList = "_fields_=";
-                        for (int j = 0; j < _IncludedFields.Count; j++)
-                        {
-                            if (j > 0)
-                            {
-                                fieldsList = fieldsList + ",";
-                            }
-                            fieldsList = fieldsList + _IncludedFields[j].ToString();
-
-                        }
-
-
-                        for (int i = 0; i < _QueryFilters.Count; i++)
-                        {
-                            if (_QueryFilters[i].ToString() == fieldsList)
-                            {
-                                dontAdd = true;
-                                break;
-                            }
-                        }
-
-                        if (!dontAdd)
-                        {
-                            _QueryFilters.Add(fieldsList);
-                        }
-                    }
-                }
-
-
+                return;
             }
-            else
+
+            var fieldsList = "_fields_=";
+            for (var j = 0; j < _IncludedFields.Count; j++)
             {
-                IncludeAllCustomFields = false;
+                if (j > 0)
+                {
+                    fieldsList = fieldsList + ",";
+                }
+                fieldsList = fieldsList + _IncludedFields[j].ToString();
+            }
+
+
+            if (_QueryFilters.Cast<object>().Any(t => t.ToString() == fieldsList))
+            {
+                dontAdd = true;
+            }
+
+            if (dontAdd == false)
+            {
+                _QueryFilters.Add(fieldsList);
             }
         }
-
 
 
         /// <summary>
         /// Add a sort order to the Query, based on a custom field.
         /// </summary>
-        /// <param name="CustomfieldId">The id of the custom field you would like to filter upon.</param>       
-        public bool AddSortOrder(Int64 CustomfieldId, ParaEnums.QuerySortBy SortDirection)
+        /// <param name="customFieldId">The id of the custom field you would like to filter upon.</param>
+        /// <param name="sortDirection"></param>       
+        public bool AddSortOrder(Int64 customFieldId, ParaEnums.QuerySortBy sortDirection)
         {
             if (_SortByFields.Count < 5)
             {
-                _SortByFields.Add("FID" + CustomfieldId.ToString() + "_" + SortDirection.ToString().ToLower() + "_");
+                _SortByFields.Add("FID" + customFieldId.ToString() + "_" + sortDirection.ToString().ToLower() + "_");
                 return true;
             }
             else
@@ -257,7 +227,5 @@ namespace ParatureAPI
                 return false;
             }
         }
-
-
     }
 }

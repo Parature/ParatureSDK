@@ -1,15 +1,15 @@
 namespace ParatureAPI.EntityQuery
 {
-    public partial class ProductFolderQuery : ParaQuery
+    public class ProductFolderQuery : ParaQuery
     {
-        protected override void buildModuleSpecificFilter()
+        protected override void BuildModuleSpecificFilter()
         {
 
         }
         /// <summary>
         /// Contains all the static properties you will need when filtering by static fields.
         /// </summary>
-        public static partial class ProductFolderStaticFields
+        public static class ProductFolderStaticFields
         {
             /// <summary>
             /// Use this property to filter by the Date Modified property of the ProductFolder.

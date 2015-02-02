@@ -1,8 +1,8 @@
 namespace ParatureAPI.EntityQuery
 {
-    public partial class CsrStatusQuery : ParaQuery
+    public class CsrStatusQuery : ParaQuery
     {
-        protected override void buildModuleSpecificFilter()
+        protected override void BuildModuleSpecificFilter()
         {
             PageSize = 250;
         }

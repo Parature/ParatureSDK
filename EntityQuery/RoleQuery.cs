@@ -1,8 +1,8 @@
 namespace ParatureAPI.EntityQuery
 {
-    public partial class RoleQuery : ParaQuery
+    public class RoleQuery : ParaQuery
     {
-        protected override void buildModuleSpecificFilter()
+        protected override void BuildModuleSpecificFilter()
         {
             PageSize = 250;
         }

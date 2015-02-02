@@ -1,8 +1,8 @@
 namespace ParatureAPI.EntityQuery
 {
-    public partial class TicketStatusQuery : ParaQuery
+    public class TicketStatusQuery : ParaQuery
     {
-        protected override void buildModuleSpecificFilter()
+        protected override void BuildModuleSpecificFilter()
         {
             PageSize = 250;
         }

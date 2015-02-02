@@ -7,7 +7,7 @@ namespace ParatureAPI.ModuleQuery
     /// The properties include the number of items per page, the page number, what custom fields to include in the list,
     /// as well as any filtering you need to do.
     /// </summary>
-    public partial class CustomerQuery : ParaQueryModuleWithCustomField
+    public partial class CustomerQuery : ParaEntityQuery
     {
 
         private Int64 _view = 0;
@@ -24,7 +24,7 @@ namespace ParatureAPI.ModuleQuery
             }
         }
 
-        protected override void buildModuleSpecificFilter()
+        protected override void BuildModuleSpecificFilter()
         {
             // Checking if this is a view request.
             if (View > 0)

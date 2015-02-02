@@ -7,7 +7,7 @@ namespace ParatureAPI.ModuleQuery
     /// </summary>
     public partial class ArticleQuery : ParaQuery
     {
-        protected override void buildModuleSpecificFilter()
+        protected override void BuildModuleSpecificFilter()
         {
 
         }

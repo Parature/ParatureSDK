@@ -7,7 +7,7 @@ namespace ParatureAPI.ModuleQuery
     /// The properties include the number of items per page, the page number, what custom fields to include in the list,
     /// as well as any filtering you need to do.
     /// </summary>
-    public partial class TicketQuery : ParaQueryModuleWithCustomField
+    public partial class TicketQuery : ParaEntityQuery
     {
         // Status Type to filter tickets by.
         private ParaEnums.TicketStatusType _status_Type = ParaEnums.TicketStatusType.All;
@@ -55,7 +55,7 @@ namespace ParatureAPI.ModuleQuery
             }
         }
 
-        protected override void buildModuleSpecificFilter()
+        protected override void BuildModuleSpecificFilter()
         {
 
             // need to filter if requesting by status type

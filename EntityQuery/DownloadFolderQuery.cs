@@ -1,15 +1,14 @@
 namespace ParatureAPI.EntityQuery
 {
-    public partial class DownloadFolderQuery : ParaQuery
+    public class DownloadFolderQuery : ParaQuery
     {
-        protected override void buildModuleSpecificFilter()
-        {
+        protected override void BuildModuleSpecificFilter()
+        {}
 
-        }
         /// <summary>
         /// Contains all the static properties you will need when filtering by static fields.
         /// </summary>
-        public static partial class DownloadFolderStaticFields
+        public static class DownloadFolderStaticFields
         {
             /// <summary>
             /// Use this property to filter by the Date Modified property of the DownloadFolder.

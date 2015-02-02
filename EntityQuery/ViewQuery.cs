@@ -1,10 +1,8 @@
 namespace ParatureAPI.EntityQuery
 {
-    public partial class ViewQuery : ParaQuery
+    public class ViewQuery : ParaQuery
     {
-        protected override void buildModuleSpecificFilter()
-        {
-
-        }
+        protected override void BuildModuleSpecificFilter()
+        { }
     }
 }

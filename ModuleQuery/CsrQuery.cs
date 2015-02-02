@@ -2,7 +2,7 @@ namespace ParatureAPI.ModuleQuery
 {
     public partial class CsrQuery : ParaQuery
     {
-        protected override void buildModuleSpecificFilter()
+        protected override void BuildModuleSpecificFilter()
         {
 
         }

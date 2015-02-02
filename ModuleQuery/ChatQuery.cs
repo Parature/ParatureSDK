@@ -5,9 +5,9 @@ namespace ParatureAPI.ModuleQuery
     /// The properties include the number of items per page, the page number, what custom fields to include in the list,
     /// as well as any filtering you need to do.
     /// </summary>
-    public partial class ChatQuery : ParaQueryModuleWithCustomField
+    public partial class ChatQuery : ParaEntityQuery
     {
-        protected override void buildModuleSpecificFilter()
+        protected override void BuildModuleSpecificFilter()
         {
             // Lloyd  2703484446
             // Art 8597790481
