@@ -9,19 +9,15 @@ namespace ParatureAPI.ModuleQuery
     /// </summary>
     public class AccountQuery : ParaEntityQuery
     {
-        private Int64 _view = 0;
+        public AccountQuery()
+        {
+            View = 0;
+        }
 
         /// <summary>
         /// The ID of the view
         /// </summary>
-        public Int64 View
-        {
-            get { return _view; }
-            set
-            {
-                _view = value;
-            }
-        }
+        public long View { get; set; }
 
         protected override void BuildModuleSpecificFilter()
         {
