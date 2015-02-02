@@ -5,16 +5,15 @@ namespace ParatureAPI.ModuleQuery
     /// The properties include the number of items per page, the page number, what custom fields to include in the list,
     /// as well as any filtering you need to do.
     /// </summary>
-    public partial class ProductQuery : ParaEntityQuery
+    public class ProductQuery : ParaEntityQuery
     {
         protected override void BuildModuleSpecificFilter()
-        {
+        {}
 
-        }
         /// <summary>
         /// Contains all the static properties you will need when filtering by static fields.
         /// </summary>
-        public static partial class ProductStaticFields
+        public static class ProductStaticFields
         {
             public readonly static string Name = "Name";
             public readonly static string Date_Created = "Date_Created";

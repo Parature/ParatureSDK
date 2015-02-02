@@ -1,13 +1,11 @@
 namespace ParatureAPI.ModuleQuery
 {
-    public partial class CsrQuery : ParaQuery
+    public class CsrQuery : ParaQuery
     {
         protected override void BuildModuleSpecificFilter()
-        {
+        { }
 
-        }
-
-        public static partial class CsrStaticFields
+        public static class CsrStaticFields
         {
             /// <summary>
             /// Use this property to filter by the date created property of an Article.

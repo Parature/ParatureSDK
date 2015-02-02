@@ -7,7 +7,7 @@ namespace ParatureAPI.ModuleQuery
     /// The properties include the number of items per page, the page number, what custom fields to include in the list,
     /// as well as any filtering you need to do.
     /// </summary>
-    public partial class AccountQuery : ParaEntityQuery
+    public class AccountQuery : ParaEntityQuery
     {
         private Int64 _view = 0;
 
@@ -36,7 +36,7 @@ namespace ParatureAPI.ModuleQuery
         /// <summary>
         /// Contains all the static properties you will need when filtering by static fields.
         /// </summary>
-        public static partial class AccountStaticFields
+        public static class AccountStaticFields
         {
             public readonly static string Accountname = "Account_Name";
 

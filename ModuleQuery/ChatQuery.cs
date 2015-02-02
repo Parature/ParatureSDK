@@ -5,18 +5,15 @@ namespace ParatureAPI.ModuleQuery
     /// The properties include the number of items per page, the page number, what custom fields to include in the list,
     /// as well as any filtering you need to do.
     /// </summary>
-    public partial class ChatQuery : ParaEntityQuery
+    public class ChatQuery : ParaEntityQuery
     {
         protected override void BuildModuleSpecificFilter()
-        {
-            // Lloyd  2703484446
-            // Art 8597790481
-            // 
-        }
+        { }
+
         /// <summary>
         /// Contains all the static properties you will need when filtering by static fields.
         /// </summary>
-        public static partial class ChatStaticFields
+        public static class ChatStaticFields
         {
             /// <summary>
             /// Use this property to filter by the date created property of an Article.

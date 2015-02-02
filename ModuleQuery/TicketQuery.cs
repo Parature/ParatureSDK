@@ -7,10 +7,10 @@ namespace ParatureAPI.ModuleQuery
     /// The properties include the number of items per page, the page number, what custom fields to include in the list,
     /// as well as any filtering you need to do.
     /// </summary>
-    public partial class TicketQuery : ParaEntityQuery
+    public class TicketQuery : ParaEntityQuery
     {
         // Status Type to filter tickets by.
-        private ParaEnums.TicketStatusType _status_Type = ParaEnums.TicketStatusType.All;
+        private ParaEnums.TicketStatusType _statusType = ParaEnums.TicketStatusType.All;
 
         /// <summary>
         /// If there is any need to limit the ticket returned to a certain status type. Default is 
@@ -18,42 +18,28 @@ namespace ParatureAPI.ModuleQuery
         /// </summary>
         public ParaEnums.TicketStatusType Status_Type
         {
-            get { return _status_Type; }
+            get { return _statusType; }
             set
             {
-                _status_Type = value;
+                _statusType = value;
             }
         }
-
-
-        private Boolean _myTickets = false;
 
         /// <summary>
         /// Whether to show only tickets assigned to the CSR associated with the token you are using or not.
         /// </summary>
-        public Boolean MyTickets
+        public bool MyTickets { get; set; }
+
+        public TicketQuery()
         {
-            get { return _myTickets; }
-            set
-            {
-                _myTickets = value;
-            }
+            View = 0;
+            MyTickets = false;
         }
-
-
-        private Int64 _view = 0;
 
         /// <summary>
         /// The ID of the view
         /// </summary>
-        public Int64 View
-        {
-            get { return _view; }
-            set
-            {
-                _view = value;
-            }
-        }
+        public long View { get; set; }
 
         protected override void BuildModuleSpecificFilter()
         {
@@ -79,7 +65,7 @@ namespace ParatureAPI.ModuleQuery
         /// <summary>
         /// Contains all the static properties you will need when filtering by static fields.
         /// </summary>
-        public static partial class TicketStaticFields
+        public static class TicketStaticFields
         {
             /// <summary>
             /// Use this property to filter by the date created property of a ticket.
@@ -180,7 +166,6 @@ namespace ParatureAPI.ModuleQuery
             /// Tickets associated to a specific Asset
             /// </summary>
             public readonly static string Asset = "Ticket_Product_id_";
-
         }
     }
 }

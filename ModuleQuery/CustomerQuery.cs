@@ -7,22 +7,17 @@ namespace ParatureAPI.ModuleQuery
     /// The properties include the number of items per page, the page number, what custom fields to include in the list,
     /// as well as any filtering you need to do.
     /// </summary>
-    public partial class CustomerQuery : ParaEntityQuery
+    public class CustomerQuery : ParaEntityQuery
     {
-
-        private Int64 _view = 0;
+        public CustomerQuery()
+        {
+            View = 0;
+        }
 
         /// <summary>
         /// The ID of the view
         /// </summary>
-        public Int64 View
-        {
-            get { return _view; }
-            set
-            {
-                _view = value;
-            }
-        }
+        public long View { get; set; }
 
         protected override void BuildModuleSpecificFilter()
         {
@@ -36,7 +31,7 @@ namespace ParatureAPI.ModuleQuery
         /// <summary>
         /// Contains all the static properties you will need when filtering by static fields.
         /// </summary>
-        public static partial class CustomerStaticFields
+        public static class CustomerStaticFields
         {
             /// <summary>
             /// Use this property to filter by the date created property of a customer.
@@ -106,8 +101,5 @@ namespace ParatureAPI.ModuleQuery
             public readonly static string AcceptUseOfTerm = "";
 
         }
-
-
-
     }
 }
