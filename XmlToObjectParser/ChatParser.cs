@@ -132,7 +132,7 @@ namespace ParatureAPI.XmlToObjectParser
                         chat.Customer = CustomerParser.CustomerFillNode(child.ChildNodes[0], childDepth, true, ParaCredentials);
                         if (childDepth > 0)
                         {
-                            chat.Customer = ApiHandler.Customer.CustomerGetDetails(chat.Customer.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
+                            chat.Customer = ApiHandler.Customer.GetDetails(chat.Customer.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
                         }
                         chat.Customer.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);
                     }

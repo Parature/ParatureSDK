@@ -17,7 +17,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Provides the Schema of the download module.
         /// </summary>
-        public static ParaObjects.Download DownloadSchema(ParaCredentials ParaCredentials)
+        public static ParaObjects.Download Schema(ParaCredentials ParaCredentials)
         {
             ParaObjects.Download Download = new ParaObjects.Download(true);
             ApiCallResponse ar = new ApiCallResponse();
@@ -42,7 +42,7 @@ namespace ParatureAPI.ApiHandler
         /// If purge is set to true, the Download will be permanently deleted. Otherwise, it will just be 
         /// moved to the trash bin, so it will still be able to be restored from the service desk.
         ///</param>
-        public static ApiCallResponse DownloadDelete(Int64 Downloadid, ParaCredentials ParaCredentials, bool purge)
+        public static ApiCallResponse Delete(Int64 Downloadid, ParaCredentials ParaCredentials, bool purge)
         {
             return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Download, Downloadid, purge);
         }
@@ -50,7 +50,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Creates a Parature Download. Requires an Object and a credentials object. Will return the Newly Created Downloadid. Returns 0 if the Customer creation fails.
         /// </summary>
-        public static ApiCallResponse DownloadInsert(ParaObjects.Download Download, ParaCredentials ParaCredentials)
+        public static ApiCallResponse Insert(ParaObjects.Download Download, ParaCredentials ParaCredentials)
         {
             ApiCallResponse ar = new ApiCallResponse();
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
@@ -64,7 +64,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Updates a Parature Download. Requires an Object and a credentials object.  Will return the updated Downloadid. Returns 0 if the Customer update operation fails.
         /// </summary>
-        public static ApiCallResponse DownloadUpdate(ParaObjects.Download Download, ParaCredentials ParaCredentials)
+        public static ApiCallResponse Update(ParaObjects.Download Download, ParaCredentials ParaCredentials)
         {
             ApiCallResponse ar = new ApiCallResponse();
 
@@ -88,9 +88,9 @@ namespace ParatureAPI.ApiHandler
         /// <param name="RequestDepth">
         /// For a simple Download request, please put 0. <br/>When Requesting a Download, there might be related objects linked to that Download: such as Products, etc. <br/>With a regular Download detail call, generally only the ID and names of the second level objects are loaded. 
         /// </param>
-        public static ParaObjects.Download DownloadGetDetails(Int64 Downloadid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaObjects.Download GetDetails(Int64 Downloadid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
-            return DownloadFillDetails(Downloadid, ParaCredentials, RequestDepth, true);
+            return FillDetails(Downloadid, ParaCredentials, RequestDepth, true);
         }
 
         /// <summary>
@@ -103,9 +103,9 @@ namespace ParatureAPI.ApiHandler
         /// <param name="ParaCredentials">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
-        public static ParaObjects.Download DownloadGetDetails(Int64 Downloadid, ParaCredentials ParaCredentials)
+        public static ParaObjects.Download GetDetails(Int64 Downloadid, ParaCredentials ParaCredentials)
         {
-            return DownloadFillDetails(Downloadid, ParaCredentials, ParaEnums.RequestDepth.Standard, true);
+            return FillDetails(Downloadid, ParaCredentials, ParaEnums.RequestDepth.Standard, true);
         }
 
         internal static Attachment DownloadUploadFile(ParaCredentials ParaCredentials, string text, string contentType, string FileName)
@@ -129,7 +129,7 @@ namespace ParatureAPI.ApiHandler
         /// <param name="DownloadXML">
         /// The Download XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaObjects.Download DownloadGetDetails(XmlDocument DownloadXML)
+        public static ParaObjects.Download GetDetails(XmlDocument DownloadXML)
         {
             var download = new ParaObjects.Download(true);
             download = DownloadParser.DownloadFill(DownloadXML, 0, true, null);
@@ -148,7 +148,7 @@ namespace ParatureAPI.ApiHandler
         /// <param name="DownloadListXML">
         /// The Download List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaEntityList<ParaObjects.Download> DownloadsGetList(XmlDocument DownloadListXML)
+        public static ParaEntityList<ParaObjects.Download> GetList(XmlDocument DownloadListXML)
         {
             var downloadsList = new ParaEntityList<ParaObjects.Download>();
             downloadsList = DownloadParser.DownloadsFillList(DownloadListXML, true, 0, null);
@@ -162,9 +162,9 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Downloads, following criteria you would set
         /// by instantiating a ModuleQuery.DownloadQuery object
         /// </summary>
-        public static ParaEntityList<ParaObjects.Download> DownloadsGetList(ParaCredentials ParaCredentials, DownloadQuery Query)
+        public static ParaEntityList<ParaObjects.Download> GetList(ParaCredentials ParaCredentials, DownloadQuery Query)
         {
-            return DownloadsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
+            return FillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
 
         /// <summary>
@@ -174,17 +174,17 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Download> DownloadsGetList(ParaCredentials ParaCredentials, DownloadQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Download> GetList(ParaCredentials ParaCredentials, DownloadQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
-            return DownloadsFillList(ParaCredentials, Query, RequestDepth);
+            return FillList(ParaCredentials, Query, RequestDepth);
         }
         /// <summary>
         /// Returns a list of the first 25 Downloads returned by the APIs.
         /// </summary>
 
-        public static ParaEntityList<ParaObjects.Download> DownloadsGetList(ParaCredentials ParaCredentials)
+        public static ParaEntityList<ParaObjects.Download> GetList(ParaCredentials ParaCredentials)
         {
-            return DownloadsFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
+            return FillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
         }
         /// <summary>
         /// Returns a list of the first 25 Downloads returned by the APIs.
@@ -193,15 +193,15 @@ namespace ParatureAPI.ApiHandler
         /// the standard field depth.
         /// </summary>
 
-        public static ParaEntityList<ParaObjects.Download> DownloadsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Download> GetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
-            return DownloadsFillList(ParaCredentials, null, RequestDepth);
+            return FillList(ParaCredentials, null, RequestDepth);
         }
 
         /// <summary>
         /// Fills a Download list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Download> DownloadsFillList(ParaCredentials ParaCredentials, DownloadQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Download> FillList(ParaCredentials ParaCredentials, DownloadQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
@@ -301,7 +301,7 @@ namespace ParatureAPI.ApiHandler
             return DownloadsList;
         }
 
-        private static ParaObjects.Download DownloadFillDetails(Int64 Downloadid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
+        private static ParaObjects.Download FillDetails(Int64 Downloadid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
         {
             int requestdepth = (int)RequestDepth;
             ParaObjects.Download Download = new ParaObjects.Download(true);
@@ -345,7 +345,7 @@ namespace ParatureAPI.ApiHandler
                 DownloadFolderQuery dfQuery = new DownloadFolderQuery();
                 dfQuery.PageSize = 5000;
                 var Folders = new ParaEntityList<ParaObjects.DownloadFolder>();
-                Folders = DownloadFoldersGetList(paracredentials, dfQuery);
+                Folders = GetList(paracredentials, dfQuery);
                 foreach (ParaObjects.DownloadFolder folder in Folders.Data)
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
@@ -377,7 +377,7 @@ namespace ParatureAPI.ApiHandler
                 dfQuery.AddStaticFieldFilter(DownloadFolderQuery.DownloadFolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, ParentFolderId.ToString());
                 dfQuery.PageSize = 5000;
                 var Folders = new ParaEntityList<ParaObjects.DownloadFolder>();
-                Folders = DownloadFoldersGetList(paracredentials, dfQuery);
+                Folders = GetList(paracredentials, dfQuery);
                 foreach (ParaObjects.DownloadFolder folder in Folders.Data)
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
@@ -427,10 +427,10 @@ namespace ParatureAPI.ApiHandler
             /// <param name="RequestDepth">
             /// For a simple Download request, please put 0. <br/>When Requesting a Download, there might be related objects linked to that Download: such as Products, etc. <br/>With a regular Download detail call, generally only the ID and names of the second level objects are loaded. 
             /// </param>
-            public static ParaObjects.DownloadFolder DownloadFolderGetDetails(Int64 DownloadFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+            public static ParaObjects.DownloadFolder GetDetails(Int64 DownloadFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 ParaObjects.DownloadFolder DownloadFolder = new ParaObjects.DownloadFolder();
-                DownloadFolder = DownloadFolderFillDetails(DownloadFolderid, ParaCredentials, RequestDepth);
+                DownloadFolder = FillDetails(DownloadFolderid, ParaCredentials, RequestDepth);
 
                 return DownloadFolder;
 
@@ -441,9 +441,9 @@ namespace ParatureAPI.ApiHandler
             /// Provides you with the capability to list Downloads, following criteria you would set
             /// by instantiating a ModuleQuery.DownloadQuery object
             /// </summary>
-            public static ParaEntityList<ParaObjects.DownloadFolder> DownloadFoldersGetList(ParaCredentials ParaCredentials, DownloadFolderQuery Query)
+            public static ParaEntityList<ParaObjects.DownloadFolder> GetList(ParaCredentials ParaCredentials, DownloadFolderQuery Query)
             {
-                return DownloadFoldersFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
+                return FillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
@@ -453,15 +453,15 @@ namespace ParatureAPI.ApiHandler
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ParaEntityList<ParaObjects.DownloadFolder> DownloadFoldersGetList(ParaCredentials ParaCredentials, DownloadFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            public static ParaEntityList<ParaObjects.DownloadFolder> GetList(ParaCredentials ParaCredentials, DownloadFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
-                return DownloadFoldersFillList(ParaCredentials, Query, RequestDepth);
+                return FillList(ParaCredentials, Query, RequestDepth);
             }
 
             /// <summary>
             /// Fills an Download list object.
             /// </summary>
-            private static ParaEntityList<ParaObjects.DownloadFolder> DownloadFoldersFillList(ParaCredentials ParaCredentials, DownloadFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            private static ParaEntityList<ParaObjects.DownloadFolder> FillList(ParaCredentials ParaCredentials, DownloadFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 var DownloadFoldersList = new ParaEntityList<ParaObjects.DownloadFolder>();
@@ -516,7 +516,7 @@ namespace ParatureAPI.ApiHandler
                 return DownloadFoldersList;
             }
 
-            static ParaObjects.DownloadFolder DownloadFolderFillDetails(Int64 DownloadFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+            static ParaObjects.DownloadFolder FillDetails(Int64 DownloadFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 ParaObjects.DownloadFolder DownloadFolder = new ParaObjects.DownloadFolder();
@@ -544,7 +544,7 @@ namespace ParatureAPI.ApiHandler
             /// <param name="DownloadFolderXML">
             /// The DownloadFolder XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ParaObjects.DownloadFolder DownloadFolderGetDetails(XmlDocument DownloadFolderXML)
+            public static ParaObjects.DownloadFolder GetDetails(XmlDocument DownloadFolderXML)
             {
                 ParaObjects.DownloadFolder downloadFolder = new ParaObjects.DownloadFolder();
                 downloadFolder = DownloadParser.DownloadFolderParser.DownloadFolderFill(DownloadFolderXML, 0, null);
@@ -562,7 +562,7 @@ namespace ParatureAPI.ApiHandler
             /// <param name="DownloadFolderListXML">
             /// The DownloadFolder List XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ParaEntityList<ParaObjects.DownloadFolder> DownloadFoldersGetList(XmlDocument DownloadFolderListXML)
+            public static ParaEntityList<ParaObjects.DownloadFolder> GetList(XmlDocument DownloadFolderListXML)
             {
                 var downloadFoldersList = new ParaEntityList<ParaObjects.DownloadFolder>();
                 downloadFoldersList = DownloadParser.DownloadFolderParser.DownloadFoldersFillList(DownloadFolderListXML, 0, null);
@@ -572,11 +572,11 @@ namespace ParatureAPI.ApiHandler
                 return downloadFoldersList;
             }
 
-            public static ParaObjects.DownloadFolder DownloadFolderGetDetails(Int64 DownloadFolderid, ParaCredentials ParaCredentials)
+            public static ParaObjects.DownloadFolder GetDetails(Int64 DownloadFolderid, ParaCredentials ParaCredentials)
             {
 
                 ParaObjects.DownloadFolder DownloadFolder = new ParaObjects.DownloadFolder();
-                DownloadFolder = DownloadFolderFillDetails(DownloadFolderid, ParaCredentials, ParaEnums.RequestDepth.Standard);
+                DownloadFolder = FillDetails(DownloadFolderid, ParaCredentials, ParaEnums.RequestDepth.Standard);
 
                 return DownloadFolder;
             }

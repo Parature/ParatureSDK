@@ -18,18 +18,17 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Provides the Schema of the Ticket module.
         /// </summary>
-        public static ParaObjects.Ticket TicketSchema(ParaCredentials ParaCredentials)
+        public static ParaObjects.Ticket Schema(ParaCredentials pc)
         {
-            ParaObjects.Ticket Ticket = new ParaObjects.Ticket();
-            ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Ticket);
+            var ticket = new ParaObjects.Ticket();
+            var ar = ApiCallFactory.ObjectGetSchema(pc, ParaEnums.ParatureModule.Ticket);
 
             if (ar.HasException == false)
             {
-                Ticket = TicketParser.TicketFill(ar.xmlReceived, 0, false, ParaCredentials);
+                ticket = TicketParser.TicketFill(ar.xmlReceived, 0, false, pc);
             }
-            Ticket.ApiCallResponse = ar;
-            return Ticket;
+            ticket.ApiCallResponse = ar;
+            return ticket;
         }
 
         /// <summary>
@@ -37,11 +36,11 @@ namespace ParatureAPI.ApiHandler
         /// record in order to determine if any of the custom fields have special validation rules (e.g. email, phone, url)
         /// and set the "dataType" of the custom field accordingly.
         /// </summary> 
-        static public ParaObjects.Ticket TicketSchemaWithCustomFieldTypes(ParaCredentials ParaCredentials)
+        static public ParaObjects.Ticket SchemaWithCustomFieldTypes(ParaCredentials pc)
         {
-            ParaObjects.Ticket Ticket = TicketSchema(ParaCredentials);
+            ParaObjects.Ticket Ticket = Schema(pc);
 
-            Ticket = (ParaObjects.Ticket)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, ParaEnums.ParatureModule.Ticket, Ticket);
+            Ticket = (ParaObjects.Ticket)ApiCallFactory.ObjectCheckCustomFieldTypes(pc, ParaEnums.ParatureModule.Ticket, Ticket);
 
             return Ticket;
         }
@@ -49,102 +48,102 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Creates a Parature Ticket. Requires an Object and a credentials object. Will return the Newly Created Customerid. Returns 0 if the Customer creation fails.
         /// </summary>
-        public static ApiCallResponse TicketInsert(ParaObjects.Ticket Ticket, ParaCredentials ParaCredentials)
+        public static ApiCallResponse Insert(ParaObjects.Ticket ticket, ParaCredentials pc)
         {
             ApiCallResponse ar = new ApiCallResponse();
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-            doc = XmlGenerator.TicketGenerateXml(Ticket);
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Ticket, doc, 0);
-            Ticket.Id = ar.Objectid;
-            Ticket.uniqueIdentifier = ar.Objectid;
+            doc = XmlGenerator.TicketGenerateXml(ticket);
+            ar = ApiCallFactory.ObjectCreateUpdate(pc, ParaEnums.ParatureModule.Ticket, doc, 0);
+            ticket.Id = ar.Objectid;
+            ticket.uniqueIdentifier = ar.Objectid;
             return ar;
         }
 
         /// <summary>
-        /// Updates a Parature Ticket. Requires an Object and a credentials object.  Will return the updated Ticketid. Returns 0 if the Customer update operation failed.
+        /// Updates a Parature Ticket. Requires an Object and a credentials object.  Will return the updated ticketId. Returns 0 if the Customer update operation failed.
         /// </summary>
-        public static ApiCallResponse TicketUpdate(ParaObjects.Ticket Ticket, ParaCredentials ParaCredentials)
+        public static ApiCallResponse Update(ParaObjects.Ticket ticket, ParaCredentials pc)
         {
             ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Ticket, XmlGenerator.TicketGenerateXml(Ticket), Ticket.Id);
+            ar = ApiCallFactory.ObjectCreateUpdate(pc, ParaEnums.ParatureModule.Ticket, XmlGenerator.TicketGenerateXml(ticket), ticket.Id);
             return ar;
         }
 
         /// <summary>
         /// Provides the capability to delete a Ticket.
         /// </summary>
-        /// <param name="Ticketid">
+        /// <param name="ticketId">
         /// The id of the Ticket to delete
         /// </param>
         /// <param name="purge">
         /// If purge is set to true, the ticket will be permanently deleted. Otherwise, it will just be 
         /// moved to the trash bin, so it will still be able to be restored from the service desk.
         ///</param>
-        public static ApiCallResponse TicketDelete(Int64 Ticketid, ParaCredentials ParaCredentials, bool purge)
+        public static ApiCallResponse Delete(Int64 ticketId, ParaCredentials pc, bool purge)
         {
-            return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Ticket, Ticketid, purge);
+            return ApiCallFactory.ObjectDelete(pc, ParaEnums.ParatureModule.Ticket, ticketId, purge);
         }
 
         /// <summary>
         /// Returns a Ticket object with all the properties of an customer.
         /// </summary>
-        /// <param name="TicketNumber">
+        /// <param name="ticketNumber">
         ///The Ticket number that you would like to get the details of. 
         ///Value Type: <see cref="Int64" />   (System.Int64)
         ///</param>
-        /// <param name="IncludeHistory">
+        /// <param name="includeHistory">
         /// Indicates whether or not to return the Ticket action history. Please keep in mind that the action history for certain tickets 
         /// can be very large, and therefore might slow down the operation.
         /// </param>
-        /// <param name="ParaCredentials">
+        /// <param name="pc">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
-        /// <param name="RequestDepth">
+        /// <param name="requestDepth">
         /// For a simple Ticket request, please put 0. <br/>When Requesting a Ticket, there might be related objects linked to that Ticket: such as Customer, AssignedToCsr, etc. <br/>With a regular Ticket detail call, generally only the ID and names of the extra objects are loaded. 
         /// <example>For example, the call will return a Ticket.Customer object, but only the Name and ID values will be filled. All of the other properties of the Customer object will be empty. If you select RequestDepth=1, then we will go one level deeper into our request and will therefore retrieve the Customer's detail for you. Customers might be part of an account, so if you select RequestDepth=2, we will go to an even deeper level and return the full account object with all of its properties, etc.<br/> Please make sure you only request the depth you need, as this might make your request slower. </example>
         /// </param>
-        public static ParaObjects.Ticket TicketGetDetails(Int64 TicketNumber, bool IncludeHistory, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaObjects.Ticket GetDetails(Int64 ticketNumber, bool includeHistory, ParaCredentials pc, ParaEnums.RequestDepth requestDepth)
         {
             ParaObjects.Ticket Ticket = new ParaObjects.Ticket();
-            Ticket = TicketFillDetails(TicketNumber, ParaCredentials, RequestDepth, true, IncludeHistory);
+            Ticket = FillDetails(ticketNumber, pc, requestDepth, true, includeHistory);
             return Ticket;
         }
 
         /// <summary>
         /// Returns a Ticket object with all of its details.
         /// </summary>
-        /// <param name="IncludeHistory">
+        /// <param name="includeHistory">
         /// Indicates whether or not to return the Ticket action history. Please keep in mind that the action history for certain tickets 
         /// can be very large, and therefore might slow down the operation.
         /// </param> 
-        /// <param name="TicketNumber">
+        /// <param name="ticketNumber">
         ///The Ticket number that you would like to get the details of. 
         ///Value Type: <see cref="Int64" />   (System.Int64)
         ///</param>
-        /// <param name="ParaCredentials">
+        /// <param name="pc">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
-        public static ParaObjects.Ticket TicketGetDetails(Int64 TicketNumber, bool IncludeHistory, ParaCredentials ParaCredentials)
+        public static ParaObjects.Ticket GetDetails(Int64 ticketNumber, bool includeHistory, ParaCredentials pc)
         {
 
             ParaObjects.Ticket Ticket = new ParaObjects.Ticket();
-            Ticket = TicketFillDetails(TicketNumber, ParaCredentials, ParaEnums.RequestDepth.Standard, true, IncludeHistory);
+            Ticket = FillDetails(ticketNumber, pc, ParaEnums.RequestDepth.Standard, true, includeHistory);
             return Ticket;
         }
 
         /// <summary>
         /// Returns an ticket object from a XML Document. No calls to the APIs are made when calling this method.
         /// </summary>
-        /// <param name="TicketXML">
+        /// <param name="ticketXml">
         /// The Ticket XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaObjects.Ticket TicketGetDetails(XmlDocument TicketXML)
+        public static ParaObjects.Ticket GetDetails(XmlDocument ticketXml)
         {
             ParaObjects.Ticket ticket = new ParaObjects.Ticket();
-            ticket = TicketParser.TicketFill(TicketXML, 0, true, null);
+            ticket = TicketParser.TicketFill(ticketXml, 0, true, null);
             ticket.FullyLoaded = true;
 
-            ticket.ApiCallResponse.xmlReceived = TicketXML;
+            ticket.ApiCallResponse.xmlReceived = ticketXml;
             ticket.ApiCallResponse.Objectid = ticket.Id;
 
             ticket.IsDirty = false;
@@ -154,15 +153,15 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Returns an ticket list object from a XML Document. No calls to the APIs are made when calling this method.
         /// </summary>
-        /// <param name="TicketListXML">
+        /// <param name="ticketListXml">
         /// The Ticket List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaEntityList<ParaObjects.Ticket> TicketsGetList(XmlDocument TicketListXML)
+        public static ParaEntityList<ParaObjects.Ticket> GetList(XmlDocument ticketListXml)
         {
             var ticketsList = new ParaEntityList<ParaObjects.Ticket>();
-            ticketsList = TicketParser.TicketsFillList(TicketListXML, true, 0, null);
+            ticketsList = TicketParser.TicketsFillList(ticketListXml, true, 0, null);
 
-            ticketsList.ApiCallResponse.xmlReceived = TicketListXML;
+            ticketsList.ApiCallResponse.xmlReceived = ticketListXml;
 
             return ticketsList;
         }
@@ -173,26 +172,26 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Ticket> TicketsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Ticket> GetList(ParaCredentials pc, ParaEnums.RequestDepth requestDepth)
         {
-            return TicketsFillList(ParaCredentials, null, RequestDepth);
+            return FillList(pc, null, requestDepth);
         }
 
         /// <summary>
         /// Provides you with the capability to list Tickets. This will only list the first 25 tickets returned by the Api.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Ticket> TicketsGetList(ParaCredentials ParaCredentials)
+        public static ParaEntityList<ParaObjects.Ticket> GetList(ParaCredentials pc)
         {
-            return TicketsFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
+            return FillList(pc, null, ParaEnums.RequestDepth.Standard);
         }
 
         /// <summary>
         /// Provides you with the capability to list Tickets, following criteria you would set
         /// by instantiating a ModuleQuery.CustomerQuery object
         /// </summary>
-        public static ParaEntityList<ParaObjects.Ticket> TicketsGetList(ParaCredentials ParaCredentials, TicketQuery Query)
+        public static ParaEntityList<ParaObjects.Ticket> GetList(ParaCredentials pc, ParaEntityQuery query)
         {
-            return TicketsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
+            return FillList(pc, query, ParaEnums.RequestDepth.Standard);
         }
 
         /// <summary>
@@ -202,106 +201,97 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Ticket> TicketsGetList(ParaCredentials ParaCredentials, TicketQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Ticket> GetList(ParaCredentials pc, ParaEntityQuery query, ParaEnums.RequestDepth requestDepth)
         {
-            return TicketsFillList(ParaCredentials, Query, RequestDepth);
+            return FillList(pc, query, requestDepth);
         }
 
         /// <summary>
         /// Fills an Ticket list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Ticket> TicketsFillList(ParaCredentials ParaCredentials, TicketQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Ticket> FillList(ParaCredentials pc, ParaEntityQuery query, ParaEnums.RequestDepth requestDepth)
         {
-            int requestdepth = (int)RequestDepth;
-            if (Query == null)
+            var requestdepth = (int)requestDepth;
+            if (query == null)
             {
-                Query = new TicketQuery();
+                query = new TicketQuery();
             }
 
             // Making a schema call and returning all custom fields to be included in the call.
-            if (Query.IncludeAllCustomFields == true)
+            if (query.IncludeAllCustomFields)
             {
-                ParaObjects.Ticket objschem = new ParaObjects.Ticket();
-                objschem = TicketSchema(ParaCredentials);
-                Query.IncludeCustomField(objschem.CustomFields);
+                var objschem = Schema(pc);
+                query.IncludeCustomField(objschem.CustomFields);
             }
-            ApiCallResponse ar = new ApiCallResponse();
-            var TicketsList = new ParaEntityList<ParaObjects.Ticket>();
+            ApiCallResponse ar;
+            var ticketsList = new ParaEntityList<ParaObjects.Ticket>();
 
-            if (Query.RetrieveAllRecords && Query.OptimizePageSize)
+            if (query.RetrieveAllRecords && query.OptimizePageSize)
             {
-                OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(TicketsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Ticket);
+                var rslt = ApiUtils.OptimizeObjectPageSize(ticketsList, query, pc, requestdepth, ParaEnums.ParatureModule.Ticket);
                 ar = rslt.apiResponse;
-                Query = (TicketQuery)rslt.Query;
-                TicketsList = ((ParaEntityList<ParaObjects.Ticket>)rslt.objectList);
-                rslt = null;
+                query = (TicketQuery)rslt.Query;
+                ticketsList = ((ParaEntityList<ParaObjects.Ticket>)rslt.objectList);
             }
             else
             {
-                ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Ticket, Query.BuildQueryArguments());
+                ar = ApiCallFactory.ObjectGetList(pc, ParaEnums.ParatureModule.Ticket, query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    TicketsList = TicketParser.TicketsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                    ticketsList = TicketParser.TicketsFillList(ar.xmlReceived, query.MinimalisticLoad, requestdepth, pc);
                 }
-                TicketsList.ApiCallResponse = ar;
+                ticketsList.ApiCallResponse = ar;
             }
 
             // Checking if the system needs to recursively call all of the data returned.
-            if (Query.RetrieveAllRecords && !ar.HasException)
+            if (query.RetrieveAllRecords && !ar.HasException)
             {
                 // A flag variable to check if we need to make more calls
-                if (Query.OptimizeCalls)
+                if (query.OptimizeCalls)
                 {
-                    System.Threading.Thread t;
-                    ThreadPool.ObjectList instance = null;
-                    int callsRequired = (int)Math.Ceiling((double)(TicketsList.TotalItems / (double)TicketsList.PageSize));
-                    for (int i = 2; i <= callsRequired; i++)
+                    var callsRequired = (int)Math.Ceiling((double)(ticketsList.TotalItems / (double)ticketsList.PageSize));
+                    for (var i = 2; i <= callsRequired; i++)
                     {
-                        //ApiCallFactory.waitCheck(ParaCredentials.Accountid);
-                        Query.PageNumber = i;
+                        query.PageNumber = i;
                         //implement semaphore right here (in the thread pool instance to control the generation of threads
-                        instance = new ThreadPool.ObjectList(ParaCredentials, ParaEnums.ParatureModule.Ticket, Query.BuildQueryArguments(), requestdepth);
-                        t = new System.Threading.Thread(delegate() { instance.Go(TicketsList); });
+                        var instance = new ThreadPool.ObjectList(pc, ParaEnums.ParatureModule.Ticket, query.BuildQueryArguments(), requestdepth);
+                        var t = new Thread(() => instance.Go(ticketsList));
                         t.Start();
                     }
 
-                    while (TicketsList.TotalItems > TicketsList.Data.Count)
+                    while (ticketsList.TotalItems > ticketsList.Data.Count)
                     {
                         Thread.Sleep(500);
                     }
 
-                    TicketsList.ResultsReturned = TicketsList.Data.Count;
-                    TicketsList.PageNumber = callsRequired;
+                    ticketsList.ResultsReturned = ticketsList.Data.Count;
+                    ticketsList.PageNumber = callsRequired;
                 }
                 else
                 {
-                    bool continueCalling = true;
+                    var continueCalling = true;
                     while (continueCalling)
                     {
-                        var objectlist = new ParaEntityList<ParaObjects.Ticket>();
-
-                        if (TicketsList.TotalItems > TicketsList.Data.Count)
+                        if (ticketsList.TotalItems > ticketsList.Data.Count)
                         {
                             // We still need to pull data
 
                             // Getting next page's data
-                            Query.PageNumber = Query.PageNumber + 1;
+                            query.PageNumber = query.PageNumber + 1;
 
-                            ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Ticket, Query.BuildQueryArguments());
-
-
+                            ar = ApiCallFactory.ObjectGetList(pc, ParaEnums.ParatureModule.Ticket, query.BuildQueryArguments());
                             if (ar.HasException == false)
                             {
-                                objectlist = TicketParser.TicketsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                                var objectlist = TicketParser.TicketsFillList(ar.xmlReceived, query.MinimalisticLoad, requestdepth, pc);
 
-                                TicketsList.Data.AddRange(objectlist.Data);
-                                TicketsList.ResultsReturned = TicketsList.Data.Count;
-                                TicketsList.PageNumber = Query.PageNumber;
+                                ticketsList.Data.AddRange(objectlist.Data);
+                                ticketsList.ResultsReturned = ticketsList.Data.Count;
+                                ticketsList.PageNumber = query.PageNumber;
                             }
                             else
                             {
                                 // There is an error processing request
-                                TicketsList.ApiCallResponse = ar;
+                                ticketsList.ApiCallResponse = ar;
                                 continueCalling = false;
                             }
                         }
@@ -309,48 +299,48 @@ namespace ParatureAPI.ApiHandler
                         {
                             // That is it, pulled all the items.
                             continueCalling = false;
-                            TicketsList.ApiCallResponse = ar;
+                            ticketsList.ApiCallResponse = ar;
                         }
                     }
                 }
             }
 
-            return TicketsList;
+            return ticketsList;
 
         }
 
-        internal static Attachment TicketAddAttachment(ParaCredentials ParaCredentials, Byte[] Attachment, string contentType, string FileName)
+        internal static Attachment AddAttachment(ParaCredentials pc, Byte[] attachment, string contentType, string fileName)
         {
-            return ApiUtils.UploadFile(ParaEnums.ParatureModule.Ticket, ParaCredentials, Attachment, contentType, FileName);
+            return ApiUtils.UploadFile(ParaEnums.ParatureModule.Ticket, pc, attachment, contentType, fileName);
         }
         
-        internal static Attachment TicketAddAttachment(ParaCredentials ParaCredentials, string text, string contentType, string FileName)
+        internal static Attachment AddAttachment(ParaCredentials pc, string text, string contentType, string fileName)
         {
-            return ApiUtils.UploadFile(ParaEnums.ParatureModule.Ticket, ParaCredentials, text, contentType, FileName);
+            return ApiUtils.UploadFile(ParaEnums.ParatureModule.Ticket, pc, text, contentType, fileName);
         }
 
-        private static ParaObjects.Ticket TicketFillDetails(Int64 TicketNumber, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad, bool IncludeHistory)
+        private static ParaObjects.Ticket FillDetails(Int64 ticketNumber, ParaCredentials pc, ParaEnums.RequestDepth requestDepth, bool minimalisticLoad, bool includeHistory)
         {
-            int requestdepth = (int)RequestDepth;
+            int requestdepth = (int)requestDepth;
             ParaObjects.Ticket Ticket = new ParaObjects.Ticket();
             //Ticket = null;
             ApiCallResponse ar = new ApiCallResponse();
 
-            if (IncludeHistory == true)
+            if (includeHistory == true)
             {
                 ArrayList arl = new ArrayList();
                 arl.Add("_history_=true");
-                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Ticket, TicketNumber, arl);
+                ar = ApiCallFactory.ObjectGetDetail(pc, ParaEnums.ParatureModule.Ticket, ticketNumber, arl);
             }
             else
             {
-                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Ticket, TicketNumber);
+                ar = ApiCallFactory.ObjectGetDetail(pc, ParaEnums.ParatureModule.Ticket, ticketNumber);
             }
 
 
             if (ar.HasException == false)
             {
-                Ticket = TicketParser.TicketFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
+                Ticket = TicketParser.TicketFill(ar.xmlReceived, requestdepth, minimalisticLoad, pc);
                 Ticket.FullyLoaded = true;
             }
             else
@@ -366,94 +356,91 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Grabs a Ticket to the CSR that is making the call.
         /// </summary>
-        /// <param name="Ticketid">
+        /// <param name="ticketId">
         /// The Ticket you would like to run this action on.
         /// </param>
         /// <param name="actionid">
         /// The id of action Grab in your license.
         /// </param>
-        /// <param name="ParaCredentials">
+        /// <param name="pc">
         /// Your credentials object.
         /// </param>
         /// <returns></returns>
-        public static ApiCallResponse ActionRunGrab(Int64 Ticketid, Int64 actionid, ParaCredentials ParaCredentials)
+        public static ApiCallResponse ActionRunGrab(Int64 ticketId, Int64 actionid, ParaCredentials pc)
         {
             Action Action = new Action();
             Action.Id = actionid;
             Action.actionType = ParaEnums.ActionType.Grab;
             ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiUtils.ActionRun(Ticketid, Action, ParaCredentials, ParaEnums.ParatureModule.Ticket);
+            ar = ApiUtils.ActionRun(ticketId, Action, pc, ParaEnums.ParatureModule.Ticket);
             return ar;
         }
 
         /// <summary>
         /// Assigns a Ticket to a specific CSR.
         /// </summary>
-        /// <param name="Ticketid">
+        /// <param name="ticketId">
         /// The Ticket you would like to run this action on.
         /// </param>
-        /// <param name="Action">
+        /// <param name="action">
         /// The action object your would like to run on this ticket.
         /// </param>
-        /// <param name="ParaCredentials">
+        /// <param name="pc">
         /// Your credentials object.
         /// </param>
-        /// <param name="CsrID">
+        /// <param name="csrId">
         /// The CSR you would like to assign this ticket to.
         /// </param>
         /// <returns></returns>
-        public static ApiCallResponse ActionRunAssignToCsr(Int64 Ticketid, Action Action, Int64 CsrID, ParaCredentials ParaCredentials)
+        public static ApiCallResponse ActionRunAssignToCsr(Int64 ticketId, Action action, Int64 csrId, ParaCredentials pc)
         {
-            Action.actionType = ParaEnums.ActionType.Assign;
-            Action.AssigntToCsrid = CsrID;
-            ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiUtils.ActionRun(Ticketid, Action, ParaCredentials, ParaEnums.ParatureModule.Ticket);
+            action.actionType = ParaEnums.ActionType.Assign;
+            action.AssigntToCsrid = csrId;
+            var ar = ApiUtils.ActionRun(ticketId, action, pc, ParaEnums.ParatureModule.Ticket);
             return ar;
         }
 
         /// <summary>
         /// Assigns a Ticket to a specific Queue.
         /// </summary>
-        /// <param name="Ticketid">
+        /// <param name="ticketId">
         /// The Ticket you would like to run this action on.
         /// </param>
-        /// <param name="Action">
+        /// <param name="action">
         /// The action object your would like to run on this ticket.
         /// </param>
-        /// <param name="ParaCredentials">
+        /// <param name="paraCredentials">
         /// Your credentials object.
         /// </param>
-        /// <param name="QueueID">
+        /// <param name="queueId">
         /// The Queue you would like to assign this ticket to.
         /// </param>
         /// <returns></returns>
-        public static ApiCallResponse ActionRunAssignToQueue(Int64 Ticketid, Action Action, Int64 QueueID, ParaCredentials ParaCredentials)
+        public static ApiCallResponse ActionRunAssignToQueue(Int64 ticketId, Action action, Int64 queueId, ParaCredentials paraCredentials)
         {
-            Action.actionType = ParaEnums.ActionType.Assign_Queue;
-            Action.AssignToQueueid = QueueID;
-            ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiUtils.ActionRun(Ticketid, Action, ParaCredentials, ParaEnums.ParatureModule.Ticket);
+            action.actionType = ParaEnums.ActionType.Assign_Queue;
+            action.AssignToQueueid = queueId;
+            var ar = ApiUtils.ActionRun(ticketId, action, paraCredentials, ParaEnums.ParatureModule.Ticket);
             return ar;
         }
 
         /// <summary>
         /// Assigns a Ticket to a specific Queue.
         /// </summary>
-        /// <param name="Ticketid">
+        /// <param name="ticketId">
         /// The Ticket you would like to run this action on.
         /// </param>
-        /// <param name="Action">
+        /// <param name="action">
         /// The action object your would like to run on this ticket.
         /// </param>
-        /// <param name="ParaCredentials">
+        /// <param name="pc">
         /// Your credentials object.
         /// </param>
         /// <returns></returns>
-        public static ApiCallResponse ActionRun(Int64 Ticketid, Action Action, ParaCredentials ParaCredentials)
+        public static ApiCallResponse ActionRun(Int64 ticketId, Action action, ParaCredentials pc)
         {
-            Action.actionType = ParaEnums.ActionType.Other;
-            ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiUtils.ActionRun(Ticketid, Action, ParaCredentials, ParaEnums.ParatureModule.Ticket);
+            action.actionType = ParaEnums.ActionType.Other;
+            var ar = ApiUtils.ActionRun(ticketId, action, pc, ParaEnums.ParatureModule.Ticket);
             return ar;
         }
     }

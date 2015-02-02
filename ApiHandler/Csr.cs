@@ -15,7 +15,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Provides the Schema of the CSR module.
         /// </summary>
-        public static ParaObjects.Csr CsrSchema(ParaCredentials ParaCredentials)
+        public static ParaObjects.Csr Schema(ParaCredentials ParaCredentials)
         {
             ParaObjects.Csr Csr = new ParaObjects.Csr();
             ApiCallResponse ar = new ApiCallResponse();
@@ -36,7 +36,7 @@ namespace ParatureAPI.ApiHandler
         /// <param name="CsrId">
         /// The id of the CSR to delete
         /// </param>
-        public static ApiCallResponse CsrDelete(Int64 CsrId, ParaCredentials ParaCredentials)
+        public static ApiCallResponse Delete(Int64 CsrId, ParaCredentials ParaCredentials)
         {
             return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Csr, CsrId, true);
         }
@@ -51,7 +51,7 @@ namespace ParatureAPI.ApiHandler
         /// <param name="ParaCredentials">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>               
-        public static ParaObjects.Csr CsrGetDetails(Int64 Csrid, ParaCredentials ParaCredentials)
+        public static ParaObjects.Csr GetDetails(Int64 Csrid, ParaCredentials ParaCredentials)
         {
             ParaObjects.Csr Csr = new ParaObjects.Csr();
             Csr = CsrFillDetails(Csrid, ParaCredentials);
@@ -64,7 +64,7 @@ namespace ParatureAPI.ApiHandler
         /// <param name="CsrXML">
         /// The Csr XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaObjects.Csr CsrGetDetails(XmlDocument CsrXML)
+        public static ParaObjects.Csr GetDetails(XmlDocument CsrXML)
         {
             ParaObjects.Csr csr = new ParaObjects.Csr();
             csr = CsrParser.CsrFill(CsrXML);
@@ -75,7 +75,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Creates a Parature CSR. Requires an Object and a credentials object. Will return the Newly Created CSR ID
         /// </summary>
-        public static ApiCallResponse CsrInsert(ParaObjects.Csr Csr, ParaCredentials ParaCredentials)
+        public static ApiCallResponse Insert(ParaObjects.Csr Csr, ParaCredentials ParaCredentials)
         {
             ApiCallResponse ar = new ApiCallResponse();
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
@@ -91,7 +91,7 @@ namespace ParatureAPI.ApiHandler
         /// <param name="CsrListXML">
         /// The Csr List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaEntityList<ParaObjects.Csr> CsrsGetList(XmlDocument CsrListXML)
+        public static ParaEntityList<ParaObjects.Csr> GetList(XmlDocument CsrListXML)
         {
             var csrsList = new ParaEntityList<ParaObjects.Csr>();
             csrsList = CsrParser.CsrsFillList(CsrListXML);
@@ -104,15 +104,15 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Get the list of Csrs from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Csr> CsrsGetList(ParaCredentials ParaCredentials)
+        public static ParaEntityList<ParaObjects.Csr> GetList(ParaCredentials ParaCredentials)
         {
-            return CsrFillList(ParaCredentials, new CsrQuery());
+            return FillList(ParaCredentials, new CsrQuery());
         }
 
         /// <summary>
         /// Updates a Parature Csr. Requires a Csr object and a ParaCredentials object.  Will return the updated Csrid
         /// </summary>
-        public static ApiCallResponse CsrUpdate(ParaObjects.Csr Csr, ParaCredentials ParaCredentials)
+        public static ApiCallResponse Update(ParaObjects.Csr Csr, ParaCredentials ParaCredentials)
         {
             ApiCallResponse ar = new ApiCallResponse();
 
@@ -126,14 +126,14 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Get the list of Csrs from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Csr> CsrsGetList(ParaCredentials ParaCredentials, CsrQuery Query)
+        public static ParaEntityList<ParaObjects.Csr> GetList(ParaCredentials ParaCredentials, CsrQuery Query)
         {
-            return CsrFillList(ParaCredentials, Query);
+            return FillList(ParaCredentials, Query);
         }
         /// <summary>
         /// Fills a Sla list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Csr> CsrFillList(ParaCredentials ParaCredentials, CsrQuery Query)
+        private static ParaEntityList<ParaObjects.Csr> FillList(ParaCredentials ParaCredentials, CsrQuery Query)
         {
 
             var CsrsList = new ParaEntityList<ParaObjects.Csr>();
@@ -210,7 +210,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Contains all the methods needed to work with the Ticket statuses.
         /// </summary>
-        public partial class CsrStatus
+        public class CsrStatus
         {
             /// <summary>
             /// Returns a filled Csr status object.
@@ -222,10 +222,10 @@ namespace ParatureAPI.ApiHandler
             /// <param name="ParaCredentials">
             /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
             /// </param>                
-            public static ParaObjects.CsrStatus CsrStatusGetDetails(Int64 CsrStatusid, ParaCredentials ParaCredentials)
+            public static ParaObjects.CsrStatus GetDetails(Int64 CsrStatusid, ParaCredentials ParaCredentials)
             {
                 ParaObjects.CsrStatus CsrStatus = new ParaObjects.CsrStatus();
-                CsrStatus = CsrStatusFillDetails(CsrStatusid, ParaCredentials);
+                CsrStatus = FillDetails(CsrStatusid, ParaCredentials);
                 return CsrStatus;
             }
 
@@ -235,7 +235,7 @@ namespace ParatureAPI.ApiHandler
             /// <param name="CsrStatusXML">
             /// The CsrStatus XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ParaObjects.CsrStatus CsrStatusGetDetails(XmlDocument CsrStatusXML)
+            public static ParaObjects.CsrStatus GetDetails(XmlDocument CsrStatusXML)
             {
                 ParaObjects.CsrStatus CsrStatus = new ParaObjects.CsrStatus();
                 CsrStatus = CsrStatusParser.CsrStatusFill(CsrStatusXML);
@@ -252,7 +252,7 @@ namespace ParatureAPI.ApiHandler
             /// <param name="CsrStatusListXML">
             /// The CsrStatus List XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ParaEntityList<ParaObjects.CsrStatus> CsrStatusGetList(XmlDocument CsrStatusListXML)
+            public static ParaEntityList<ParaObjects.CsrStatus> GetList(XmlDocument CsrStatusListXML)
             {
                 var CsrStatussList = new ParaEntityList<ParaObjects.CsrStatus>();
                 CsrStatussList = CsrStatusParser.CsrStatusFillList(CsrStatusListXML);
@@ -265,16 +265,16 @@ namespace ParatureAPI.ApiHandler
             /// <summary>
             /// Provides you with the capability to list statuses
             /// </summary>
-            public static ParaEntityList<ParaObjects.CsrStatus> CsrStatusGetList(ParaCredentials ParaCredentials)
+            public static ParaEntityList<ParaObjects.CsrStatus> GetList(ParaCredentials ParaCredentials)
             {
-                return CsrStatusFillList(ParaCredentials);
+                return FillList(ParaCredentials);
             }
 
 
             /// <summary>
             /// Fills an Csr Status object.
             /// </summary>
-            private static ParaEntityList<ParaObjects.CsrStatus> CsrStatusFillList(ParaCredentials ParaCredentials)
+            private static ParaEntityList<ParaObjects.CsrStatus> FillList(ParaCredentials ParaCredentials)
             {
 
                 var CsrStatusList = new ParaEntityList<ParaObjects.CsrStatus>();
@@ -289,7 +289,7 @@ namespace ParatureAPI.ApiHandler
                 return CsrStatusList;
             }
 
-            static ParaObjects.CsrStatus CsrStatusFillDetails(Int64 CsrStatusid, ParaCredentials ParaCredentials)
+            private static ParaObjects.CsrStatus FillDetails(Int64 CsrStatusid, ParaCredentials ParaCredentials)
             {
 
                 ParaObjects.CsrStatus CsrStatus = new ParaObjects.CsrStatus();

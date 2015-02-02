@@ -269,7 +269,7 @@ namespace ParatureAPI.XmlToObjectParser
 
                             if (childDepth > 0)
                             {
-                                pf = Article.ArticleFolder.ArticleFolderGetDetails(Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString()), ParaCredentials, (ParaEnums.RequestDepth)childDepth);
+                                pf = Article.ArticleFolder.GetDetails(Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString()), ParaCredentials, (ParaEnums.RequestDepth)childDepth);
                             }
                             ArticleFolder.Parent_Folder = pf;
                         }

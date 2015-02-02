@@ -111,7 +111,7 @@ namespace ParatureAPI.XmlToObjectParser
                         Customer.Account = AccountParser.AccountFillNode(child.ChildNodes[0], childDepth, MinimalisticLoad, ParaCredentials);
                         if (childDepth > 0)
                         {
-                            Customer.Account = Account.AccountGetDetails(Customer.Account.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
+                            Customer.Account = Account.GetDetails(Customer.Account.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
                         }
 
                         Customer.Account.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);

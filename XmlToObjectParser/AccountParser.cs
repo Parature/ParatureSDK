@@ -160,7 +160,7 @@ namespace ParatureAPI.XmlToObjectParser
 
                                 if (childDepth > 0)
                                 {
-                                    acc = Account.AccountGetDetails(acc.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
+                                    acc = Account.GetDetails(acc.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
                                 }
 
                                 acc.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);

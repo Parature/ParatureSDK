@@ -24,10 +24,10 @@ namespace ParatureAPI.ApiHandler
         /// <param name="ParaCredentials">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
-        public static ParaObjects.Chat ChatGetDetails(Int64 chatid, ParaCredentials ParaCredentials)
+        public static ParaObjects.Chat GetDetails(Int64 chatid, ParaCredentials ParaCredentials)
         {
             ParaObjects.Chat chat = new ParaObjects.Chat();
-            chat = ChatFillDetails(chatid, ParaCredentials, false, false);
+            chat = FillDetails(chatid, ParaCredentials, false, false);
 
             return chat;
 
@@ -49,30 +49,30 @@ namespace ParatureAPI.ApiHandler
         /// <param name="IncludeTranscripts">
         /// Whether to include the chat transcript (chat discussion) for this particular chat 
         /// </param>
-        public static ParaObjects.Chat ChatGetDetails(Int64 chatid, ParaCredentials ParaCredentials, Boolean IncludeHistory, Boolean IncludeTranscripts)
+        public static ParaObjects.Chat GetDetails(Int64 chatid, ParaCredentials ParaCredentials, Boolean IncludeHistory, Boolean IncludeTranscripts)
         {
 
             ParaObjects.Chat chat = new ParaObjects.Chat();
-            chat = ChatFillDetails(chatid, ParaCredentials, IncludeHistory, IncludeTranscripts);
+            chat = FillDetails(chatid, ParaCredentials, IncludeHistory, IncludeTranscripts);
 
             return chat;
 
         }
 
 
-        public static ParaEntityList<ParaObjects.Chat> ChatGetList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ChatQuery Query)
+        public static ParaEntityList<ParaObjects.Chat> GetList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ChatQuery Query)
         {
-            return ChatFillList(ParaCredentials, IncludeTranscripts, Query, ParaEnums.RequestDepth.Standard);
+            return FillList(ParaCredentials, IncludeTranscripts, Query, ParaEnums.RequestDepth.Standard);
         }
 
 
-        public static ParaEntityList<ParaObjects.Chat> ChatGetList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, Boolean IncludeHistory)
+        public static ParaEntityList<ParaObjects.Chat> GetList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, Boolean IncludeHistory)
         {
-            return ChatFillList(ParaCredentials, IncludeTranscripts, null, ParaEnums.RequestDepth.Standard);
+            return FillList(ParaCredentials, IncludeTranscripts, null, ParaEnums.RequestDepth.Standard);
         }
 
 
-        private static ParaEntityList<ParaObjects.Chat> ChatFillList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ChatQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Chat> FillList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ChatQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
@@ -83,7 +83,7 @@ namespace ParatureAPI.ApiHandler
             if (Query.IncludeAllCustomFields)
             {
                 ParaObjects.Customer objschem = new ParaObjects.Customer();
-                objschem = Customer.CustomerSchema(ParaCredentials);
+                objschem = Customer.Schema(ParaCredentials);
                 Query.IncludeCustomField(objschem.CustomFields);
             }
             ApiCallResponse ar = new ApiCallResponse();
@@ -175,7 +175,7 @@ namespace ParatureAPI.ApiHandler
         }
 
             
-        static ParaObjects.Chat ChatFillDetails(Int64 chatid, ParaCredentials ParaCredentials, Boolean IncludeHistory, Boolean IncludeTranscripts)
+        static ParaObjects.Chat FillDetails(Int64 chatid, ParaCredentials ParaCredentials, Boolean IncludeHistory, Boolean IncludeTranscripts)
         {
             ParaObjects.Chat chat = new ParaObjects.Chat();
             //Customer = null;
@@ -201,7 +201,7 @@ namespace ParatureAPI.ApiHandler
             return chat;
         }
             
-        public static ParaObjects.Chat ChatSchema(ParaCredentials ParaCredentials)
+        public static ParaObjects.Chat Schema(ParaCredentials ParaCredentials)
         {
             ParaObjects.Chat chat = new ParaObjects.Chat();
             ApiCallResponse ar = new ApiCallResponse();
@@ -220,9 +220,9 @@ namespace ParatureAPI.ApiHandler
         /// record in order to determine if any of the custom fields have special validation rules (e.g. email, phone, url)
         /// and set the "dataType" of the custom field accordingly.
         /// </summary> 
-        public static ParaObjects.Chat ChatSchemaWithCustomFieldTypes(ParaCredentials ParaCredentials)
+        public static ParaObjects.Chat SchemaWithCustomFieldTypes(ParaCredentials ParaCredentials)
         {
-            ParaObjects.Chat chat = ChatSchema(ParaCredentials);
+            ParaObjects.Chat chat = Schema(ParaCredentials);
 
             chat = (ParaObjects.Chat)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, ParaEnums.ParatureModule.Chat, chat);
 

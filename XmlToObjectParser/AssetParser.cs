@@ -109,7 +109,7 @@ namespace ParatureAPI.XmlToObjectParser
 
                         if (childDepth > 0)
                         {
-                            Asset.Account_Owner = Account.AccountGetDetails(Asset.Account_Owner.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth - 1);
+                            Asset.Account_Owner = Account.GetDetails(Asset.Account_Owner.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth - 1);
                         }
                         Asset.Account_Owner.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);
                     }
@@ -130,7 +130,7 @@ namespace ParatureAPI.XmlToObjectParser
 
                         if (childDepth > 0)
                         {
-                            Asset.Customer_Owner = Customer.CustomerGetDetails(Asset.Customer_Owner.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth - 1);
+                            Asset.Customer_Owner = Customer.GetDetails(Asset.Customer_Owner.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth - 1);
                         }
                         Asset.Customer_Owner.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);
 
@@ -144,7 +144,7 @@ namespace ParatureAPI.XmlToObjectParser
                         Asset.Product.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
                         if (childDepth > 0)
                         {
-                            Asset.Product = Product.ProductGetDetails(Asset.Product.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth - 1);
+                            Asset.Product = Product.GetDetails(Asset.Product.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth - 1);
                         }
                         Asset.Product.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);
                     }

@@ -178,7 +178,7 @@ namespace ParatureAPI.XmlToObjectParser
                         Ticket.Ticket_Customer = CustomerParser.CustomerFillNode(child.ChildNodes[0], childDepth, MinimalisticLoad, ParaCredentials);
                         if (childDepth > 0)
                         {
-                            Ticket.Ticket_Customer = ApiHandler.Customer.CustomerGetDetails(Ticket.Ticket_Customer.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
+                            Ticket.Ticket_Customer = ApiHandler.Customer.GetDetails(Ticket.Ticket_Customer.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
                         }
                         Ticket.Ticket_Customer.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);
                     }
@@ -192,7 +192,7 @@ namespace ParatureAPI.XmlToObjectParser
                         Ticket.Additional_Contact = CustomerParser.CustomerFillNode(child.ChildNodes[0], childDepth, MinimalisticLoad, ParaCredentials);
                         if (childDepth > 0)
                         {
-                            Ticket.Additional_Contact = ApiHandler.Customer.CustomerGetDetails(Ticket.Additional_Contact.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
+                            Ticket.Additional_Contact = ApiHandler.Customer.GetDetails(Ticket.Additional_Contact.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
                         }
                         Ticket.Additional_Contact.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);
                     }
@@ -217,7 +217,7 @@ namespace ParatureAPI.XmlToObjectParser
                             PTicket.Department.Id = Int64.Parse(hrefs[hrefs.Length - 3]);
                             if (childDepth > 0)
                             {
-                                PTicket = ApiHandler.Ticket.TicketGetDetails(PTicket.Id, false, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
+                                PTicket = ApiHandler.Ticket.GetDetails(PTicket.Id, false, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
                             }
                             PTicket.Ticket_Number = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
                             PTicket.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);
@@ -248,7 +248,7 @@ namespace ParatureAPI.XmlToObjectParser
                                 
                             if (childDepth > 0)
                             {
-                                ChildTicket = ApiHandler.Ticket.TicketGetDetails(ChildTicket.Id, false, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
+                                ChildTicket = ApiHandler.Ticket.GetDetails(ChildTicket.Id, false, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
                             }
                             ChildTicket.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);
                             Ticket_Children.Add(ChildTicket);
@@ -304,7 +304,7 @@ namespace ParatureAPI.XmlToObjectParser
 
                         if (childDepth > 0)
                         {
-                            Ticket.Ticket_Product = Product.ProductGetDetails(Ticket.Ticket_Product.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth - 1);
+                            Ticket.Ticket_Product = Product.GetDetails(Ticket.Ticket_Product.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth - 1);
                         }
                         Ticket.Ticket_Product.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);
                     }

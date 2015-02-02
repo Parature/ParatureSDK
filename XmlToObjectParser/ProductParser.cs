@@ -247,7 +247,7 @@ namespace ParatureAPI.XmlToObjectParser
 
                         if (childDepth > 0)
                         {
-                            pf = Product.ProductFolder.ProductFolderGetDetails(Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString()), ParaCredentials, (ParaEnums.RequestDepth)childDepth);
+                            pf = Product.ProductFolder.GetDetails(Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString()), ParaCredentials, (ParaEnums.RequestDepth)childDepth);
                         }
                         ProductFolder.Parent_Folder = pf;
                     }

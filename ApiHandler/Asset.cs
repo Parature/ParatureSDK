@@ -18,7 +18,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Provides the Schema of the asset module.
         /// </summary>
-        public static ParaObjects.Asset AssetSchema(ParaCredentials ParaCredentials)
+        public static ParaObjects.Asset Schema(ParaCredentials ParaCredentials)
         {
             ParaObjects.Asset Asset = new ParaObjects.Asset();
 
@@ -39,9 +39,9 @@ namespace ParatureAPI.ApiHandler
         /// record in order to determine if any of the custom fields have special validation rules (e.g. email, phone, url)
         /// and set the "dataType" of the custom field accordingly.
         /// </summary> 
-        static public ParaObjects.Asset AssetSchemaWithCustomFieldTypes(ParaCredentials ParaCredentials)
+        static public ParaObjects.Asset SchemaWithCustomFieldTypes(ParaCredentials ParaCredentials)
         {
-            ParaObjects.Asset asset = AssetSchema(ParaCredentials);
+            ParaObjects.Asset asset = Schema(ParaCredentials);
 
             asset = (ParaObjects.Asset)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, ParaEnums.ParatureModule.Asset, asset);
 
@@ -51,7 +51,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Creates a Parature Ticket. Requires an Object and a credentials object. Will return the Newly Created Assetid. Returns 0 if the Asset creation fails.
         /// </summary>
-        public static ApiCallResponse AssetInsert(ParaObjects.Asset Asset, ParaCredentials ParaCredentials)
+        public static ApiCallResponse Insert(ParaObjects.Asset Asset, ParaCredentials ParaCredentials)
         {
             ApiCallResponse ar = new ApiCallResponse();
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
@@ -65,7 +65,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Updates a Parature Asset. Requires an Object and a credentials object.  Will return the updated Assetid. Returns 0 if the Asset update operation failed.
         /// </summary>
-        public static ApiCallResponse AssetUpdate(ParaObjects.Asset Asset, ParaCredentials ParaCredentials)
+        public static ApiCallResponse Update(ParaObjects.Asset Asset, ParaCredentials ParaCredentials)
         {
             ApiCallResponse ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Asset, XmlGenerator.AssetGenerateXml(Asset), Asset.Id);
@@ -82,7 +82,7 @@ namespace ParatureAPI.ApiHandler
         /// If purge is set to true, the Asset will be permanently deleted. Otherwise, it will just be 
         /// moved to the trash bin, so it will still be able to be restored from the service desk.
         ///</param>
-        public static ApiCallResponse AssetDelete(Int64 Assetid, ParaCredentials ParaCredentials, bool purge)
+        public static ApiCallResponse Delete(Int64 Assetid, ParaCredentials ParaCredentials, bool purge)
         {
             return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Asset, Assetid, purge);
         }
@@ -102,10 +102,10 @@ namespace ParatureAPI.ApiHandler
         /// For a simple Asset request, please put 0. <br/>When Requesting an Asset, there might be related objects linked to that Asset: such as Customer Owner, Product, etc. <br/>With a regular Asset detail call, generally only the ID and names of the extra objects are loaded. 
         /// <example>For example, the call will return a Asset.CustomerOwner object, but only the Name and ID values will be filled. All of the other properties of the Customer object will be empty. If you select RequestDepth=1, then we will go one level deeper into our request and will therefore retrieve the Customer's detail for you. Customers might be part of an account, so if you select RequestDepth=2, we will go to an even deeper level and return the full account object with all of its properties, etc.<br/> Please make sure you only request the depth you need, as this might make your request slower. </example>
         /// </param>
-        public static ParaObjects.Asset AssetGetDetails(Int64 Assetid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaObjects.Asset GetDetails(Int64 Assetid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
             ParaObjects.Asset Asset = new ParaObjects.Asset();
-            Asset = AssetFillDetails(Assetid, ParaCredentials, RequestDepth);
+            Asset = FillDetails(Assetid, ParaCredentials, RequestDepth);
             return Asset;
         }
 
@@ -120,9 +120,9 @@ namespace ParatureAPI.ApiHandler
         /// <param name="ParaCredentials">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>           
-        public static ParaObjects.Asset AssetGetDetails(Int64 Assetid, ParaCredentials ParaCredentials)
+        public static ParaObjects.Asset GetDetails(Int64 Assetid, ParaCredentials ParaCredentials)
         {
-            return AssetGetDetails(Assetid, ParaCredentials, ParaEnums.RequestDepth.Standard);
+            return GetDetails(Assetid, ParaCredentials, ParaEnums.RequestDepth.Standard);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace ParatureAPI.ApiHandler
         /// <param name="AssetXML">
         /// The Asset XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaObjects.Asset AssetGetDetails(XmlDocument AssetXML)
+        public static ParaObjects.Asset GetDetails(XmlDocument AssetXML)
         {
             ParaObjects.Asset asset = new ParaObjects.Asset();
             asset = AssetParser.AssetFill(AssetXML, true, 0, null);
@@ -150,7 +150,7 @@ namespace ParatureAPI.ApiHandler
         /// <param name="AssetsListXML">
         /// The Asset List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaEntityList<ParaObjects.Asset> AssetsGetList(XmlDocument AssetsListXML)
+        public static ParaEntityList<ParaObjects.Asset> GetList(XmlDocument AssetsListXML)
         {
             var assetsList = new ParaEntityList<ParaObjects.Asset>();
             assetsList = AssetParser.AssetsFillList(AssetsListXML, true, 0, null);
@@ -164,9 +164,9 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Assets, following criteria you would set
         /// by instantiating a ModuleQuery.AssetQuery object
         /// </summary>
-        public static ParaEntityList<ParaObjects.Asset> AssetsGetList(ParaCredentials ParaCredentials, AssetQuery Query)
+        public static ParaEntityList<ParaObjects.Asset> GetList(ParaCredentials ParaCredentials, AssetQuery Query)
         {
-            return AssetsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
+            return FillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
 
         /// <summary>
@@ -175,16 +175,16 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Asset> AssetsGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Asset> GetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
-            return AssetsFillList(ParaCredentials, null, RequestDepth);
+            return FillList(ParaCredentials, null, RequestDepth);
         }
         /// <summary>
         /// Gets the first 25 assets returned by the API.
         /// </summary>            
-        public static ParaEntityList<ParaObjects.Asset> AssetsGetList(ParaCredentials ParaCredentials)
+        public static ParaEntityList<ParaObjects.Asset> GetList(ParaCredentials ParaCredentials)
         {
-            return AssetsFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
+            return FillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
         }
         /// <summary>
         /// Provides you with the capability to list Assets, following criteria you would set
@@ -193,15 +193,15 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Asset> AssetsGetList(ParaCredentials ParaCredentials, AssetQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Asset> GetList(ParaCredentials ParaCredentials, AssetQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
-            return AssetsFillList(ParaCredentials, Query, RequestDepth);
+            return FillList(ParaCredentials, Query, RequestDepth);
         }
 
         /// <summary>
         /// Fills an Asset list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Asset> AssetsFillList(ParaCredentials ParaCredentials, AssetQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Asset> FillList(ParaCredentials ParaCredentials, AssetQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
@@ -212,7 +212,7 @@ namespace ParatureAPI.ApiHandler
             if (Query.IncludeAllCustomFields == true)
             {
                 ParaObjects.Asset objschem = new ParaObjects.Asset();
-                objschem = AssetSchema(ParaCredentials);
+                objschem = Schema(ParaCredentials);
                 Query.IncludeCustomField(objschem.CustomFields);
             }
 
@@ -309,7 +309,7 @@ namespace ParatureAPI.ApiHandler
 
         }
 
-        private static ParaObjects.Asset AssetFillDetails(Int64 Assetid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        private static ParaObjects.Asset FillDetails(Int64 Assetid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             ParaObjects.Asset Asset = new ParaObjects.Asset();

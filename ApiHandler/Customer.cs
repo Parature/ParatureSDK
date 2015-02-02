@@ -25,7 +25,7 @@ namespace ParatureAPI.ApiHandler
         /// If purge is set to true, the Customer will be permanently deleted. Otherwise, it will just be 
         /// moved to the trash bin, so it will still be able to be restored from the service desk.
         ///</param>
-        public static ApiCallResponse CustomerDelete(Int64 Customerid, ParaCredentials ParaCredentials, bool purge)
+        public static ApiCallResponse Delete(Int64 Customerid, ParaCredentials ParaCredentials, bool purge)
         {
             return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Customer, Customerid, purge);
         }
@@ -34,9 +34,9 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Creates a Parature Customer. Requires an Object and a credentials object. Will return the Newly Created Customerid. Returns 0 if the Customer creation fails.
         /// </summary>
-        public static ApiCallResponse CustomerInsert(ParaObjects.Customer customer, ParaCredentials ParaCredentials)
+        public static ApiCallResponse Insert(ParaObjects.Customer customer, ParaCredentials ParaCredentials)
         {
-            return CustomerInsert(customer, ParaCredentials, false, false);
+            return Insert(customer, ParaCredentials, false, false);
         }
 
 
@@ -44,7 +44,7 @@ namespace ParatureAPI.ApiHandler
         /// Creates a Parature Customer. Requires an Object and a credentials object. Need to specific whether to include a customer notification for the insert, as well as if the password should be included in the Notificaiton. 
         /// Will return the Newly Created Customerid. Returns 0 if the Customer creation fails.
         /// </summary>
-        public static ApiCallResponse CustomerInsert(ParaObjects.Customer customer, ParaCredentials ParaCredentials, bool NotifyCustomer, bool IncludePasswordInNotification)
+        public static ApiCallResponse Insert(ParaObjects.Customer customer, ParaCredentials ParaCredentials, bool NotifyCustomer, bool IncludePasswordInNotification)
         {
             // Extra arguments for the customer module
             ArrayList arguments = new ArrayList();
@@ -70,15 +70,15 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Updates a Parature Customer. Requires an Object and a credentials object.  Will return the updated Customerid. Returns 0 if the Customer update operation fails.
         /// </summary>
-        public static ApiCallResponse CustomerUpdate(ParaObjects.Customer Customer, ParaCredentials ParaCredentials)
+        public static ApiCallResponse Update(ParaObjects.Customer Customer, ParaCredentials ParaCredentials)
         {
-            return CustomerUpdate(Customer, ParaCredentials, false, false);
+            return Update(Customer, ParaCredentials, false, false);
         }
 
         /// <summary>
         /// Updates a Parature Customer. Requires an Object and a credentials object. Need to specific whether to include a customer notification for the insert, as well as if the password should be included in the Notificaiton. Will return the updated Customerid. Returns 0 if the Customer update operation fails.
         /// </summary>
-        public static ApiCallResponse CustomerUpdate(ParaObjects.Customer Customer, ParaCredentials ParaCredentials, bool NotifyCustomer, bool IncludePasswordInNotification)
+        public static ApiCallResponse Update(ParaObjects.Customer Customer, ParaCredentials ParaCredentials, bool NotifyCustomer, bool IncludePasswordInNotification)
         {
             // Extra arguments for the customer module
             ArrayList arguments = new ArrayList();
@@ -106,10 +106,10 @@ namespace ParatureAPI.ApiHandler
         /// <param name="RequestDepth">
         /// For a simple customer request, please put 0. <br/>When Requesting a Customer, there might be related objects linked to that Customer: such as Account, etc. <br/>With a regular Customer detail call, generally only the ID and names of the second level objects are loaded. 
         /// </param>
-        public static ParaObjects.Customer CustomerGetDetails(Int64 customerid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaObjects.Customer GetDetails(Int64 customerid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
             ParaObjects.Customer Customer = new ParaObjects.Customer();
-            Customer = CustomerFillDetails(customerid, ParaCredentials, RequestDepth, true);
+            Customer = FillDetails(customerid, ParaCredentials, RequestDepth, true);
 
             return Customer;
 
@@ -125,11 +125,11 @@ namespace ParatureAPI.ApiHandler
         /// <param name="ParaCredentials">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
-        public static ParaObjects.Customer CustomerGetDetails(Int64 Customerid, ParaCredentials ParaCredentials)
+        public static ParaObjects.Customer GetDetails(Int64 Customerid, ParaCredentials ParaCredentials)
         {
 
             ParaObjects.Customer Customer = new ParaObjects.Customer();
-            Customer = CustomerFillDetails(Customerid, ParaCredentials, ParaEnums.RequestDepth.Standard, true);
+            Customer = FillDetails(Customerid, ParaCredentials, ParaEnums.RequestDepth.Standard, true);
 
             return Customer;
 
@@ -141,7 +141,7 @@ namespace ParatureAPI.ApiHandler
         /// <param name="CustomerXML">
         /// The Customer XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaObjects.Customer CustomerGetDetails(XmlDocument CustomerXML)
+        public static ParaObjects.Customer GetDetails(XmlDocument CustomerXML)
         {
             var customer = new ParaObjects.Customer();
             customer = CustomerParser.CustomerFill(CustomerXML, 0, true, null);
@@ -160,7 +160,7 @@ namespace ParatureAPI.ApiHandler
         /// <param name="CustomerListXML">
         /// The Customer List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaEntityList<ParaObjects.Customer> CustomersGetList(XmlDocument CustomerListXML)
+        public static ParaEntityList<ParaObjects.Customer> GetList(XmlDocument CustomerListXML)
         {
             var customersList = new ParaEntityList<ParaObjects.Customer>();
             customersList = CustomerParser.CustomersFillList(CustomerListXML, true, 0, null);
@@ -174,9 +174,9 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Customers, following criteria you would set
         /// by instantiating a ModuleQuery.CustomerQuery object
         /// </summary>
-        public static ParaEntityList<ParaObjects.Customer> CustomersGetList(ParaCredentials ParaCredentials, CustomerQuery Query)
+        public static ParaEntityList<ParaObjects.Customer> GetList(ParaCredentials ParaCredentials, ParaEntityQuery Query)
         {
-            return CustomersFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
+            return FillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
 
         /// <summary>
@@ -186,9 +186,9 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Customer> CustomersGetList(ParaCredentials ParaCredentials, CustomerQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Customer> GetList(ParaCredentials ParaCredentials, ParaEntityQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
-            return CustomersFillList(ParaCredentials, Query, RequestDepth);
+            return FillList(ParaCredentials, Query, RequestDepth);
         }
 
         /// <summary>
@@ -197,23 +197,23 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>            
-        public static ParaEntityList<ParaObjects.Customer> CustomersGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Customer> GetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
-            return CustomersFillList(ParaCredentials, null, RequestDepth);
+            return FillList(ParaCredentials, null, RequestDepth);
         }
 
         /// <summary>
         /// Returns the list of the first 25 customers returned by the API.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Customer> CustomersGetList(ParaCredentials ParaCredentials)
+        public static ParaEntityList<ParaObjects.Customer> GetList(ParaCredentials ParaCredentials)
         {
-            return CustomersFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
+            return FillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
         }
 
         /// <summary>
         /// Fills an Customer list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Customer> CustomersFillList(ParaCredentials ParaCredentials, CustomerQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Customer> FillList(ParaCredentials ParaCredentials, ParaEntityQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
@@ -224,7 +224,7 @@ namespace ParatureAPI.ApiHandler
             if (Query.IncludeAllCustomFields)
             {
                 ParaObjects.Customer objschem = new ParaObjects.Customer();
-                objschem = CustomerSchema(ParaCredentials);
+                objschem = Schema(ParaCredentials);
                 Query.IncludeCustomField(objschem.CustomFields);
             }
             ApiCallResponse ar = new ApiCallResponse();
@@ -315,7 +315,7 @@ namespace ParatureAPI.ApiHandler
             return CustomersList;
         }
 
-        static ParaObjects.Customer CustomerFillDetails(Int64 Customerid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
+        static ParaObjects.Customer FillDetails(Int64 Customerid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
         {
             int requestdepth = (int)RequestDepth;
             ParaObjects.Customer Customer = new ParaObjects.Customer();
@@ -338,7 +338,7 @@ namespace ParatureAPI.ApiHandler
         }
 
 
-        public static ParaObjects.Customer CustomerSchema(ParaCredentials ParaCredentials)
+        public static ParaObjects.Customer Schema(ParaCredentials ParaCredentials)
         {
             ParaObjects.Customer Customer = new ParaObjects.Customer();
             ApiCallResponse ar = new ApiCallResponse();
@@ -357,9 +357,9 @@ namespace ParatureAPI.ApiHandler
         /// record in order to determine if any of the custom fields have special validation rules (e.g. email, phone, url)
         /// and set the "dataType" of the custom field accordingly.
         /// </summary> 
-        static public ParaObjects.Customer CustomerSchemaWithCustomFieldTypes(ParaCredentials ParaCredentials)
+        static public ParaObjects.Customer SchemaWithCustomFieldTypes(ParaCredentials ParaCredentials)
         {
-            ParaObjects.Customer Customer = CustomerSchema(ParaCredentials);
+            ParaObjects.Customer Customer = Schema(ParaCredentials);
 
             Customer = (ParaObjects.Customer)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, ParaEnums.ParatureModule.Customer, Customer);
 

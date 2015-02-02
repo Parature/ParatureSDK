@@ -18,15 +18,15 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Provides the Schema of the article module.
         /// </summary>
-        public static ParaObjects.Article ArticleSchema(ParaCredentials ParaCredentials)
+        public static ParaObjects.Article Schema(ParaCredentials pc)
         {
             ParaObjects.Article Article = new ParaObjects.Article();
             ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Article);
+            ar = ApiCallFactory.ObjectGetSchema(pc, ParaEnums.ParatureModule.Article);
 
             if (ar.HasException == false)
             {
-                Article = ArticleParser.ArticleFill(ar.xmlReceived, 0, false, ParaCredentials);
+                Article = ArticleParser.ArticleFill(ar.xmlReceived, 0, false, pc);
             }
 
             Article.ApiCallResponse = ar;
@@ -38,40 +38,40 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Provides the capability to delete a Article.
         /// </summary>
-        /// <param name="Articleid">
+        /// <param name="articleId">
         /// The id of the Article to delete
         /// </param>
         /// <param name="purge">
         /// If purge is set to true, the Article will be permanently deleted. Otherwise, it will just be 
         /// moved to the trash bin, so it will still be able to be restored from the service desk.
         ///</param>
-        public static ApiCallResponse ArticleDelete(Int64 Articleid, ParaCredentials ParaCredentials, bool purge)
+        public static ApiCallResponse Delete(Int64 articleId, ParaCredentials pc, bool purge)
         {
-            return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Article, Articleid, purge);
+            return ApiCallFactory.ObjectDelete(pc, ParaEnums.ParatureModule.Article, articleId, purge);
         }
 
         /// <summary>
-        /// Creates a Parature Article. Requires an Object and a credentials object. Will return the Newly Created Articleid
+        /// Creates a Parature Article. Requires an Object and a credentials object. Will return the Newly Created articleId
         /// </summary>
-        public static ApiCallResponse ArticleInsert(ParaObjects.Article Article, ParaCredentials ParaCredentials)
+        public static ApiCallResponse Insert(ParaObjects.Article article, ParaCredentials pc)
         {
             ApiCallResponse ar = new ApiCallResponse();
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-            doc = XmlGenerator.ArticleGenerateXml(Article);
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Article, doc, 0);
-            Article.Id = ar.Objectid;
-            Article.uniqueIdentifier = ar.Objectid;
+            doc = XmlGenerator.ArticleGenerateXml(article);
+            ar = ApiCallFactory.ObjectCreateUpdate(pc, ParaEnums.ParatureModule.Article, doc, 0);
+            article.Id = ar.Objectid;
+            article.uniqueIdentifier = ar.Objectid;
             return ar;
         }
 
         /// <summary>
-        /// Updates a Parature Article. Requires an Object and a credentials object.  Will return the updated Articleid
+        /// Updates a Parature Article. Requires an Object and a credentials object.  Will return the updated articleId
         /// </summary>
-        public static ApiCallResponse ArticleUpdate(ParaObjects.Article Article, ParaCredentials ParaCredentials)
+        public static ApiCallResponse Update(ParaObjects.Article article, ParaCredentials pc)
         {
             ApiCallResponse ar = new ApiCallResponse();
 
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Article, XmlGenerator.ArticleGenerateXml(Article), Article.Id);
+            ar = ApiCallFactory.ObjectCreateUpdate(pc, ParaEnums.ParatureModule.Article, XmlGenerator.ArticleGenerateXml(article), article.Id);
 
 
             return ar;
@@ -81,20 +81,20 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Returns an Article object with all the properties of an Article.
         /// </summary>
-        /// <param name="Articleid">
+        /// <param name="articleId">
         ///The Article number that you would like to get the details of. 
         ///Value Type: <see cref="Int64" />   (System.Int64)
         ///</param>
-        /// <param name="ParaCredentials">
+        /// <param name="pc">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
-        /// <param name="RequestDepth">
+        /// <param name="requestDepth">
         /// For a simple customer request, please put 0. <br/>When Requesting a Customer, there might be related objects linked to that Customer: such as Account, etc. <br/>With a regular Customer detail call, generally only the ID and names of the second level objects are loaded. 
         /// </param>
-        public static ParaObjects.Article ArticleGetDetails(Int64 Articleid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaObjects.Article GetDetails(Int64 articleId, ParaCredentials pc, ParaEnums.RequestDepth requestDepth)
         {
             ParaObjects.Article Article = new ParaObjects.Article();
-            Article = ArticleFillDetails(Articleid, ParaCredentials, RequestDepth, true);
+            Article = FillDetails(articleId, pc, requestDepth, true);
 
             return Article;
 
@@ -103,18 +103,18 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Returns an Article object with all of its properties filled.
         /// </summary>
-        /// <param name="Articleid">
+        /// <param name="articleId">
         ///The Article number that you would like to get the details of. 
         ///Value Type: <see cref="Int64" />   (System.Int64)
         ///</param>
-        /// <param name="ParaCredentials">
+        /// <param name="pc">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
-        public static ParaObjects.Article ArticleGetDetails(Int64 Articleid, ParaCredentials ParaCredentials)
+        public static ParaObjects.Article GetDetails(Int64 articleId, ParaCredentials pc)
         {
 
             ParaObjects.Article Article = new ParaObjects.Article();
-            Article = ArticleFillDetails(Articleid, ParaCredentials, ParaEnums.RequestDepth.Standard, true);
+            Article = FillDetails(articleId, pc, ParaEnums.RequestDepth.Standard, true);
 
             return Article;
 
@@ -123,16 +123,14 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Returns an article object from a XML Document. No calls to the APIs are made when calling this method.
         /// </summary>
-        /// <param name="ArticleXML">
+        /// <param name="articleXml">
         /// The Article XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaObjects.Article ArticleGetDetails(XmlDocument ArticleXML)
+        public static ParaObjects.Article GetDetails(XmlDocument articleXml)
         {
-            ParaObjects.Article article = new ParaObjects.Article();
-            article = ArticleParser.ArticleFill(ArticleXML, 0, true, null);
+            var article = ArticleParser.ArticleFill(articleXml, 0, true, null);
             article.FullyLoaded = true;
-
-            article.ApiCallResponse.xmlReceived = ArticleXML;
+            article.ApiCallResponse.xmlReceived = articleXml;
             article.ApiCallResponse.Objectid = article.Id;
 
             article.IsDirty = false;
@@ -142,15 +140,14 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Returns an article list object from a XML Document. No calls to the APIs are made when calling this method.
         /// </summary>
-        /// <param name="ArticleListXML">
+        /// <param name="articleListXml">
         /// The Article List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaEntityList<ParaObjects.Article> ArticlesGetList(XmlDocument ArticleListXML)
+        public static ParaEntityList<ParaObjects.Article> GetList(XmlDocument articleListXml)
         {
-            var articlesList = new ParaEntityList<ParaObjects.Article>();
-            articlesList = ArticleParser.ArticlesFillList(ArticleListXML, true, 0, null);
+            var articlesList = ArticleParser.ArticlesFillList(articleListXml, true, 0, null);
 
-            articlesList.ApiCallResponse.xmlReceived = ArticleListXML;
+            articlesList.ApiCallResponse.xmlReceived = articleListXml;
 
             return articlesList;
         }
@@ -159,9 +156,9 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Customers, following criteria you would set
         /// by instantiating a ModuleQuery.CustomerQuery object
         /// </summary>
-        public static ParaEntityList<ParaObjects.Article> ArticlesGetList(ParaCredentials ParaCredentials, ArticleQuery Query)
+        public static ParaEntityList<ParaObjects.Article> GetList(ParaCredentials ParaCredentials, ArticleQuery Query)
         {
-            return ArticlesFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
+            return FillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
 
         /// <summary>
@@ -171,9 +168,9 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Article> ArticlesGetList(ParaCredentials ParaCredentials, ArticleQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Article> GetList(ParaCredentials ParaCredentials, ArticleQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
-            return ArticlesFillList(ParaCredentials, Query, RequestDepth);
+            return FillList(ParaCredentials, Query, RequestDepth);
         }
         /// <summary>
         /// Returns the first 25 Articles returned by the APIs.
@@ -181,22 +178,22 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>           
-        public static ParaEntityList<ParaObjects.Article> ArticlesGetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Article> GetList(ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
-            return ArticlesFillList(ParaCredentials, null, RequestDepth);
+            return FillList(ParaCredentials, null, RequestDepth);
         }
         /// <summary>
         /// Returns the first 25 Articles returned by the APIs.           
         /// </summary>
-        public static ParaEntityList<ParaObjects.Article> ArticlesGetList(ParaCredentials ParaCredentials)
+        public static ParaEntityList<ParaObjects.Article> GetList(ParaCredentials ParaCredentials)
         {
-            return ArticlesFillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
+            return FillList(ParaCredentials, null, ParaEnums.RequestDepth.Standard);
         }
 
         /// <summary>
         /// Fills an Article list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Article> ArticlesFillList(ParaCredentials ParaCredentials, ArticleQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Article> FillList(ParaCredentials ParaCredentials, ArticleQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
@@ -237,7 +234,7 @@ namespace ParatureAPI.ApiHandler
                     int callsRequired = (int)Math.Ceiling((double)(ArticlesList.TotalItems / (double)ArticlesList.PageSize));
                     for (int i = 2; i <= callsRequired; i++)
                     {
-                        //ApiCallFactory.waitCheck(ParaCredentials.Accountid);
+                        //ApiCallFactory.waitCheck(pc.Accountid);
                         Query.PageNumber = i;
                         //implement semaphore right here (in the thread pool instance to control the generation of threads
                         instance = new ThreadPool.ObjectList(ParaCredentials, ParaEnums.ParatureModule.Article, Query.BuildQueryArguments(), requestdepth);
@@ -295,7 +292,7 @@ namespace ParatureAPI.ApiHandler
             return ArticlesList;
         }
 
-        static ParaObjects.Article ArticleFillDetails(Int64 Articleid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
+        static ParaObjects.Article FillDetails(Int64 Articleid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
         {
             int requestdepth = (int)RequestDepth;
             ParaObjects.Article article = new ParaObjects.Article();
@@ -318,14 +315,14 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Contains all the methods needed to work with the download module's folders.
         /// </summary>
-        public partial class ArticleFolder
+        public class ArticleFolder
         {
             /// <summary>
             /// Provides the Schema of the article folder entity.
             /// </summary>
             /// <param name="ParaCredentials"></param>
             /// <returns></returns>
-            public static ParaObjects.ArticleFolder ArticleFolderSchema(ParaCredentials ParaCredentials)
+            public static ParaObjects.ArticleFolder Schema(ParaCredentials ParaCredentials)
             {
                 ParaObjects.ArticleFolder ArticleFolder = new ParaObjects.ArticleFolder();
                 ApiCallResponse ar = new ApiCallResponse();
@@ -355,7 +352,7 @@ namespace ParatureAPI.ApiHandler
                 ArticleFolderQuery afQuery = new ArticleFolderQuery();
                 afQuery.PageSize = 5000;
                 var Folders = new ParaEntityList<ParaObjects.ArticleFolder>();
-                Folders = ArticleFoldersGetList(paracredentials, afQuery);
+                Folders = GetList(paracredentials, afQuery);
                 foreach (ParaObjects.ArticleFolder folder in Folders.Data)
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
@@ -387,7 +384,7 @@ namespace ParatureAPI.ApiHandler
                 afQuery.AddStaticFieldFilter(ArticleFolderQuery.ArticleFolderStaticFields.Name, ParaEnums.QueryCriteria.Equal, ParentFolderId.ToString());
                 afQuery.PageSize = 5000;
                 var Folders = new ParaEntityList<ParaObjects.ArticleFolder>();
-                Folders = ArticleFoldersGetList(paracredentials, afQuery);
+                Folders = GetList(paracredentials, afQuery);
                 foreach (ParaObjects.ArticleFolder folder in Folders.Data)
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
@@ -450,10 +447,10 @@ namespace ParatureAPI.ApiHandler
             /// <param name="RequestDepth">
             /// For a simple Article request, please put 0. <br/>When Requesting a Article, there might be related objects linked to that Article: such as Products, etc. <br/>With a regular Download detail call, generally only the ID and names of the second level objects are loaded. 
             /// </param>
-            public static ParaObjects.ArticleFolder ArticleFolderGetDetails(Int64 ArticleFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+            public static ParaObjects.ArticleFolder GetDetails(Int64 ArticleFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 ParaObjects.ArticleFolder ArticleFolder = new ParaObjects.ArticleFolder();
-                ArticleFolder = ArticleFolderFillDetails(ArticleFolderid, ParaCredentials, RequestDepth);
+                ArticleFolder = FillDetails(ArticleFolderid, ParaCredentials, RequestDepth);
 
                 return ArticleFolder;
 
@@ -465,7 +462,7 @@ namespace ParatureAPI.ApiHandler
             /// <param name="ArticleFolderXml">
             /// The Article Folder XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ParaObjects.ArticleFolder ArticleFolderGetDetails(XmlDocument ArticleFolderXml)
+            public static ParaObjects.ArticleFolder GetDetails(XmlDocument ArticleFolderXml)
             {
                 ParaObjects.ArticleFolder articleFolder = new ParaObjects.ArticleFolder();
                 articleFolder = ArticleParser.ArticleFolderParser.ArticleFolderFill(ArticleFolderXml, 0, null);
@@ -480,20 +477,20 @@ namespace ParatureAPI.ApiHandler
             /// <summary>
             /// Provides you with the capability to list Article Folders.
             /// </summary>
-            public static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersGetList(ParaCredentials ParaCredentials)
+            public static ParaEntityList<ParaObjects.ArticleFolder> GetList(ParaCredentials ParaCredentials)
             {
                 ArticleFolderQuery eq = new ArticleFolderQuery();
                 eq.RetrieveAllRecords = true;
-                return ArticleFoldersFillList(ParaCredentials, eq, ParaEnums.RequestDepth.Standard);
+                return FillList(ParaCredentials, eq, ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
             /// Provides you with the capability to list Article Folders, following criteria you would set
             /// by instantiating a ModuleQuery.DownloadQuery object
             /// </summary>
-            public static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersGetList(ParaCredentials ParaCredentials, ArticleFolderQuery Query)
+            public static ParaEntityList<ParaObjects.ArticleFolder> GetList(ParaCredentials ParaCredentials, ArticleFolderQuery Query)
             {
-                return ArticleFoldersFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
+                return FillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
@@ -503,9 +500,9 @@ namespace ParatureAPI.ApiHandler
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersGetList(ParaCredentials ParaCredentials, ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            public static ParaEntityList<ParaObjects.ArticleFolder> GetList(ParaCredentials ParaCredentials, ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
-                return ArticleFoldersFillList(ParaCredentials, Query, RequestDepth);
+                return FillList(ParaCredentials, Query, RequestDepth);
             }
 
             /// <summary>
@@ -514,7 +511,7 @@ namespace ParatureAPI.ApiHandler
             /// <param name="ArticleFoldersListXml">
             /// The Article Folder List XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersGetList(XmlDocument ArticleFoldersListXml)
+            public static ParaEntityList<ParaObjects.ArticleFolder> GetList(XmlDocument ArticleFoldersListXml)
             {
                 var articleFolderList = new ParaEntityList<ParaObjects.ArticleFolder>();
                 articleFolderList = ArticleParser.ArticleFolderParser.ArticleFoldersFillList(ArticleFoldersListXml, 0, null);
@@ -527,7 +524,7 @@ namespace ParatureAPI.ApiHandler
             /// <summary>
             /// Fills an Article list object.
             /// </summary>
-            private static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersFillList(ParaCredentials ParaCredentials, ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            private static ParaEntityList<ParaObjects.ArticleFolder> FillList(ParaCredentials ParaCredentials, ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 if (Query == null)
@@ -585,7 +582,7 @@ namespace ParatureAPI.ApiHandler
                 return ArticleFoldersList;
             }
 
-            private static ParaObjects.ArticleFolder ArticleFolderFillDetails(Int64 ArticleFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+            private static ParaObjects.ArticleFolder FillDetails(Int64 ArticleFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 ParaObjects.ArticleFolder ArticleFolder = new ParaObjects.ArticleFolder();
@@ -608,11 +605,11 @@ namespace ParatureAPI.ApiHandler
             }
 
 
-            public static ParaObjects.ArticleFolder ArticleFolderGetDetails(Int64 ArticleFolderid, ParaCredentials ParaCredentials)
+            public static ParaObjects.ArticleFolder GetDetails(Int64 ArticleFolderid, ParaCredentials ParaCredentials)
             {
 
                 ParaObjects.ArticleFolder ArticleFolder = new ParaObjects.ArticleFolder();
-                ArticleFolder = ArticleFolderFillDetails(ArticleFolderid, ParaCredentials, ParaEnums.RequestDepth.Standard);
+                ArticleFolder = FillDetails(ArticleFolderid, ParaCredentials, ParaEnums.RequestDepth.Standard);
 
                 return ArticleFolder;
             }

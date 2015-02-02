@@ -640,7 +640,7 @@ namespace ParatureAPI.ParaObjects
         /// <param name="fileName"></param>
         public void AttachmentsAdd(ParaCredentials creds, Byte[] attachment, string contentType, string fileName)
         {
-            Ticket_Attachments.Add(ApiHandler.Ticket.TicketAddAttachment(creds, attachment, contentType, fileName));
+            Ticket_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, attachment, contentType, fileName));
         }
 
         /// <summary>
@@ -660,7 +660,7 @@ namespace ParatureAPI.ParaObjects
         ///</param>
         public void AttachmentsAdd(ParaCredentials creds, string text, string contentType, string fileName)
         {
-            Ticket_Attachments.Add(ApiHandler.Ticket.TicketAddAttachment(creds, text, contentType, fileName));
+            Ticket_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, text, contentType, fileName));
         }
 
         /// <summary>
@@ -681,7 +681,7 @@ namespace ParatureAPI.ParaObjects
         public void AttachmentsUpdate(ParaCredentials creds, string text, string attachmentGuid, string contentType, string fileName)
         {
             AttachmentsDelete(attachmentGuid);
-            Ticket_Attachments.Add(ApiHandler.Ticket.TicketAddAttachment(creds, text, contentType, fileName));
+            Ticket_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, text, contentType, fileName));
         }
 
         /// <summary>
@@ -691,7 +691,7 @@ namespace ParatureAPI.ParaObjects
         public void AttachmentsUpdate(ParaCredentials creds, Byte[] attachment, string attachmentGuid, string contentType, string fileName)
         {
             AttachmentsDelete(attachmentGuid);
-            Ticket_Attachments.Add(ApiHandler.Ticket.TicketAddAttachment(creds, attachment, contentType, fileName));
+            Ticket_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, attachment, contentType, fileName));
         }
 
         /// <summary>

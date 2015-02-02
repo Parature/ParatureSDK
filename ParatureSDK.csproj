@@ -89,7 +89,6 @@
     <Compile Include="ApiHandler\Entities\TicketStatus.cs" />
     <Compile Include="ApiHandler\Entities\TicketView.cs" />
     <Compile Include="ApiHandler\Entities\Timezone.cs" />
-    <Compile Include="ApiHandler\Entity.cs" />
     <Compile Include="ApiHandler\Product.cs" />
     <Compile Include="ApiHandler\ApiUtils.cs" />
     <Compile Include="ApiHandler\Ticket.cs" />

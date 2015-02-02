@@ -16,7 +16,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Create a Parature Account. Requires an Object and a credentials object. Will return the Newly Created accountId. Returns 0 if the account creation fails.
         /// </summary>
-        public static ApiCallResponse AccountInsert(ParaObjects.Account account, ParaCredentials paraCredentials)
+        public static ApiCallResponse Insert(ParaObjects.Account account, ParaCredentials paraCredentials)
         {
             var ar = new ApiCallResponse();
             var doc = new XmlDocument();
@@ -30,7 +30,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Update a Parature Account. Requires an Object and a credentials object.  Will return the updated accountId. Returns 0 if the account update operation fails.
         /// </summary>
-        public static ApiCallResponse AccountUpdate(ParaObjects.Account account, ParaCredentials paraCredentials)
+        public static ApiCallResponse Update(ParaObjects.Account account, ParaCredentials paraCredentials)
         {
             var ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, ParaEnums.ParatureModule.Account, XmlGenerator.AccountGenerateXml(account), account.Id);
@@ -51,10 +51,10 @@ namespace ParatureAPI.ApiHandler
         /// For a simple account request, please put 0. <br/>When Requesting an account, there might be related objects linked to that Account: such as products, viewable accounts, etc. <br/>With a regular Account detail call, generally only the ID and names of the extra objects are loaded. 
         /// <example>For example, the call will return an Account.Product object, but only the Name and ID values will be filled. All of the other properties of the product object will be empty. If you select RequestDepth=1, then we will go one level deeper into our request and will therefore retrieve the product's detail for you. Products might have assets linked to them, so if you select RequestDepth=2, we will go to an even deeped level and return all the assets properties for that product, etc.<br/> Please make sure you only request the depth you need, as this might make your request slower. </example>
         /// </param>
-        public static ParaObjects.Account AccountGetDetails(Int64 accountid, ParaCredentials pc, ParaEnums.RequestDepth requestDepth)
+        public static ParaObjects.Account GetDetails(Int64 accountid, ParaCredentials pc, ParaEnums.RequestDepth requestDepth)
         {
             ParaObjects.Account account = new ParaObjects.Account();
-            account = AccountFillDetails(accountid, pc, requestDepth, true);
+            account = FillDetails(accountid, pc, requestDepth, true);
             return account;
         }
 
@@ -64,7 +64,7 @@ namespace ParatureAPI.ApiHandler
         /// <param name="accountXml">
         /// The Account XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaObjects.Account AccountGetDetails(XmlDocument accountXml)
+        public static ParaObjects.Account GetDetails(XmlDocument accountXml)
         {
             ParaObjects.Account account = new ParaObjects.Account();
             account = AccountParser.AccountFill(accountXml, 0, true, null);
@@ -87,11 +87,11 @@ namespace ParatureAPI.ApiHandler
         /// <param name="pc">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
-        public static ParaObjects.Account AccountGetDetails(Int64 accountid, ParaCredentials pc)
+        public static ParaObjects.Account GetDetails(Int64 accountid, ParaCredentials pc)
         {
 
             ParaObjects.Account account = new ParaObjects.Account();
-            account = AccountFillDetails(accountid, pc, ParaEnums.RequestDepth.Standard, true);
+            account = FillDetails(accountid, pc, ParaEnums.RequestDepth.Standard, true);
 
             return account;
 
@@ -101,9 +101,9 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list accounts, following criteria you would set
         /// by instantiating a ModuleQuery.AccountQuery object
         /// </summary>
-        public static ParaEntityList<ParaObjects.Account> AccountsGetList(ParaCredentials pc, AccountQuery query)
+        public static ParaEntityList<ParaObjects.Account> GetList(ParaCredentials pc, ParaEntityQuery query)
         {
-            return AccountsFillList(pc, query, ParaEnums.RequestDepth.Standard);
+            return FillList(pc, query, ParaEnums.RequestDepth.Standard);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace ParatureAPI.ApiHandler
         /// <param name="accountListXml">
         /// The Account List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaEntityList<ParaObjects.Account> AccountsGetList(XmlDocument accountListXml)
+        public static ParaEntityList<ParaObjects.Account> GetList(XmlDocument accountListXml)
         {
             var accountsList = new ParaEntityList<ParaObjects.Account>();
             accountsList = AccountParser.AccountsFillList(accountListXml, true, 0, null);
@@ -129,9 +129,9 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Account> AccountsGetList(ParaCredentials pc, AccountQuery query, ParaEnums.RequestDepth requestDepth)
+        public static ParaEntityList<ParaObjects.Account> GetList(ParaCredentials pc, ParaEntityQuery query, ParaEnums.RequestDepth requestDepth)
         {
-            return AccountsFillList(pc, query, requestDepth);
+            return FillList(pc, query, requestDepth);
         }
 
         /// <summary>
@@ -140,16 +140,16 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>  
-        public static ParaEntityList<ParaObjects.Account> AccountsGetList(ParaCredentials pc, ParaEnums.RequestDepth requestDepth)
+        public static ParaEntityList<ParaObjects.Account> GetList(ParaCredentials pc, ParaEnums.RequestDepth requestDepth)
         {
-            return AccountsFillList(pc, null, requestDepth);
+            return FillList(pc, null, requestDepth);
         }
         /// <summary>
         /// Will return the first 25 accounts returned by the APIs.
         /// </summary>            
-        public static ParaEntityList<ParaObjects.Account> AccountsGetList(ParaCredentials pc)
+        public static ParaEntityList<ParaObjects.Account> GetList(ParaCredentials pc)
         {
-            return AccountsFillList(pc, null, ParaEnums.RequestDepth.Standard);
+            return FillList(pc, null, ParaEnums.RequestDepth.Standard);
         }
 
 
@@ -172,7 +172,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Fills an account list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Account> AccountsFillList(ParaCredentials pc, ParaEntityQuery query, ParaEnums.RequestDepth requestDepth)
+        private static ParaEntityList<ParaObjects.Account> FillList(ParaCredentials pc, ParaEntityQuery query, ParaEnums.RequestDepth requestDepth)
         {
             var requestdepth = (int)requestDepth;
             if (query == null)
@@ -181,12 +181,12 @@ namespace ParatureAPI.ApiHandler
             }
 
             // Making a schema call and returning all custom fields to be included in the call.
-            if (query.IncludeAllCustomFields == true)
+            if (query.IncludeAllCustomFields)
             {
-                var objschem = AccountSchema(pc);
+                var objschem = Schema(pc);
                 query.IncludeCustomField(objschem.CustomFields);
             }
-            var ar = new ApiCallResponse();
+            ApiCallResponse ar;
             var accountsList = new ParaEntityList<ParaObjects.Account>();
 
             if (query.RetrieveAllRecords && query.OptimizePageSize)
@@ -270,7 +270,7 @@ namespace ParatureAPI.ApiHandler
             return accountsList;
         }
 
-        private static ParaObjects.Account AccountFillDetails(Int64 accountid, ParaCredentials pc, ParaEnums.RequestDepth requestDepth, bool minimalisticLoad)
+        private static ParaObjects.Account FillDetails(Int64 accountid, ParaCredentials pc, ParaEnums.RequestDepth requestDepth, bool minimalisticLoad)
         {
             var requestdepth = (int)requestDepth;
             var account = new ParaObjects.Account();
@@ -293,7 +293,7 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Gets an empty object with the scheam (custom fields, if any).
         /// </summary>            
-        public static ParaObjects.Account AccountSchema(ParaCredentials pc)
+        public static ParaObjects.Account Schema(ParaCredentials pc)
         {
             ParaObjects.Account account = new ParaObjects.Account();
             ApiCallResponse ar = new ApiCallResponse();
@@ -314,9 +314,9 @@ namespace ParatureAPI.ApiHandler
         /// record in order to determine if any of the custom fields have special validation rules (e.g. email, phone, url)
         /// and set the "dataType" of the custom field accordingly.
         /// </summary> 
-        static public ParaObjects.Account AccountSchemaWithCustomFieldTypes(ParaCredentials pc)
+        static public ParaObjects.Account SchemaWithCustomFieldTypes(ParaCredentials pc)
         {
-            ParaObjects.Account account = AccountSchema(pc);
+            ParaObjects.Account account = Schema(pc);
 
             account = (ParaObjects.Account)ApiCallFactory.ObjectCheckCustomFieldTypes(pc, ParaEnums.ParatureModule.Account, account);
 

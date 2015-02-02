@@ -302,7 +302,7 @@ namespace ParatureAPI.XmlToObjectParser
 
                         if (childDepth > 0)
                         {
-                            pf = Download.DownloadFolder.DownloadFolderGetDetails(Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString()), ParaCredentials, (ParaEnums.RequestDepth)childDepth);
+                            pf = Download.DownloadFolder.GetDetails(Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString()), ParaCredentials, (ParaEnums.RequestDepth)childDepth);
                         }
                         DownloadFolder.Parent_Folder = pf;
                     }
