@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Threading;
 using System.Xml;
+using ParatureAPI.ModuleQuery;
 using ParatureAPI.PagedData;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
@@ -173,7 +174,7 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Customers, following criteria you would set
         /// by instantiating a ModuleQuery.CustomerQuery object
         /// </summary>
-        public static ParaEntityList<ParaObjects.Customer> CustomersGetList(ParaCredentials ParaCredentials, ModuleQuery.CustomerQuery Query)
+        public static ParaEntityList<ParaObjects.Customer> CustomersGetList(ParaCredentials ParaCredentials, CustomerQuery Query)
         {
             return CustomersFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
@@ -185,7 +186,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Customer> CustomersGetList(ParaCredentials ParaCredentials, ModuleQuery.CustomerQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Customer> CustomersGetList(ParaCredentials ParaCredentials, CustomerQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             return CustomersFillList(ParaCredentials, Query, RequestDepth);
         }
@@ -212,12 +213,12 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Fills an Customer list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Customer> CustomersFillList(ParaCredentials ParaCredentials, ModuleQuery.CustomerQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Customer> CustomersFillList(ParaCredentials ParaCredentials, CustomerQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
             {
-                Query = new ModuleQuery.CustomerQuery();
+                Query = new CustomerQuery();
             }
             // Making a schema call and returning all custom fields to be included in the call.
             if (Query.IncludeAllCustomFields)
@@ -233,7 +234,7 @@ namespace ParatureAPI.ApiHandler
             {
                 OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(CustomersList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Customer);
                 ar = rslt.apiResponse;
-                Query = (ModuleQuery.CustomerQuery)rslt.Query;
+                Query = (CustomerQuery)rslt.Query;
                 CustomersList = ((ParaEntityList<ParaObjects.Customer>)rslt.objectList);
                 rslt = null;
             }

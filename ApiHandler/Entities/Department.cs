@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using ParatureAPI.EntityQuery;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
 
@@ -56,14 +57,14 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of Departments from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Department> DepartmentsGetList(ParaCredentials paraCredentials, EntityQuery.DepartmentQuery query)
+        public static ParaEntityList<ParaObjects.Department> DepartmentsGetList(ParaCredentials paraCredentials, DepartmentQuery query)
         {
             return DepartmentFillList(paraCredentials, query);
         }
         /// <summary>
         /// Fills a Departmentslist object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Department> DepartmentFillList(ParaCredentials paraCredentials, EntityQuery.DepartmentQuery query)
+        private static ParaEntityList<ParaObjects.Department> DepartmentFillList(ParaCredentials paraCredentials, DepartmentQuery query)
         {
 
             var departmentsList = new ParaEntityList<ParaObjects.Department>();

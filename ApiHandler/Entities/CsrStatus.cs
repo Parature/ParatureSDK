@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using ParatureAPI.EntityQuery;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
 
@@ -30,13 +31,13 @@ namespace ParatureAPI.ApiHandler.Entities
         /// </summary>
         public static ParaEntityList<ParaObjects.CsrStatus> CsrStatusGetList(ParaCredentials paraCredentials)
         {
-            return CsrStatusFillList(paraCredentials, new EntityQuery.CsrStatusQuery());
+            return CsrStatusFillList(paraCredentials, new CsrStatusQuery());
         }
 
         /// <summary>
         /// Get the list of Csrs from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.CsrStatus> CsrStatusGetList(ParaCredentials paraCredentials, EntityQuery.CsrStatusQuery query)
+        public static ParaEntityList<ParaObjects.CsrStatus> CsrStatusGetList(ParaCredentials paraCredentials, CsrStatusQuery query)
         {
             return CsrStatusFillList(paraCredentials, query);
         }
@@ -77,7 +78,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Fills a Sla list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.CsrStatus> CsrStatusFillList(ParaCredentials paraCredentials, EntityQuery.CsrStatusQuery query)
+        private static ParaEntityList<ParaObjects.CsrStatus> CsrStatusFillList(ParaCredentials paraCredentials, CsrStatusQuery query)
         {
 
             var CsrStatusList = new ParaEntityList<ParaObjects.CsrStatus>();

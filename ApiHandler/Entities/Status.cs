@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using ParatureAPI.EntityQuery;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
 
@@ -59,20 +60,20 @@ namespace ParatureAPI.ApiHandler.Entities
         /// </summary>
         public static ParaEntityList<ParaObjects.Status> StatusGetList(ParaCredentials ParaCredentials)
         {
-            return StatusFillList(ParaCredentials, new EntityQuery.StatusQuery());
+            return StatusFillList(ParaCredentials, new StatusQuery());
         }
 
         /// <summary>
         /// Get the list of Statuss from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Status> StatusGetList(ParaCredentials ParaCredentials, EntityQuery.StatusQuery Query)
+        public static ParaEntityList<ParaObjects.Status> StatusGetList(ParaCredentials ParaCredentials, StatusQuery Query)
         {
             return StatusFillList(ParaCredentials, Query);
         }
         /// <summary>
         /// Fills a Status List object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Status> StatusFillList(ParaCredentials ParaCredentials, EntityQuery.StatusQuery Query)
+        private static ParaEntityList<ParaObjects.Status> StatusFillList(ParaCredentials ParaCredentials, StatusQuery Query)
         {
 
             var StatusList = new ParaEntityList<ParaObjects.Status>();

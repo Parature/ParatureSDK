@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using ParatureAPI.EntityQuery;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
 
@@ -43,13 +44,13 @@ namespace ParatureAPI.ApiHandler.Entities
         /// </summary>
         public static ParaEntityList<ParaObjects.Sla> SLAsGetList(ParaCredentials paraCredentials)
         {
-            return SlaFillList(paraCredentials, new EntityQuery.SlaQuery());
+            return SlaFillList(paraCredentials, new SlaQuery());
         }
 
         /// <summary>
         /// Get the list of SLAs from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Sla> SLAsGetList(ParaCredentials paraCredentials, EntityQuery.SlaQuery query)
+        public static ParaEntityList<ParaObjects.Sla> SLAsGetList(ParaCredentials paraCredentials, SlaQuery query)
         {
             return SlaFillList(paraCredentials, query);
         }
@@ -73,7 +74,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Fills a Sla list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Sla> SlaFillList(ParaCredentials paraCredentials, EntityQuery.SlaQuery query)
+        private static ParaEntityList<ParaObjects.Sla> SlaFillList(ParaCredentials paraCredentials, SlaQuery query)
         {
 
             var SlasList = new ParaEntityList<ParaObjects.Sla>();

@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Xml;
+using ParatureAPI.ModuleQuery;
 using ParatureAPI.PagedData;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
@@ -163,7 +164,7 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Assets, following criteria you would set
         /// by instantiating a ModuleQuery.AssetQuery object
         /// </summary>
-        public static ParaEntityList<ParaObjects.Asset> AssetsGetList(ParaCredentials ParaCredentials, ModuleQuery.AssetQuery Query)
+        public static ParaEntityList<ParaObjects.Asset> AssetsGetList(ParaCredentials ParaCredentials, AssetQuery Query)
         {
             return AssetsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
@@ -192,7 +193,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Asset> AssetsGetList(ParaCredentials ParaCredentials, ModuleQuery.AssetQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Asset> AssetsGetList(ParaCredentials ParaCredentials, AssetQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             return AssetsFillList(ParaCredentials, Query, RequestDepth);
         }
@@ -200,12 +201,12 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Fills an Asset list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Asset> AssetsFillList(ParaCredentials ParaCredentials, ModuleQuery.AssetQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Asset> AssetsFillList(ParaCredentials ParaCredentials, AssetQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
             {
-                Query = new ModuleQuery.AssetQuery();
+                Query = new AssetQuery();
             }
             // Making a schema call and returning all custom fields to be included in the call.
             if (Query.IncludeAllCustomFields == true)
@@ -222,7 +223,7 @@ namespace ParatureAPI.ApiHandler
             {
                 OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(AssetsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Asset);
                 ar = rslt.apiResponse;
-                Query = (ModuleQuery.AssetQuery)rslt.Query;
+                Query = (AssetQuery)rslt.Query;
                 AssetsList = ((ParaEntityList<ParaObjects.Asset>)rslt.objectList);
                 rslt = null;
             }

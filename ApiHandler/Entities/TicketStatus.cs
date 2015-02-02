@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using ParatureAPI.EntityQuery;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
 
@@ -26,12 +27,12 @@ namespace ParatureAPI.ApiHandler.Entities
         /// </summary>
         public static ParaEntityList<ParaObjects.TicketStatus> TicketStatusGetList(ParaCredentials paraCredentials)
         {
-            return TicketStatusFillList(paraCredentials, new EntityQuery.TicketStatusQuery());
+            return TicketStatusFillList(paraCredentials, new TicketStatusQuery());
         }
         /// <summary>
         /// Get the list of Csrs from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.TicketStatus> TicketStatusGetList(ParaCredentials paraCredentials, EntityQuery.TicketStatusQuery query)
+        public static ParaEntityList<ParaObjects.TicketStatus> TicketStatusGetList(ParaCredentials paraCredentials, TicketStatusQuery query)
         {
             return TicketStatusFillList(paraCredentials, query);
         }
@@ -72,7 +73,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Fills a Sla list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.TicketStatus> TicketStatusFillList(ParaCredentials paraCredentials, EntityQuery.TicketStatusQuery query)
+        private static ParaEntityList<ParaObjects.TicketStatus> TicketStatusFillList(ParaCredentials paraCredentials, TicketStatusQuery query)
         {
 
             var TicketStatusList = new ParaEntityList<ParaObjects.TicketStatus>();

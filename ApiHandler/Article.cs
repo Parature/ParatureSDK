@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Xml;
+using ParatureAPI.EntityQuery;
+using ParatureAPI.ModuleQuery;
 using ParatureAPI.PagedData;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
@@ -157,7 +159,7 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Customers, following criteria you would set
         /// by instantiating a ModuleQuery.CustomerQuery object
         /// </summary>
-        public static ParaEntityList<ParaObjects.Article> ArticlesGetList(ParaCredentials ParaCredentials, ModuleQuery.ArticleQuery Query)
+        public static ParaEntityList<ParaObjects.Article> ArticlesGetList(ParaCredentials ParaCredentials, ArticleQuery Query)
         {
             return ArticlesFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
@@ -169,7 +171,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Article> ArticlesGetList(ParaCredentials ParaCredentials, ModuleQuery.ArticleQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Article> ArticlesGetList(ParaCredentials ParaCredentials, ArticleQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             return ArticlesFillList(ParaCredentials, Query, RequestDepth);
         }
@@ -194,12 +196,12 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Fills an Article list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Article> ArticlesFillList(ParaCredentials ParaCredentials, ModuleQuery.ArticleQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Article> ArticlesFillList(ParaCredentials ParaCredentials, ArticleQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
             {
-                Query = new ModuleQuery.ArticleQuery();
+                Query = new ArticleQuery();
             }
 
 
@@ -210,7 +212,7 @@ namespace ParatureAPI.ApiHandler
             {
                 OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(ArticlesList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Article);
                 ar = rslt.apiResponse;
-                Query = (ModuleQuery.ArticleQuery)rslt.Query;
+                Query = (ArticleQuery)rslt.Query;
                 ArticlesList = ((ParaEntityList<ParaObjects.Article>)rslt.objectList);
                 rslt = null;
             }
@@ -350,7 +352,7 @@ namespace ParatureAPI.ApiHandler
             public static Int64 FolderGetIdByName(string FolderName, bool IgnoreCase, ParaCredentials paracredentials)
             {
                 Int64 id = 0;
-                EntityQuery.ArticleFolderQuery afQuery = new EntityQuery.ArticleFolderQuery();
+                ArticleFolderQuery afQuery = new ArticleFolderQuery();
                 afQuery.PageSize = 5000;
                 var Folders = new ParaEntityList<ParaObjects.ArticleFolder>();
                 Folders = ArticleFoldersGetList(paracredentials, afQuery);
@@ -381,8 +383,8 @@ namespace ParatureAPI.ApiHandler
             public static Int64 FolderGetIdByName(string FolderName, bool IgnoreCase, ParaCredentials paracredentials, Int64 ParentFolderId)
             {
                 Int64 id = 0;
-                EntityQuery.ArticleFolderQuery afQuery = new EntityQuery.ArticleFolderQuery();
-                afQuery.AddStaticFieldFilter(EntityQuery.ArticleFolderQuery.ArticleFolderStaticFields.Name, ParaEnums.QueryCriteria.Equal, ParentFolderId.ToString());
+                ArticleFolderQuery afQuery = new ArticleFolderQuery();
+                afQuery.AddStaticFieldFilter(ArticleFolderQuery.ArticleFolderStaticFields.Name, ParaEnums.QueryCriteria.Equal, ParentFolderId.ToString());
                 afQuery.PageSize = 5000;
                 var Folders = new ParaEntityList<ParaObjects.ArticleFolder>();
                 Folders = ArticleFoldersGetList(paracredentials, afQuery);
@@ -480,7 +482,7 @@ namespace ParatureAPI.ApiHandler
             /// </summary>
             public static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersGetList(ParaCredentials ParaCredentials)
             {
-                EntityQuery.ArticleFolderQuery eq = new EntityQuery.ArticleFolderQuery();
+                ArticleFolderQuery eq = new ArticleFolderQuery();
                 eq.RetrieveAllRecords = true;
                 return ArticleFoldersFillList(ParaCredentials, eq, ParaEnums.RequestDepth.Standard);
             }
@@ -489,7 +491,7 @@ namespace ParatureAPI.ApiHandler
             /// Provides you with the capability to list Article Folders, following criteria you would set
             /// by instantiating a ModuleQuery.DownloadQuery object
             /// </summary>
-            public static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ArticleFolderQuery Query)
+            public static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersGetList(ParaCredentials ParaCredentials, ArticleFolderQuery Query)
             {
                 return ArticleFoldersFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
             }
@@ -501,7 +503,7 @@ namespace ParatureAPI.ApiHandler
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            public static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersGetList(ParaCredentials ParaCredentials, ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 return ArticleFoldersFillList(ParaCredentials, Query, RequestDepth);
             }
@@ -525,12 +527,12 @@ namespace ParatureAPI.ApiHandler
             /// <summary>
             /// Fills an Article list object.
             /// </summary>
-            private static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersFillList(ParaCredentials ParaCredentials, EntityQuery.ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            private static ParaEntityList<ParaObjects.ArticleFolder> ArticleFoldersFillList(ParaCredentials ParaCredentials, ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 if (Query == null)
                 {
-                    Query = new EntityQuery.ArticleFolderQuery();
+                    Query = new ArticleFolderQuery();
                 }
 
                 ApiCallResponse ar = new ApiCallResponse();

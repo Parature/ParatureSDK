@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using ParatureAPI.EntityQuery;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
 
@@ -56,20 +57,20 @@ namespace ParatureAPI.ApiHandler.Entities
         /// </summary>
         public static ParaEntityList<ParaObjects.Queue> QueueGetList(ParaCredentials paraCredentials)
         {
-            return QueueFillList(paraCredentials, new EntityQuery.QueueQuery());
+            return QueueFillList(paraCredentials, new QueueQuery());
         }
 
         /// <summary>
         /// Get the list of Queues from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Queue> QueueGetList(ParaCredentials paraCredentials, EntityQuery.QueueQuery query)
+        public static ParaEntityList<ParaObjects.Queue> QueueGetList(ParaCredentials paraCredentials, QueueQuery query)
         {
             return QueueFillList(paraCredentials, query);
         }
         /// <summary>
         /// Fills a Queue List object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Queue> QueueFillList(ParaCredentials paraCredentials, EntityQuery.QueueQuery query)
+        private static ParaEntityList<ParaObjects.Queue> QueueFillList(ParaCredentials paraCredentials, QueueQuery query)
         {
 
             var QueueList = new ParaEntityList<ParaObjects.Queue>();

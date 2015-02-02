@@ -1,6 +1,8 @@
 using System;
 using System.Threading;
 using System.Xml;
+using ParatureAPI.EntityQuery;
+using ParatureAPI.ModuleQuery;
 using ParatureAPI.PagedData;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
@@ -163,7 +165,7 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Products, following criteria you would set
         /// by instantiating a ModuleQuery.ProductQuery object
         /// </summary>
-        public static ParaEntityList<ParaObjects.Product> ProductsGetList(ParaCredentials ParaCredentials, ModuleQuery.ProductQuery Query)
+        public static ParaEntityList<ParaObjects.Product> ProductsGetList(ParaCredentials ParaCredentials, ProductQuery Query)
         {
             return ProductsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
@@ -175,7 +177,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Product> ProductsGetList(ParaCredentials ParaCredentials, ModuleQuery.ProductQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Product> ProductsGetList(ParaCredentials ParaCredentials, ProductQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             return ProductsFillList(ParaCredentials, Query, RequestDepth);
         }
@@ -202,12 +204,12 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Fills an Customer list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Product> ProductsFillList(ParaCredentials ParaCredentials, ModuleQuery.ProductQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Product> ProductsFillList(ParaCredentials ParaCredentials, ProductQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
             {
-                Query = new ModuleQuery.ProductQuery();
+                Query = new ProductQuery();
             }
             // Making a schema call and returning all custom fields to be included in the call.
             if (Query.IncludeAllCustomFields == true)
@@ -224,7 +226,7 @@ namespace ParatureAPI.ApiHandler
             {
                 OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(ProductsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Product);
                 ar = rslt.apiResponse;
-                Query = (ModuleQuery.ProductQuery)rslt.Query;
+                Query = (ProductQuery)rslt.Query;
                 ProductsList = ((ParaEntityList<ParaObjects.Product>)rslt.objectList);
                 rslt = null;
             }
@@ -351,7 +353,7 @@ namespace ParatureAPI.ApiHandler
             public static Int64 FolderGetIdByName(string FolderName, bool IgnoreCase, ParaCredentials paracredentials)
             {
                 Int64 id = 0;
-                EntityQuery.DownloadFolderQuery dfQuery = new EntityQuery.DownloadFolderQuery();
+                DownloadFolderQuery dfQuery = new DownloadFolderQuery();
                 dfQuery.PageSize = 5000;
                 var Folders = new ParaEntityList<ParaObjects.DownloadFolder>();
                 Folders = Download.DownloadFolder.DownloadFoldersGetList(paracredentials, dfQuery);
@@ -382,8 +384,8 @@ namespace ParatureAPI.ApiHandler
             public static Int64 FolderGetIdByName(string FolderName, bool IgnoreCase, ParaCredentials paracredentials, Int64 ParentFolderId)
             {
                 Int64 id = 0;
-                EntityQuery.DownloadFolderQuery dfQuery = new EntityQuery.DownloadFolderQuery();
-                dfQuery.AddStaticFieldFilter(EntityQuery.DownloadFolderQuery.DownloadFolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, ParentFolderId.ToString());
+                DownloadFolderQuery dfQuery = new DownloadFolderQuery();
+                dfQuery.AddStaticFieldFilter(DownloadFolderQuery.DownloadFolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, ParentFolderId.ToString());
                 dfQuery.PageSize = 5000;
                 var Folders = new ParaEntityList<ParaObjects.DownloadFolder>();
                 Folders = Download.DownloadFolder.DownloadFoldersGetList(paracredentials, dfQuery);
@@ -474,14 +476,14 @@ namespace ParatureAPI.ApiHandler
             /// </summary>
             public static ParaEntityList<ParaObjects.ProductFolder> ProductFoldersGetList(ParaCredentials ParaCredentials)
             {
-                return ProductFoldersFillList(ParaCredentials, new EntityQuery.ProductFolderQuery(), ParaEnums.RequestDepth.Standard);
+                return ProductFoldersFillList(ParaCredentials, new ProductFolderQuery(), ParaEnums.RequestDepth.Standard);
             }
 
             /// <summary>
             /// Provides you with the capability to list Downloads, following criteria you would set
             /// by instantiating a ModuleQuery.DownloadQuery object
             /// </summary>
-            public static ParaEntityList<ParaObjects.ProductFolder> ProductFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ProductFolderQuery Query)
+            public static ParaEntityList<ParaObjects.ProductFolder> ProductFoldersGetList(ParaCredentials ParaCredentials, ProductFolderQuery Query)
             {
                 return ProductFoldersFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
             }
@@ -493,7 +495,7 @@ namespace ParatureAPI.ApiHandler
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ParaEntityList<ParaObjects.ProductFolder> ProductFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.ProductFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            public static ParaEntityList<ParaObjects.ProductFolder> ProductFoldersGetList(ParaCredentials ParaCredentials, ProductFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 return ProductFoldersFillList(ParaCredentials, Query, RequestDepth);
             }
@@ -517,12 +519,12 @@ namespace ParatureAPI.ApiHandler
             /// <summary>
             /// Fills a ProductFolderList object.
             /// </summary>
-            private static ParaEntityList<ParaObjects.ProductFolder> ProductFoldersFillList(ParaCredentials ParaCredentials, EntityQuery.ProductFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            private static ParaEntityList<ParaObjects.ProductFolder> ProductFoldersFillList(ParaCredentials ParaCredentials, ProductFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 if (Query == null)
                 {
-                    Query = new EntityQuery.ProductFolderQuery();
+                    Query = new ProductFolderQuery();
                 }
 
                 ApiCallResponse ar = new ApiCallResponse();

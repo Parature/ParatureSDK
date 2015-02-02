@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using ParatureAPI.EntityQuery;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
 
@@ -58,20 +59,20 @@ namespace ParatureAPI.ApiHandler.Entities
         /// </summary>
         public static ParaEntityList<ParaObjects.Timezone> TimezoneGetList(ParaCredentials ParaCredentials)
         {
-            return TimezoneFillList(ParaCredentials, new EntityQuery.TimezoneQuery());
+            return TimezoneFillList(ParaCredentials, new TimezoneQuery());
         }
 
         /// <summary>
         /// Get the list of Timezones from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Timezone> TimezoneGetList(ParaCredentials ParaCredentials, EntityQuery.TimezoneQuery Query)
+        public static ParaEntityList<ParaObjects.Timezone> TimezoneGetList(ParaCredentials ParaCredentials, TimezoneQuery Query)
         {
             return TimezoneFillList(ParaCredentials, Query);
         }
         /// <summary>
         /// Fills a Timezone List object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Timezone> TimezoneFillList(ParaCredentials ParaCredentials, EntityQuery.TimezoneQuery Query)
+        private static ParaEntityList<ParaObjects.Timezone> TimezoneFillList(ParaCredentials ParaCredentials, TimezoneQuery Query)
         {
 
             var TimezoneList = new ParaEntityList<ParaObjects.Timezone>();

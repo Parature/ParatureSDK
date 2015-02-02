@@ -1,6 +1,8 @@
 using System;
 using System.Threading;
 using System.Xml;
+using ParatureAPI.EntityQuery;
+using ParatureAPI.ModuleQuery;
 using ParatureAPI.PagedData;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
@@ -160,7 +162,7 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Downloads, following criteria you would set
         /// by instantiating a ModuleQuery.DownloadQuery object
         /// </summary>
-        public static ParaEntityList<ParaObjects.Download> DownloadsGetList(ParaCredentials ParaCredentials, ModuleQuery.DownloadQuery Query)
+        public static ParaEntityList<ParaObjects.Download> DownloadsGetList(ParaCredentials ParaCredentials, DownloadQuery Query)
         {
             return DownloadsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
@@ -172,7 +174,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Download> DownloadsGetList(ParaCredentials ParaCredentials, ModuleQuery.DownloadQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Download> DownloadsGetList(ParaCredentials ParaCredentials, DownloadQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             return DownloadsFillList(ParaCredentials, Query, RequestDepth);
         }
@@ -199,12 +201,12 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Fills a Download list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Download> DownloadsFillList(ParaCredentials ParaCredentials, ModuleQuery.DownloadQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Download> DownloadsFillList(ParaCredentials ParaCredentials, DownloadQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
             {
-                Query = new ModuleQuery.DownloadQuery();
+                Query = new DownloadQuery();
             }
 
 
@@ -215,7 +217,7 @@ namespace ParatureAPI.ApiHandler
             {
                 OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(DownloadsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Download);
                 ar = rslt.apiResponse;
-                Query = (ModuleQuery.DownloadQuery)rslt.Query;
+                Query = (DownloadQuery)rslt.Query;
                 DownloadsList = ((ParaEntityList<ParaObjects.Download>)rslt.objectList);
                 rslt = null;
             }
@@ -340,7 +342,7 @@ namespace ParatureAPI.ApiHandler
             public static Int64 FolderGetIdByName(string FolderName, bool IgnoreCase, ParaCredentials paracredentials)
             {
                 Int64 id = 0;
-                EntityQuery.DownloadFolderQuery dfQuery = new EntityQuery.DownloadFolderQuery();
+                DownloadFolderQuery dfQuery = new DownloadFolderQuery();
                 dfQuery.PageSize = 5000;
                 var Folders = new ParaEntityList<ParaObjects.DownloadFolder>();
                 Folders = DownloadFoldersGetList(paracredentials, dfQuery);
@@ -371,8 +373,8 @@ namespace ParatureAPI.ApiHandler
             public static Int64 FolderGetIdByName(string FolderName, bool IgnoreCase, ParaCredentials paracredentials, Int64 ParentFolderId)
             {
                 Int64 id = 0;
-                EntityQuery.DownloadFolderQuery dfQuery = new EntityQuery.DownloadFolderQuery();
-                dfQuery.AddStaticFieldFilter(EntityQuery.DownloadFolderQuery.DownloadFolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, ParentFolderId.ToString());
+                DownloadFolderQuery dfQuery = new DownloadFolderQuery();
+                dfQuery.AddStaticFieldFilter(DownloadFolderQuery.DownloadFolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, ParentFolderId.ToString());
                 dfQuery.PageSize = 5000;
                 var Folders = new ParaEntityList<ParaObjects.DownloadFolder>();
                 Folders = DownloadFoldersGetList(paracredentials, dfQuery);
@@ -439,7 +441,7 @@ namespace ParatureAPI.ApiHandler
             /// Provides you with the capability to list Downloads, following criteria you would set
             /// by instantiating a ModuleQuery.DownloadQuery object
             /// </summary>
-            public static ParaEntityList<ParaObjects.DownloadFolder> DownloadFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.DownloadFolderQuery Query)
+            public static ParaEntityList<ParaObjects.DownloadFolder> DownloadFoldersGetList(ParaCredentials ParaCredentials, DownloadFolderQuery Query)
             {
                 return DownloadFoldersFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
             }
@@ -451,7 +453,7 @@ namespace ParatureAPI.ApiHandler
             /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
             /// the standard field depth.
             /// </summary>
-            public static ParaEntityList<ParaObjects.DownloadFolder> DownloadFoldersGetList(ParaCredentials ParaCredentials, EntityQuery.DownloadFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            public static ParaEntityList<ParaObjects.DownloadFolder> DownloadFoldersGetList(ParaCredentials ParaCredentials, DownloadFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 return DownloadFoldersFillList(ParaCredentials, Query, RequestDepth);
             }
@@ -459,7 +461,7 @@ namespace ParatureAPI.ApiHandler
             /// <summary>
             /// Fills an Download list object.
             /// </summary>
-            private static ParaEntityList<ParaObjects.DownloadFolder> DownloadFoldersFillList(ParaCredentials ParaCredentials, EntityQuery.DownloadFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            private static ParaEntityList<ParaObjects.DownloadFolder> DownloadFoldersFillList(ParaCredentials ParaCredentials, DownloadFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
                 var DownloadFoldersList = new ParaEntityList<ParaObjects.DownloadFolder>();

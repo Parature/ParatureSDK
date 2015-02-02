@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Threading;
 using System.Xml;
+using ParatureAPI.ModuleQuery;
 using ParatureAPI.PagedData;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
@@ -189,7 +190,7 @@ namespace ParatureAPI.ApiHandler
         /// Provides you with the capability to list Tickets, following criteria you would set
         /// by instantiating a ModuleQuery.CustomerQuery object
         /// </summary>
-        public static ParaEntityList<ParaObjects.Ticket> TicketsGetList(ParaCredentials ParaCredentials, ModuleQuery.TicketQuery Query)
+        public static ParaEntityList<ParaObjects.Ticket> TicketsGetList(ParaCredentials ParaCredentials, TicketQuery Query)
         {
             return TicketsFillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
         }
@@ -201,7 +202,7 @@ namespace ParatureAPI.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Ticket> TicketsGetList(ParaCredentials ParaCredentials, ModuleQuery.TicketQuery Query, ParaEnums.RequestDepth RequestDepth)
+        public static ParaEntityList<ParaObjects.Ticket> TicketsGetList(ParaCredentials ParaCredentials, TicketQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             return TicketsFillList(ParaCredentials, Query, RequestDepth);
         }
@@ -209,12 +210,12 @@ namespace ParatureAPI.ApiHandler
         /// <summary>
         /// Fills an Ticket list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Ticket> TicketsFillList(ParaCredentials ParaCredentials, ModuleQuery.TicketQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Ticket> TicketsFillList(ParaCredentials ParaCredentials, TicketQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
             {
-                Query = new ModuleQuery.TicketQuery();
+                Query = new TicketQuery();
             }
 
             // Making a schema call and returning all custom fields to be included in the call.
@@ -231,7 +232,7 @@ namespace ParatureAPI.ApiHandler
             {
                 OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(TicketsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Ticket);
                 ar = rslt.apiResponse;
-                Query = (ModuleQuery.TicketQuery)rslt.Query;
+                Query = (TicketQuery)rslt.Query;
                 TicketsList = ((ParaEntityList<ParaObjects.Ticket>)rslt.objectList);
                 rslt = null;
             }

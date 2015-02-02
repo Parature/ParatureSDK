@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using ParatureAPI.EntityQuery;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
 
@@ -26,13 +27,13 @@ namespace ParatureAPI.ApiHandler.Entities
         /// </summary>
         public static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusGetList(ParaCredentials paraCredentials)
         {
-            return CustomerStatusFillList(paraCredentials, new EntityQuery.CustomerStatusQuery());
+            return CustomerStatusFillList(paraCredentials, new CustomerStatusQuery());
         }
 
         /// <summary>
         /// Get the list of Customers from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusGetList(ParaCredentials paraCredentials, EntityQuery.CustomerStatusQuery query)
+        public static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusGetList(ParaCredentials paraCredentials, CustomerStatusQuery query)
         {
             return CustomerStatusFillList(paraCredentials, query);
         }
@@ -73,7 +74,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Fills a Sla list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusFillList(ParaCredentials paraCredentials, EntityQuery.CustomerStatusQuery query)
+        private static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusFillList(ParaCredentials paraCredentials, CustomerStatusQuery query)
         {
 
             var CustomerStatusList = new ParaEntityList<ParaObjects.CustomerStatus>();

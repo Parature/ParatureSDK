@@ -1,5 +1,6 @@
 using System;
 using System.Xml;
+using ParatureAPI.EntityQuery;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
 
@@ -61,7 +62,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <param name="ParaCredentials"></param>
         /// <param name="Query"></param>
         /// <returns></returns>
-        public static ParaEntityList<ParaObjects.Role> RolesGetList(ParaCredentials ParaCredentials, EntityQuery.RoleQuery Query, ParaEnums.ParatureModule Module)
+        public static ParaEntityList<ParaObjects.Role> RolesGetList(ParaCredentials ParaCredentials, RoleQuery Query, ParaEnums.ParatureModule Module)
         {
             return RoleFillList(ParaCredentials, Query, Module);
         }
@@ -69,7 +70,7 @@ namespace ParatureAPI.ApiHandler.Entities
 
         public static ParaEntityList<ParaObjects.Role> RolesGetList(ParaCredentials ParaCredentials, ParaEnums.ParatureModule Module)
         {
-            return RoleFillList(ParaCredentials, new EntityQuery.RoleQuery(), Module);
+            return RoleFillList(ParaCredentials, new RoleQuery(), Module);
         }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <param name="query"></param>
         /// <param name="Module"></param>
         /// <returns></returns>
-        private static ParaEntityList<ParaObjects.Role> RoleFillList(ParaCredentials paraCredentials, EntityQuery.RoleQuery query, ParaEnums.ParatureModule Module)
+        private static ParaEntityList<ParaObjects.Role> RoleFillList(ParaCredentials paraCredentials, RoleQuery query, ParaEnums.ParatureModule Module)
         {
             var RolesList = new ParaEntityList<ParaObjects.Role>();
             ApiCallResponse ar = new ApiCallResponse();

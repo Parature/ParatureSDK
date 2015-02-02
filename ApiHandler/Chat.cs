@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using ParatureAPI.ModuleQuery;
 using ParatureAPI.PagedData;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
@@ -59,7 +60,7 @@ namespace ParatureAPI.ApiHandler
         }
 
 
-        public static ParaEntityList<ParaObjects.Chat> ChatGetList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ModuleQuery.ChatQuery Query)
+        public static ParaEntityList<ParaObjects.Chat> ChatGetList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ChatQuery Query)
         {
             return ChatFillList(ParaCredentials, IncludeTranscripts, Query, ParaEnums.RequestDepth.Standard);
         }
@@ -71,12 +72,12 @@ namespace ParatureAPI.ApiHandler
         }
 
 
-        private static ParaEntityList<ParaObjects.Chat> ChatFillList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ModuleQuery.ChatQuery Query, ParaEnums.RequestDepth RequestDepth)
+        private static ParaEntityList<ParaObjects.Chat> ChatFillList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ChatQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
             int requestdepth = (int)RequestDepth;
             if (Query == null)
             {
-                Query = new ModuleQuery.ChatQuery();
+                Query = new ChatQuery();
             }
             // Making a schema call and returning all custom fields to be included in the call.
             if (Query.IncludeAllCustomFields)
@@ -92,7 +93,7 @@ namespace ParatureAPI.ApiHandler
             {
                 OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(ChatList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Customer);
                 ar = rslt.apiResponse;
-                Query = (ModuleQuery.ChatQuery)rslt.Query;
+                Query = (ChatQuery)rslt.Query;
                 ChatList = ((ParaEntityList<ParaObjects.Chat>)rslt.objectList);
                 rslt = null;
             }

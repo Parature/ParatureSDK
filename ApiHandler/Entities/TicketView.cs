@@ -1,4 +1,5 @@
 using System.Xml;
+using ParatureAPI.EntityQuery;
 using ParatureAPI.ParaObjects;
 using ParatureAPI.XmlToObjectParser;
 
@@ -24,7 +25,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Get the list of Views from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.View> ViewGetList(ParaCredentials paraCredentials, EntityQuery.ViewQuery query)
+        public static ParaEntityList<ParaObjects.View> ViewGetList(ParaCredentials paraCredentials, ViewQuery query)
         {
             return ViewFillList(paraCredentials, query);
         }
@@ -32,7 +33,7 @@ namespace ParatureAPI.ApiHandler.Entities
         /// <summary>
         /// Fills a View List object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.View> ViewFillList(ParaCredentials paraCredentials, EntityQuery.ViewQuery query)
+        private static ParaEntityList<ParaObjects.View> ViewFillList(ParaCredentials paraCredentials, ViewQuery query)
         {
 
             var viewList = new ParaEntityList<ParaObjects.View>();
