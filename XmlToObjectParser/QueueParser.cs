@@ -1,8 +1,8 @@
 using System;
 using System.Xml;
-using ParatureAPI.ParaObjects;
+using ParatureSDK.ParaObjects;
 
-namespace ParatureAPI.XmlToObjectParser
+namespace ParatureSDK.XmlToObjectParser
 {
     internal partial class QueueParser
     {

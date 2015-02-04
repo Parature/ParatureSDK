@@ -1,4 +1,4 @@
-namespace ParatureAPI.ParaObjects
+namespace ParatureSDK.ParaObjects
 {
     /// <summary>
     /// Used only for the downloads module folders.

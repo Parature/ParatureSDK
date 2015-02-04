@@ -1,4 +1,4 @@
-namespace ParatureAPI.ParaObjects
+namespace ParatureSDK.ParaObjects
 {
     /// <summary>
     /// An attachment object holds the information about any attachment, whether in the ticket history, in the ticket itself, a download, or any other module that supports the attachments feature.

@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.Serialization;
-using ParatureAPI.ParaObjects;
+using ParatureSDK.ParaObjects;
 
-namespace ParatureAPI
+namespace ParatureSDK
 {
     /// <summary>
     /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.

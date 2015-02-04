@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ParatureAPI.Fields;
+using ParatureSDK.Fields;
 
-namespace ParatureAPI.ParaHelper
+namespace ParatureSDK.ParaHelper
 {
     internal class HelperMethods
     {

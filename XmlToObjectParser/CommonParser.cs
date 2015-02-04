@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 using Microsoft.VisualBasic;
-using ParatureAPI.Fields;
-using ParatureAPI.ParaHelper;
-using ParatureAPI.ParaObjects;
+using ParatureSDK.Fields;
+using ParatureSDK.ParaHelper;
+using ParatureSDK.ParaObjects;
 
-namespace ParatureAPI.XmlToObjectParser
+namespace ParatureSDK.XmlToObjectParser
 {
     /// <summary>
     /// Includes all common parsing methods used by the other XML parser classes.

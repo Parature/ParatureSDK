@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Collections;
 
-namespace ParatureAPI
+namespace ParatureSDK
 {
     internal static class ApiUrlBuilder
     {

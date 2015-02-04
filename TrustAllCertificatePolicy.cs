@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace ParatureAPI
+namespace ParatureSDK
 {
     /// <summary>
     /// 

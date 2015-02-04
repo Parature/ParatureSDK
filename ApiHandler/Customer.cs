@@ -2,12 +2,11 @@ using System;
 using System.Collections;
 using System.Threading;
 using System.Xml;
-using ParatureAPI.ModuleQuery;
-using ParatureAPI.PagedData;
-using ParatureAPI.ParaObjects;
-using ParatureAPI.XmlToObjectParser;
+using ParatureSDK.ModuleQuery;
+using ParatureSDK.ParaObjects;
+using ParatureSDK.XmlToObjectParser;
 
-namespace ParatureAPI.ApiHandler
+namespace ParatureSDK.ApiHandler
 {
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Customer module.

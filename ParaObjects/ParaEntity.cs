@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ParatureAPI.Fields;
-using ParatureAPI.ParaHelper;
+using ParatureSDK.Fields;
+using ParatureSDK.ParaHelper;
 
-namespace ParatureAPI.ParaObjects
+namespace ParatureSDK.ParaObjects
 {
     /// <summary>
     /// Base class for all Parature Entities (Modules) retrievable via the API

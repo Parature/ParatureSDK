@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ParatureAPI.Fields
+namespace ParatureSDK.Fields
 {
     /// <summary>
     /// Holds the list of dependant field IDs, as well as the field options contained within it.

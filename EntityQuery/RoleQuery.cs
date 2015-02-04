@@ -1,4 +1,4 @@
-namespace ParatureAPI.EntityQuery
+namespace ParatureSDK.EntityQuery
 {
     public class RoleQuery : ParaQuery
     {

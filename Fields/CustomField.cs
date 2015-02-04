@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ParatureAPI.Fields
+namespace ParatureSDK.Fields
 {
     /// <summary>
     /// A custom field class is specific to each module.

@@ -1,11 +1,10 @@
 using System;
 using System.Xml;
-using ParatureAPI.PagedData;
-using ParatureAPI.ParaHelper;
-using ParatureAPI.ParaObjects;
-using Product = ParatureAPI.ApiHandler.Product;
+using ParatureSDK.ParaHelper;
+using ParatureSDK.ParaObjects;
+using Product = ParatureSDK.ApiHandler.Product;
 
-namespace ParatureAPI.XmlToObjectParser
+namespace ParatureSDK.XmlToObjectParser
 {
     /// <summary>
     /// This class helps parse raw XML responses returned from the server to hard typed Product objects that you can use for further processing.

@@ -1,10 +1,9 @@
 using System;
 using System.Xml;
-using ParatureAPI.PagedData;
-using ParatureAPI.ParaObjects;
-using Article = ParatureAPI.ApiHandler.Article;
+using ParatureSDK.ParaObjects;
+using Article = ParatureSDK.ApiHandler.Article;
 
-namespace ParatureAPI.XmlToObjectParser
+namespace ParatureSDK.XmlToObjectParser
 {
     /// <summary>
     /// This class helps parse raw XML responses returned from the server to hard typed Article objects that you can use for further processing.

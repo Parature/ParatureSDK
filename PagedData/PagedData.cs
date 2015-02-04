@@ -1,6 +1,6 @@
-using ParatureAPI.ParaObjects;
+using ParatureSDK.ParaObjects;
 
-namespace ParatureAPI.PagedData
+namespace ParatureSDK.PagedData
 {
     /// <summary>
     /// Designed to provide properties for paged results.

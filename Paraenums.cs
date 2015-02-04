@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
-namespace ParatureAPI
+namespace ParatureSDK
 {
     /// <summary>
     /// Paraenums contains all the available enumeration for your Parature Connector.

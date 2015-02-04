@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
-using ParatureAPI.PagedData;
-using ParatureAPI.ParaHelper;
-using ParatureAPI.ParaObjects;
-using Account = ParatureAPI.ApiHandler.Account;
+using ParatureSDK.ParaHelper;
+using ParatureSDK.ParaObjects;
+using Account = ParatureSDK.ApiHandler.Account;
 
-namespace ParatureAPI.XmlToObjectParser
+namespace ParatureSDK.XmlToObjectParser
 {
     /// <summary>
     /// This class helps parse raw XML responses returned from the server to hard typed Account objects that you can use for further processing.

@@ -1,16 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Net;
-using System.IO;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.VisualBasic;
-using ParatureAPI.Fields;
-using ParatureAPI.ParaHelper;
-using ParatureAPI.ParaObjects;
+using ParatureSDK.Fields;
+using ParatureSDK.ParaHelper;
+using ParatureSDK.ParaObjects;
 
-namespace ParatureAPI
+namespace ParatureSDK
 {
     /// <summary>
     /// The APICallFactory manages all calls made to the APIs server. No API calls should be made outside of this class.

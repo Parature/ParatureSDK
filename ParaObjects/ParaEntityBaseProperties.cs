@@ -1,6 +1,6 @@
 using System;
 
-namespace ParatureAPI.ParaObjects
+namespace ParatureSDK.ParaObjects
 {
     /// <summary>
     /// Provides basic shared properties among all the objects.

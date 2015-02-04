@@ -1,4 +1,4 @@
-namespace ParatureAPI.ParaObjects
+namespace ParatureSDK.ParaObjects
 {
     /// <summary>
     /// Indicates who performed an action history item, whether a CSR or a Customer and includes the id and name of the performer.

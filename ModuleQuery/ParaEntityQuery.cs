@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using ParatureAPI.Fields;
+using ParatureSDK.Fields;
 
-namespace ParatureAPI
+namespace ParatureSDK.ModuleQuery
 {
     public abstract class ParaEntityQuery : ParaQuery
     {

@@ -2,13 +2,12 @@ using System;
 using System.Collections;
 using System.Threading;
 using System.Xml;
-using ParatureAPI.ModuleQuery;
-using ParatureAPI.PagedData;
-using ParatureAPI.ParaObjects;
-using ParatureAPI.XmlToObjectParser;
-using Action = ParatureAPI.ParaObjects.Action;
+using ParatureSDK.ModuleQuery;
+using ParatureSDK.ParaObjects;
+using ParatureSDK.XmlToObjectParser;
+using Action = ParatureSDK.ParaObjects.Action;
 
-namespace ParatureAPI.ApiHandler
+namespace ParatureSDK.ApiHandler
 {
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Ticket module.

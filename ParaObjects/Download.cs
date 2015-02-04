@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ParatureAPI.Fields;
+using ParatureSDK.Fields;
 
-namespace ParatureAPI.ParaObjects
+namespace ParatureSDK.ParaObjects
 {
     /// <summary>
     /// Holds all the properties of the Download module.

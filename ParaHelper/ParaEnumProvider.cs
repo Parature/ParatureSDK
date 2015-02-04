@@ -1,6 +1,6 @@
 using System;
 
-namespace ParatureAPI.ParaHelper
+namespace ParatureSDK.ParaHelper
 {
     internal class ParaEnumProvider
     {

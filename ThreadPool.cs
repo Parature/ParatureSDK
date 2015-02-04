@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ParatureAPI.PagedData;
-using ParatureAPI.ParaObjects;
-using ParatureAPI.XmlToObjectParser;
+using ParatureSDK.ParaObjects;
+using ParatureSDK.XmlToObjectParser;
 
-namespace ParatureAPI
+namespace ParatureSDK
 {
     /// <summary>
     /// Main Thread controller class

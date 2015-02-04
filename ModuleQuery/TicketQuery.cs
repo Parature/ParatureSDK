@@ -1,6 +1,4 @@
-using System;
-
-namespace ParatureAPI.ModuleQuery
+namespace ParatureSDK.ModuleQuery
 {
     /// <summary>
     /// Instantiate this class to build all the properties needed to get a list of Tickets.

@@ -1,8 +1,8 @@
 using System;
 using System.Xml;
-using ParatureAPI.ParaObjects;
+using ParatureSDK.ParaObjects;
 
-namespace ParatureAPI.XmlToObjectParser
+namespace ParatureSDK.XmlToObjectParser
 {
     /// <summary>
     /// Handles all XML parsing logic needed for the Role object

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ParatureAPI.Fields
+namespace ParatureSDK.Fields
 {
     /// <summary>
     /// A custom field option is actually one of the possible values a custom field can take. So this can be an option in a dropdown, or a checkbox in a CheckBoxList field.

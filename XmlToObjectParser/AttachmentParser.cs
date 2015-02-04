@@ -1,8 +1,8 @@
 using System;
 using System.Xml;
-using ParatureAPI.ParaObjects;
+using ParatureSDK.ParaObjects;
 
-namespace ParatureAPI.XmlToObjectParser
+namespace ParatureSDK.XmlToObjectParser
 {
     /// <summary>
     /// This class takes care of parsing the different XMLs returned when sending an attachment.

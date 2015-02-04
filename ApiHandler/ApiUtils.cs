@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net;
 using System.Text;
-using ParatureAPI.ParaObjects;
-using ParatureAPI.XmlToObjectParser;
-using Action = ParatureAPI.ParaObjects.Action;
+using ParatureSDK.ParaObjects;
+using ParatureSDK.XmlToObjectParser;
+using Action = ParatureSDK.ParaObjects.Action;
 
-namespace ParatureAPI.ApiHandler
+namespace ParatureSDK.ApiHandler
 {
     internal static class ApiUtils
     {

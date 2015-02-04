@@ -1,6 +1,4 @@
-using System;
-
-namespace ParatureAPI.ParaObjects
+namespace ParatureSDK.ParaObjects
 {
     /// <summary>
     /// A department's property.

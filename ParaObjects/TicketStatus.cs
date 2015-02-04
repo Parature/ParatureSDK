@@ -1,4 +1,4 @@
-namespace ParatureAPI.ParaObjects
+namespace ParatureSDK.ParaObjects
 {
     public class TicketStatus : Status
     {

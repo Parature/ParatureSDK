@@ -1,13 +1,12 @@
 using System;
 using System.Xml;
-using ParatureAPI.PagedData;
-using ParatureAPI.ParaHelper;
-using ParatureAPI.ParaObjects;
-using Account = ParatureAPI.ApiHandler.Account;
-using Customer = ParatureAPI.ApiHandler.Customer;
-using Product = ParatureAPI.ApiHandler.Product;
+using ParatureSDK.ParaHelper;
+using ParatureSDK.ParaObjects;
+using Account = ParatureSDK.ApiHandler.Account;
+using Customer = ParatureSDK.ApiHandler.Customer;
+using Product = ParatureSDK.ApiHandler.Product;
 
-namespace ParatureAPI.XmlToObjectParser
+namespace ParatureSDK.XmlToObjectParser
 {
     /// <summary>
     /// This class helps parse raw XML responses returned from the server to hard typed Asset objects that you can use for further processing.

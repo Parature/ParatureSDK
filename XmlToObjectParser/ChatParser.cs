@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
-using ParatureAPI.PagedData;
-using ParatureAPI.ParaObjects;
-using Chat = ParatureAPI.ApiHandler.Chat;
+using ParatureSDK.ParaObjects;
+using Chat = ParatureSDK.ApiHandler.Chat;
 
-namespace ParatureAPI.XmlToObjectParser
+namespace ParatureSDK.XmlToObjectParser
 {
     /// <summary>
     /// This class helps parse raw XML responses returned from the server to hard typed Chat objects that you can use for further processing.

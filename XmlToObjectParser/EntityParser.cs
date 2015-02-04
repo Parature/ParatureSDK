@@ -1,4 +1,4 @@
-namespace ParatureAPI.XmlToObjectParser
+namespace ParatureSDK.XmlToObjectParser
 {
     internal class EntityParser
     {

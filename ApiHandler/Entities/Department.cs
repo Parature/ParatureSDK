@@ -1,10 +1,10 @@
 using System;
 using System.Xml;
-using ParatureAPI.EntityQuery;
-using ParatureAPI.ParaObjects;
-using ParatureAPI.XmlToObjectParser;
+using ParatureSDK.EntityQuery;
+using ParatureSDK.ParaObjects;
+using ParatureSDK.XmlToObjectParser;
 
-namespace ParatureAPI.ApiHandler.Entities
+namespace ParatureSDK.ApiHandler.Entities
 {
     public partial class Department
     {

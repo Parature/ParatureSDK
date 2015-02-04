@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace ParatureAPI.ParaObjects
+namespace ParatureSDK.ParaObjects
 {
     public class ParaEntityList<T> : PagedData.PagedData
     {

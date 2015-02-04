@@ -1,6 +1,6 @@
 using System;
 
-namespace ParatureAPI.ParaObjects
+namespace ParatureSDK.ParaObjects
 {
     public class Queue
     {

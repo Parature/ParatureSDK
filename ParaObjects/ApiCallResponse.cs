@@ -1,7 +1,7 @@
 using System;
 using System.Xml;
 
-namespace ParatureAPI.ParaObjects
+namespace ParatureSDK.ParaObjects
 {
     /// <summary>
     /// This class is contains all row information regarding an API call.

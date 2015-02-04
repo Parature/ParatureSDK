@@ -1,10 +1,9 @@
 using System;
 using System.Xml;
-using ParatureAPI.PagedData;
-using ParatureAPI.ParaObjects;
-using Download = ParatureAPI.ApiHandler.Download;
+using ParatureSDK.ParaObjects;
+using Download = ParatureSDK.ApiHandler.Download;
 
-namespace ParatureAPI.XmlToObjectParser
+namespace ParatureSDK.XmlToObjectParser
 {
     /// <summary>
     /// This class helps parse raw XML responses returned from the server to hard typed Download objects that you can use for further processing.

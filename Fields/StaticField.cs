@@ -1,4 +1,4 @@
-namespace ParatureAPI.Fields
+namespace ParatureSDK.Fields
 {
     public class StaticField : Field
     {

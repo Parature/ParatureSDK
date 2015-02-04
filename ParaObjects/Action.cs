@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace ParatureAPI.ParaObjects
+namespace ParatureSDK.ParaObjects
 {
     public class Action : ActionBase
     {

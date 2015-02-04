@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
-using ParatureAPI.Fields;
+using ParatureSDK.Fields;
 
-namespace ParatureAPI.ParaObjects
+namespace ParatureSDK.ParaObjects
 {
     public class Product : ParaEntity
     {
