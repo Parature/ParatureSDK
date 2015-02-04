@@ -1,6 +1,6 @@
 namespace ParatureAPI.ModuleQuery
 {
-    public class CsrQuery : ParaQuery
+    public class CsrQuery : ParaEntityQuery
     {
         protected override void BuildModuleSpecificFilter()
         { }

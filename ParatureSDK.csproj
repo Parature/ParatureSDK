@@ -162,7 +162,7 @@
     <Compile Include="ParaObjects\Timezone.cs" />
     <Compile Include="ParaObjects\View.cs" />
     <Compile Include="ParaQuery.cs" />
-    <Compile Include="ParaEntityQuery.cs" />
+    <Compile Include="ModuleQuery\ParaEntityQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThreadPool.cs" />
     <Compile Include="TrustAllCertificatePolicy.cs" />
