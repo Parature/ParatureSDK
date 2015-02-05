@@ -273,11 +273,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// Whether email notification is turned on or off.
         /// </summary>
-        public bool Email_Notification
+        public bool? Email_Notification
         {
             get
             {
-                return GetFieldValue<bool>("Email_Notification");
+                return GetFieldValue<bool?>("Email_Notification");
             }
             set
             {

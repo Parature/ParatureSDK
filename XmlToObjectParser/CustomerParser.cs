@@ -99,8 +99,12 @@ namespace ParatureSDK.XmlToObjectParser
                     {
                         if (child.ChildNodes[0] != null && child.ChildNodes[0].Attributes["id"] != null)
                         {
-                            Customer.Status.StatusID = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                            Customer.Status.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
+                            var status = new CustomerStatus
+                            {
+                                Name = child.ChildNodes[0].ChildNodes[0].InnerText,
+                                StatusID = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value)
+                            };
+                            Customer.Status = status;
                         }
                     }
                     if (child.LocalName.ToLower() == "account")
@@ -120,8 +124,12 @@ namespace ParatureSDK.XmlToObjectParser
                     {
                         if (child.ChildNodes[0] != null && child.ChildNodes[0].Attributes["id"] != null)
                         {
-                            Customer.Customer_Role.RoleID = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                            Customer.Customer_Role.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
+                            var role = new Role
+                            {
+                                Name = child.ChildNodes[0].ChildNodes[0].InnerText,
+                                RoleID = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value)
+                            };
+                            Customer.Customer_Role = role;
                         }
                     }
 
@@ -129,8 +137,12 @@ namespace ParatureSDK.XmlToObjectParser
                     {
                         if (child.ChildNodes[0] != null && child.ChildNodes[0].Attributes["id"] != null)
                         {
-                            Customer.Sla.SlaID = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                            Customer.Sla.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
+                            var sla = new Sla
+                            {
+                                Name = child.ChildNodes[0].ChildNodes[0].InnerText,
+                                SlaID = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value)
+                            };
+                            Customer.Sla = sla;
                         }
                     }
                     if (child.LocalName.ToLower() == "date_visited")

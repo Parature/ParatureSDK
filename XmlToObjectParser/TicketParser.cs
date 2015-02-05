@@ -121,7 +121,7 @@ namespace ParatureSDK.XmlToObjectParser
                     }
                     if (child.LocalName.ToLower() == "email_notification")
                     {
-                        Ticket.Email_Notification = Boolean.Parse(ParserUtils.NodeGetInnerText(child));
+                        //Ticket.Email_Notification = Boolean.Parse(ParserUtils.NodeGetInnerText(child));
                     }
 
                     // DJERAME
@@ -137,7 +137,7 @@ namespace ParatureSDK.XmlToObjectParser
 
                     if (child.LocalName.ToLower() == "tou")
                     {
-                        Ticket.Email_Notification = Boolean.Parse(ParserUtils.NodeGetInnerText(child));
+                        //Ticket.Email_Notification = Boolean.Parse(ParserUtils.NodeGetInnerText(child));
                     }
 
                     if (child.LocalName.ToLower() == "date_created")
