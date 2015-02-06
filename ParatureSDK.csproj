@@ -182,7 +182,6 @@
     <Compile Include="XmlToObjectParser\CustomerViewParser.cs" />
     <Compile Include="XmlToObjectParser\DepartmentParser.cs" />
     <Compile Include="XmlToObjectParser\DownloadParser.cs" />
-    <Compile Include="XmlToObjectParser\EntityParser.cs" />
     <Compile Include="XmlToObjectParser\ProductParser.cs" />
     <Compile Include="XmlToObjectParser\QueueParser.cs" />
     <Compile Include="XmlToObjectParser\RoleParser.cs" />

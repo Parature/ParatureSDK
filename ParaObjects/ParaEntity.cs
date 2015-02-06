@@ -99,11 +99,13 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// List of all fields for this entity
         /// </summary>
+        [XmlElement("Custom_Field")]
         public List<Field> Fields = new List<Field>();
 
         /// <summary>
         /// Convenience method to retrieve only static fields
         /// </summary>
+        [XmlIgnore]
         public IEnumerable<StaticField> StaticFields
         {
             get { return Fields.OfType<StaticField>(); }
@@ -117,7 +119,7 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// Convenience method to retrieve only custom fields
         /// </summary>
-        [XmlElement("Custom_Field")]
+        [XmlIgnore]
         public IEnumerable<CustomField> CustomFields
         {
             get

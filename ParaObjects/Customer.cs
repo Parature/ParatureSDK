@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Xml.Serialization;
 using ParatureSDK.Fields;
 
 namespace ParatureSDK.ParaObjects
@@ -141,6 +142,7 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
+        [XmlElement("CustomerRole")]
         public Role Customer_Role
         {
             get
