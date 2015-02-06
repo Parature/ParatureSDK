@@ -14,9 +14,9 @@ namespace ParatureSDK.XmlToObjectParser
         /// </summary>
         /// <param name="xmlresp"></param>
         /// <returns></returns>
-        static internal CustomerStatus CustomerStatusFill(XmlDocument xmlresp)
+        static internal Status CustomerStatusFill(XmlDocument xmlresp)
         {
-            CustomerStatus CustomerStatus = new CustomerStatus();
+            Status CustomerStatus = new Status();
             XmlNode CustomerStatusNode = xmlresp.DocumentElement;
             CustomerStatus = CustomerStatusFillNode(CustomerStatusNode);
             return CustomerStatus;
@@ -26,9 +26,9 @@ namespace ParatureSDK.XmlToObjectParser
         /// </summary>
         /// <param name="xmlresp"></param>
         /// <returns></returns>
-        static internal ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusFillList(XmlDocument xmlresp)
+        static internal ParaEntityList<ParaObjects.Status> CustomerStatusFillList(XmlDocument xmlresp)
         {
-            var CustomerStatusList = new ParaEntityList<ParaObjects.CustomerStatus>();
+            var CustomerStatusList = new ParaEntityList<ParaObjects.Status>();
             XmlNode DocNode = xmlresp.DocumentElement;
 
             CustomerStatusList.TotalItems = Int32.Parse(DocNode.Attributes["total"].InnerText.ToString());
@@ -51,10 +51,10 @@ namespace ParatureSDK.XmlToObjectParser
         /// <summary>
         /// This method accepts a CustomerStatus node and parses through the different items in it. it can be used to parse a CustomerStatus node, whether the node is returned from a simple read, or as part of a list call.
         /// </summary>
-        static internal CustomerStatus CustomerStatusFillNode(XmlNode CustomerStatusNode)
+        static internal Status CustomerStatusFillNode(XmlNode CustomerStatusNode)
         {
 
-            CustomerStatus CustomerStatus = new CustomerStatus();
+            var CustomerStatus = new Status();
             CustomerStatus.StatusID = Int64.Parse(CustomerStatusNode.Attributes["id"].InnerText.ToString());
 
             foreach (XmlNode child in CustomerStatusNode.ChildNodes)

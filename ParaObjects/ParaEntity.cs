@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using ParatureSDK.Fields;
 using ParatureSDK.ParaHelper;
 
@@ -116,6 +117,7 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// Convenience method to retrieve only custom fields
         /// </summary>
+        [XmlElement("Custom_Field")]
         public IEnumerable<CustomField> CustomFields
         {
             get

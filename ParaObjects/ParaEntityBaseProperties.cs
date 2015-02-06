@@ -1,4 +1,5 @@
 using System;
+using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects
 {
@@ -10,6 +11,7 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// Id for the entity in Parature
         /// </summary>
+        [XmlAttribute(AttributeName = "id")]
         public Int64 Id = 0;
 
         /// <summary>

@@ -15,9 +15,9 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <param name="paraCredentials">
         ///  The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         ///  </param>               
-        public static ParaObjects.CustomerStatus CustomerStatusGetDetails(Int64 customerStatusId, ParaCredentials paraCredentials)
+        public static ParaObjects.Status CustomerStatusGetDetails(Int64 customerStatusId, ParaCredentials paraCredentials)
         {
-            ParaObjects.CustomerStatus CustomerStatus = new ParaObjects.CustomerStatus();
+            ParaObjects.Status CustomerStatus;
             CustomerStatus = CustomerStatusFillDetails(customerStatusId, paraCredentials);
             return CustomerStatus;
         }
@@ -25,7 +25,7 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <summary>
         /// Get the list of Customers from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusGetList(ParaCredentials paraCredentials)
+        public static ParaEntityList<ParaObjects.Status> CustomerStatusGetList(ParaCredentials paraCredentials)
         {
             return CustomerStatusFillList(paraCredentials, new CustomerStatusQuery());
         }
@@ -33,7 +33,7 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <summary>
         /// Get the list of Customers from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusGetList(ParaCredentials paraCredentials, CustomerStatusQuery query)
+        public static ParaEntityList<ParaObjects.Status> CustomerStatusGetList(ParaCredentials paraCredentials, CustomerStatusQuery query)
         {
             return CustomerStatusFillList(paraCredentials, query);
         }
@@ -44,15 +44,14 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <param name="customerStatusXml">
         /// The CustomerStatus XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaObjects.CustomerStatus CustomerStatusGetDetails(XmlDocument customerStatusXml)
+        public static ParaObjects.Status CustomerStatusGetDetails(XmlDocument customerStatusXml)
         {
-            ParaObjects.CustomerStatus CustomerStatus = new ParaObjects.CustomerStatus();
-            CustomerStatus = CustomerStatusParser.CustomerStatusFill(customerStatusXml);
+            var customerStatus = CustomerStatusParser.CustomerStatusFill(customerStatusXml);
 
-            CustomerStatus.ApiCallResponse.xmlReceived = customerStatusXml;
-            CustomerStatus.ApiCallResponse.Objectid = CustomerStatus.StatusID;
+            customerStatus.ApiCallResponse.xmlReceived = customerStatusXml;
+            customerStatus.ApiCallResponse.Objectid = customerStatus.StatusID;
 
-            return CustomerStatus;
+            return customerStatus;
         }
 
         /// <summary>
@@ -61,54 +60,53 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <param name="customerStatusListXml">
         /// The CustomerStatus List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusGetList(XmlDocument customerStatusListXml)
+        public static ParaEntityList<ParaObjects.Status> CustomerStatusGetList(XmlDocument customerStatusListXml)
         {
-            var CustomerStatussList = new ParaEntityList<ParaObjects.CustomerStatus>();
-            CustomerStatussList = CustomerStatusParser.CustomerStatusFillList(customerStatusListXml);
+            var customerStatussList = CustomerStatusParser.CustomerStatusFillList(customerStatusListXml);
 
-            CustomerStatussList.ApiCallResponse.xmlReceived = customerStatusListXml;
+            customerStatussList.ApiCallResponse.xmlReceived = customerStatusListXml;
 
-            return CustomerStatussList;
+            return customerStatussList;
         }
 
         /// <summary>
         /// Fills a Sla list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusFillList(ParaCredentials paraCredentials, CustomerStatusQuery query)
+        private static ParaEntityList<ParaObjects.Status> CustomerStatusFillList(ParaCredentials paraCredentials, CustomerStatusQuery query)
         {
 
-            var CustomerStatusList = new ParaEntityList<ParaObjects.CustomerStatus>();
-            ApiCallResponse ar = new ApiCallResponse();
+            var customerStatusList = new ParaEntityList<ParaObjects.Status>();
+            var ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Customer, ParaEnums.ParatureEntity.status, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                CustomerStatusList = CustomerStatusParser.CustomerStatusFillList(ar.xmlReceived);
+                customerStatusList = CustomerStatusParser.CustomerStatusFillList(ar.xmlReceived);
             }
-            CustomerStatusList.ApiCallResponse = ar;
+            customerStatusList.ApiCallResponse = ar;
 
 
 
 
 
-            return CustomerStatusList;
+            return customerStatusList;
         }
 
-        private static ParaObjects.CustomerStatus CustomerStatusFillDetails(Int64 customerStatusId, ParaCredentials paraCredentials)
+        private static ParaObjects.Status CustomerStatusFillDetails(Int64 customerStatusId, ParaCredentials paraCredentials)
         {
-            ParaObjects.CustomerStatus CustomerStatus = new ParaObjects.CustomerStatus();
-            ApiCallResponse ar = new ApiCallResponse();
+            var customerStatus = new ParaObjects.Status();
+            var ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.CustomerStatus, customerStatusId);
             if (ar.HasException == false)
             {
-                CustomerStatus = CustomerStatusParser.CustomerStatusFill(ar.xmlReceived);
+                customerStatus = CustomerStatusParser.CustomerStatusFill(ar.xmlReceived);
             }
             else
             {
 
-                CustomerStatus.StatusID = 0;
+                customerStatus.StatusID = 0;
             }
 
-            return CustomerStatus;
+            return customerStatus;
         }
     }
 }

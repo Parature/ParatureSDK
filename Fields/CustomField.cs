@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace ParatureSDK.Fields
 {
@@ -11,14 +12,18 @@ namespace ParatureSDK.Fields
         /// <summary>
         /// The internal ID of the field
         /// </summary>
+        [XmlAttribute(AttributeName = "id")]
         public Int64 Id = 0;
 
+        [XmlAttribute("multi-value")]
         public bool MultiValue;
+        [XmlIgnore]
         public bool FlagToDelete = false;
 
         /// <summary>
         /// If this is a custom field that holds multiple options, this collection of CustomFieldOptions will be populated.
         /// </summary>
+        [XmlElement("Option")]
         public List<CustomFieldOptions> CustomFieldOptionsCollection = new List<CustomFieldOptions>();
 
         public CustomField()

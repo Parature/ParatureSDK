@@ -1,13 +1,23 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace ParatureSDK.Fields
 {
     public class Field
     {
+        [XmlAttribute(AttributeName = "display-name")]
         public string Name = "";
+        [XmlAttribute(AttributeName = "required")]
         public bool Required;
+        [XmlAttribute(AttributeName = "dependent")]
         public bool Dependent = false;
         public Int32 MaxLength = 0;
+        /// <summary>
+        /// this indicates whether the field is editable or read only. 
+        /// If it is a read only, inluding it in an update will not result in that field value being updated.
+        /// </summary>
+        [XmlAttribute(AttributeName = "editable")]
+        public bool Editable;
 
         /// <summary>
         /// This Value will be populated with the field's value. 
@@ -31,11 +41,7 @@ namespace ParatureSDK.Fields
             return (T)Value;
         }
 
-        /// <summary>
-        /// this indicates whether the field is editable or read only. 
-        /// If it is a read only, inluding it in an update will not result in that field value being updated.
-        /// </summary>
-        public bool Editable;
+
 
         public ParaEnums.FieldDataType DataType;
     }

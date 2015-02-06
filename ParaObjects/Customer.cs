@@ -317,11 +317,11 @@ namespace ParatureSDK.ParaObjects
         }
 
 
-        public CustomerStatus Status
+        public Status Status
         {
             get
             {
-                return GetFieldValue<CustomerStatus>("Status");
+                return GetFieldValue<Status>("Status");
             }
             set
             {
@@ -358,7 +358,7 @@ namespace ParatureSDK.ParaObjects
             Tou = customer.Tou;
             Password = customer.Password;
             Password_Confirm = customer.Password_Confirm;
-            Status = new CustomerStatus(customer.Status);
+            Status = new Status(customer.Status);
             Customer_Role = new Role(customer.Customer_Role);
         }
 

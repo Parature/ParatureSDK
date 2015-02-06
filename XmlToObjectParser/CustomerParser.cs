@@ -99,7 +99,7 @@ namespace ParatureSDK.XmlToObjectParser
                     {
                         if (child.ChildNodes[0] != null && child.ChildNodes[0].Attributes["id"] != null)
                         {
-                            var status = new CustomerStatus
+                            var status = new Status
                             {
                                 Name = child.ChildNodes[0].ChildNodes[0].InnerText,
                                 StatusID = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value)

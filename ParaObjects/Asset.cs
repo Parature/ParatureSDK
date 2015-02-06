@@ -189,11 +189,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The status of the Asset.
         /// </summary>           
-        public AssetStatus Status
+        public Status Status
         {
             get
             {
-                return GetFieldValue<AssetStatus>("Status");
+                return GetFieldValue<Status>("Status");
             }
             set
             {
@@ -306,7 +306,7 @@ namespace ParatureSDK.ParaObjects
             Modified_By = new Csr(asset.Modified_By);
             Name = asset.Name;
             Product = new Product(asset.Product);
-            Status = new AssetStatus(asset.Status);
+            Status = new Status(asset.Status);
             Date_Created = asset.Date_Created;
             Date_Updated = asset.Date_Updated;
             AvailableActions = new List<Action>(asset.AvailableActions);
