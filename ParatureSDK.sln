@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParatureSDK", "ParatureSDK.csproj", "{9DEBF649-1163-4B2C-B466-8B0C75A784FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication2", "..\..\..\Desktop\json\ConsoleApplication2\ConsoleApplication2\ConsoleApplication2.csproj", "{D86BE188-D922-43E5-8C3D-06B81B9CF9A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{9DEBF649-1163-4B2C-B466-8B0C75A784FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DEBF649-1163-4B2C-B466-8B0C75A784FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DEBF649-1163-4B2C-B466-8B0C75A784FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D86BE188-D922-43E5-8C3D-06B81B9CF9A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D86BE188-D922-43E5-8C3D-06B81B9CF9A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D86BE188-D922-43E5-8C3D-06B81B9CF9A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D86BE188-D922-43E5-8C3D-06B81B9CF9A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
