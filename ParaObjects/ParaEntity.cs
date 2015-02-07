@@ -99,7 +99,7 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// List of all fields for this entity
         /// </summary>
-        [XmlElement("Custom_Field")]
+        [XmlIgnore]
         public List<Field> Fields = new List<Field>();
 
         /// <summary>

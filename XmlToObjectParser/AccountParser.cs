@@ -135,7 +135,7 @@ namespace ParatureSDK.XmlToObjectParser
                     {
                         if (child.ChildNodes[0].Attributes["id"] != null)
                         {
-                            account.Default_Customer_Role.RoleID = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
+                            account.Default_Customer_Role.Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
                             account.Default_Customer_Role.Name = child.ChildNodes[0].InnerText.ToString();
                         }
                     }

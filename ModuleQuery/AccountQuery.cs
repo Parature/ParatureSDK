@@ -40,7 +40,7 @@ namespace ParatureSDK.ModuleQuery
             public readonly static string AccountSlaID = "sla_id_";
 
             /// <summary>
-            /// The criteria for this property can only be a RoleID
+            /// The criteria for this property can only be a Id
             /// </summary>
             public readonly static string DefaultCustomerRoleID = "Default_Customer_Role_id_";
 

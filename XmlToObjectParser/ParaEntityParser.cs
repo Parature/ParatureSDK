@@ -27,57 +27,47 @@ namespace ParatureSDK.XmlToObjectParser
             {
                 //Name that will be used in the lookup of the field. It is the element text
                 var wrapperTagName = wrapper.Name.ToString();
-                XmlSerializer nodeSerializer;
                 var field = new StaticField();
-                var firstChild = wrapper.FirstNode;
 
                 //deserialize static fields which are found in an 
-                #region switch on tags for serialization
+                #region switch on tags for serialization of Static Fields
                 switch (wrapperTagName)
                 {
                     //Account
                     case "Default_Customer_Role":
-                        nodeSerializer = new XmlSerializer(typeof (Sla));
                         field.DataType = ParaEnums.FieldDataType.Sla;
-                        field.Value = nodeSerializer.Deserialize(firstChild.CreateReader()) as Sla;
+                        field.Value = OverrideNodeFill<Sla>(wrapper);
                         break;
                     case "Modified_By": //Articles and Accounts both have this one
-                        nodeSerializer = new XmlSerializer(typeof(Csr));
                         field.DataType = ParaEnums.FieldDataType.EntityReference;
-                        field.Value = nodeSerializer.Deserialize(firstChild.CreateReader()) as Csr;
+                        field.Value = OverrideNodeFill<Csr>(wrapper);
                         break;
                     case "Owned_By":
-                        nodeSerializer = new XmlSerializer(typeof(Csr));
                         field.DataType = ParaEnums.FieldDataType.EntityReference;
-                        field.Value = nodeSerializer.Deserialize(firstChild.CreateReader()) as Csr;
+                        field.Value = OverrideNodeFill<Csr>(wrapper);
                         break;
                     //customer
                     case "Account":
-                        nodeSerializer = new XmlSerializer(typeof(Account));
                         field.DataType = ParaEnums.FieldDataType.EntityReference;
-                        field.Value = nodeSerializer.Deserialize(firstChild.CreateReader()) as Account;
+                        field.Value = OverrideNodeFill<Account>(wrapper);
                         break;
                     case "Customer_Role":
-                        nodeSerializer = new XmlSerializer(typeof(Sla));
                         field.DataType = ParaEnums.FieldDataType.Sla;
-                        field.Value = nodeSerializer.Deserialize(firstChild.CreateReader()) as Sla;
+                        field.Value = OverrideNodeFill<Sla>(wrapper);
                         break;
                     case "Status": //Asset, customer, chat
-                        nodeSerializer = new XmlSerializer(typeof(Status));
                         field.DataType = ParaEnums.FieldDataType.Status;
-                        field.Value = nodeSerializer.Deserialize(firstChild.CreateReader()) as Status;
+                        field.Value = OverrideNodeFill<Status>(wrapper);
                         break;
                     //customer or account
                     case "Sla":
-                        nodeSerializer = new XmlSerializer(typeof(Sla));
                         field.DataType = ParaEnums.FieldDataType.Sla;
-                        field.Value = nodeSerializer.Deserialize(firstChild.CreateReader()) as Sla;
+                        field.Value = OverrideNodeFill<Sla>(wrapper);
                         break;
                     //download
                     case "Eula":
-                        nodeSerializer = new XmlSerializer(typeof(Eula));
                         field.DataType = ParaEnums.FieldDataType.Eula;
-                        field.Value = nodeSerializer.Deserialize(firstChild.CreateReader()) as Eula;
+                        field.Value = OverrideNodeFill<Eula>(wrapper);
                         break;
                     case "Folders": //Articles too
                         var folders = wrapper.Descendants().FirstOrDefault();
@@ -89,20 +79,17 @@ namespace ParatureSDK.XmlToObjectParser
                                 case "DownloadFolder":
                                     //TODO: Add field for "multipleFolders" too
                                     //nuanced. This can be a different node name depending on the dept configuration
-                                    nodeSerializer = new XmlSerializer(typeof(List<DownloadFolder>));
                                     field.DataType = ParaEnums.FieldDataType.Folder;
-                                    field.Value = nodeSerializer.Deserialize(wrapper.CreateReader()) as List<DownloadFolder>;
+                                    field.Value = OverrideNodeFill<List<DownloadFolder>>(wrapper);
                                     break;
                                 case "ArticleFolder":
-                                    nodeSerializer = new XmlSerializer(typeof(List<ArticleFolder>));
                                     field.DataType = ParaEnums.FieldDataType.Folder;
-                                    field.Value = nodeSerializer.Deserialize(wrapper.CreateReader()) as List<ArticleFolder>;
+                                    field.Value = OverrideNodeFill<List<ArticleFolder>>(wrapper);
                                     break;
                                 default:
                                     break;
                             }
                         }
-
                         break;
                     case "Folder":  //Products too
                         var folderWrapper = wrapper.Descendants().FirstOrDefault();
@@ -114,47 +101,37 @@ namespace ParatureSDK.XmlToObjectParser
                                 case "DownloadFolder":
                                     //TODO: Add field for "multipleFolders" too
                                     //nuanced. This can be a different node name depending on the dept configuration
-                                    nodeSerializer = new XmlSerializer(typeof(List<DownloadFolder>));
                                     field.DataType = ParaEnums.FieldDataType.Folder;
-                                    field.Value = nodeSerializer.Deserialize(firstChild.CreateReader()) as List<DownloadFolder>;
+                                    field.Value = OverrideNodeFill<List<DownloadFolder>>(wrapper);
                                     break;
                                 case "ProductFolder":
-                                    nodeSerializer = new XmlSerializer(typeof(List<ProductFolder>));
                                     field.DataType = ParaEnums.FieldDataType.Folder;
-                                    field.Value = nodeSerializer.Deserialize(firstChild.CreateReader()) as List<ProductFolder>;
+                                    field.Value = OverrideNodeFill<List<ProductFolder>>(wrapper);
                                     break;
                                 default:
                                     break;
                             }
                         }
-                        //nuanced. This can be a different node name depending on the dept configuration
-                        nodeSerializer = new XmlSerializer(typeof(DownloadFolder));
-                        field.DataType = ParaEnums.FieldDataType.Folder;
-                        field.Value = nodeSerializer.Deserialize(firstChild.CreateReader()) as DownloadFolder;
                         break;
                     //Articles
                     case "Created_By": //also products
-                        nodeSerializer = new XmlSerializer(typeof(Csr));
                         field.DataType = ParaEnums.FieldDataType.EntityReference;
-                        field.Value = nodeSerializer.Deserialize(firstChild.CreateReader()) as Csr;
+                        field.Value = OverrideNodeFill<Csr>(wrapper);
                         break;
                     //Products
                     case "Customer_Owner":
-                        nodeSerializer = new XmlSerializer(typeof(Customer));
                         field.DataType = ParaEnums.FieldDataType.EntityReference;
-                        field.Value = nodeSerializer.Deserialize(firstChild.CreateReader()) as Customer;
+                        field.Value = OverrideNodeFill<Customer>(wrapper);
                         break;
                     //Asset
                     case "Product":
-                        nodeSerializer = new XmlSerializer(typeof(Product));
                         field.DataType = ParaEnums.FieldDataType.EntityReference;
-                        field.Value = nodeSerializer.Deserialize(firstChild.CreateReader()) as Product;
+                        field.Value = OverrideNodeFill<Product>(wrapper);
                         break;
                     //chat
                     case "Initial_Csr":
-                        nodeSerializer = new XmlSerializer(typeof(Product));
                         field.DataType = ParaEnums.FieldDataType.EntityReference;
-                        field.Value = nodeSerializer.Deserialize(firstChild.CreateReader()) as Product;
+                        field.Value = OverrideNodeFill<Csr>(wrapper);
                         break;
                     default:
                         break;
@@ -164,9 +141,14 @@ namespace ParatureSDK.XmlToObjectParser
                 //Check whether the wrapped Static Field was properly deserialized
                 if (entity != null && field.Value != null)
                 {
+                    field.Name = wrapperTagName;
                     entity.Fields.Add(field);
                 }
             }
+
+            //deserialize custom field
+            var custFieldSerializer = new XmlSerializer(typeof (CustomField));
+
 
             return entity;
         }
@@ -175,20 +157,19 @@ namespace ParatureSDK.XmlToObjectParser
         /// Retrieves an Entity Object from an Entity Node
         /// </summary>
         /// <typeparam name="T">Type of Entity</typeparam>
-        /// <param name="xml">XML of the parent object</param>
-        /// <param name="entityParentTagName">Tag name of the parent node</param>
-        /// <param name="entityTagName">Tag name of our entity</param>
+        /// <param name="node"></param>
         /// <returns></returns>
-        public static T OverrideNodeFill<T>(XDocument xml, string entityParentTagName, string entityTagName)
+        public static T OverrideNodeFill<T>(XElement node)
         {
+            var childNode = node.FirstNode as XElement;
+            var root = new XmlRootAttribute
+            {
+                ElementName = childNode.Name.ToString(), 
+                IsNullable = true
+            };
             //Our entity is the first node from a parent entity
-            var entityNode =
-                (xml.Descendants(entityParentTagName).Select(node => node)).FirstOrDefault().Elements().FirstOrDefault();
-            XmlRootAttribute roleRoot = new XmlRootAttribute();
-            roleRoot.ElementName = entityTagName;
-            roleRoot.IsNullable = true;
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(T), roleRoot);
-            return (T)xmlSerializer.Deserialize(entityNode.CreateReader());
+            var xmlSerializer = new XmlSerializer(typeof(T), root);
+            return (T)xmlSerializer.Deserialize(node.FirstNode.CreateReader());
         }
     }
 }

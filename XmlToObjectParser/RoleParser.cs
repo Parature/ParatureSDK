@@ -55,7 +55,7 @@ namespace ParatureSDK.XmlToObjectParser
         {
 
             Role Role = new Role();
-            Role.RoleID = Int64.Parse(RoleNode.Attributes["id"].InnerText.ToString());
+            Role.Id = Int64.Parse(RoleNode.Attributes["id"].InnerText.ToString());
 
             foreach (XmlNode child in RoleNode.ChildNodes)
             {

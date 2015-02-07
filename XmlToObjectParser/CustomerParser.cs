@@ -127,7 +127,7 @@ namespace ParatureSDK.XmlToObjectParser
                             var role = new Role
                             {
                                 Name = child.ChildNodes[0].ChildNodes[0].InnerText,
-                                RoleID = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value)
+                                Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value)
                             };
                             Customer.Customer_Role = role;
                         }

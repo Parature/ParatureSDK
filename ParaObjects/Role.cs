@@ -1,27 +1,29 @@
 using System;
+using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects
 {
     public class Role
     {
-        public Int64 RoleID;
+        [XmlAttribute("id")]
+        public Int64 Id;
         public string Name;
         public string Description;
         public Role()
         {
-            RoleID = 0;
+            Id = 0;
             Name = "";
             Description = "";
         }
         public Role(Role role)
         {
-            RoleID = role.RoleID;
+            Id = role.Id;
             Name = role.Name;
             Description = role.Description;
         }
-        public Role(Int64 RoleID, string Name, string Description)
+        public Role(Int64 id, string Name, string Description)
         {
-            this.RoleID = RoleID;
+            this.Id = id;
             this.Name = Name;
             this.Description = Description;
         }

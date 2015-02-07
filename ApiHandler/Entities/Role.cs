@@ -142,7 +142,7 @@ namespace ParatureSDK.ApiHandler.Entities
             }
             else
             {
-                Role.RoleID = 0;
+                Role.Id = 0;
             }
             return Role;
         }
