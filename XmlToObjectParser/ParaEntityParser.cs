@@ -171,9 +171,24 @@ namespace ParatureSDK.XmlToObjectParser
             return entity;
         }
 
-        private static T OverrideNode<T>(XElement node, string newTagName)
+        /// <summary>
+        /// Retrieves an Entity Object from an Entity Node
+        /// </summary>
+        /// <typeparam name="T">Type of Entity</typeparam>
+        /// <param name="xml">XML of the parent object</param>
+        /// <param name="entityParentTagName">Tag name of the parent node</param>
+        /// <param name="entityTagName">Tag name of our entity</param>
+        /// <returns></returns>
+        public static T OverrideNodeFill<T>(XDocument xml, string entityParentTagName, string entityTagName)
         {
-            return default(T);
+            //Our entity is the first node from a parent entity
+            var entityNode =
+                (xml.Descendants(entityParentTagName).Select(node => node)).FirstOrDefault().Elements().FirstOrDefault();
+            XmlRootAttribute roleRoot = new XmlRootAttribute();
+            roleRoot.ElementName = entityTagName;
+            roleRoot.IsNullable = true;
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(T), roleRoot);
+            return (T)xmlSerializer.Deserialize(entityNode.CreateReader());
         }
     }
 }
