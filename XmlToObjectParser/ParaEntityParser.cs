@@ -152,7 +152,21 @@ namespace ParatureSDK.XmlToObjectParser
             {
                 var custFieldSerializer = new XmlSerializer(typeof(CustomField));
                 var custField = custFieldSerializer.Deserialize(element.CreateReader()) as CustomField;
-                
+
+                var text = element.Value;
+                if (string.IsNullOrEmpty(text) == false
+                    && custField.DataType != null)
+                {
+                    switch (custField.DataType)
+                    {
+                        case ParaEnums.FieldDataType.String:
+                            custField.Value = text;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
                 entity.Fields.Add(custField);
             }
 

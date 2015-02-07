@@ -42,7 +42,7 @@ namespace ParatureSDK.Fields
         }
 
 
-
+        [XmlAttribute("data-type")]
         public ParaEnums.FieldDataType DataType;
     }
 }

@@ -1,3 +1,5 @@
+using System.Xml.Serialization;
+
 namespace ParatureSDK
 {
     /// <summary>
@@ -161,6 +163,7 @@ namespace ParatureSDK
             /// <summary>
             /// Usually a textbox, textarea or a similar field type
             /// </summary>
+            [XmlEnum("string")]
             String = 0,
             /// <summary>
             /// DropdownList, CheckBoxList, etc
