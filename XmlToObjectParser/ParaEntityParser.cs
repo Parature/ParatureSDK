@@ -137,18 +137,24 @@ namespace ParatureSDK.XmlToObjectParser
                         break;
                 }
                 #endregion
-
+                        
                 //Check whether the wrapped Static Field was properly deserialized
-                if (entity != null && field.Value != null)
+                if (entity != null)
                 {
                     field.Name = wrapperTagName;
                     entity.Fields.Add(field);
                 }
             }
 
-            //deserialize custom field
-            var custFieldSerializer = new XmlSerializer(typeof (CustomField));
-
+            var customFieldNodes = xml.Root.Descendants().Where(node => node.Name.ToString() == "Custom_Field");
+            var newRoot = new XDocument();
+            foreach (var element in customFieldNodes)
+            {
+                var custFieldSerializer = new XmlSerializer(typeof(CustomField));
+                var custField = custFieldSerializer.Deserialize(element.CreateReader()) as CustomField;
+                
+                entity.Fields.Add(custField);
+            }
 
             return entity;
         }

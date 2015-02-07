@@ -7,6 +7,7 @@ namespace ParatureSDK.Fields
     /// <summary>
     /// A custom field class is specific to each module.
     /// </summary>
+    [XmlRoot("Custom_Field")]
     public class CustomField : Field
     {
         /// <summary>
