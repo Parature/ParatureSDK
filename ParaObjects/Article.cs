@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ParatureSDK.Fields;
+using ParatureSDK.ParaObjects.EntityReferences;
 
 namespace ParatureSDK.ParaObjects
 {
@@ -29,7 +30,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
         public DateTime Date_Updated
@@ -51,7 +52,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
 
@@ -83,11 +84,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The date this Article will expire on.
         /// </summary>
-        public DateTime Expiration_Date
+        public DateTime? Expiration_Date
         {
             get
             {
-                return GetFieldValue<DateTime>("Expiration_Date");
+                return GetFieldValue<DateTime?>("Expiration_Date");
             }
             set
             {
@@ -102,7 +103,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
 
@@ -128,7 +129,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
 
@@ -180,7 +181,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
 
@@ -206,14 +207,14 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
-        public Csr Modified_By 
+        public CsrReference Modified_By 
         {
             get
             {
-                return GetFieldValue<Csr>("Modified_By");
+                return GetFieldValue<CsrReference>("Modified_By");
             }
             set
             {
@@ -231,11 +232,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public Csr Created_By
+        public CsrReference Created_By
         {
             get
             {
-                return GetFieldValue<Csr>("Created_By");
+                return GetFieldValue<CsrReference>("Created_By");
             }
             set
             {
@@ -346,8 +347,8 @@ namespace ParatureSDK.ParaObjects
             Expiration_Date = article.Expiration_Date;
             Rating = article.Rating;
             Times_Viewed = article.Times_Viewed;
-            Modified_By = new Csr(article.Modified_By);
-            Created_By = new Csr(article.Created_By);
+            Modified_By = article.Modified_By;
+            Created_By = article.Created_By;
             Folders = new List<Folder>(article.Folders);
             Permissions = new List<Sla>(article.Permissions);
             Products = new List<Product>(article.Products);

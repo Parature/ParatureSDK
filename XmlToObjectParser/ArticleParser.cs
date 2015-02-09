@@ -24,7 +24,7 @@ namespace ParatureSDK.XmlToObjectParser
             {
                 childDepth = requestdepth - 1;
             }
-            Article = ArticleFillNode(ArticleNode, childDepth, MinimalisticLoad, ParaCredentials);
+            Article = ParaEntityParser.EntityFill<ParaObjects.Article>(xmlresp);
             Article.FullyLoaded = true;
             return Article;
         }
@@ -59,113 +59,12 @@ namespace ParatureSDK.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                ArticlesList.Data.Add(ArticleFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
+                var xDoc = new XmlDocument();
+                xDoc.LoadXml(xn.OuterXml);
+                //ArticlesList.Data.Add(ArticleFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
+                ArticlesList.Data.Add(ParaEntityParser.EntityFill<ParaObjects.Article>(xDoc));
             }
             return ArticlesList;
-        }
-
-        /// <summary>
-        /// This methods accepts a Article node and parse through the different items in it. it can be used to parse a Article node, whether the node is returned from a simple read, or as part of a list call.
-        /// </summary>
-        static internal ParaObjects.Article ArticleFillNode(XmlNode ArticleNode, int childDepth, bool MinimalisticLoad, ParaCredentials ParaCredentials)
-        {
-            bool isSchema = false;
-            ParaObjects.Article Article = new ParaObjects.Article();
-            if (ArticleNode.Attributes["id"] != null)
-            {
-                Article.Id = Int64.Parse(ArticleNode.Attributes["id"].InnerText.ToString());
-                Article.uniqueIdentifier = Article.Id;
-            }
-            else
-            {
-                isSchema = true;
-            }
-
-            if (ArticleNode.Attributes["service-desk-uri"] != null)
-            {
-                Article.serviceDeskUri = ArticleNode.Attributes["service-desk-uri"].InnerText.ToString();
-            }
-
-            foreach (XmlNode child in ArticleNode.ChildNodes)
-            {
-                if (isSchema == false)
-                {
-                    if (child.LocalName.ToLower() == "permissions")
-                    {
-                        foreach (XmlNode n in child.ChildNodes)
-                        {
-                            Sla sla = new Sla();
-                            sla.Id = Int64.Parse(n.Attributes["id"].Value);
-                            sla.Name = n.ChildNodes[0].InnerText.ToString();
-                            Article.Permissions.Add(sla);
-                        }
-                    }
-                    if (child.LocalName.ToLower() == "products")
-                    {
-                        foreach (XmlNode n in child.ChildNodes)
-                        {
-                            ParaObjects.Product product = new ParaObjects.Product();
-                            product.Id = Int64.Parse(n.Attributes["id"].Value);
-                            product.Name = n.ChildNodes[0].InnerText.ToString();
-                            Article.Products.Add(product);
-                        }
-                    }
-                    if (child.LocalName.ToLower() == "answer")
-                    {
-                        Article.Answer = ParserUtils.NodeGetInnerText(child);
-                    }
-                    if (child.LocalName.ToLower() == "created_by")
-                    {
-                        Article.Created_By.Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                        Article.Created_By.Full_Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
-                    }
-
-                    if (child.LocalName.ToLower() == "date_created")
-                    {
-                        Article.Date_Created = DateTime.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-                    if (child.LocalName.ToLower() == "date_updated")
-                    {
-                        Article.Date_Updated = DateTime.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-                    if (child.LocalName.ToLower() == "expiration_date")
-                    {
-                        Article.Expiration_Date = DateTime.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-                    if (child.LocalName.ToLower() == "modified_by")
-                    {
-                        Article.Modified_By.Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                        Article.Modified_By.Full_Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
-                    }
-                    if (child.LocalName.ToLower() == "folders")
-                    {
-                        foreach (XmlNode n in child.ChildNodes)
-                        {
-                            Folder folder = new Folder();
-                            folder.Id = Int64.Parse(n.Attributes["id"].Value);
-                            folder.Name = n.ChildNodes[0].InnerText.ToString();
-                            Article.Folders.Add(folder);
-                        }
-                    }
-                    if (child.LocalName.ToLower() == "published")
-                    {
-                        Article.Published = Boolean.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-                    if (child.LocalName.ToLower() == "question")
-                    {
-                        Article.Question = ParserUtils.NodeGetInnerText(child);
-                    }
-                    if (child.LocalName.ToLower() == "rating")
-                    {
-                        Article.Rating = Int32.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-                    if (child.LocalName.ToLower() == "times_viewed")
-                    {
-                        Article.Times_Viewed = Int32.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-                }
-            }
-            return Article;
         }
 
         internal partial class ArticleFolderParser
