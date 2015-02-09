@@ -144,6 +144,13 @@
     <Compile Include="ParaObjects\Department.cs" />
     <Compile Include="ParaObjects\Download.cs" />
     <Compile Include="ParaObjects\DownloadFolder.cs" />
+    <Compile Include="ParaObjects\EntityReferences\AccountReference.cs" />
+    <Compile Include="ParaObjects\EntityReferences\CsrReference.cs" />
+    <Compile Include="ParaObjects\EntityReferences\CustomerReference.cs" />
+    <Compile Include="ParaObjects\EntityReferences\CustomerRoleReference.cs" />
+    <Compile Include="ParaObjects\EntityReferences\EntityReference.cs" />
+    <Compile Include="ParaObjects\EntityReferences\RoleReference.cs" />
+    <Compile Include="ParaObjects\EntityReferences\SlaReference.cs" />
     <Compile Include="ParaObjects\Eula.cs" />
     <Compile Include="ParaObjects\Folder.cs" />
     <Compile Include="ParaObjects\ParaEntity.cs" />

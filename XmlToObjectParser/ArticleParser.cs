@@ -95,7 +95,7 @@ namespace ParatureSDK.XmlToObjectParser
                         foreach (XmlNode n in child.ChildNodes)
                         {
                             Sla sla = new Sla();
-                            sla.SlaID = Int64.Parse(n.Attributes["id"].Value);
+                            sla.Id = Int64.Parse(n.Attributes["id"].Value);
                             sla.Name = n.ChildNodes[0].InnerText.ToString();
                             Article.Permissions.Add(sla);
                         }

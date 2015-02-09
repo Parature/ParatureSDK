@@ -139,7 +139,7 @@ namespace ParatureSDK.ApiHandler.Entities
             else
             {
 
-                Sla.SlaID = 0;
+                Sla.Id = 0;
             }
 
             //Sla.ApiCallResponse = ar;

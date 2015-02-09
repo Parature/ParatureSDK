@@ -140,7 +140,7 @@ namespace ParatureSDK.XmlToObjectParser
                             var sla = new Sla
                             {
                                 Name = child.ChildNodes[0].ChildNodes[0].InnerText,
-                                SlaID = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value)
+                                Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value)
                             };
                             Customer.Sla = sla;
                         }

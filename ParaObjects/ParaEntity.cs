@@ -64,7 +64,7 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// Retrieve the value of a specific field, typecast to the provided type.
         /// </summary>
-        /// <param name="fieldName">Custom Field Id</param>
+        /// <param name="fieldName">Static Field Name</param>
         /// <typeparam name="T">Type of the value</typeparam>
         /// <returns></returns>
         /// <exception cref="InvalidCastException">Thrown if the type provided is incorrect</exception>
@@ -81,7 +81,7 @@ namespace ParatureSDK.ParaObjects
 
         /// <summary>
         /// Retrieve the value of a specific field, typecast to the provided type.
-        /// </summary>
+        /// </summary> 
         /// <param name="fieldId">Custom Field Id</param>
         /// <typeparam name="T">Type of the value</typeparam>
         /// <exception cref="InvalidCastException">Thrown if the type provided is incorrect</exception>

@@ -1,10 +1,12 @@
 using System;
+using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects
 {
     public class Sla
     {
-        public Int64 SlaID = 0;
+        [XmlAttribute("id")]
+        public Int64 Id = 0;
         public string Name = "";
 
         public Sla()
@@ -13,7 +15,7 @@ namespace ParatureSDK.ParaObjects
 
         public Sla(Sla sla)
         {
-            SlaID = sla.SlaID;
+            Id = sla.Id;
             Name = sla.Name;
         }
     }

@@ -312,7 +312,7 @@ namespace ParatureSDK.XmlToObjectParser
                     {
                         if (child.ChildNodes[0] != null && child.ChildNodes[0].Attributes["id"] != null)
                         {
-                            Ticket.Ticket_Sla.SlaID = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
+                            Ticket.Ticket_Sla.Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
                             Ticket.Ticket_Sla.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
                         }
                     }

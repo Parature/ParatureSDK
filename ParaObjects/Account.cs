@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using ParatureSDK.Fields;
+using ParatureSDK.ParaObjects.EntityReferences;
 
 namespace ParatureSDK.ParaObjects
 {
@@ -33,12 +34,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-
-        public Csr Modified_By
+        public CsrReference Modified_By
         {
             get
             {
-                return GetFieldValue<Csr>("Modified_By"); 
+                return GetFieldValue<CsrReference>("Modified_By"); 
             }
             set
             {
@@ -56,11 +56,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public Csr Owned_By
+        public CsrReference Owned_By
         {
             get
             {
-                return GetFieldValue<Csr>("Owned_By");
+                return GetFieldValue<CsrReference>("Owned_By");
             }
             set
             {
@@ -78,11 +78,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public Sla Sla
+        public SlaReference Sla
         {
             get
             {
-                return GetFieldValue<Sla>("Sla");
+                return GetFieldValue<SlaReference>("Sla");
             }
             set
             {
@@ -119,7 +119,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
         public DateTime Date_Updated
@@ -141,24 +141,23 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
-        [XmlElement("CustomerRole")]
-        public Role Default_Customer_Role
+        public RoleReference Default_Customer_Role
         {
             get
             {
-                return GetFieldValue<Role>("Role");
+                return GetFieldValue<RoleReference>("Default_Customer_Role");
             }
             set
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Role");
+                var field = Fields.FirstOrDefault(f => f.Name == "Default_Customer_Role");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
-                        Name = "Role",
+                        Name = "Default_Customer_Role",
                         DataType = ParaEnums.FieldDataType.Role
                     };
                     Fields.Add(field);
@@ -202,11 +201,11 @@ namespace ParatureSDK.ParaObjects
         {
             Id = account.Id;
             Account_Name = account.Account_Name;
-            Modified_By = new Csr(account.Modified_By);
-            Owned_By = new Csr(account.Owned_By);
-            Sla = new Sla(account.Sla);
+            Modified_By = account.Modified_By;
+            Owned_By = account.Owned_By;
+            Sla = account.Sla;
             Viewable_Account = new List<Account>(account.Viewable_Account);
-            Default_Customer_Role = new Role(account.Default_Customer_Role);
+            Default_Customer_Role = account.Default_Customer_Role;
         }
 
         public override string GetReadableName()

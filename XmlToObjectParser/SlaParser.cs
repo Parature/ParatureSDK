@@ -54,7 +54,7 @@ namespace ParatureSDK.XmlToObjectParser
         {
 
             Sla Sla = new Sla();
-            Sla.SlaID = Int64.Parse(SlaNode.Attributes["id"].InnerText.ToString());
+            Sla.Id = Int64.Parse(SlaNode.Attributes["id"].InnerText.ToString());
 
             foreach (XmlNode child in SlaNode.ChildNodes)
             {

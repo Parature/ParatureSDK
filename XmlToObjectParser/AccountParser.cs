@@ -117,8 +117,8 @@ namespace ParatureSDK.XmlToObjectParser
                     {
                         if (child.ChildNodes[0].Attributes["id"] != null)
                         {
-                            account.Owned_By.Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                            account.Owned_By.Full_Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
+                            account.Owned_By.Entity.Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
+                            account.Owned_By.Entity.Full_Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
                         }
                     }
 
@@ -126,8 +126,8 @@ namespace ParatureSDK.XmlToObjectParser
                     {
                         if (child.ChildNodes[0].Attributes["id"] != null)
                         {
-                            account.Sla.SlaID = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                            account.Sla.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
+                            account.Sla.Sla.Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
+                            account.Sla.Sla.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
                         }
                     }
 
@@ -135,8 +135,8 @@ namespace ParatureSDK.XmlToObjectParser
                     {
                         if (child.ChildNodes[0].Attributes["id"] != null)
                         {
-                            account.Default_Customer_Role.Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                            account.Default_Customer_Role.Name = child.ChildNodes[0].InnerText.ToString();
+                            account.Default_Customer_Role.Role.Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
+                            account.Default_Customer_Role.Role.Name = child.ChildNodes[0].InnerText.ToString();
                         }
                     }
 
@@ -144,8 +144,8 @@ namespace ParatureSDK.XmlToObjectParser
                     {
                         if (child.ChildNodes[0].Attributes["id"] != null)
                         {
-                            account.Modified_By.Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                            account.Modified_By.Full_Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
+                            account.Modified_By.Entity.Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
+                            account.Modified_By.Entity.Full_Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
                         }
                     }
                     if (child.LocalName.ToLower() == "shown_accounts")

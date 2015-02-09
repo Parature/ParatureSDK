@@ -22,7 +22,7 @@ namespace ParatureSDK.XmlToObjectParser
              * Get the first level descendents. 
              * Some entities have a wrapper element around the XML node, which throws off deserialization
              */
-            var wrapperElements = xml.Root.Descendants().Where(node => node.HasElements);
+            var wrapperElements = xml.Root.Elements().Where(node => node.HasElements);
             foreach (var wrapper in wrapperElements)
             {
                 //Name that will be used in the lookup of the field. It is the element text
@@ -33,19 +33,6 @@ namespace ParatureSDK.XmlToObjectParser
                 #region switch on tags for serialization of Static Fields
                 switch (wrapperTagName)
                 {
-                    //Account
-                    case "Default_Customer_Role":
-                        field.DataType = ParaEnums.FieldDataType.Sla;
-                        field.Value = OverrideNodeFill<Sla>(wrapper);
-                        break;
-                    case "Modified_By": //Articles and Accounts both have this one
-                        field.DataType = ParaEnums.FieldDataType.EntityReference;
-                        field.Value = OverrideNodeFill<Csr>(wrapper);
-                        break;
-                    case "Owned_By":
-                        field.DataType = ParaEnums.FieldDataType.EntityReference;
-                        field.Value = OverrideNodeFill<Csr>(wrapper);
-                        break;
                     //customer
                     case "Account":
                         field.DataType = ParaEnums.FieldDataType.EntityReference;
@@ -146,7 +133,7 @@ namespace ParatureSDK.XmlToObjectParser
                 }
             }
 
-            var customFieldNodes = xml.Root.Descendants().Where(node => node.Name.ToString() == "Custom_Field");
+            var customFieldNodes = xml.Root.Elements().Where(node => node.Name.ToString() == "Custom_Field");
             var newRoot = new XDocument();
             foreach (var element in customFieldNodes)
             {
