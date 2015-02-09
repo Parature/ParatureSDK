@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Xml;
 using ParatureSDK.ParaObjects;
 using Download = ParatureSDK.ApiHandler.Download;
@@ -24,7 +25,7 @@ namespace ParatureSDK.XmlToObjectParser
             {
                 childDepth = requestdepth - 1;
             }
-            Download = DownloadFillNode(DownloadNode, childDepth, includeAllCustomFields, ParaCredentials);
+            Download = ParaEntityParser.EntityFill<ParaObjects.Download>(xmlresp);
             Download.FullyLoaded = true;
             return Download;
         }
@@ -59,152 +60,13 @@ namespace ParatureSDK.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                DownloadsList.Data.Add(DownloadFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
+                var xDoc = new XmlDocument();
+                xDoc.LoadXml(xn.OuterXml);
+                //DownloadsList.Data.Add(DownloadFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
+                DownloadsList.Data.Add(ParaEntityParser.EntityFill<ParaObjects.Download>(xDoc));
             }
             return DownloadsList;
         }
-
-        /// <summary>
-        /// This methods accepts a Download node and parse through the different items in it. it can be used to parse a Download node, whether the node is returned from a simple read, or as part of a list call.
-        /// </summary>
-        static internal ParaObjects.Download DownloadFillNode(XmlNode DownloadNode, int childDepth, bool MinimalisticLoad, ParaCredentials ParaCredentials)
-        {
-
-            ParaObjects.Download Download = new ParaObjects.Download(true);
-            bool isSchema = false;
-            if (DownloadNode.Attributes["id"] != null)
-            {
-                Download.Id = Int64.Parse(DownloadNode.Attributes["id"].InnerText.ToString());
-                Download.uniqueIdentifier = Download.Id;
-                isSchema = false;
-            }
-            else
-            {
-                isSchema = true;
-            }
-
-            if (DownloadNode.Attributes["service-desk-uri"] != null)
-            {
-                Download.serviceDeskUri = DownloadNode.Attributes["service-desk-uri"].InnerText.ToString();
-            }
-
-            foreach (XmlNode child in DownloadNode.ChildNodes)
-            {
-                if (isSchema == false)
-                {
-                    if (child.LocalName.ToLower() == "date_created")
-                    {
-                        Download.Date_Created = DateTime.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-
-                    if (child.LocalName.ToLower() == "date_updated")
-                    {
-                        Download.Date_Updated = DateTime.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-
-                    if (child.LocalName.ToLower() == "file_size")
-                    {
-                        Download.File_Size = Int64.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-
-                    if (child.LocalName.ToLower() == "file_hits")
-                    {
-                        Download.File_Hits = Int64.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-
-                    if (child.LocalName.ToLower() == "description")
-                    {
-                        Download.Description = ParserUtils.NodeGetInnerText(child);
-                    }
-
-                    if (child.LocalName.ToLower() == "eula")
-                    {
-                        Download.Eula.Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                        Download.Eula.ShortTitle = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
-                    }
-                    if (child.LocalName.ToLower() == "external_link")
-                    {
-                        Download.External_Link = ParserUtils.NodeGetInnerText(child);
-                    }
-
-                    if (child.LocalName.ToLower() == "folders")
-                    {
-                        Download.MultipleFolders = true;
-                        foreach (XmlNode n in child.ChildNodes)
-                        {
-                            DownloadFolder folder = new DownloadFolder();
-                            folder.Id = Int64.Parse(n.Attributes["id"].Value);
-                            folder.Name = n.ChildNodes[0].InnerText.ToString();
-                            Download.Folders.Add(folder);
-                        }
-                    }
-
-                    if (child.LocalName.ToLower() == "folder")
-                    {
-                        Download.MultipleFolders = false;
-                        DownloadFolder folder = new DownloadFolder();
-                        folder.Id = Int64.Parse(child.FirstChild.Attributes["id"].Value);
-                        folder.Name = child.FirstChild.InnerText.ToString();
-                        Download.Folders.Add(folder);
-                    }
-
-                    if (child.LocalName.ToLower() == "guid")
-                    {
-                        Download.Guid = ParserUtils.NodeGetInnerText(child);
-                    }
-                    if (child.LocalName.ToLower() == "name")
-                    {
-                        Download.Name = ParserUtils.NodeGetInnerText(child);
-                    }
-                    if (child.LocalName.ToLower() == "published")
-                    {
-                        Download.Published = Boolean.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-                    if (child.LocalName.ToLower() == "title")
-                    {
-                        Download.Title = ParserUtils.NodeGetInnerText(child);
-                    }
-                    if (child.LocalName.ToLower() == "visible")
-                    {
-                        Download.Visible = Boolean.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-                    if (child.LocalName.ToLower() == "permissions")
-                    {
-                        foreach (XmlNode n in child.ChildNodes)
-                        {
-                            Sla sla = new Sla();
-                            sla.Id = Int64.Parse(n.Attributes["id"].Value);
-                            sla.Name = n.ChildNodes[0].InnerText.ToString();
-                            Download.Permissions.Add(sla);
-                        }
-                    }
-                    if (child.LocalName.ToLower() == "products")
-                    {
-                        foreach (XmlNode n in child.ChildNodes)
-                        {
-                            ParaObjects.Product product = new ParaObjects.Product();
-                            product.Id = Int64.Parse(n.Attributes["id"].Value);
-                            product.Name = n.ChildNodes[0].InnerText.ToString();
-                            Download.Products.Add(product);
-                        }
-                    }
-                    if (child.LocalName.ToLower() == "ext")
-                    {
-                        Download.Extension = ParserUtils.NodeGetInnerText(child);
-                    }
-                }
-                else
-                {
-                    if (child.LocalName.ToLower() == "folder")
-                    {
-                        Download.MultipleFolders = false;
-                    }
-                }
-            }
-
-            return Download;
-        }
-
 
         internal partial class DownloadFolderParser
         {

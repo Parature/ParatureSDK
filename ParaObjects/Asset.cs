@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using ParatureSDK.Fields;
 using ParatureSDK.ParaObjects.EntityReferences;
 
@@ -190,11 +191,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The status of the Asset.
         /// </summary>           
-        public Status Status
+        public StatusReference Status
         {
             get
             {
-                return GetFieldValue<Status>("Status");
+                return GetFieldValue<StatusReference>("Status");
             }
             set
             {
@@ -263,7 +264,9 @@ namespace ParatureSDK.ParaObjects
         /// The list, if any exists, of all the available actions that can be run agains this ticket.
         /// Only the id and the name of the action
         /// </summary>
-        public List<Action> AvailableActions
+        [XmlArray("Actions")]
+        [XmlArrayItem("Action")]
+        public List<Action> Actions
         {
             get
             {
@@ -307,10 +310,10 @@ namespace ParatureSDK.ParaObjects
             Modified_By = asset.Modified_By;
             Name = asset.Name;
             Product = asset.Product;
-            Status = new Status(asset.Status);
+            Status = asset.Status;
             Date_Created = asset.Date_Created;
             Date_Updated = asset.Date_Updated;
-            AvailableActions = new List<Action>(asset.AvailableActions);
+            Actions = new List<Action>(asset.Actions);
             Serial_Number = asset.Serial_Number;
         }
 

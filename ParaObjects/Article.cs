@@ -258,11 +258,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// List of Folders under which this article is listed.
         /// </summary>
-        public List<Folder> Folders
+        public List<ArticleFolder> Folders
         {
             get
             {
-                return GetFieldValue<List<Folder>>("Folders");
+                return GetFieldValue<List<ArticleFolder>>("Folders");
             }
             set
             {
@@ -349,7 +349,7 @@ namespace ParatureSDK.ParaObjects
             Times_Viewed = article.Times_Viewed;
             Modified_By = article.Modified_By;
             Created_By = article.Created_By;
-            Folders = new List<Folder>(article.Folders);
+            Folders = new List<ArticleFolder>(article.Folders);
             Permissions = new List<Sla>(article.Permissions);
             Products = new List<Product>(article.Products);
         }

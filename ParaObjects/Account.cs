@@ -144,11 +144,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public RoleReference Default_Customer_Role
+        public CustomerRoleReference Default_Customer_Role
         {
             get
             {
-                return GetFieldValue<RoleReference>("Default_Customer_Role");
+                return GetFieldValue<CustomerRoleReference>("Default_Customer_Role");
             }
             set
             {

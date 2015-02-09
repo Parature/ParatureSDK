@@ -25,7 +25,7 @@ namespace ParatureSDK.XmlToObjectParser
             {
                 childDepth = requestdepth - 1;
             }
-            chat = ParaEntityParser.NodeFill<ParaObjects.Chat>(xmlresp);
+            chat = ParaEntityParser.EntityFill<ParaObjects.Chat>(xmlresp);
             chat.FullyLoaded = true;
             return chat;
         }
@@ -67,7 +67,7 @@ namespace ParatureSDK.XmlToObjectParser
                 var xDoc = new XmlDocument();
                 xDoc.LoadXml(xn.OuterXml);
                 //ChatsList.Data.Add(ChatFillNode(xn, MinimalisticLoad, childDepth, includeTranscripts, ParaCredentials));
-                ChatsList.Data.Add(ParaEntityParser.NodeFill<ParaObjects.Chat>(xDoc));
+                ChatsList.Data.Add(ParaEntityParser.EntityFill<ParaObjects.Chat>(xDoc));
             }
             return ChatsList;
         }

@@ -55,11 +55,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public DateTime Date_Visited
+        public DateTime? Date_Visited
         {
             get
             {
-                return GetFieldValue<DateTime>("Date_Visited");
+                return GetFieldValue<DateTime?>("Date_Visited");
             }
             set
             {
@@ -143,12 +143,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        [XmlElement("CustomerRole")]
-        public RoleReference Customer_Role
+        public CustomerRoleReference Customer_Role
         {
             get
             {
-                return GetFieldValue<RoleReference>("Customer_Role");
+                return GetFieldValue<CustomerRoleReference>("Customer_Role");
             }
             set
             {
@@ -264,11 +263,11 @@ namespace ParatureSDK.ParaObjects
         /// Certain configs have the terms of use feature activated. This property should be taken into account
         /// only when you are using the "customer terms of use" feature.
         /// </summary>
-        public bool Tou
+        public bool? Tou
         {
             get
             {
-                return GetFieldValue<bool>("Tou");
+                return GetFieldValue<bool?>("Tou");
             }
             set
             {
@@ -341,11 +340,11 @@ namespace ParatureSDK.ParaObjects
         }
 
 
-        public Status Status
+        public StatusReference Status
         {
             get
             {
-                return GetFieldValue<Status>("Status");
+                return GetFieldValue<StatusReference>("Status");
             }
             set
             {
@@ -382,7 +381,7 @@ namespace ParatureSDK.ParaObjects
             Tou = customer.Tou;
             Password = customer.Password;
             Password_Confirm = customer.Password_Confirm;
-            Status = new Status(customer.Status);
+            Status = customer.Status;
             Customer_Role = customer.Customer_Role;
         }
 

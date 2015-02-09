@@ -61,125 +61,12 @@ namespace ParatureSDK.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                AccountsList.Data.Add(AccountFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
+                var xDoc = new XmlDocument();
+                xDoc.LoadXml(xn.OuterXml);
+                AccountsList.Data.Add(ParaEntityParser.EntityFill<ParaObjects.Account>(xDoc));
+                //AccountsList.Data.Add(AccountFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
             }
             return AccountsList;
         }
-
-        /// <summary>
-        /// This methods accepts an account node and parse through the different items in it. it can be used to parse an account node, whether the node is returned from a simple read, or as part of a list call.
-        /// </summary>
-        static internal ParaObjects.Account AccountFillNode(XmlNode AccountNode, int childDepth, bool MinimalisticLoad, ParaCredentials ParaCredentials)
-        {
-            ParaObjects.Account account = new ParaObjects.Account();
-            account.Viewable_Account = new List<ParaObjects.Account>();
-
-            bool isSchema = false;
-
-            if (AccountNode.Attributes["id"] != null)
-            {
-                account.Id = Int64.Parse(AccountNode.Attributes["id"].InnerText.ToString());
-                account.uniqueIdentifier = account.Id;
-                isSchema = false;
-            }
-            else
-            {
-                isSchema = true;
-            }
-
-            if (AccountNode.Attributes["service-desk-uri"] != null)
-            {
-                account.serviceDeskUri = AccountNode.Attributes["service-desk-uri"].InnerText.ToString();
-            }
-
-            account.FullyLoaded = true;
-            foreach (XmlNode child in AccountNode.ChildNodes)
-            {
-                if (isSchema == false)
-                {
-                    if (child.LocalName.ToLower() == "account_name")
-                    {
-                        account.Account_Name = HelperMethods.SafeHtmlDecode(child.InnerText.ToString());
-                    }
-
-                    if (child.LocalName.ToLower() == "date_created")
-                    {
-                        account.Date_Created = DateTime.Parse(child.InnerText.ToString());
-                    }
-
-                    if (child.LocalName.ToLower() == "date_updated")
-                    {
-                        account.Date_Updated = DateTime.Parse(child.InnerText.ToString());
-                    }
-
-                    if (child.LocalName.ToLower() == "owned_by")
-                    {
-                        if (child.ChildNodes[0].Attributes["id"] != null)
-                        {
-                            account.Owned_By.Entity.Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                            account.Owned_By.Entity.Full_Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
-                        }
-                    }
-
-                    if (child.LocalName.ToLower() == "sla")
-                    {
-                        if (child.ChildNodes[0].Attributes["id"] != null)
-                        {
-                            account.Sla.Sla.Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                            account.Sla.Sla.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
-                        }
-                    }
-
-                    if (child.LocalName.ToLower() == "default_customer_role")
-                    {
-                        if (child.ChildNodes[0].Attributes["id"] != null)
-                        {
-                            account.Default_Customer_Role.Role.Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                            account.Default_Customer_Role.Role.Name = child.ChildNodes[0].InnerText.ToString();
-                        }
-                    }
-
-                    if (child.LocalName.ToLower() == "modified_by")
-                    {
-                        if (child.ChildNodes[0].Attributes["id"] != null)
-                        {
-                            account.Modified_By.Entity.Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                            account.Modified_By.Entity.Full_Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
-                        }
-                    }
-                    if (child.LocalName.ToLower() == "shown_accounts")
-                    {
-                        foreach (XmlNode vnode in child.ChildNodes)
-                        {
-                            if (vnode.LocalName.ToLower() == "account")
-                            {
-                                ParaObjects.Account acc = new ParaObjects.Account();
-                                acc.Id = Int64.Parse(vnode.Attributes["id"].Value.ToString());
-                                acc.Account_Name = vnode.ChildNodes[0].InnerText.ToString();
-
-                                if (childDepth > 0)
-                                {
-                                    acc = Account.GetDetails(acc.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
-                                }
-
-                                acc.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);
-
-                                account.Viewable_Account.Add(acc);
-
-                            }
-                        }
-
-
-                    }
-                }
-
-                if (child.LocalName.ToLower() == "custom_field")
-                {
-                    account.CustomFields.Add(CommonParser.FillCustomField(MinimalisticLoad, child));
-                }
-            }
-            return account;
-        }
-
     }
 }

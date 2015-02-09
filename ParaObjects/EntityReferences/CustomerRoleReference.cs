@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects.EntityReferences
 {
-    class CustomerRoleReference: RoleReference
+    public class CustomerRoleReference: RoleReference
     {
         [XmlElement("CustomerRole")]
         public Role Role { 

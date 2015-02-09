@@ -289,11 +289,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// Whether the download is published or not.
         /// </summary>
-        public Boolean Published
+        public bool? Published
         {
             get
             {
-                return GetFieldValue<bool>("Published");
+                return GetFieldValue<bool?>("Published");
             }
             set
             {
@@ -333,11 +333,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public bool Visible
+        public bool? Visible
         {
             get
             {
-                return GetFieldValue<bool>("Visible");
+                return GetFieldValue<bool?>("Visible");
             }
             set
             {
@@ -358,6 +358,7 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// File extension
         /// </summary>
+        [XmlElement("Ext")]
         public string Extension
         {
             get
@@ -549,6 +550,10 @@ namespace ParatureSDK.ParaObjects
             Name = FileName;
         }
 
+        public Download()
+        {
+            
+        }
 
         /// <summary>
         /// 

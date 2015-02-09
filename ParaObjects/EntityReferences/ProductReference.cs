@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects.EntityReferences
 {
     public class ProductReference: EntityReference<Product>
     {
+        [XmlElement("Product")]
         public Product Entity
         {
             get { return base.Entity; }

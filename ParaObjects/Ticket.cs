@@ -402,6 +402,75 @@ namespace ParatureSDK.ParaObjects
             }
         }
 
+        public bool Dont_Overwrite_Sla_In_Rr
+        {
+            get
+            {
+                return GetFieldValue<bool>("Dont_Overwrite_Sla_In_Rr");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Dont_Overwrite_Sla_In_Rr");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Dont_Overwrite_Sla_In_Rr",
+                        FieldDataType = ParaEnums.FieldDataType.Boolean
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            } 
+        }
+
+        public Int64 Initial_Resolution_Target_Duration
+        {
+            get
+            {
+                return GetFieldValue<Int64>("Initial_Resolution_Target_Duration");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Initial_Resolution_Target_Duration");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Initial_Resolution_Target_Duration",
+                        FieldDataType = ParaEnums.FieldDataType.Int
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }  
+        }
+
+        public Int64 Initial_Response_Target_Duration
+        {
+            get
+            {
+                return GetFieldValue<Int64>("Initial_Response_Target_Duration");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Initial_Response_Target_Duration");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Initial_Response_Target_Duration",
+                        FieldDataType = ParaEnums.FieldDataType.Int
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }  
+        }
+
         /// <summary>
         /// The Queue that has this ticket assigned to. This class is only filled if the ticket is assigned to a Queue (as opposed to a CSR).
         /// </summary>
