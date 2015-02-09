@@ -14,10 +14,9 @@ namespace ParatureSDK.XmlToObjectParser
         /// </summary>
         static internal ParaObjects.Csr CsrFill(XmlDocument xmlresp)
         {
-            ParaObjects.Csr Csr = new ParaObjects.Csr();
-            XmlNode CsrNode = xmlresp.DocumentElement;
-            Csr = CsrFillNode(CsrNode);
-            return Csr;
+            XmlNode csrNode = xmlresp.DocumentElement;
+            var csr = ParaEntityParser.EntityFill<ParaObjects.Csr>(xmlresp);
+            return csr;
         }
 
         /// <summary>
@@ -128,16 +127,16 @@ namespace ParatureSDK.XmlToObjectParser
                     {
                         if (child.ChildNodes[0] != null && child.ChildNodes[0].Attributes["id"] != null)
                         {
-                            Csr.Status.StatusID = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                            Csr.Status.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
+                            Csr.Status.Status.Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
+                            Csr.Status.Status.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
                         }
                     }
                     else if (child.LocalName.ToLower() == "timezone")
                     {
                         if (child.ChildNodes[0] != null && child.ChildNodes[0].Attributes["id"] != null)
                         {
-                            Csr.Timezone.TimezoneID = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                            Csr.Timezone.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
+                            Csr.Timezone.Timezone.Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
+                            Csr.Timezone.Timezone.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
                         }
                     }
                     else

@@ -142,7 +142,7 @@ namespace ParatureSDK.XmlToObjectParser
                         foreach (XmlNode n in child.ChildNodes)
                         {
                             Folder folder = new Folder();
-                            folder.FolderID = Int64.Parse(n.Attributes["id"].Value);
+                            folder.Id = Int64.Parse(n.Attributes["id"].Value);
                             folder.Name = n.ChildNodes[0].InnerText.ToString();
                             Article.Folders.Add(folder);
                         }
@@ -235,7 +235,7 @@ namespace ParatureSDK.XmlToObjectParser
 
                 if (ArticleFolderNode.Attributes["id"] != null)
                 {
-                    ArticleFolder.FolderID = Int64.Parse(ArticleFolderNode.Attributes["id"].InnerText.ToString());
+                    ArticleFolder.Id = Int64.Parse(ArticleFolderNode.Attributes["id"].InnerText.ToString());
                 }
                 else
                 {
@@ -263,7 +263,7 @@ namespace ParatureSDK.XmlToObjectParser
                         {
                             ArticleFolder pf = new ArticleFolder();
 
-                            pf.FolderID = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
+                            pf.Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
                             pf.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
 
                             if (childDepth > 0)

@@ -355,7 +355,7 @@ namespace ParatureSDK.ApiHandler
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
                     {
-                        id = folder.FolderID;
+                        id = folder.Id;
                         break;
                     }
                 }
@@ -387,7 +387,7 @@ namespace ParatureSDK.ApiHandler
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
                     {
-                        id = folder.FolderID;
+                        id = folder.Id;
                         break;
                     }
                 }
@@ -414,7 +414,7 @@ namespace ParatureSDK.ApiHandler
                 System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
                 doc = XmlGenerator.ArticleFolderGenerateXML(articleFolder);
                 ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.ArticleFolder, doc, 0);
-                articleFolder.FolderID = ar.Objectid;
+                articleFolder.Id = ar.Objectid;
                 return ar;
                 //return 0;
             }
@@ -426,7 +426,7 @@ namespace ParatureSDK.ApiHandler
             {
                 ApiCallResponse ar = new ApiCallResponse();
 
-                ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.ArticleFolder, XmlGenerator.ArticleFolderGenerateXML(articleFolder), articleFolder.FolderID);
+                ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.ArticleFolder, XmlGenerator.ArticleFolderGenerateXML(articleFolder), articleFolder.Id);
 
                 return ar;
                 //return 0;
@@ -467,7 +467,7 @@ namespace ParatureSDK.ApiHandler
                 articleFolder.FullyLoaded = true;
 
                 articleFolder.ApiCallResponse.xmlReceived = ArticleFolderXml;
-                articleFolder.ApiCallResponse.Objectid = articleFolder.FolderID;
+                articleFolder.ApiCallResponse.Objectid = articleFolder.Id;
 
                 return articleFolder;
             }
@@ -595,7 +595,7 @@ namespace ParatureSDK.ApiHandler
                 else
                 {
                     ArticleFolder.FullyLoaded = false;
-                    ArticleFolder.FolderID = 0;
+                    ArticleFolder.Id = 0;
                 }
 
                 ArticleFolder.ApiCallResponse = ar;

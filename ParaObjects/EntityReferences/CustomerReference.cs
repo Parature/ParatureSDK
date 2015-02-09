@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects.EntityReferences
 {
-    class CustomerReference : EntityReference<Customer>
+    public class CustomerReference : EntityReference<Customer>
     {
         [XmlElement("Customer")]
         public Customer Entity

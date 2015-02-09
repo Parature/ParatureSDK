@@ -1,28 +1,30 @@
 using System;
+using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects
 {
     public class Timezone
     {
-        public Int64 TimezoneID;
+        [XmlAttribute("id")]
+        public Int64 Id;
         public string Name;
         public string Abbreviation;
         public Timezone()
         {
-            TimezoneID = 0;
+            Id = 0;
             Name = "";
             Abbreviation = "";
         }
         public Timezone(Timezone timezone)
         {
-            TimezoneID = timezone.TimezoneID;
+            Id = timezone.Id;
             Name = timezone.Name;
             Abbreviation = timezone.Abbreviation;
         }
 
         public Timezone(Int64 ID, string Name, string Abbreviation)
         {
-            TimezoneID = ID;
+            Id = ID;
             this.Name = Name;
             this.Abbreviation = Abbreviation;
         }

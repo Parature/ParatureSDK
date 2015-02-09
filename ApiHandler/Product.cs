@@ -360,7 +360,7 @@ namespace ParatureSDK.ApiHandler
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
                     {
-                        id = folder.FolderID;
+                        id = folder.Id;
                         break;
                     }
                 }
@@ -392,7 +392,7 @@ namespace ParatureSDK.ApiHandler
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
                     {
-                        id = folder.FolderID;
+                        id = folder.Id;
                         break;
                     }
                 }
@@ -409,7 +409,7 @@ namespace ParatureSDK.ApiHandler
                 System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
                 doc = XmlGenerator.ProductFolderGenerateXML(ProductFolder);
                 ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.ProductFolder, doc, 0);
-                ProductFolder.FolderID = ar.Objectid;
+                ProductFolder.Id = ar.Objectid;
                 return ar;
             }
 
@@ -419,7 +419,7 @@ namespace ParatureSDK.ApiHandler
             public static ApiCallResponse Update(ParaObjects.ProductFolder ProductFolder, ParaCredentials ParaCredentials)
             {
                 ApiCallResponse ar = new ApiCallResponse();
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, XmlGenerator.ProductFolderGenerateXML(ProductFolder), ProductFolder.FolderID);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, XmlGenerator.ProductFolderGenerateXML(ProductFolder), ProductFolder.Id);
                 return ar;
             }
 
@@ -465,7 +465,7 @@ namespace ParatureSDK.ApiHandler
                 productFolder.FullyLoaded = true;
 
                 productFolder.ApiCallResponse.xmlReceived = ProductFolderXML;
-                productFolder.ApiCallResponse.Objectid = productFolder.FolderID;
+                productFolder.ApiCallResponse.Objectid = productFolder.Id;
 
                 return productFolder;
             }
@@ -591,7 +591,7 @@ namespace ParatureSDK.ApiHandler
                 else
                 {
                     ProductFolder.FullyLoaded = false;
-                    ProductFolder.FolderID = 0;
+                    ProductFolder.Id = 0;
                 }
 
                 ProductFolder.ApiCallResponse = ar;

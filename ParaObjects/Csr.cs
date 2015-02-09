@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using ParatureSDK.Fields;
+using ParatureSDK.ParaObjects.EntityReferences;
 
 namespace ParatureSDK.ParaObjects
 {
@@ -165,7 +167,6 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-
         public string Password
         {
             get
@@ -188,11 +189,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public Timezone Timezone
+        public TimezoneReference Timezone
         {
             get
             {
-                return GetFieldValue<Timezone>("Timezone");
+                return GetFieldValue<TimezoneReference>("Timezone");
             }
             set
             {
@@ -210,11 +211,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public Status Status
+        public StatusReference Status
         {
             get
             {
-                return GetFieldValue<Status>("Status");
+                return GetFieldValue<StatusReference>("Status");
             }
             set
             {
@@ -251,9 +252,12 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
+
+        [XmlArray("Role")]
+        [XmlArrayItem("CsrRole")]
         public List<Role> Role
         {
             get
@@ -291,8 +295,8 @@ namespace ParatureSDK.ParaObjects
             Phone_2 = csr.Phone_2;
             Screen_Name = csr.Screen_Name;
             Date_Format = csr.Date_Format;
-            Status = new Status(csr.Status);
-            Timezone = new Timezone(csr.Timezone);
+            Status = csr.Status;
+            Timezone = csr.Timezone;
             Date_Created = csr.Date_Created;
             Role = new List<Role>(csr.Role);
             Password = csr.Password;

@@ -14,7 +14,7 @@ namespace ParatureSDK.ParaObjects
         public ArticleFolder(ArticleFolder articleFolder)
         {
             Description = articleFolder.Description;
-            FolderID = articleFolder.FolderID;
+            Id = articleFolder.Id;
             FullyLoaded = articleFolder.FullyLoaded;
             Is_Private = articleFolder.Is_Private;
             Name = articleFolder.Name;

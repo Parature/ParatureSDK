@@ -27,7 +27,6 @@ namespace ParatureSDK.XmlToObjectParser
                 childDepth = requestdepth - 1;
             }
 
-            //account = AccountFillNode(AccountNode, childDepth, MinimalisticLoad, ParaCredentials);
             account = ParaEntityParser.EntityFill<ParaObjects.Account>(xmlresp);
             account.FullyLoaded = true;
             return account;

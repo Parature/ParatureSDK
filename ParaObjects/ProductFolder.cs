@@ -22,7 +22,7 @@ namespace ParatureSDK.ParaObjects
 
         public ProductFolder(ProductFolder ProductFolder)
         {
-            FolderID = ProductFolder.FolderID;
+            Id = ProductFolder.Id;
             Date_Updated = ProductFolder.Date_Updated;
             FullyLoaded = ProductFolder.FullyLoaded;
             if (ProductFolder.Parent_Folder != null)

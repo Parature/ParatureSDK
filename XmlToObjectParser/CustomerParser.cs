@@ -25,7 +25,7 @@ namespace ParatureSDK.XmlToObjectParser
             {
                 childDepth = requestdepth - 1;
             }
-            Customer = CustomerFillNode(CustomerNode, childDepth, includeAllCustomFields, ParaCredentials);
+            Customer = ParaEntityParser.EntityFill<ParaObjects.Customer>(xmlresp);
             Customer.FullyLoaded = true;
             return Customer;
         }
@@ -62,130 +62,12 @@ namespace ParatureSDK.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                CustomersList.Data.Add(CustomerFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
+                var xDoc = new XmlDocument();
+                xDoc.LoadXml(xn.OuterXml);
+                //CustomersList.Data.Add(CustomerFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
+                CustomersList.Data.Add(ParaEntityParser.EntityFill<Customer>(xDoc));
             }
             return CustomersList;
-        }
-
-        /// <summary>
-        /// This methods accepts a customer node and parse through the different items in it. it can be used to parse a customer node, whether the node is returned from a simple read, or as part of a list call.
-        /// </summary>
-        static internal ParaObjects.Customer CustomerFillNode(XmlNode CustomerNode, int childDepth, Boolean MinimalisticLoad, ParaCredentials ParaCredentials)
-        {
-
-            ParaObjects.Customer Customer = new ParaObjects.Customer();
-            bool isSchema = false;
-            if (CustomerNode.Attributes["id"] != null)
-            {
-                isSchema = false;
-                Customer.Id = Int64.Parse(CustomerNode.Attributes["id"].InnerText.ToString());
-                Customer.uniqueIdentifier = Customer.Id;
-            }
-            else
-            {
-                isSchema = true;
-            }
-
-            if (CustomerNode.Attributes["service-desk-uri"] != null)
-            {
-                Customer.serviceDeskUri = CustomerNode.Attributes["service-desk-uri"].InnerText.ToString();
-            }
-
-            foreach (XmlNode child in CustomerNode.ChildNodes)
-            {
-                if (isSchema == false)
-                {
-                    if (child.LocalName.ToLower() == "status")
-                    {
-                        if (child.ChildNodes[0] != null && child.ChildNodes[0].Attributes["id"] != null)
-                        {
-                            var status = new Status
-                            {
-                                Name = child.ChildNodes[0].ChildNodes[0].InnerText,
-                                StatusID = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value)
-                            };
-                            Customer.Status = status;
-                        }
-                    }
-                    if (child.LocalName.ToLower() == "account")
-                    {
-                        // Fill the account details
-                        Customer.Account = new ParaObjects.Account();
-                        Customer.Account = AccountParser.AccountFillNode(child.ChildNodes[0], childDepth, MinimalisticLoad, ParaCredentials);
-                        if (childDepth > 0)
-                        {
-                            Customer.Account = Account.GetDetails(Customer.Account.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
-                        }
-
-                        Customer.Account.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);
-                    }
-
-                    if (child.LocalName.ToLower() == "customer_role")
-                    {
-                        if (child.ChildNodes[0] != null && child.ChildNodes[0].Attributes["id"] != null)
-                        {
-                            var role = new Role
-                            {
-                                Name = child.ChildNodes[0].ChildNodes[0].InnerText,
-                                Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value)
-                            };
-                            Customer.Customer_Role = role;
-                        }
-                    }
-
-                    if (child.LocalName.ToLower() == "sla")
-                    {
-                        if (child.ChildNodes[0] != null && child.ChildNodes[0].Attributes["id"] != null)
-                        {
-                            var sla = new Sla
-                            {
-                                Name = child.ChildNodes[0].ChildNodes[0].InnerText,
-                                Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value)
-                            };
-                            Customer.Sla = sla;
-                        }
-                    }
-                    if (child.LocalName.ToLower() == "date_visited")
-                    {
-                        Customer.Date_Visited = DateTime.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-
-
-                    if (child.LocalName.ToLower() == "date_created")
-                    {
-                        Customer.Date_Created = DateTime.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-
-                    if (child.LocalName.ToLower() == "date_updated")
-                    {
-                        Customer.Date_Updated = DateTime.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-
-                    if (child.LocalName.ToLower() == "email")
-                    {
-                        Customer.Email = HelperMethods.SafeHtmlDecode(ParserUtils.NodeGetInnerText(child));
-                    }
-                    if (child.LocalName.ToLower() == "first_name")
-                    {
-                        Customer.First_Name = HelperMethods.SafeHtmlDecode(ParserUtils.NodeGetInnerText(child));
-                    }
-                    if (child.LocalName.ToLower() == "last_name")
-                    {
-                        Customer.Last_Name = HelperMethods.SafeHtmlDecode(ParserUtils.NodeGetInnerText(child));
-                    }
-                    if (child.LocalName.ToLower() == "user_name")
-                    {
-                        Customer.User_Name = HelperMethods.SafeHtmlDecode(ParserUtils.NodeGetInnerText(child));
-                    }
-                }
-
-                if (child.LocalName.ToLower() == "custom_field")
-                {
-                    Customer.Fields.Add(CommonParser.FillCustomField(MinimalisticLoad, child));
-                }
-
-            }
-            return Customer;
         }
     }
 }

@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects
 {
     public class Action : ActionBase
     {
         public bool FullyLoaded;
+        [XmlAttribute("name")]
         public string Name = "";
         internal ParaEnums.ActionType actionType;
         public string Comment = "";

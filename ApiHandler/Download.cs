@@ -349,7 +349,7 @@ namespace ParatureSDK.ApiHandler
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
                     {
-                        id = folder.FolderID;
+                        id = folder.Id;
                         break;
                     }
                 }
@@ -381,7 +381,7 @@ namespace ParatureSDK.ApiHandler
                 {
                     if (String.Compare(folder.Name, FolderName, IgnoreCase) == 0)
                     {
-                        id = folder.FolderID;
+                        id = folder.Id;
                         break;
                     }
                 }
@@ -398,7 +398,7 @@ namespace ParatureSDK.ApiHandler
                 System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
                 doc = XmlGenerator.DownloadFolderGenerateXML(downloadfolder);
                 ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, doc, 0);
-                downloadfolder.FolderID = ar.Objectid;
+                downloadfolder.Id = ar.Objectid;
                 return ar;
             }
 
@@ -408,7 +408,7 @@ namespace ParatureSDK.ApiHandler
             public static ApiCallResponse Update(ParaObjects.DownloadFolder downloadfolder, ParaCredentials ParaCredentials)
             {
                 ApiCallResponse ar = new ApiCallResponse();
-                ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, XmlGenerator.DownloadFolderGenerateXML(downloadfolder), downloadfolder.FolderID);
+                ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, XmlGenerator.DownloadFolderGenerateXML(downloadfolder), downloadfolder.Id);
 
                 return ar;
             }
@@ -530,7 +530,7 @@ namespace ParatureSDK.ApiHandler
                 else
                 {
                     DownloadFolder.FullyLoaded = false;
-                    DownloadFolder.FolderID = 0;
+                    DownloadFolder.Id = 0;
                 }
 
                 DownloadFolder.ApiCallResponse = ar;
@@ -550,7 +550,7 @@ namespace ParatureSDK.ApiHandler
                 downloadFolder.FullyLoaded = true;
 
                 downloadFolder.ApiCallResponse.xmlReceived = DownloadFolderXML;
-                downloadFolder.ApiCallResponse.Objectid = downloadFolder.FolderID;
+                downloadFolder.ApiCallResponse.Objectid = downloadFolder.Id;
 
                 return downloadFolder;
             }

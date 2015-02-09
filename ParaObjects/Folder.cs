@@ -1,14 +1,16 @@
 using System;
+using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects
 {
     public class Folder
     {
         // Specific properties for this module
-        public Int64 FolderID = 0;
+        [XmlAttribute("id")]
+        public Int64 Id = 0;
         public string Name = "";
         public string Description = "";
-        public bool Is_Private = false;
+        public bool? Is_Private;
 
         /// <summary>
         /// Contains all the information regarding the API Call that was made.
@@ -22,7 +24,7 @@ namespace ParatureSDK.ParaObjects
 
         public Folder(Folder folder)
         {
-            FolderID = folder.FolderID;
+            Id = folder.Id;
             Name = folder.Name;
             Description = folder.Description;
             Is_Private = folder.Is_Private;

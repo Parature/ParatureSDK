@@ -104,9 +104,12 @@ namespace ParatureSDK.XmlToObjectParser
 
                     if (child.LocalName.ToLower() == "folder")
                     {
-                        Product.Folder.FolderID = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value);
-                        Product.Folder.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
-                        Product.Folder.FullyLoaded = false;
+                        Product.Folder = new ProductFolder
+                        {
+                            Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value),
+                            Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString(),
+                            FullyLoaded = false
+                        };
                     }
 
 
@@ -215,7 +218,7 @@ namespace ParatureSDK.XmlToObjectParser
             {
 
                 ProductFolder ProductFolder = new ProductFolder();
-                ProductFolder.FolderID = Int64.Parse(ProductFolderNode.Attributes["id"].InnerText.ToString());
+                ProductFolder.Id = Int64.Parse(ProductFolderNode.Attributes["id"].InnerText.ToString());
 
                 foreach (XmlNode child in ProductFolderNode.ChildNodes)
                 {
@@ -241,7 +244,7 @@ namespace ParatureSDK.XmlToObjectParser
                     {
                         ProductFolder pf = new ProductFolder();
 
-                        pf.FolderID = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
+                        pf.Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
                         pf.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
 
                         if (childDepth > 0)

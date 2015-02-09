@@ -55,7 +55,7 @@ namespace ParatureSDK.XmlToObjectParser
         {
 
             Timezone Timezone = new Timezone();
-            Timezone.TimezoneID = Int64.Parse(TimezoneNode.Attributes["id"].InnerText.ToString());
+            Timezone.Id = Int64.Parse(TimezoneNode.Attributes["id"].InnerText.ToString());
 
             foreach (XmlNode child in TimezoneNode.ChildNodes)
             {

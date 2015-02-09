@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ParatureSDK.Fields;
+using ParatureSDK.ParaObjects.EntityReferences;
 
 namespace ParatureSDK.ParaObjects
 {
@@ -10,11 +11,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The account that owns the asset, if any.
         /// </summary>
-        public Account Account_Owner
+        public AccountReference Account_Owner
         {
             get
             {
-                return GetFieldValue<Account>("Account_Owner");
+                return GetFieldValue<AccountReference>("Account_Owner");
             }
             set
             {
@@ -36,11 +37,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The CSR that created the asset.
         /// </summary>
-        public Csr Created_By
+        public CsrReference Created_By
         {
             get
             {
-                return GetFieldValue<Csr>("Created_By");
+                return GetFieldValue<CsrReference>("Created_By");
             }
             set
             {
@@ -62,11 +63,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The customer that owns the asset, if any.
         /// </summary>
-        public Customer Customer_Owner
+        public CustomerReference Customer_Owner
         {
             get
             {
-                return GetFieldValue<Customer>("Customer_Owner");
+                return GetFieldValue<CustomerReference>("Customer_Owner");
             }
             set
             {
@@ -88,11 +89,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The CSR that last modified the asset.
         /// </summary>
-        public Csr Modified_By
+        public CsrReference Modified_By
         {
             get
             {
-                return GetFieldValue<Csr>("Modified_By");
+                return GetFieldValue<CsrReference>("Modified_By");
             }
             set
             {
@@ -140,11 +141,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The product this asset is derived from.
         /// </summary>
-        public Product Product
+        public ProductReference Product
         {
             get
             {
-                return GetFieldValue<Product>("Product");
+                return GetFieldValue<ProductReference>("Product");
             }
             set
             {
@@ -231,7 +232,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
         public DateTime Date_Updated
@@ -253,7 +254,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
 
@@ -300,12 +301,12 @@ namespace ParatureSDK.ParaObjects
             : base(asset)
         {
             Id = asset.Id;
-            Account_Owner = new Account(asset.Account_Owner);
-            Created_By = new Csr(asset.Created_By);
-            Customer_Owner = new Customer(asset.Customer_Owner);
-            Modified_By = new Csr(asset.Modified_By);
+            Account_Owner = asset.Account_Owner;
+            Created_By = asset.Created_By;
+            Customer_Owner = asset.Customer_Owner;
+            Modified_By = asset.Modified_By;
             Name = asset.Name;
-            Product = new Product(asset.Product);
+            Product = asset.Product;
             Status = new Status(asset.Status);
             Date_Created = asset.Date_Created;
             Date_Updated = asset.Date_Updated;

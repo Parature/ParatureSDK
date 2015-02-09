@@ -54,7 +54,7 @@ namespace ParatureSDK.ApiHandler.Entities
             CsrStatus = CsrStatusParser.CsrStatusFill(csrStatusXml);
 
             CsrStatus.ApiCallResponse.xmlReceived = csrStatusXml;
-            CsrStatus.ApiCallResponse.Objectid = CsrStatus.StatusID;
+            CsrStatus.ApiCallResponse.Objectid = CsrStatus.Id;
 
             return CsrStatus;
         }
@@ -104,7 +104,7 @@ namespace ParatureSDK.ApiHandler.Entities
             else
             {
 
-                CsrStatus.StatusID = 0;
+                CsrStatus.Id = 0;
             }
 
             return CsrStatus;

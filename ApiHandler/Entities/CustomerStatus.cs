@@ -49,7 +49,7 @@ namespace ParatureSDK.ApiHandler.Entities
             var customerStatus = CustomerStatusParser.CustomerStatusFill(customerStatusXml);
 
             customerStatus.ApiCallResponse.xmlReceived = customerStatusXml;
-            customerStatus.ApiCallResponse.Objectid = customerStatus.StatusID;
+            customerStatus.ApiCallResponse.Objectid = customerStatus.Id;
 
             return customerStatus;
         }
@@ -103,7 +103,7 @@ namespace ParatureSDK.ApiHandler.Entities
             else
             {
 
-                customerStatus.StatusID = 0;
+                customerStatus.Id = 0;
             }
 
             return customerStatus;

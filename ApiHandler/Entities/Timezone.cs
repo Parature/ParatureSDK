@@ -97,7 +97,7 @@ namespace ParatureSDK.ApiHandler.Entities
             else
             {
 
-                Timezone.TimezoneID = 0;
+                Timezone.Id = 0;
             }
 
             return Timezone;

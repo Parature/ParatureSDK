@@ -50,7 +50,7 @@ namespace ParatureSDK.XmlToObjectParser
         {
 
             TicketStatus TicketStatus = new TicketStatus();
-            TicketStatus.StatusID = Int64.Parse(TicketStatusNode.Attributes["id"].InnerText.ToString());
+            TicketStatus.Id = Int64.Parse(TicketStatusNode.Attributes["id"].InnerText.ToString());
             TicketStatus.StatusType = (ParaEnums.TicketStatusType)Enum.Parse(typeof(ParaEnums.TicketStatusType), TicketStatusNode.Attributes["status-type"].InnerText.ToString());
 
             foreach (XmlNode child in TicketStatusNode.ChildNodes)

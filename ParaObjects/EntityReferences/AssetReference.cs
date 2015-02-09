@@ -6,10 +6,10 @@ using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects.EntityReferences
 {
-    public class AccountReference: EntityReference<Account>
+    public class AssetReference: EntityReference<Asset>
     {
-        [XmlElement("Account")]
-        public Account Entity
+        [XmlElement("Asset")]
+        public Asset Entity
         {
             get { return base.Entity; }
             set { base.Entity = value; }

@@ -137,7 +137,7 @@ namespace ParatureSDK.ApiHandler.Entities
             else
             {
 
-                Status.StatusID = 0;
+                Status.Id = 0;
             }
 
             return Status;

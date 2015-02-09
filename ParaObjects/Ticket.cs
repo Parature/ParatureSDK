@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using ParatureSDK.Fields;
+using ParatureSDK.ParaObjects.EntityReferences;
 
 namespace ParatureSDK.ParaObjects
 {
@@ -40,11 +42,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The product associated to a ticket. It will only be populated in certain configurations.
         /// </summary>
-        public Product Ticket_Product
+        public ProductReference Ticket_Product
         {
             get
             {
-                return GetFieldValue<Product>("Ticket_Product");
+                return GetFieldValue<ProductReference>("Ticket_Product");
             }
             set
             {
@@ -66,11 +68,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The status of the ticket
         /// </summary>
-        public TicketStatus Ticket_Status
+        public TicketStatusReference Ticket_Status
         {
             get
             {
-                return GetFieldValue<TicketStatus>("Ticket_Status");
+                return GetFieldValue<TicketStatusReference>("Ticket_Status");
             }
             set
             {
@@ -92,11 +94,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The asset linked to the ticket. this is only populated for certain Product/Asset configurations, when the ticket is linked to an Asset.
         /// </summary>
-        public Asset Ticket_Asset
+        public AssetReference Ticket_Asset
         {
             get
             {
-                return GetFieldValue<Asset>("Ticket_Asset");
+                return GetFieldValue<AssetReference>("Ticket_Asset");
             }
             set
             {
@@ -115,11 +117,11 @@ namespace ParatureSDK.ParaObjects
             }
         }
 
-        public Sla Ticket_Sla
+        public SlaReference Ticket_Sla
         {
             get
             {
-                return GetFieldValue<Sla>("Ticket_Sla");
+                return GetFieldValue<SlaReference>("Ticket_Sla");
             }
             set
             {
@@ -143,11 +145,11 @@ namespace ParatureSDK.ParaObjects
         /// credentials class, it could be that the user you are passing the Token of has access to multiple
         /// departments. In which case, the tickets that account has access to will be visible (no matter their departments).
         /// </summary>
-        public Department Department
+        public DepartmentReference Department
         {
             get
             {
-                return GetFieldValue<Department>("Department");
+                return GetFieldValue<DepartmentReference>("Department");
             }
             set
             {
@@ -169,11 +171,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The customer that owns the ticket. If your only requested a standard Ticket read, only the customer id is returned withing the Customer class.
         /// </summary>
-        public Customer Ticket_Customer
+        public CustomerReference Ticket_Customer
         {
             get
             {
-                return GetFieldValue<Customer>("Ticket_Customer");
+                return GetFieldValue<CustomerReference>("Ticket_Customer");
             }
             set
             {
@@ -195,11 +197,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The additional contact associated to this ticket.
         /// </summary>
-        public Customer Additional_Contact
+        public CustomerReference Additional_Contact
         {
             get
             {
-                return GetFieldValue<Customer>("Additional_Contact");
+                return GetFieldValue<CustomerReference>("Additional_Contact");
             }
             set
             {
@@ -221,11 +223,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The CSR that has entered this ticket (this class is filled only when a Ticket has been created by a CSR). Only the CSR id and Name are filled in case of a standard ticket read.
         /// </summary>
-        public Csr Entered_By
+        public CsrReference Entered_By
         {
             get
             {
-                return GetFieldValue<Csr>("Entered_By");
+                return GetFieldValue<CsrReference>("Entered_By");
             }
             set
             {
@@ -247,11 +249,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The CSR that is has this ticket assigned to. This class is only filled if the ticket is assigned to a CSR (as opposed to a Queue). If the ticket is assigned to a CSR, this class will only be filled with the ID of the CSR (unless you requested an appropriate request depth.
         /// </summary>
-        public Csr Assigned_To
+        public CsrReference Assigned_To
         {
             get
             {
-                return GetFieldValue<Csr>("Assigned_To");
+                return GetFieldValue<CsrReference>("Assigned_To");
             }
             set
             {
@@ -292,7 +294,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
 
@@ -318,7 +320,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
 
@@ -344,18 +346,18 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
 
         /// <summary>
         /// An optional string array of CSR emails that are CCed when an email notification is sent.
         /// </summary>
-        public List<string> Cc_Csr
+        public string Cc_Csr
         {
             get
             {
-                return GetFieldValue<List<string>>("Cc_Csr");
+                return GetFieldValue<string>("Cc_Csr");
             }
             set
             {
@@ -377,11 +379,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// An optional string array of customer emails that are CCed when an email notification is sent.
         /// </summary>
-        public List<string> Cc_Customer
+        public string Cc_Customer
         {
             get
             {
-                return GetFieldValue<List<string>>("Cc_Customer");
+                return GetFieldValue<string>("Cc_Customer");
             }
             set
             {
@@ -403,11 +405,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The Queue that has this ticket assigned to. This class is only filled if the ticket is assigned to a Queue (as opposed to a CSR).
         /// </summary>
-        public Queue Ticket_Queue
+        public QueueReference Ticket_Queue
         {
             get
             {
-                return GetFieldValue<Queue>("Ticket_Queue");
+                return GetFieldValue<QueueReference>("Ticket_Queue");
             }
             set
             {
@@ -429,11 +431,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// Parent Ticket of this ticket. Only filled whenever there is a parent ticket. Also, only the ticket id will be filled. Please make sure
         /// </summary>
-        public Ticket Ticket_Parent
+        public TicketReference Ticket_Parent
         {
             get
             {
-                return GetFieldValue<Ticket>("Ticket_Parent");
+                return GetFieldValue<TicketReference>("Ticket_Parent");
             }
             set
             {
@@ -560,6 +562,8 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The actions that ran on this ticket. This is only populated if you requested the ticket action history.
         /// </summary>
+        [XmlArray("ActionHistory")]
+        [XmlArrayItem("History")]
         public List<ActionHistory> ActionHistory
         {
             get
@@ -602,7 +606,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
 
@@ -625,7 +629,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
 
@@ -720,24 +724,24 @@ namespace ParatureSDK.ParaObjects
             {
                 ActionHistory = new List<ActionHistory>(ticket.ActionHistory);
                 Actions = new List<Action>(ticket.Actions);
-                Additional_Contact = new Customer(ticket.Additional_Contact);
-                Assigned_To = new Csr(ticket.Assigned_To);
-                Cc_Csr = ticket.Cc_Csr.ToList();
-                Cc_Customer = ticket.Cc_Customer.ToList();
+                Additional_Contact = ticket.Additional_Contact;
+                Assigned_To = ticket.Assigned_To;
+                Cc_Csr = ticket.Cc_Csr;
+                Cc_Customer = ticket.Cc_Customer;
                 Date_Created = ticket.Date_Created;
                 Date_Updated = ticket.Date_Updated;
-                Department = new Department(ticket.Department);
+                Department = ticket.Department;
                 Email_Notification = ticket.Email_Notification;
                 Email_Notification_Additional_Contact = ticket.Email_Notification_Additional_Contact;
-                Entered_By = new Csr(ticket.Entered_By);
+                Entered_By = ticket.Entered_By;
                 Hide_From_Customer = ticket.Hide_From_Customer;
                 Id = ticket.Id;
                 operation = ticket.operation;
-                Ticket_Asset = new Asset(ticket.Ticket_Asset);
+                Ticket_Asset = ticket.Ticket_Asset;
                 Ticket_Attachments = new List<Attachment>(ticket.Ticket_Attachments);
                 if (ticket.Ticket_Customer != null)
                 {
-                    Ticket_Customer = new Customer(ticket.Ticket_Customer);
+                    Ticket_Customer = ticket.Ticket_Customer;
                 }
                 if (ticket.Ticket_Children != null)
                 {
@@ -746,11 +750,11 @@ namespace ParatureSDK.ParaObjects
                 Ticket_Number = ticket.Ticket_Number;
                 if (ticket.Ticket_Parent != null)
                 {
-                    Ticket_Parent = new Ticket(ticket.Ticket_Parent);
+                    Ticket_Parent = ticket.Ticket_Parent;
                 }
-                Ticket_Product = new Product(ticket.Ticket_Product);
-                Ticket_Queue = new Queue(ticket.Ticket_Queue);
-                Ticket_Status = new TicketStatus(ticket.Ticket_Status);
+                Ticket_Product = ticket.Ticket_Product;
+                Ticket_Queue = ticket.Ticket_Queue;
+                Ticket_Status = ticket.Ticket_Status;
             }
         }
 

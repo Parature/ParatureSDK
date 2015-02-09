@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects.EntityReferences
 {
-    public class AccountReference: EntityReference<Account>
+    public class TicketReference: EntityReference<Ticket>
     {
-        [XmlElement("Account")]
-        public Account Entity
+        public Ticket Entity
         {
             get { return base.Entity; }
             set { base.Entity = value; }

@@ -241,7 +241,7 @@ namespace ParatureSDK.ApiHandler
                 CsrStatus = CsrStatusParser.CsrStatusFill(CsrStatusXML);
 
                 CsrStatus.ApiCallResponse.xmlReceived = CsrStatusXML;
-                CsrStatus.ApiCallResponse.Objectid = CsrStatus.StatusID;
+                CsrStatus.ApiCallResponse.Objectid = CsrStatus.Id;
 
                 return CsrStatus;
             }
@@ -301,7 +301,7 @@ namespace ParatureSDK.ApiHandler
                 }
                 else
                 {
-                    CsrStatus.StatusID = 0;
+                    CsrStatus.Id = 0;
                 }
 
                 CsrStatus.ApiCallResponse = ar;

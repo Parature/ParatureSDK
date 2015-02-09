@@ -1,3 +1,6 @@
+using System.Xml.Serialization;
+using ParatureSDK.ParaObjects.EntityReferences;
+
 namespace ParatureSDK.ParaObjects
 {
     /// <summary>
@@ -5,11 +8,15 @@ namespace ParatureSDK.ParaObjects
     /// </summary>
     public class ActionHistoryPerformer
     {
+        [XmlAttribute("performer-type")]
         public ParaEnums.ActionHistoryPerformerType ActionHistoryPerformerType = ParaEnums.ActionHistoryPerformerType.System;
+
         // Will be loaded with the CSR id and name, only if it was a CSR that performed the action.
+        [XmlElement("Csr")]
         public Csr CsrPerformer = new Csr();
 
         // Will be loaded with the Customer id and name, only if it was a Customer that performed the action.
+        [XmlElement("Customer")]
         public Customer CustomerPerformer = new Customer();
 
         public ActionHistoryPerformer()
@@ -29,7 +36,7 @@ namespace ParatureSDK.ParaObjects
                 case ParaEnums.ActionHistoryPerformerType.Csr:
                     return CsrPerformer.Full_Name;
                 case ParaEnums.ActionHistoryPerformerType.Customer:
-                    return CustomerPerformer.First_Name + " " + CustomerPerformer.Last_Name;
+                    return CustomerPerformer.Full_Name;
                 case ParaEnums.ActionHistoryPerformerType.System:
                     return "System";
                 default:

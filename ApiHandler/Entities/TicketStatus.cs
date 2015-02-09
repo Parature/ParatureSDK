@@ -49,7 +49,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ticketStatus = TicketStatusParser.TicketStatusFill(ticketStatusXml);
 
             ticketStatus.ApiCallResponse.xmlReceived = ticketStatusXml;
-            ticketStatus.ApiCallResponse.Objectid = ticketStatus.StatusID;
+            ticketStatus.ApiCallResponse.Objectid = ticketStatus.Id;
 
             return ticketStatus;
         }
@@ -138,7 +138,7 @@ namespace ParatureSDK.ApiHandler.Entities
             else
             {
 
-                TicketStatus.StatusID = 0;
+                TicketStatus.Id = 0;
             }
 
             return TicketStatus;

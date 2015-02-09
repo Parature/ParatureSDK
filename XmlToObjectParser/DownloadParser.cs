@@ -133,7 +133,7 @@ namespace ParatureSDK.XmlToObjectParser
                         foreach (XmlNode n in child.ChildNodes)
                         {
                             DownloadFolder folder = new DownloadFolder();
-                            folder.FolderID = Int64.Parse(n.Attributes["id"].Value);
+                            folder.Id = Int64.Parse(n.Attributes["id"].Value);
                             folder.Name = n.ChildNodes[0].InnerText.ToString();
                             Download.Folders.Add(folder);
                         }
@@ -143,7 +143,7 @@ namespace ParatureSDK.XmlToObjectParser
                     {
                         Download.MultipleFolders = false;
                         DownloadFolder folder = new DownloadFolder();
-                        folder.FolderID = Int64.Parse(child.FirstChild.Attributes["id"].Value);
+                        folder.Id = Int64.Parse(child.FirstChild.Attributes["id"].Value);
                         folder.Name = child.FirstChild.InnerText.ToString();
                         Download.Folders.Add(folder);
                     }
@@ -270,7 +270,7 @@ namespace ParatureSDK.XmlToObjectParser
             {
 
                 DownloadFolder DownloadFolder = new DownloadFolder();
-                DownloadFolder.FolderID = Int64.Parse(DownloadFolderNode.Attributes["id"].InnerText.ToString());
+                DownloadFolder.Id = Int64.Parse(DownloadFolderNode.Attributes["id"].InnerText.ToString());
 
                 foreach (XmlNode child in DownloadFolderNode.ChildNodes)
                 {
@@ -296,7 +296,7 @@ namespace ParatureSDK.XmlToObjectParser
                     {
                         DownloadFolder pf = new DownloadFolder();
 
-                        pf.FolderID = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
+                        pf.Id = Int64.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
                         pf.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
 
                         if (childDepth > 0)

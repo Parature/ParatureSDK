@@ -27,7 +27,7 @@ namespace ParatureSDK.XmlToObjectParser
             {
                 childDepth = requestdepth - 1;
             }
-            Asset = AssetFillNode(AssetNode, MinimalisticLoad, childDepth, ParaCredentials);
+            Asset = ParaEntityParser.EntityFill<ParaObjects.Asset>(xmlresp);
             Asset.FullyLoaded = true;
             return Asset;
         }
@@ -62,120 +62,12 @@ namespace ParatureSDK.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                AssetsList.Data.Add(AssetFillNode(xn, MinimalisticLoad, childDepth, ParaCredentials));
+                var xDoc = new XmlDocument();
+                xDoc.LoadXml(xn.OuterXml);
+                //AssetsList.Data.Add(AssetFillNode(xn, MinimalisticLoad, childDepth, ParaCredentials));
+                AssetsList.Data.Add(ParaEntityParser.EntityFill<Asset>(xDoc));
             }
             return AssetsList;
-        }
-
-        /// <summary>
-        /// This methods accepts an Asset node and parse through the different items in it. it can be used to parse a Asset node, whether the node is returned from a simple read, or as part of a list call.
-        /// </summary>
-        static internal ParaObjects.Asset AssetFillNode(XmlNode Node, Boolean MinimalisticLoad, int childDepth, ParaCredentials ParaCredentials)
-        {
-
-            ParaObjects.Asset Asset = new ParaObjects.Asset();
-            bool isSchema = false;
-            if (Node.Attributes["id"] != null)
-            {
-                Asset.Id = Int64.Parse(Node.Attributes["id"].InnerText.ToString());
-                Asset.uniqueIdentifier = Asset.Id;
-                isSchema = false;
-            }
-            else
-            {
-                isSchema = true;
-            }
-
-            if (Node.Attributes["service-desk-uri"] != null)
-            {
-                Asset.serviceDeskUri = Node.Attributes["service-desk-uri"].InnerText.ToString();
-            }
-
-            if (Node.Attributes["uid"] != null)
-            {
-                Asset.uid = Node.Attributes["uid"].InnerText.ToString();
-            }
-
-
-            foreach (XmlNode child in Node.ChildNodes)
-            {
-                if (isSchema == false)
-                {
-                    if (child.LocalName.ToLower() == "account_owner")
-                    {
-                        Asset.Account_Owner.Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value);
-                        Asset.Account_Owner.Account_Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
-
-                        if (childDepth > 0)
-                        {
-                            Asset.Account_Owner = Account.GetDetails(Asset.Account_Owner.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth - 1);
-                        }
-                        Asset.Account_Owner.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);
-                    }
-
-                    if (child.LocalName.ToLower() == "created_by")
-                    {
-                        Asset.Created_By.Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value);
-                        Asset.Created_By.Full_Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
-                    }
-                    if (child.LocalName.ToLower() == "modified_by")
-                    {
-                        Asset.Modified_By.Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value);
-                        Asset.Modified_By.Full_Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
-                    }
-                    if (child.LocalName.ToLower() == "customer_owner")
-                    {
-                        Asset.Customer_Owner.Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value);
-
-                        if (childDepth > 0)
-                        {
-                            Asset.Customer_Owner = Customer.GetDetails(Asset.Customer_Owner.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth - 1);
-                        }
-                        Asset.Customer_Owner.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);
-
-                        //Not sure about this one
-                        Asset.Customer_Owner.First_Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
-                    }
-
-                    if (child.LocalName.ToLower() == "product")
-                    {
-                        Asset.Product.Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value);
-                        Asset.Product.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
-                        if (childDepth > 0)
-                        {
-                            Asset.Product = Product.GetDetails(Asset.Product.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth - 1);
-                        }
-                        Asset.Product.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);
-                    }
-                    if (child.LocalName.ToLower() == "date_created")
-                    {
-                        Asset.Date_Created = DateTime.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-                    if (child.LocalName.ToLower() == "date_updated")
-                    {
-                        Asset.Date_Updated = DateTime.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-                    if (child.LocalName.ToLower() == "serial_number")
-                    {
-                        Asset.Serial_Number = ParserUtils.NodeGetInnerText(child);
-                    }
-                    if (child.LocalName.ToLower() == "name")
-                    {
-                        Asset.Name = HelperMethods.SafeHtmlDecode(ParserUtils.NodeGetInnerText(child));
-                    }
-                    if (child.LocalName.ToLower() == "status")
-                    {
-                        Asset.Status.StatusID = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value);
-                        Asset.Status.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
-                    }
-                }
-
-                if (child.LocalName.ToLower() == "custom_field")
-                {
-                    Asset.Fields.Add(CommonParser.FillCustomField(MinimalisticLoad, child));
-                }
-            }
-            return Asset;
         }
     }
 }

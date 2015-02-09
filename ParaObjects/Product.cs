@@ -47,7 +47,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
         public DateTime Date_Updated
@@ -69,7 +69,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
         public string Price
@@ -135,7 +135,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
         /// <summary>
@@ -251,7 +251,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
 

@@ -133,6 +133,7 @@ namespace ParatureSDK.XmlToObjectParser
                 }
             }
 
+            /*
             var customFieldNodes = xml.Root.Elements().Where(node => node.Name.ToString() == "Custom_Field");
             var newRoot = new XDocument();
             foreach (var element in customFieldNodes)
@@ -156,6 +157,16 @@ namespace ParatureSDK.XmlToObjectParser
 
                 entity.Fields.Add(custField);
             }
+            */
+
+            return entity;
+        }
+
+        public static T NodeFill<T>(XmlDocument xmlDoc)
+        {
+            var serializer = new XmlSerializer(typeof(T));
+            var xml = XDocument.Parse(xmlDoc.OuterXml);
+            var entity = (T)serializer.Deserialize(xml.CreateReader());
 
             return entity;
         }

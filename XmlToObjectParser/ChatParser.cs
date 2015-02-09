@@ -25,7 +25,7 @@ namespace ParatureSDK.XmlToObjectParser
             {
                 childDepth = requestdepth - 1;
             }
-            chat = ChatFillNode(ObjectNode,MinimalisticLoad, childDepth, includeTranscripts, ParaCredentials);
+            chat = ParaEntityParser.NodeFill<ParaObjects.Chat>(xmlresp);
             chat.FullyLoaded = true;
             return chat;
         }
@@ -64,180 +64,12 @@ namespace ParatureSDK.XmlToObjectParser
 
             foreach (XmlNode xn in DocNode.ChildNodes)
             {
-                ChatsList.Data.Add(ChatFillNode(xn, MinimalisticLoad, childDepth, includeTranscripts, ParaCredentials));
+                var xDoc = new XmlDocument();
+                xDoc.LoadXml(xn.OuterXml);
+                //ChatsList.Data.Add(ChatFillNode(xn, MinimalisticLoad, childDepth, includeTranscripts, ParaCredentials));
+                ChatsList.Data.Add(ParaEntityParser.NodeFill<ParaObjects.Chat>(xDoc));
             }
             return ChatsList;
-        }
-
-        /// <summary>
-        /// This methods accepts a Chat node and parse through the different items in it. it can be used to parse a Chat node, whether the node is returned from a simple read, or as part of a list call.
-        /// </summary>
-        static internal ParaObjects.Chat ChatFillNode(XmlNode ChatNode, Boolean MinimalisticLoad, int childDepth, bool includeTranscripts, ParaCredentials ParaCredentials)
-        {
-
-            ParaObjects.Chat chat = new ParaObjects.Chat();
-            bool isSchema = false;
-            if (ChatNode.Attributes["id"] != null)
-            {
-                isSchema = false;
-                chat.Id = Int64.Parse(ChatNode.Attributes["id"].InnerText.ToString());
-                chat.uniqueIdentifier = chat.Id;
-            }
-            else
-            {
-                isSchema = true;
-            }
-
-            if (ChatNode.Attributes["service-desk-uri"] != null)
-            {
-                chat.serviceDeskUri = ChatNode.Attributes["service-desk-uri"].InnerText.ToString();
-            }
-
-            foreach (XmlNode child in ChatNode.ChildNodes)
-            {
-                if (isSchema == false)
-                {
-
-                    if (child.LocalName.ToLower() == "browser_language")
-                    {
-                        chat.Browser_Language = ParserUtils.NodeGetInnerText(child);
-                    }
-
-
-                    if (child.LocalName.ToLower() == "browser_type")
-                    {
-                        chat.Browser_Type = ParserUtils.NodeGetInnerText(child);
-                    }
-
-
-                    if (child.LocalName.ToLower() == "browser_version")
-                    {
-                        chat.Browser_Version = ParserUtils.NodeGetInnerText(child);
-                    }
-
-
-                    if (child.LocalName.ToLower() == "chat_number")
-                    {
-                        long num;
-                        Int64.TryParse(ParserUtils.NodeGetInnerText(child), out num);
-                        chat.Chat_Number = num;
-                    }
-
-                    if (child.LocalName.ToLower() == "customer")
-                    {
-                        // Fill the Customer details
-                        ParaObjects.Customer Customer = new ParaObjects.Customer();
-
-                        chat.Customer = CustomerParser.CustomerFillNode(child.ChildNodes[0], childDepth, true, ParaCredentials);
-                        if (childDepth > 0)
-                        {
-                            chat.Customer = ApiHandler.Customer.GetDetails(chat.Customer.Id, ParaCredentials, (ParaEnums.RequestDepth)childDepth);
-                        }
-                        chat.Customer.FullyLoaded = ParserUtils.ObjectFullyLoaded(childDepth);
-                    }
-
-                    if (child.LocalName.ToLower() == "email")
-                    {
-                        chat.Email = ParserUtils.NodeGetInnerText(child);
-                    }
-
-                    if (child.LocalName.ToLower() == "date_created")
-                    {
-                        chat.Date_Created = DateTime.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-
-                    if (child.LocalName.ToLower() == "date_ended")
-                    {
-                        chat.Date_Ended = DateTime.Parse(ParserUtils.NodeGetInnerText(child));
-                    }
-
-                    if (child.LocalName.ToLower() == "initial_csr")
-                    {
-                        if (child.ChildNodes[0] != null && child.ChildNodes[0].Attributes["id"] != null)
-                        {
-                            chat.Initial_Csr.Id = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                            chat.Initial_Csr.Full_Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
-                        }
-                    }
-
-                    if (child.LocalName.ToLower() == "ip_address")
-                    {
-                        chat.Ip_Address = ParserUtils.NodeGetInnerText(child);
-                    }
-
-                    if (child.LocalName.ToLower() == "is_anonymous")
-                    {
-                        bool anon;
-                        Boolean.TryParse(ParserUtils.NodeGetInnerText(child), out anon);
-                        chat.Is_Anonymous = anon;
-                    }
-
-                    if (child.LocalName.ToLower() == "referrer_url")
-                    {
-                        chat.Referrer_Url = ParserUtils.NodeGetInnerText(child);
-                    }
-
-                    if (child.LocalName.ToLower() == "related_tickets")
-                    {
-                        if (child.ChildNodes[0] != null && child.ChildNodes[0].Attributes["id"] != null)
-                        {
-                            Int32 counter = 0;
-                            chat.Related_Tickets = new List<ParaObjects.Ticket>();
-
-                            while (child.ChildNodes[counter] != null && child.ChildNodes[counter].Attributes["id"] != null)
-                            {
-                                ParaObjects.Ticket ticket = new ParaObjects.Ticket();
-
-                                ticket.Id = Int32.Parse(child.ChildNodes[counter].Attributes["id"].Value.ToString());
-                                ticket.Ticket_Number = child.ChildNodes[counter].ChildNodes[0].InnerText.ToString();
-
-                                chat.Related_Tickets.Add(ticket);
-
-                                counter++;
-                            }
-                        }
-                    }
-
-                    if (child.LocalName.ToLower() == "sla_violations")
-                    {
-                        var vio = Int32.MinValue;
-                        Int32.TryParse(ParserUtils.NodeGetInnerText(child), out vio);
-                        chat.Sla_Violation = vio;
-                    }
-                        
-                    if (child.LocalName.ToLower() == "status")
-                    {
-                        if (child.ChildNodes[0] != null && child.ChildNodes[0].Attributes["id"] != null)
-                        {
-                            chat.Status.StatusID = Int32.Parse(child.ChildNodes[0].Attributes["id"].Value.ToString());
-                            chat.Status.Name = child.ChildNodes[0].ChildNodes[0].InnerText.ToString();
-                        }
-                    }
-
-                    if (child.LocalName.ToLower() == "summary")
-                    {
-                        chat.Summary = ParserUtils.NodeGetInnerText(child);
-                    }
-                    if (child.LocalName.ToLower() == "user_agent")
-                    {
-                        chat.User_Agent = ParserUtils.NodeGetInnerText(child);
-                    }
-
-                }
-
-                if (child.LocalName.ToLower() == "custom_field")
-                {
-                    chat.Fields.Add(CommonParser.FillCustomField(MinimalisticLoad, child));
-                }
-            }
-
-            if (includeTranscripts && chat.Id>0)
-            {
-                // Load transcripts
-                chat.ChatTranscripts = Chat.ChatTranscripts(chat.Id, ParaCredentials);
-            }
-
-            return chat;
         }
 
         static internal List<ChatTranscript> ChatTranscriptsFillList(XmlDocument ChatTranscriptDoc)

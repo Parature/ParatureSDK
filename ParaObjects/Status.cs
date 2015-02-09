@@ -1,4 +1,5 @@
 using System;
+using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects
 {
@@ -18,37 +19,30 @@ namespace ParatureSDK.ParaObjects
         /// Contains all the information regarding the API Call that was made.
         /// </summary>
         public ApiCallResponse ApiCallResponse = new ApiCallResponse();
-        private Int64 _StatusID = 0;
 
         /// <summary>
         /// 1 = Active, -1 = Deactivated
         /// </summary>
-        public Int64 StatusID
-        {
-            get { return _StatusID; }
-            set { _StatusID = value; }
-        }
-        private string _Name = "";
+        [XmlAttribute("id")]
+        public long Id { get; set; }
 
-        public string Name
-        {
-            get { return _Name; }
-            set { _Name = value; }
-        }
+        public string Name { get; set; }
 
         public Status()
         {
+            Name = "";
+            Id = 0;
         }
 
         public Status(Status status)
         {
-            StatusID = status.StatusID;
+            Id = status.Id;
             Name = status.Name;
         }
 
         public Status(Int64 ID, string Name)
         {
-            StatusID = ID;
+            Id = ID;
             this.Name = Name;
         }
     }

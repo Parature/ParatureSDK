@@ -55,7 +55,7 @@ namespace ParatureSDK.XmlToObjectParser
         {
 
             CsrStatus CsrStatus = new CsrStatus();
-            CsrStatus.StatusID = Int64.Parse(CsrStatusNode.Attributes["id"].InnerText.ToString());
+            CsrStatus.Id = Int64.Parse(CsrStatusNode.Attributes["id"].InnerText.ToString());
 
             foreach (XmlNode child in CsrStatusNode.ChildNodes)
             {

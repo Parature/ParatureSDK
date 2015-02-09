@@ -55,7 +55,7 @@ namespace ParatureSDK.XmlToObjectParser
         {
 
             Status Status = new Status();
-            Status.StatusID = Int64.Parse(StatusNode.Attributes["id"].InnerText.ToString());
+            Status.Id = Int64.Parse(StatusNode.Attributes["id"].InnerText.ToString());
 
             foreach (XmlNode child in StatusNode.ChildNodes)
             {

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Xml.Serialization;
 using ParatureSDK.Fields;
+using ParatureSDK.ParaObjects.EntityReferences;
 
 namespace ParatureSDK.ParaObjects
 {
@@ -10,11 +11,11 @@ namespace ParatureSDK.ParaObjects
     /// </summary>
     public class Customer : ParaEntity
     {
-        public Account Account
+        public AccountReference Account
         {
             get
             {
-                return GetFieldValue<Account>("Account");
+                return GetFieldValue<AccountReference>("Account");
             }
             set
             {
@@ -32,11 +33,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public Sla Sla
+        public SlaReference Sla
         {
             get
             {
-                return GetFieldValue<Sla>("Sla");
+                return GetFieldValue<SlaReference>("Sla");
             }
             set
             {
@@ -73,7 +74,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
         public DateTime Date_Created
@@ -95,7 +96,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
         public DateTime Date_Updated
@@ -117,7 +118,7 @@ namespace ParatureSDK.ParaObjects
                     Fields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
         public string Email
@@ -143,11 +144,11 @@ namespace ParatureSDK.ParaObjects
             }
         }
         [XmlElement("CustomerRole")]
-        public Role Customer_Role
+        public RoleReference Customer_Role
         {
             get
             {
-                return GetFieldValue<Role>("Customer_Role");
+                return GetFieldValue<RoleReference>("Customer_Role");
             }
             set
             {
@@ -234,7 +235,28 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
+        public string Full_Name
+        {
+            get
+            {
+                return GetFieldValue<string>("Full_Name");
+            }
+            set
+            {
+                var field = Fields.FirstOrDefault(f => f.Name == "Full_Name");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Full_Name",
+                        DataType = ParaEnums.FieldDataType.String
+                    };
+                    Fields.Add(field);
+                }
 
+                field.Value = value;
+            }   
+        }
 
         ////////////////////////////////////////// COULD NOT LOCATE IT FOR NOW //////////////
         /// <summary>
@@ -351,8 +373,8 @@ namespace ParatureSDK.ParaObjects
             : base(customer)
         {
             Id = customer.Id;
-            Account = new Account(customer.Account);
-            Sla = new Sla(customer.Sla);
+            Account = customer.Account;
+            Sla = customer.Sla;
             Date_Visited = customer.Date_Visited;
             Email = customer.Email;
             User_Name = customer.User_Name;
@@ -361,10 +383,8 @@ namespace ParatureSDK.ParaObjects
             Password = customer.Password;
             Password_Confirm = customer.Password_Confirm;
             Status = new Status(customer.Status);
-            Customer_Role = new Role(customer.Customer_Role);
+            Customer_Role = customer.Customer_Role;
         }
-
-
 
         public override string GetReadableName()
         {

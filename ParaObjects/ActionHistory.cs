@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
+using ParatureSDK.ParaObjects.EntityReferences;
 
 namespace ParatureSDK.ParaObjects
 {
@@ -9,7 +11,8 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The unique identifier of this action history item
         /// </summary>
-        public Int64 ActionHistoryID = 0;
+        [XmlAttribute("id")]
+        public Int64 Id = 0;
         /// <summary>
         /// the action that run
         /// </summary>
@@ -17,11 +20,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The status the object was on, before the action was run
         /// </summary>
-        public TicketStatus Old_Status = new TicketStatus();
+        public TicketStatusReference Old_Status = new TicketStatusReference();
         /// <summary>
         /// The new status that the object moved to, after the action was run.
         /// </summary>
-        public TicketStatus New_Status = new TicketStatus();
+        public TicketStatusReference New_Status = new TicketStatusReference();
         public String Comments;
         /// <summary>
         /// Whether this action was exposed to the customer or not.
@@ -46,10 +49,10 @@ namespace ParatureSDK.ParaObjects
 
         public ActionHistory(ActionHistory actionHistory)
         {
-            ActionHistoryID = actionHistory.ActionHistoryID;
+            Id = actionHistory.Id;
             Action = new Action(actionHistory.Action);
-            Old_Status = new TicketStatus(actionHistory.Old_Status);
-            New_Status = new TicketStatus(actionHistory.New_Status);
+            Old_Status = actionHistory.Old_Status;
+            New_Status = actionHistory.New_Status;
             Comments = actionHistory.Comments;
             Show_To_Customer = actionHistory.Show_To_Customer;
             Time_Spent = actionHistory.Time_Spent;
