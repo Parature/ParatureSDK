@@ -35,25 +35,25 @@ namespace ParatureSDK.XmlToObjectParser
                 {
                     //customer
                     case "Account":
-                        field.DataType = ParaEnums.FieldDataType.EntityReference;
+                        field.FieldDataType = ParaEnums.FieldDataType.EntityReference;
                         field.Value = OverrideNodeFill<Account>(wrapper);
                         break;
                     case "Customer_Role":
-                        field.DataType = ParaEnums.FieldDataType.Sla;
+                        field.FieldDataType = ParaEnums.FieldDataType.Sla;
                         field.Value = OverrideNodeFill<Sla>(wrapper);
                         break;
                     case "Status": //Asset, customer, chat
-                        field.DataType = ParaEnums.FieldDataType.Status;
+                        field.FieldDataType = ParaEnums.FieldDataType.Status;
                         field.Value = OverrideNodeFill<Status>(wrapper);
                         break;
                     //customer or account
                     case "Sla":
-                        field.DataType = ParaEnums.FieldDataType.Sla;
+                        field.FieldDataType = ParaEnums.FieldDataType.Sla;
                         field.Value = OverrideNodeFill<Sla>(wrapper);
                         break;
                     //download
                     case "Eula":
-                        field.DataType = ParaEnums.FieldDataType.Eula;
+                        field.FieldDataType = ParaEnums.FieldDataType.Eula;
                         field.Value = OverrideNodeFill<Eula>(wrapper);
                         break;
                     case "Folders": //Articles too
@@ -66,11 +66,11 @@ namespace ParatureSDK.XmlToObjectParser
                                 case "DownloadFolder":
                                     //TODO: Add field for "multipleFolders" too
                                     //nuanced. This can be a different node name depending on the dept configuration
-                                    field.DataType = ParaEnums.FieldDataType.Folder;
+                                    field.FieldDataType = ParaEnums.FieldDataType.Folder;
                                     field.Value = OverrideNodeFill<List<DownloadFolder>>(wrapper);
                                     break;
                                 case "ArticleFolder":
-                                    field.DataType = ParaEnums.FieldDataType.Folder;
+                                    field.FieldDataType = ParaEnums.FieldDataType.Folder;
                                     field.Value = OverrideNodeFill<List<ArticleFolder>>(wrapper);
                                     break;
                                 default:
@@ -88,11 +88,11 @@ namespace ParatureSDK.XmlToObjectParser
                                 case "DownloadFolder":
                                     //TODO: Add field for "multipleFolders" too
                                     //nuanced. This can be a different node name depending on the dept configuration
-                                    field.DataType = ParaEnums.FieldDataType.Folder;
+                                    field.FieldDataType = ParaEnums.FieldDataType.Folder;
                                     field.Value = OverrideNodeFill<List<DownloadFolder>>(wrapper);
                                     break;
                                 case "ProductFolder":
-                                    field.DataType = ParaEnums.FieldDataType.Folder;
+                                    field.FieldDataType = ParaEnums.FieldDataType.Folder;
                                     field.Value = OverrideNodeFill<List<ProductFolder>>(wrapper);
                                     break;
                                 default:
@@ -102,22 +102,22 @@ namespace ParatureSDK.XmlToObjectParser
                         break;
                     //Articles
                     case "Created_By": //also products
-                        field.DataType = ParaEnums.FieldDataType.EntityReference;
+                        field.FieldDataType = ParaEnums.FieldDataType.EntityReference;
                         field.Value = OverrideNodeFill<Csr>(wrapper);
                         break;
                     //Products
                     case "Customer_Owner":
-                        field.DataType = ParaEnums.FieldDataType.EntityReference;
+                        field.FieldDataType = ParaEnums.FieldDataType.EntityReference;
                         field.Value = OverrideNodeFill<Customer>(wrapper);
                         break;
                     //Asset
                     case "Product":
-                        field.DataType = ParaEnums.FieldDataType.EntityReference;
+                        field.FieldDataType = ParaEnums.FieldDataType.EntityReference;
                         field.Value = OverrideNodeFill<Product>(wrapper);
                         break;
                     //chat
                     case "Initial_Csr":
-                        field.DataType = ParaEnums.FieldDataType.EntityReference;
+                        field.FieldDataType = ParaEnums.FieldDataType.EntityReference;
                         field.Value = OverrideNodeFill<Csr>(wrapper);
                         break;
                     default:
@@ -126,11 +126,13 @@ namespace ParatureSDK.XmlToObjectParser
                 #endregion
                         
                 //Check whether the wrapped Static Field was properly deserialized
+                /*
                 if (entity != null)
                 {
                     field.Name = wrapperTagName;
                     entity.Fields.Add(field);
                 }
+                */
             }
 
             /*

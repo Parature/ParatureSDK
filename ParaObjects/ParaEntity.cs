@@ -20,12 +20,12 @@ namespace ParatureSDK.ParaObjects
         {
             if (paraEntity == null)
             {
-                Fields = new List<Field>();
+                StaticFields = new List<StaticField>();
                 return;
             }
 
             Id = paraEntity.Id;
-            Fields = paraEntity.Fields;
+            StaticFields = paraEntity.StaticFields;
         }
 
         /// <summary>
@@ -39,8 +39,8 @@ namespace ParatureSDK.ParaObjects
             get { return StaticFields.FirstOrDefault(f => f.Name == fieldName); }
             set
             {
-                Fields.RemoveAll(f => f.Name == fieldName && f is StaticField);
-                Fields.Add(value);
+                StaticFields.RemoveAll(f => f.Name == fieldName && f is StaticField);
+                StaticFields.Add(value);
             }
         }
 
@@ -56,8 +56,8 @@ namespace ParatureSDK.ParaObjects
             set
             {
                 var matchingCustomField = CustomFields.FirstOrDefault(f => f.Id == fieldId);
-                Fields.Remove(matchingCustomField);
-                Fields.Add(value);
+                CustomFields.Remove(matchingCustomField);
+                CustomFields.Add(value);
             }
         }
 
@@ -97,42 +97,16 @@ namespace ParatureSDK.ParaObjects
         }
 
         /// <summary>
-        /// List of all fields for this entity
-        /// </summary>
-        [XmlIgnore]
-        public List<Field> Fields = new List<Field>();
-
-        /// <summary>
         /// Convenience method to retrieve only static fields
         /// </summary>
         [XmlIgnore]
-        public IEnumerable<StaticField> StaticFields
-        {
-            get { return Fields.OfType<StaticField>(); }
-            set
-            {
-                Fields.RemoveAll(f => f is StaticField);
-                Fields.AddRange(value);
-            }
-        }
+        public List<StaticField> StaticFields = new List<StaticField>();
 
         /// <summary>
         /// Convenience method to retrieve only custom fields
         /// </summary>
-        [XmlIgnore]
-        public IEnumerable<CustomField> CustomFields
-        {
-            get
-            {
-                return Fields.OfType<CustomField>();
-            }
-            set
-            {
-                Fields.RemoveAll(f => f is CustomField);
-                Fields.AddRange(value);
-            }
-        }
-
+        [XmlElement("Custom_Field")]
+        public List<CustomField> CustomFields = new List<CustomField>();
         /// <summary>
         /// This method accepts a custom field id and will reset all of its values: if this custom field has any options, they will be 
         /// all unselected. If the custom field value is not set to "", this method will set it. Basically, the field will be empty.            /// 
@@ -281,7 +255,7 @@ namespace ParatureSDK.ParaObjects
                 {
                     foreach (CustomFieldOptions cfo in cf.CustomFieldOptionsCollection)
                     {
-                        if (cfo.IsSelected == true)
+                        if (cfo.Selected == true)
                         {
                             return cfo;
                         }
@@ -300,7 +274,7 @@ namespace ParatureSDK.ParaObjects
 
             foreach (CustomFieldOptions cfo in customField.CustomFieldOptionsCollection)
             {
-                if (cfo.IsSelected == true)
+                if (cfo.Selected == true)
                 {
                     return cfo;
                 }
@@ -321,7 +295,7 @@ namespace ParatureSDK.ParaObjects
                 {
                     foreach (CustomFieldOptions cfo in cf.CustomFieldOptionsCollection)
                     {
-                        if (cfo.IsSelected == true)
+                        if (cfo.Selected == true)
                         {
                             return cfo;
                         }
@@ -343,7 +317,7 @@ namespace ParatureSDK.ParaObjects
                 {
                     foreach (CustomFieldOptions cfo in cf.CustomFieldOptionsCollection)
                     {
-                        if (cfo.IsSelected == true)
+                        if (cfo.Selected == true)
                         {
                             SelectedOptions.Add(cfo);
                         }
@@ -385,7 +359,7 @@ namespace ParatureSDK.ParaObjects
             List<CustomFieldOptions> SelectedOptions = new List<CustomFieldOptions>();
             foreach (CustomFieldOptions cfo in customField.CustomFieldOptionsCollection)
             {
-                if (cfo.IsSelected == true)
+                if (cfo.Selected == true)
                 {
                     SelectedOptions.Add(cfo);
                 }
@@ -406,7 +380,7 @@ namespace ParatureSDK.ParaObjects
                 {
                     foreach (CustomFieldOptions cfo in cf.CustomFieldOptionsCollection)
                     {
-                        if (cfo.IsSelected == true)
+                        if (cfo.Selected == true)
                         {
                             SelectedOptions.Add(cfo);
                         }
@@ -519,7 +493,7 @@ namespace ParatureSDK.ParaObjects
 
                 if (found == false)
                 {
-                    Fields.Add(cf);
+                    CustomFields.Add(cf);
                 }
 
             }
@@ -539,9 +513,9 @@ namespace ParatureSDK.ParaObjects
                     {
                         foreach (CustomFieldOptions option in cfn.CustomFieldOptionsCollection)
                         {
-                            if (String.Compare(option.CustomFieldOptionName, customFieldOptionName, ignoreCase) == 0)
+                            if (String.Compare(option.Value, customFieldOptionName, ignoreCase) == 0)
                             {
-                                return CustomFieldSetFieldOption(customFieldid, option.CustomFieldOptionID, customFields, resetOtherOptions);
+                                return CustomFieldSetFieldOption(customFieldid, option.Id, customFields, resetOtherOptions);
                             }
                         }
 
@@ -568,12 +542,12 @@ namespace ParatureSDK.ParaObjects
                         bool optionFound = false;
                         foreach (CustomFieldOptions option in cfn.CustomFieldOptionsCollection)
                         {
-                            if (option.CustomFieldOptionID == customFieldOptionId)
+                            if (option.Id == customFieldOptionId)
                             {
-                                if (option.IsSelected == false)
+                                if (option.Selected == false)
                                 {
                                     modified = true;
-                                    option.IsSelected = true;
+                                    option.Selected = true;
                                 }
 
                                 optionFound = true;
@@ -586,10 +560,10 @@ namespace ParatureSDK.ParaObjects
                             {
                                 if (resetOtherOptions == true)
                                 {
-                                    if (option.IsSelected == true)
+                                    if (option.Selected == true)
                                     {
                                         modified = true;
-                                        option.IsSelected = false;
+                                        option.Selected = false;
                                     }
                                 }
                             }
@@ -597,8 +571,8 @@ namespace ParatureSDK.ParaObjects
                         if (optionFound == false)
                         {
                             CustomFieldOptions NewOption = new CustomFieldOptions();
-                            NewOption.CustomFieldOptionID = customFieldOptionId;
-                            NewOption.IsSelected = true;
+                            NewOption.Id = customFieldOptionId;
+                            NewOption.Selected = true;
                             cfn.CustomFieldOptionsCollection.Add(NewOption);
                             modified = true;
                             found = true;
@@ -608,14 +582,15 @@ namespace ParatureSDK.ParaObjects
                 }
                 if (found == false)
                 {
-                    CustomField cf = new CustomField();
-                    cf.Id = customFieldid;
-                    CustomFieldOptions NewOption = new CustomFieldOptions();
-                    NewOption.CustomFieldOptionID = customFieldOptionId;
-                    NewOption.IsSelected = true;
-                    cf.CustomFieldOptionsCollection.Add(NewOption);
+                    var cf = new CustomField {Id = customFieldid};
+                    var newOption = new CustomFieldOptions
+                    {
+                        Id = customFieldOptionId,
+                        Selected = true
+                    };
+                    cf.CustomFieldOptionsCollection.Add(newOption);
                     modified = true;
-                    Fields.Add(cf);
+                    CustomFields.Add(cf);
                 }
             }
             return modified;

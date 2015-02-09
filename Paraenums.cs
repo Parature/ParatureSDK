@@ -188,10 +188,12 @@ namespace ParatureSDK
             /// <summary>
             /// A date/time field
             /// </summary>
+            [XmlEnum("date")]
             Date = 8,
             /// <summary>
             /// A Boolean field: a field that holds a True or False value
             /// </summary>
+            [XmlEnum("boolean")]
             Boolean = 5,
             /// <summary>
             /// An attachment field. Used whenever there is an attachment to an object.

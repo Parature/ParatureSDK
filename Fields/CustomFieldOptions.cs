@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace ParatureSDK.Fields
 {
@@ -8,23 +9,14 @@ namespace ParatureSDK.Fields
     /// </summary>
     public class CustomFieldOptions
     {
-        public Int64 CustomFieldOptionID = 0;
-        public string CustomFieldOptionName = "";
-
-        public Int64 OptionID
-        {
-            get { return CustomFieldOptionID; }
-            set { CustomFieldOptionID = value; }
-        }
-
-        public string OptionName
-        {
-            get { return CustomFieldOptionName; }
-            set { CustomFieldOptionName = value; }
-        }
-
+        [XmlAttribute("id")]
+        public Int64 Id = 0;
+        public string Value;
+        [XmlAttribute("viewOrder")]
+        public Int64 ViewOrder;
         public bool Dependent = false;
-        public bool IsSelected = false;
+        [XmlAttribute("selected")]
+        public bool Selected = false;
 
         /// <summary>
         /// If the custom field option has dependent fields, or dependant field options, they will be listed under the DependantCustomFields collection.
@@ -37,9 +29,9 @@ namespace ParatureSDK.Fields
 
         public CustomFieldOptions(CustomFieldOptions customFieldOptions)
         {
-            CustomFieldOptionID = customFieldOptions.CustomFieldOptionID;
-            CustomFieldOptionName = customFieldOptions.CustomFieldOptionName;
-            IsSelected = customFieldOptions.IsSelected;
+            Id = customFieldOptions.Id;
+            Value = customFieldOptions.Value;
+            Selected = customFieldOptions.Selected;
             Dependent = customFieldOptions.Dependent;
             DependantCustomFields = new List<DependantCustomFields>(customFieldOptions.DependantCustomFields);
         }

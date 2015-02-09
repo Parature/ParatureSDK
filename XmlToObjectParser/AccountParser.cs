@@ -175,7 +175,7 @@ namespace ParatureSDK.XmlToObjectParser
 
                 if (child.LocalName.ToLower() == "custom_field")
                 {
-                    account.Fields.Add(CommonParser.FillCustomField(MinimalisticLoad, child));
+                    account.CustomFields.Add(CommonParser.FillCustomField(MinimalisticLoad, child));
                 }
             }
             return account;

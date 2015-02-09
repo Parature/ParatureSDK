@@ -17,15 +17,15 @@ namespace ParatureSDK.ParaObjects
             }
             set
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Full_Name");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Full_Name");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
                         Name = "Full_Name",
-                        DataType = ParaEnums.FieldDataType.String
+                        FieldDataType = ParaEnums.FieldDataType.String
                     };
-                    Fields.Add(field);
+                    StaticFields.Add(field);
                 }
 
                 field.Value = value;
@@ -39,15 +39,15 @@ namespace ParatureSDK.ParaObjects
             }
             set
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Email");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Email");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
                         Name = "Email",
-                        DataType = ParaEnums.FieldDataType.String
+                        FieldDataType = ParaEnums.FieldDataType.String
                     };
-                    Fields.Add(field);
+                    StaticFields.Add(field);
                 }
 
                 field.Value = value;
@@ -61,15 +61,15 @@ namespace ParatureSDK.ParaObjects
             }
             set
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Fax");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Fax");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
                         Name = "Fax",
-                        DataType = ParaEnums.FieldDataType.String
+                        FieldDataType = ParaEnums.FieldDataType.String
                     };
-                    Fields.Add(field);
+                    StaticFields.Add(field);
                 }
 
                 field.Value = value;
@@ -83,15 +83,15 @@ namespace ParatureSDK.ParaObjects
             }
             set
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Phone_1");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Phone_1");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
                         Name = "Phone_1",
-                        DataType = ParaEnums.FieldDataType.InternationalPhone
+                        FieldDataType = ParaEnums.FieldDataType.InternationalPhone
                     };
-                    Fields.Add(field);
+                    StaticFields.Add(field);
                 }
 
                 field.Value = value;
@@ -105,15 +105,15 @@ namespace ParatureSDK.ParaObjects
             }
             set
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Phone_2");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Phone_2");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
                         Name = "Phone_2",
-                        DataType = ParaEnums.FieldDataType.String
+                        FieldDataType = ParaEnums.FieldDataType.String
                     };
-                    Fields.Add(field);
+                    StaticFields.Add(field);
                 }
 
                 field.Value = value;
@@ -127,15 +127,15 @@ namespace ParatureSDK.ParaObjects
             }
             set
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Screen_Name");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Screen_Name");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
                         Name = "Screen_Name",
-                        DataType = ParaEnums.FieldDataType.String
+                        FieldDataType = ParaEnums.FieldDataType.String
                     };
-                    Fields.Add(field);
+                    StaticFields.Add(field);
                 }
 
                 field.Value = value;
@@ -153,15 +153,15 @@ namespace ParatureSDK.ParaObjects
             }
             set
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Date_Format");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Date_Format");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
                         Name = "Date_Format",
-                        DataType = ParaEnums.FieldDataType.String
+                        FieldDataType = ParaEnums.FieldDataType.String
                     };
-                    Fields.Add(field);
+                    StaticFields.Add(field);
                 }
 
                 field.Value = value;
@@ -175,15 +175,15 @@ namespace ParatureSDK.ParaObjects
             }
             set
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Password");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Password");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
                         Name = "Password",
-                        DataType = ParaEnums.FieldDataType.String
+                        FieldDataType = ParaEnums.FieldDataType.String
                     };
-                    Fields.Add(field);
+                    StaticFields.Add(field);
                 }
 
                 field.Value = value;
@@ -197,15 +197,15 @@ namespace ParatureSDK.ParaObjects
             }
             set
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Timezone");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Timezone");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
                         Name = "Timezone",
-                        DataType = ParaEnums.FieldDataType.Timezone
+                        FieldDataType = ParaEnums.FieldDataType.Timezone
                     };
-                    Fields.Add(field);
+                    StaticFields.Add(field);
                 }
 
                 field.Value = value;
@@ -219,15 +219,15 @@ namespace ParatureSDK.ParaObjects
             }
             set
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Status");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Status");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
                         Name = "Status",
-                        DataType = ParaEnums.FieldDataType.Status
+                        FieldDataType = ParaEnums.FieldDataType.Status
                     };
-                    Fields.Add(field);
+                    StaticFields.Add(field);
                 }
 
                 field.Value = value;
@@ -241,15 +241,15 @@ namespace ParatureSDK.ParaObjects
             }
             set
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Date_Created");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Date_Created");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
                         Name = "Date_Created",
-                        DataType = ParaEnums.FieldDataType.DateTime
+                        FieldDataType = ParaEnums.FieldDataType.DateTime
                     };
-                    Fields.Add(field);
+                    StaticFields.Add(field);
                 }
 
                 field.Value = value;
@@ -266,15 +266,15 @@ namespace ParatureSDK.ParaObjects
             }
             set
             {
-                var field = Fields.FirstOrDefault(f => f.Name == "Role");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Role");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
                         Name = "Role",
-                        DataType = ParaEnums.FieldDataType.Role
+                        FieldDataType = ParaEnums.FieldDataType.Role
                     };
-                    Fields.Add(field);
+                    StaticFields.Add(field);
                 }
 
                 field.Value = value;

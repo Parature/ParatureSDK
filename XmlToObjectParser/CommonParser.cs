@@ -71,11 +71,11 @@ namespace ParatureSDK.XmlToObjectParser
             //parse the data type
             try
             {
-                cf.DataType = ParaEnumProvider.CustomFieldDataTypeProvider(Node.Attributes["data-type"].Value);
+                cf.FieldDataType = ParaEnumProvider.CustomFieldDataTypeProvider(Node.Attributes["data-type"].Value);
             }
             catch (Exception exx)
             {
-                cf.DataType = ParaEnums.FieldDataType.Unknown;
+                cf.FieldDataType = ParaEnums.FieldDataType.Unknown;
             }
 
 
@@ -156,7 +156,7 @@ namespace ParatureSDK.XmlToObjectParser
             var ismultivalue = true;
             var cfo = new CustomFieldOptions
             {
-                CustomFieldOptionID = Int64.Parse(optionNode.Attributes["id"].Value)
+                Id = Int64.Parse(optionNode.Attributes["id"].Value)
             };
             if (ParserUtils.CheckNodeAttributeNotNull(optionNode, "Dependent") == true)
             {
@@ -164,11 +164,11 @@ namespace ParatureSDK.XmlToObjectParser
             }
             if (ParserUtils.CheckNodeAttributeNotNull(optionNode, "selected") == true)
             {
-                cfo.IsSelected = Convert.ToBoolean(optionNode.Attributes["selected"].Value);
+                cfo.Selected = Convert.ToBoolean(optionNode.Attributes["selected"].Value);
             }
             else
             {
-                cfo.IsSelected = false;
+                cfo.Selected = false;
             }
 
 
@@ -176,7 +176,7 @@ namespace ParatureSDK.XmlToObjectParser
             {
                 if (child.LocalName.ToLower() == "value")
                 {
-                    cfo.CustomFieldOptionName = child.InnerText;
+                    cfo.Value = child.InnerText;
                 }
 
                 if (child.LocalName.ToLower() == "enables" && minimalisticLoad == false)
@@ -235,7 +235,7 @@ namespace ParatureSDK.XmlToObjectParser
                     }
                 }
             }
-            if (cfo.IsSelected == true || minimalisticLoad == false)
+            if (cfo.Selected == true || minimalisticLoad == false)
             {
                 cf.CustomFieldOptionsCollection.Add(cfo);
             }

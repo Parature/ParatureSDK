@@ -361,7 +361,7 @@ namespace ParatureSDK
             {
                 foreach (CustomField cf in baseObject.CustomFields)
                 {
-                    if (cf.DataType == ParaEnums.FieldDataType.String)
+                    if (cf.FieldDataType == ParaEnums.FieldDataType.String)
                     {
                         cf.Value = "a";
                     }
@@ -421,7 +421,7 @@ namespace ParatureSDK
                             {
                                 if (cf.Id == long.Parse(id))
                                 {
-                                    cf.DataType = ParaEnums.FieldDataType.UsPhone;
+                                    cf.FieldDataType = ParaEnums.FieldDataType.UsPhone;
                                 }
                             }
                         }
@@ -434,7 +434,7 @@ namespace ParatureSDK
                             {
                                 if (cf.Id == long.Parse(id))
                                 {
-                                    cf.DataType = ParaEnums.FieldDataType.Email;
+                                    cf.FieldDataType = ParaEnums.FieldDataType.Email;
                                 }
                             }
                         }
@@ -447,7 +447,7 @@ namespace ParatureSDK
                             {
                                 if (cf.Id == long.Parse(id))
                                 {
-                                    cf.DataType = ParaEnums.FieldDataType.InternationalPhone;
+                                    cf.FieldDataType = ParaEnums.FieldDataType.InternationalPhone;
                                 }
                             }
                         }
@@ -461,7 +461,7 @@ namespace ParatureSDK
                             {
                                 if (cf.Id == long.Parse(id.Trim()))
                                 {
-                                    cf.DataType = ParaEnums.FieldDataType.Url;
+                                    cf.FieldDataType = ParaEnums.FieldDataType.Url;
                                 }
                             }
                             }

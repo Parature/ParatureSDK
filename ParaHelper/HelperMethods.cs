@@ -18,10 +18,10 @@ namespace ParatureSDK.ParaHelper
             {
                 if (cf.CustomFieldOptionsCollection.Count > 0)
                 {
-                    var selectedFieldsTrue = cf.CustomFieldOptionsCollection.Where(cfo => cfo.IsSelected);
+                    var selectedFieldsTrue = cf.CustomFieldOptionsCollection.Where(cfo => cfo.Selected);
                     foreach (var cfo in selectedFieldsTrue)
                     {
-                        cfo.IsSelected = false;
+                        cfo.Selected = false;
                         modified = true;
                     }
                 }

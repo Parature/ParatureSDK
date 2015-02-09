@@ -41,8 +41,12 @@ namespace ParatureSDK.Fields
             return (T)Value;
         }
 
-
         [XmlAttribute("data-type")]
-        public ParaEnums.FieldDataType DataType;
+        public string DataType;
+        [XmlAttribute("field-type")]
+        public string FieldType;
+
+        [XmlIgnore]
+        public ParaEnums.FieldDataType FieldDataType;
     }
 }
