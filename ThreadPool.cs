@@ -43,7 +43,7 @@ namespace ParatureSDK
             public void Go(ParaEntityList<ParaObjects.Customer> customerList)
             {
                 var ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                var objectlist = CustomerParser.CustomersFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
+                var objectlist = ParaEntityParser.FillList<ParaObjects.Customer>(ar.xmlReceived);
                 customerList.Data.AddRange(objectlist.Data);
                 customerList.ApiCallResponse = ar;
                 sem.Release();
@@ -56,7 +56,7 @@ namespace ParatureSDK
             public void Go(ParaEntityList<ParaObjects.Chat> chatList, Boolean IncludeTranscripts)
             {
                 var ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                var objectlist = ChatParser.ChatsFillList(ar.xmlReceived, true, IncludeTranscripts, _requestdepth, _paracredentials);
+                var objectlist = ParaEntityParser.FillList<ParaObjects.Chat>(ar.xmlReceived);
                 chatList.Data.AddRange(objectlist.Data);
                 chatList.ApiCallResponse = ar;
                 sem.Release();
@@ -69,7 +69,7 @@ namespace ParatureSDK
             public void Go(ParaEntityList<ParaObjects.Account> accountList)
             {
                 var ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                var objectlist = AccountParser.AccountsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
+                var objectlist = ParaEntityParser.FillList<ParaObjects.Account>(ar.xmlReceived);
                 accountList.Data.AddRange(objectlist.Data);
                 accountList.ApiCallResponse = ar;
                 sem.Release();
@@ -82,7 +82,7 @@ namespace ParatureSDK
             public void Go(ParaEntityList<ParaObjects.Ticket> ticketList)
             {
                 var ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                var objectlist = TicketParser.TicketsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
+                var objectlist = ParaEntityParser.FillList<ParaObjects.Ticket>(ar.xmlReceived);
                 ticketList.Data.AddRange(objectlist.Data);
                 ticketList.ApiCallResponse = ar;
                 sem.Release();
@@ -95,7 +95,7 @@ namespace ParatureSDK
             public void Go(ParaEntityList<ParaObjects.Product> productList)
             {
                 var ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                var objectlist = ProductParser.ProductsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
+                var objectlist = ParaEntityParser.FillList<ParaObjects.Product>(ar.xmlReceived);
                 productList.Data.AddRange(objectlist.Data);
                 productList.ApiCallResponse = ar;
                 sem.Release();
@@ -108,7 +108,7 @@ namespace ParatureSDK
             public void Go(ParaEntityList<ParaObjects.Asset> assetList)
             {
                 var ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                var objectlist = AssetParser.AssetsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
+                var objectlist = ParaEntityParser.FillList<ParaObjects.Asset>(ar.xmlReceived);
                 assetList.Data.AddRange(objectlist.Data);
                 assetList.ApiCallResponse = ar;
                 sem.Release();
@@ -121,7 +121,7 @@ namespace ParatureSDK
             public void Go(ParaEntityList<ParaObjects.Download> downloadList)
             {
                 var ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                var objectlist = DownloadParser.DownloadsFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
+                var objectlist = ParaEntityParser.FillList<ParaObjects.Download>(ar.xmlReceived);
                 downloadList.Data.AddRange(objectlist.Data);
                 downloadList.ApiCallResponse = ar;
                 sem.Release();
@@ -134,7 +134,7 @@ namespace ParatureSDK
             public void Go(ParaEntityList<ParaObjects.Article> articleList)
             {
                 var ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
-                var objectlist = ArticleParser.ArticlesFillList(ar.xmlReceived, true, _requestdepth, _paracredentials);
+                var objectlist = ParaEntityParser.FillList<ParaObjects.Article>(ar.xmlReceived);
                 articleList.Data.AddRange(objectlist.Data);
                 articleList.ApiCallResponse = ar;
                 sem.Release();

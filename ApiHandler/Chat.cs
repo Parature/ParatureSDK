@@ -101,7 +101,7 @@ namespace ParatureSDK.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Chat, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    ChatList = ChatParser.ChatsFillList(ar.xmlReceived, Query.MinimalisticLoad, IncludeTranscripts, requestdepth, ParaCredentials);
+                    ChatList = ParaEntityParser.FillList<ParaObjects.Chat>(ar.xmlReceived);
                 }
                 ChatList.ApiCallResponse = ar;
             }
@@ -149,7 +149,7 @@ namespace ParatureSDK.ApiHandler
                             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments());
                             if (ar.HasException == false)
                             {
-                                ChatList.Data.AddRange(ChatParser.ChatsFillList(ar.xmlReceived, Query.MinimalisticLoad, IncludeTranscripts, requestdepth, ParaCredentials).Data);
+                                ChatList.Data.AddRange(ParaEntityParser.FillList<ParaObjects.Chat>(ar.xmlReceived).Data);
                                 ChatList.ResultsReturned = ChatList.Data.Count;
                                 ChatList.PageNumber = Query.PageNumber;
                             }
@@ -187,7 +187,7 @@ namespace ParatureSDK.ApiHandler
             ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Chat, chatid, arl);
             if (ar.HasException == false)
             {
-                chat = ChatParser.ChatFill(ar.xmlReceived, true, 0, IncludeTranscripts, ParaCredentials);
+                chat = ParaEntityParser.EntityFill<ParaObjects.Chat>(ar.xmlReceived);
                 chat.FullyLoaded = true;
             }
             else
@@ -208,7 +208,7 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                chat = ChatParser.ChatFill(ar.xmlReceived, false, 0,false, ParaCredentials);
+                chat = ParaEntityParser.EntityFill<ParaObjects.Chat>(ar.xmlReceived);
             }
             chat.ApiCallResponse = ar;
             return chat;

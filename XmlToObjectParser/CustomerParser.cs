@@ -12,25 +12,6 @@ namespace ParatureSDK.XmlToObjectParser
     internal class CustomerParser
     {
         /// <summary>
-        /// This methods requires a Customer xml file and returns a customer object. It should only by used for a retrieve operation.
-        /// </summary>
-        static internal ParaObjects.Customer CustomerFill(XmlDocument xmlresp, int requestdepth, bool includeAllCustomFields, ParaCredentials ParaCredentials)
-        {
-            ParaObjects.Customer Customer = new ParaObjects.Customer();
-            XmlNode CustomerNode = xmlresp.DocumentElement;
-
-            // Setting up the request level for all child items of an account.
-            int childDepth = 0;
-            if (requestdepth > 0)
-            {
-                childDepth = requestdepth - 1;
-            }
-            Customer = ParaEntityParser.EntityFill<ParaObjects.Customer>(xmlresp);
-            Customer.FullyLoaded = true;
-            return Customer;
-        }
-
-        /// <summary>
         /// This methods requires a Customer list xml file and returns an CustomersList oject. It should only by used for a List operation.
         /// </summary>
         static internal ParaEntityList<ParaObjects.Customer> CustomersFillList(XmlDocument xmlresp, Boolean MinimalisticLoad, int requestdepth, ParaCredentials ParaCredentials)

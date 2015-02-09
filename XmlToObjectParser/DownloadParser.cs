@@ -11,63 +11,6 @@ namespace ParatureSDK.XmlToObjectParser
     /// </summary>
     internal partial class DownloadParser
     {
-        /// <summary>
-        /// This methods requires a Download xml file and returns a Download object. It should only by used for a retrieve operation.
-        /// </summary>
-        static internal ParaObjects.Download DownloadFill(XmlDocument xmlresp, int requestdepth, bool includeAllCustomFields, ParaCredentials ParaCredentials)
-        {
-            ParaObjects.Download Download = new ParaObjects.Download(true);
-            XmlNode DownloadNode = xmlresp.DocumentElement;
-
-            // Setting up the request level for all child items of an account.
-            int childDepth = 0;
-            if (requestdepth > 0)
-            {
-                childDepth = requestdepth - 1;
-            }
-            Download = ParaEntityParser.EntityFill<ParaObjects.Download>(xmlresp);
-            Download.FullyLoaded = true;
-            return Download;
-        }
-
-        /// <summary>
-        /// This methods requires a Download list xml file and returns a DownloadsList oject. It should only by used for a List operation.
-        /// </summary>
-        static internal ParaEntityList<ParaObjects.Download> DownloadsFillList(XmlDocument xmlresp, Boolean MinimalisticLoad, int requestdepth, ParaCredentials ParaCredentials)
-        {
-            var DownloadsList = new ParaEntityList<ParaObjects.Download>();
-            XmlNode DocNode = xmlresp.DocumentElement;
-
-            // Setting up the request level for all child items of a Download.
-            int childDepth = 0;
-            if (requestdepth > 0)
-            {
-                childDepth = requestdepth - 1;
-            }
-
-
-            DownloadsList.TotalItems = Int32.Parse(DocNode.Attributes["total"].InnerText.ToString());
-
-
-            if (DocNode.Attributes["page-size"] != null)
-            {
-                // If this is a "TotalOnly" request, there are no other attributes than "Total"
-
-                DownloadsList.PageNumber = Int32.Parse(DocNode.Attributes["page"].InnerText.ToString());
-                DownloadsList.PageSize = Int32.Parse(DocNode.Attributes["page-size"].InnerText.ToString());
-                DownloadsList.ResultsReturned = Int32.Parse(DocNode.Attributes["results"].InnerText.ToString());
-            }
-
-            foreach (XmlNode xn in DocNode.ChildNodes)
-            {
-                var xDoc = new XmlDocument();
-                xDoc.LoadXml(xn.OuterXml);
-                //DownloadsList.Data.Add(DownloadFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
-                DownloadsList.Data.Add(ParaEntityParser.EntityFill<ParaObjects.Download>(xDoc));
-            }
-            return DownloadsList;
-        }
-
         internal partial class DownloadFolderParser
         {
             /// <summary>

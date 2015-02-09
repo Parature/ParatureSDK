@@ -10,63 +10,6 @@ namespace ParatureSDK.XmlToObjectParser
     /// </summary>
     internal partial class ArticleParser
     {
-        /// <summary>
-        /// This methods requires a Article xml file and returns a Article object. It should only by used for a retrieve operation.
-        /// </summary>
-        static internal ParaObjects.Article ArticleFill(XmlDocument xmlresp, int requestdepth, bool MinimalisticLoad, ParaCredentials ParaCredentials)
-        {
-            ParaObjects.Article Article = new ParaObjects.Article();
-            XmlNode ArticleNode = xmlresp.DocumentElement;
-
-            // Setting up the request level for all child items of an account.
-            int childDepth = 0;
-            if (requestdepth > 0)
-            {
-                childDepth = requestdepth - 1;
-            }
-            Article = ParaEntityParser.EntityFill<ParaObjects.Article>(xmlresp);
-            Article.FullyLoaded = true;
-            return Article;
-        }
-
-        /// <summary>
-        /// This methods requires a Article list xml file and returns a ArticlesList oject. It should only by used for a List operation.
-        /// </summary>
-        static internal ParaEntityList<ParaObjects.Article> ArticlesFillList(XmlDocument xmlresp, Boolean MinimalisticLoad, int requestdepth, ParaCredentials ParaCredentials)
-        {
-            var ArticlesList = new ParaEntityList<ParaObjects.Article>();
-            XmlNode DocNode = xmlresp.DocumentElement;
-
-            // Setting up the request level for all child items of a Download.
-            int childDepth = 0;
-            if (requestdepth > 0)
-            {
-                childDepth = requestdepth - 1;
-            }
-
-
-            ArticlesList.TotalItems = Int32.Parse(DocNode.Attributes["total"].InnerText.ToString());
-
-            if (DocNode.Attributes["page-size"] != null)
-            {
-                // If this is a "TotalOnly" request, there are no other attributes than "Total"
-                ArticlesList.PageNumber = Int32.Parse(DocNode.Attributes["page"].InnerText.ToString());
-                ArticlesList.PageSize = Int32.Parse(DocNode.Attributes["page-size"].InnerText.ToString());
-                ArticlesList.ResultsReturned = Int32.Parse(DocNode.Attributes["results"].InnerText.ToString());
-            }
-
-
-
-            foreach (XmlNode xn in DocNode.ChildNodes)
-            {
-                var xDoc = new XmlDocument();
-                xDoc.LoadXml(xn.OuterXml);
-                //ArticlesList.Data.Add(ArticleFillNode(xn, childDepth, MinimalisticLoad, ParaCredentials));
-                ArticlesList.Data.Add(ParaEntityParser.EntityFill<ParaObjects.Article>(xDoc));
-            }
-            return ArticlesList;
-        }
-
         internal partial class ArticleFolderParser
         {
             /// <summary>

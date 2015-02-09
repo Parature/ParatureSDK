@@ -24,7 +24,7 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                ticket = TicketParser.TicketFill(ar.xmlReceived, 0, false, pc);
+                ticket = ParaEntityParser.EntityFill<ParaObjects.Ticket>(ar.xmlReceived);
             }
             ticket.ApiCallResponse = ar;
             return ticket;
@@ -139,7 +139,7 @@ namespace ParatureSDK.ApiHandler
         public static ParaObjects.Ticket GetDetails(XmlDocument ticketXml)
         {
             ParaObjects.Ticket ticket = new ParaObjects.Ticket();
-            ticket = TicketParser.TicketFill(ticketXml, 0, true, null);
+            ticket = ParaEntityParser.EntityFill<ParaObjects.Ticket>(ticketXml);
             ticket.FullyLoaded = true;
 
             ticket.ApiCallResponse.xmlReceived = ticketXml;
@@ -158,7 +158,7 @@ namespace ParatureSDK.ApiHandler
         public static ParaEntityList<ParaObjects.Ticket> GetList(XmlDocument ticketListXml)
         {
             var ticketsList = new ParaEntityList<ParaObjects.Ticket>();
-            ticketsList = TicketParser.TicketsFillList(ticketListXml, true, 0, null);
+            ticketsList = ParaEntityParser.FillList<ParaObjects.Ticket>(ticketListXml);
 
             ticketsList.ApiCallResponse.xmlReceived = ticketListXml;
 
@@ -237,7 +237,7 @@ namespace ParatureSDK.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(pc, ParaEnums.ParatureModule.Ticket, query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    ticketsList = TicketParser.TicketsFillList(ar.xmlReceived, query.MinimalisticLoad, requestdepth, pc);
+                    ticketsList = ParaEntityParser.FillList<ParaObjects.Ticket>(ar.xmlReceived);
                 }
                 ticketsList.ApiCallResponse = ar;
             }
@@ -281,7 +281,7 @@ namespace ParatureSDK.ApiHandler
                             ar = ApiCallFactory.ObjectGetList(pc, ParaEnums.ParatureModule.Ticket, query.BuildQueryArguments());
                             if (ar.HasException == false)
                             {
-                                var objectlist = TicketParser.TicketsFillList(ar.xmlReceived, query.MinimalisticLoad, requestdepth, pc);
+                                var objectlist = ParaEntityParser.FillList<ParaObjects.Ticket>(ar.xmlReceived);
 
                                 ticketsList.Data.AddRange(objectlist.Data);
                                 ticketsList.ResultsReturned = ticketsList.Data.Count;
@@ -339,7 +339,7 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                Ticket = TicketParser.TicketFill(ar.xmlReceived, requestdepth, minimalisticLoad, pc);
+                Ticket = ParaEntityParser.EntityFill<ParaObjects.Ticket>(ar.xmlReceived);
                 Ticket.FullyLoaded = true;
             }
             else

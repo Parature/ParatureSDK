@@ -23,7 +23,7 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                Csr = CsrParser.CsrFill(ar.xmlReceived);
+                Csr = ParaEntityParser.EntityFill<ParaObjects.Csr>(ar.xmlReceived);
             }
             Csr.ApiCallResponse = ar;
             Csr.IsDirty = false;
@@ -67,7 +67,7 @@ namespace ParatureSDK.ApiHandler
         public static ParaObjects.Csr GetDetails(XmlDocument CsrXML)
         {
             ParaObjects.Csr csr = new ParaObjects.Csr();
-            csr = CsrParser.CsrFill(CsrXML);
+            csr = ParaEntityParser.EntityFill<ParaObjects.Csr>(CsrXML);
 
             return csr;
         }
@@ -94,7 +94,7 @@ namespace ParatureSDK.ApiHandler
         public static ParaEntityList<ParaObjects.Csr> GetList(XmlDocument CsrListXML)
         {
             var csrsList = new ParaEntityList<ParaObjects.Csr>();
-            csrsList = CsrParser.CsrsFillList(CsrListXML);
+            csrsList = ParaEntityParser.FillList<ParaObjects.Csr>(CsrListXML);
 
             csrsList.ApiCallResponse.xmlReceived = CsrListXML;
 
@@ -141,7 +141,7 @@ namespace ParatureSDK.ApiHandler
             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Csr, Query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                CsrsList = CsrParser.CsrsFillList(ar.xmlReceived);
+                CsrsList = ParaEntityParser.FillList<ParaObjects.Csr>(ar.xmlReceived);
             }
 
             CsrsList.ApiCallResponse = ar;
@@ -164,7 +164,7 @@ namespace ParatureSDK.ApiHandler
 
                         ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Csr, Query.BuildQueryArguments());
 
-                        objectlist = CsrParser.CsrsFillList(ar.xmlReceived);
+                        objectlist = ParaEntityParser.FillList<ParaObjects.Csr>(ar.xmlReceived);
 
                         if (objectlist.Data.Count == 0)
                         {
@@ -194,7 +194,7 @@ namespace ParatureSDK.ApiHandler
             ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Csr, Csrid);
             if (ar.HasException == false)
             {
-                Csr = CsrParser.CsrFill(ar.xmlReceived);
+                Csr = ParaEntityParser.EntityFill<ParaObjects.Csr>(ar.xmlReceived);
             }
             else
             {

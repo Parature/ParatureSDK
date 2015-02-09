@@ -24,7 +24,7 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                Product = ProductParser.ProductFill(ar.xmlReceived, 0, false, ParaCredentials);
+                Product = ParaEntityParser.EntityFill<ParaObjects.Product>(ar.xmlReceived);
             }
             Product.ApiCallResponse = ar;
             return Product;
@@ -134,7 +134,7 @@ namespace ParatureSDK.ApiHandler
         public static ParaObjects.Product GetDetails(XmlDocument ProductXML)
         {
             ParaObjects.Product product = new ParaObjects.Product();
-            product = ProductParser.ProductFill(ProductXML, 0, true, null);
+            product = ParaEntityParser.EntityFill<ParaObjects.Product>(ProductXML);
             product.FullyLoaded = true;
 
             product.ApiCallResponse.xmlReceived = ProductXML;
@@ -153,7 +153,7 @@ namespace ParatureSDK.ApiHandler
         public static ParaEntityList<ParaObjects.Product> GetList(XmlDocument ProductListXML)
         {
             var productsList = new ParaEntityList<ParaObjects.Product>();
-            productsList = ProductParser.ProductsFillList(ProductListXML, true, 0, null);
+            productsList = ParaEntityParser.FillList<ParaObjects.Product>(ProductListXML);
 
             productsList.ApiCallResponse.xmlReceived = ProductListXML;
 
@@ -234,7 +234,7 @@ namespace ParatureSDK.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Product, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    ProductsList = ProductParser.ProductsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                    ProductsList = ParaEntityParser.FillList<ParaObjects.Product>(ar.xmlReceived);
                 }
                 ProductsList.ApiCallResponse = ar;
             }
@@ -284,7 +284,7 @@ namespace ParatureSDK.ApiHandler
 
                             if (ar.HasException == false)
                             {
-                                objectlist = ProductParser.ProductsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                                objectlist = ParaEntityParser.FillList<ParaObjects.Product>(ar.xmlReceived);
                                 ProductsList.Data.AddRange(objectlist.Data);
                                 ProductsList.ResultsReturned = ProductsList.Data.Count;
                                 ProductsList.PageNumber = Query.PageNumber;
@@ -319,7 +319,7 @@ namespace ParatureSDK.ApiHandler
             ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Product, Productid);
             if (ar.HasException == false)
             {
-                Product = ProductParser.ProductFill(ar.xmlReceived, requestdepth, MinimalisticLoad, ParaCredentials);
+                Product = ParaEntityParser.EntityFill<ParaObjects.Product>(ar.xmlReceived);
                 Product.FullyLoaded = true;
             }
             else

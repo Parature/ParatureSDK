@@ -26,7 +26,7 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                Asset = AssetParser.AssetFill(ar.xmlReceived, false, 0, ParaCredentials);
+                Asset = ParaEntityParser.EntityFill<ParaObjects.Asset>(ar.xmlReceived);
             }
             Asset.ApiCallResponse = ar;
             Asset.IsDirty = false;
@@ -133,7 +133,7 @@ namespace ParatureSDK.ApiHandler
         public static ParaObjects.Asset GetDetails(XmlDocument AssetXML)
         {
             ParaObjects.Asset asset = new ParaObjects.Asset();
-            asset = AssetParser.AssetFill(AssetXML, true, 0, null);
+            asset = ParaEntityParser.EntityFill<ParaObjects.Asset>(AssetXML);
             asset.FullyLoaded = true;
 
             asset.ApiCallResponse.xmlReceived = AssetXML;
@@ -152,7 +152,7 @@ namespace ParatureSDK.ApiHandler
         public static ParaEntityList<ParaObjects.Asset> GetList(XmlDocument AssetsListXML)
         {
             var assetsList = new ParaEntityList<ParaObjects.Asset>();
-            assetsList = AssetParser.AssetsFillList(AssetsListXML, true, 0, null);
+            assetsList = ParaEntityParser.FillList<ParaObjects.Asset>(AssetsListXML);
 
             assetsList.ApiCallResponse.xmlReceived = AssetsListXML;
 
@@ -231,7 +231,7 @@ namespace ParatureSDK.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Asset, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    AssetsList = AssetParser.AssetsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                    AssetsList = ParaEntityParser.FillList<ParaObjects.Asset>(ar.xmlReceived);
                 }
                 AssetsList.ApiCallResponse = ar;
             }
@@ -281,7 +281,7 @@ namespace ParatureSDK.ApiHandler
 
                             if (ar.HasException == false)
                             {
-                                objectlist = AssetParser.AssetsFillList(ar.xmlReceived, Query.MinimalisticLoad, requestdepth, ParaCredentials);
+                                objectlist = ParaEntityParser.FillList<ParaObjects.Asset>(ar.xmlReceived);
                                 AssetsList.Data.AddRange(objectlist.Data);
                                 AssetsList.ResultsReturned = AssetsList.Data.Count;
                                 AssetsList.PageNumber = Query.PageNumber;
@@ -319,7 +319,7 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                Asset = AssetParser.AssetFill(ar.xmlReceived, true, requestdepth, ParaCredentials);
+                Asset = ParaEntityParser.EntityFill<ParaObjects.Asset>(ar.xmlReceived);
                 Asset.FullyLoaded = true;
             }
             else
