@@ -185,7 +185,6 @@
     <Compile Include="XmlToObjectParser\ParaEntityParser.cs" />
     <Compile Include="XmlToObjectParser\ParserUtils.cs" />
     <Compile Include="XmlToObjectParser\AttachmentParser.cs" />
-    <Compile Include="XmlToObjectParser\TimezoneParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
