@@ -17,49 +17,45 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// Indicates whether the object is fully loaded or not. If the object is returned as a second level object, this flag will indicate whether only the id property of the object is filled, or if all the properties have been loaded.
         /// </summary>
+        [XmlIgnore]
         public bool FullyLoaded;
         /// <summary>
         /// Contains all the information regarding the API Call that was made.
         /// </summary>
+        [XmlIgnore]
         public ApiCallResponse ApiCallResponse = new ApiCallResponse();
 
         /// <summary>
-        /// The unique identifier of this object. This is mainly used to standardize the integration process for the 
-        /// Parature Technical Services Team.
+        /// 
         /// </summary>
-        public Int64 uniqueIdentifier;
+        [XmlAttribute("service-desk-uri")]
+        public string ServiceDeskUri;
 
-        public string serviceDeskUri;
-
-        public string uid;
-
-        //public ObjectType type = ObjectType.Custom;
-
-        private bool _isDirty = false;
+        /// <summary>
+        /// 
+        /// </summary>
+        [XmlAttribute("href")]
+        public string Href;
 
         /// <summary>
         /// Indicate whether the object is dirty or not (means it needs to be updated, created or deleted).
         /// </summary>
-        public bool IsDirty
-        {
-            get { return _isDirty; }
-            set { _isDirty = value; }
-        }
+        [XmlIgnore]
+        public bool IsDirty { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
         protected ParaEntityBaseProperties()
         {
+            IsDirty = false;
         }
 
         protected ParaEntityBaseProperties(ParaEntityBaseProperties objBP)
         {
             FullyLoaded = objBP.FullyLoaded;
             ApiCallResponse = new ApiCallResponse(objBP.ApiCallResponse);
-            uniqueIdentifier = objBP.uniqueIdentifier;
             IsDirty = objBP.IsDirty;
-            uid = objBP.uid;
         }
 
         /// <summary>
@@ -70,7 +66,7 @@ namespace ParatureSDK.ParaObjects
         {
             if (isModified)
             {
-                _isDirty = true;
+                IsDirty = true;
                 return true;
             }
             else
@@ -78,7 +74,5 @@ namespace ParatureSDK.ParaObjects
                 return false;
             }
         }
-
-        public ParaEnums.Operation operation = ParaEnums.Operation.Ignore;
     }
 }

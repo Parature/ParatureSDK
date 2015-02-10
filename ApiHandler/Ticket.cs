@@ -54,7 +54,6 @@ namespace ParatureSDK.ApiHandler
             doc = XmlGenerator.TicketGenerateXml(ticket);
             ar = ApiCallFactory.ObjectCreateUpdate(pc, ParaEnums.ParatureModule.Ticket, doc, 0);
             ticket.Id = ar.Objectid;
-            ticket.uniqueIdentifier = ar.Objectid;
             return ar;
         }
 

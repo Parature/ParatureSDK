@@ -233,11 +233,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public DateTime Date_Created
+        public DateTime? Date_Created
         {
             get
             {
-                return GetFieldValue<DateTime>("Date_Created");
+                return GetFieldValue<DateTime?>("Date_Created");
             }
             set
             {

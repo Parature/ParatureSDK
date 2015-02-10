@@ -805,7 +805,6 @@ namespace ParatureSDK.ParaObjects
                 Entered_By = ticket.Entered_By;
                 Hide_From_Customer = ticket.Hide_From_Customer;
                 Id = ticket.Id;
-                operation = ticket.operation;
                 Ticket_Asset = ticket.Ticket_Asset;
                 Ticket_Attachments = new List<Attachment>(ticket.Ticket_Attachments);
                 if (ticket.Ticket_Customer != null)
@@ -829,7 +828,7 @@ namespace ParatureSDK.ParaObjects
 
         public override string GetReadableName()
         {
-            return "Ticket #" + uniqueIdentifier;
+            return "Ticket #" + Id;
         }
     }
 }

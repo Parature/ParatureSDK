@@ -5,12 +5,13 @@ namespace ParatureSDK.Fields
 {
     public class Field
     {
-        [XmlAttribute(AttributeName = "display-name")]
+        [XmlAttribute("display-name")]
         public string Name = "";
-        [XmlAttribute(AttributeName = "required")]
+        [XmlAttribute("required")]
         public bool Required;
-        [XmlAttribute(AttributeName = "dependent")]
+        [XmlAttribute("dependent")]
         public bool Dependent = false;
+        [XmlAttribute("max-length")]
         public Int32 MaxLength = 0;
         /// <summary>
         /// this indicates whether the field is editable or read only. 

@@ -69,7 +69,6 @@ namespace ParatureSDK.ApiHandler
             doc = XmlGenerator.ProductGenerateXml(Product);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, doc, 0);
             Product.Id = ar.Objectid;
-            Product.uniqueIdentifier = ar.Objectid;
             return ar;
         }
 

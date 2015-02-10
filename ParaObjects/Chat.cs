@@ -444,7 +444,7 @@ namespace ParatureSDK.ParaObjects
 
         public override string GetReadableName()
         {
-            return "Chat #" + uniqueIdentifier.ToString();
+            return "Chat #" + Id;
         }
     }
 }

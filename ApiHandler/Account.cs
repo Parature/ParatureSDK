@@ -22,7 +22,6 @@ namespace ParatureSDK.ApiHandler
             doc = XmlGenerator.AccountGenerateXml(account);
             ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, ParaEnums.ParatureModule.Account, doc, 0);
             account.Id = ar.Objectid;
-            account.uniqueIdentifier = ar.Objectid;
             return ar;
         }
 

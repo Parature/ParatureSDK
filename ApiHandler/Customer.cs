@@ -46,7 +46,7 @@ namespace ParatureSDK.ApiHandler
         public static ApiCallResponse Insert(ParaObjects.Customer customer, ParaCredentials ParaCredentials, bool NotifyCustomer, bool IncludePasswordInNotification)
         {
             // Extra arguments for the customer module
-            ArrayList arguments = new ArrayList();
+            var arguments = new ArrayList();
             arguments.Add("_notify_=" + NotifyCustomer.ToString().ToLower());
 
             // Only if the user selects to notify the customer that we include the password.
@@ -56,12 +56,9 @@ namespace ParatureSDK.ApiHandler
                 arguments.Add("_includePassword_=" + IncludePasswordInNotification.ToString().ToLower());
             }
 
-            ApiCallResponse ar = new ApiCallResponse();
-            System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-            doc = XmlGenerator.CustomerGenerateXml(customer);
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Customer, doc, 0, arguments);
+            var doc = XmlGenerator.CustomerGenerateXml(customer);
+            var ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Customer, doc, 0, arguments);
             customer.Id = ar.Objectid;
-            customer.uniqueIdentifier = ar.Objectid;
             return ar;
         }
 
@@ -80,14 +77,14 @@ namespace ParatureSDK.ApiHandler
         public static ApiCallResponse Update(ParaObjects.Customer Customer, ParaCredentials ParaCredentials, bool NotifyCustomer, bool IncludePasswordInNotification)
         {
             // Extra arguments for the customer module
-            ArrayList arguments = new ArrayList();
+            var arguments = new ArrayList();
             arguments.Add("_notify_=" + NotifyCustomer.ToString().ToLower());
             // Only if the user selects to notify the customer that we include the password.
             if (NotifyCustomer == true)
             {
                 //arguments.Add("_include_password_=" + IncludePasswordInNotification.ToString().ToLower());
             }
-            ApiCallResponse ar = new ApiCallResponse();
+            var ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Customer, XmlGenerator.CustomerGenerateXml(Customer), Customer.Id, arguments);
             return ar;
         }
@@ -107,7 +104,7 @@ namespace ParatureSDK.ApiHandler
         /// </param>
         public static ParaObjects.Customer GetDetails(Int64 customerid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
-            ParaObjects.Customer Customer = new ParaObjects.Customer();
+            var Customer = new ParaObjects.Customer();
             Customer = FillDetails(customerid, ParaCredentials, RequestDepth, true);
 
             return Customer;
@@ -127,7 +124,7 @@ namespace ParatureSDK.ApiHandler
         public static ParaObjects.Customer GetDetails(Int64 Customerid, ParaCredentials ParaCredentials)
         {
 
-            ParaObjects.Customer Customer = new ParaObjects.Customer();
+            var Customer = new ParaObjects.Customer();
             Customer = FillDetails(Customerid, ParaCredentials, ParaEnums.RequestDepth.Standard, true);
 
             return Customer;
@@ -214,7 +211,7 @@ namespace ParatureSDK.ApiHandler
         /// </summary>
         private static ParaEntityList<ParaObjects.Customer> FillList(ParaCredentials ParaCredentials, ParaEntityQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
-            int requestdepth = (int)RequestDepth;
+            var requestdepth = (int)RequestDepth;
             if (Query == null)
             {
                 Query = new CustomerQuery();
@@ -222,20 +219,19 @@ namespace ParatureSDK.ApiHandler
             // Making a schema call and returning all custom fields to be included in the call.
             if (Query.IncludeAllCustomFields)
             {
-                ParaObjects.Customer objschem = new ParaObjects.Customer();
+                var objschem = new ParaObjects.Customer();
                 objschem = Schema(ParaCredentials);
                 Query.IncludeCustomField(objschem.CustomFields);
             }
-            ApiCallResponse ar = new ApiCallResponse();
+            var ar = new ApiCallResponse();
             var CustomersList = new ParaEntityList<ParaObjects.Customer>();
 
             if (Query.RetrieveAllRecords && Query.OptimizePageSize)
             {
-                OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(CustomersList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Customer);
+                var rslt = ApiUtils.OptimizeObjectPageSize(CustomersList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Customer);
                 ar = rslt.apiResponse;
                 Query = (CustomerQuery)rslt.Query;
                 CustomersList = ((ParaEntityList<ParaObjects.Customer>)rslt.objectList);
-                rslt = null;
             }
             else
             {
@@ -254,15 +250,14 @@ namespace ParatureSDK.ApiHandler
                 if (Query.OptimizeCalls)
                 {
                     System.Threading.Thread t;
-                    ThreadPool.ObjectList instance = null;
-                    int callsRequired = (int)Math.Ceiling((double)(CustomersList.TotalItems / (double)CustomersList.PageSize));
-                    for (int i = 2; i <= callsRequired; i++)
+                    var callsRequired = (int)Math.Ceiling((double)(CustomersList.TotalItems / (double)CustomersList.PageSize));
+                    for (var i = 2; i <= callsRequired; i++)
                     {
                         //ApiCallFactory.waitCheck(ParaCredentials.Accountid);
                         Query.PageNumber = i;
                         //implement semaphore right here (in the thread pool instance to control the generation of threads
-                        instance = new ThreadPool.ObjectList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments(), requestdepth);
-                        t = new System.Threading.Thread(delegate() { instance.Go(CustomersList); });
+                        var instance = new ThreadPool.ObjectList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments(), requestdepth);
+                        t = new Thread(() => instance.Go(CustomersList));
                         t.Start();
                     }
 
@@ -276,7 +271,7 @@ namespace ParatureSDK.ApiHandler
                 }
                 else
                 {
-                    bool continueCalling = true;
+                    var continueCalling = true;
                     while (continueCalling)
                     {
 
@@ -314,41 +309,37 @@ namespace ParatureSDK.ApiHandler
             return CustomersList;
         }
 
-        static ParaObjects.Customer FillDetails(Int64 Customerid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
+        static ParaObjects.Customer FillDetails(Int64 customerId, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
         {
-            int requestdepth = (int)RequestDepth;
-            ParaObjects.Customer Customer = new ParaObjects.Customer();
-            //Customer = null;
-            ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Customer, Customerid);
+            var customer = new ParaObjects.Customer();
+            var ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Customer, customerId);
             if (ar.HasException == false)
             {
-                Customer = ParaEntityParser.EntityFill<ParaObjects.Customer>(ar.xmlReceived);
-                Customer.FullyLoaded = true;
+                customer = ParaEntityParser.EntityFill<ParaObjects.Customer>(ar.xmlReceived);
+                customer.FullyLoaded = true;
             }
             else
             {
-                Customer.FullyLoaded = false;
-                Customer.Id = 0;
+                customer.FullyLoaded = false;
+                customer.Id = 0;
             }
-            Customer.ApiCallResponse = ar;
-            Customer.IsDirty = false;
-            return Customer;
+            customer.ApiCallResponse = ar;
+            customer.IsDirty = false;
+            return customer;
         }
 
 
         public static ParaObjects.Customer Schema(ParaCredentials ParaCredentials)
         {
-            ParaObjects.Customer Customer = new ParaObjects.Customer();
-            ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Customer);
+            var customer = new ParaObjects.Customer();
+            var ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Customer);
 
             if (ar.HasException == false)
             {
-                Customer = ParaEntityParser.EntityFill<ParaObjects.Customer>(ar.xmlReceived);
+                customer = ParaEntityParser.EntityFill<ParaObjects.Customer>(ar.xmlReceived);
             }
-            Customer.ApiCallResponse = ar;
-            return Customer;
+            customer.ApiCallResponse = ar;
+            return customer;
         }
 
         /// <summary>
@@ -358,7 +349,7 @@ namespace ParatureSDK.ApiHandler
         /// </summary> 
         static public ParaObjects.Customer SchemaWithCustomFieldTypes(ParaCredentials ParaCredentials)
         {
-            ParaObjects.Customer Customer = Schema(ParaCredentials);
+            var Customer = Schema(ParaCredentials);
 
             Customer = (ParaObjects.Customer)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, ParaEnums.ParatureModule.Customer, Customer);
 

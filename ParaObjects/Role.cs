@@ -12,8 +12,6 @@ namespace ParatureSDK.ParaObjects
         public Role()
         {
             Id = 0;
-            Name = "";
-            Description = "";
         }
         public Role(Role role)
         {

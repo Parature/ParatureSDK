@@ -19,9 +19,9 @@ namespace ParatureSDK.ApiHandler
         /// </summary>
         public static ParaObjects.Asset Schema(ParaCredentials ParaCredentials)
         {
-            ParaObjects.Asset Asset = new ParaObjects.Asset();
+            var Asset = new ParaObjects.Asset();
 
-            ApiCallResponse ar = new ApiCallResponse();
+            var ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Asset);
 
             if (ar.HasException == false)
@@ -52,12 +52,11 @@ namespace ParatureSDK.ApiHandler
         /// </summary>
         public static ApiCallResponse Insert(ParaObjects.Asset Asset, ParaCredentials ParaCredentials)
         {
-            ApiCallResponse ar = new ApiCallResponse();
-            System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+            var ar = new ApiCallResponse();
+            var doc = new System.Xml.XmlDocument();
             doc = XmlGenerator.AssetGenerateXml(Asset);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Asset, doc, 0);
             Asset.Id = ar.Objectid;
-            Asset.uniqueIdentifier = ar.Objectid;
             return ar;
         }
 
