@@ -34,7 +34,7 @@ namespace ParatureSDK.ApiHandler.Entities
         public static ParaObjects.Sla SLAGetDetails(XmlDocument slaXml)
         {
             ParaObjects.Sla sla = new ParaObjects.Sla();
-            sla = SlaParser.SlaFill(slaXml);
+            sla = ParaEntityParser.EntityFill<ParaObjects.Sla>(slaXml);
 
             return sla;
         }
@@ -64,7 +64,7 @@ namespace ParatureSDK.ApiHandler.Entities
         public static ParaEntityList<ParaObjects.Sla> SLAsGetList(XmlDocument slaListXml)
         {
             var slasList = new ParaEntityList<ParaObjects.Sla>();
-            slasList = SlaParser.SlasFillList(slaListXml);
+            slasList = ParaEntityParser.FillList<ParaObjects.Sla>(slaListXml);
 
             slasList.ApiCallResponse.xmlReceived = slaListXml;
 
@@ -82,7 +82,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Sla, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                SlasList = SlaParser.SlasFillList(ar.xmlReceived);
+                SlasList = ParaEntityParser.FillList<ParaObjects.Sla>(ar.xmlReceived);
             }
             SlasList.ApiCallResponse = ar;
 
@@ -103,7 +103,7 @@ namespace ParatureSDK.ApiHandler.Entities
 
                         ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Sla, query.BuildQueryArguments());
 
-                        objectlist = SlaParser.SlasFillList(ar.xmlReceived);
+                        objectlist = ParaEntityParser.FillList<ParaObjects.Sla>(ar.xmlReceived);
 
                         if (objectlist.Data.Count == 0)
                         {
@@ -134,7 +134,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.Sla, slaId);
             if (ar.HasException == false)
             {
-                Sla = SlaParser.SlaFill(ar.xmlReceived);
+                Sla = ParaEntityParser.EntityFill<ParaObjects.Sla>(ar.xmlReceived);
             }
             else
             {

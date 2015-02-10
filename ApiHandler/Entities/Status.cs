@@ -34,7 +34,7 @@ namespace ParatureSDK.ApiHandler.Entities
         public static ParaObjects.Status StatusGetDetails(XmlDocument StatusXML)
         {
             ParaObjects.Status Status = new ParaObjects.Status();
-            Status = StatusParser.StatusFill(StatusXML);
+            Status = ParaEntityParser.EntityFill<ParaObjects.Status>(StatusXML);
 
             return Status;
         }
@@ -48,7 +48,7 @@ namespace ParatureSDK.ApiHandler.Entities
         public static ParaEntityList<ParaObjects.Status> StatusGetList(XmlDocument StatusListXML)
         {
             var StatussList = new ParaEntityList<ParaObjects.Status>();
-            StatussList = StatusParser.StatusFillList(StatusListXML);
+            StatussList = ParaEntityParser.FillList<ParaObjects.Status>(StatusListXML);
 
             StatussList.ApiCallResponse.xmlReceived = StatusListXML;
 
@@ -70,6 +70,7 @@ namespace ParatureSDK.ApiHandler.Entities
         {
             return StatusFillList(ParaCredentials, Query);
         }
+
         /// <summary>
         /// Fills a Status List object.
         /// </summary>
@@ -81,7 +82,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.status, Query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                StatusList = StatusParser.StatusFillList(ar.xmlReceived);
+                StatusList = ParaEntityParser.FillList<ParaObjects.Status>(ar.xmlReceived);
             }
             StatusList.ApiCallResponse = ar;
 
@@ -103,7 +104,7 @@ namespace ParatureSDK.ApiHandler.Entities
 
                         ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.status, Query.BuildQueryArguments());
 
-                        objectlist = StatusParser.StatusFillList(ar.xmlReceived);
+                        objectlist = ParaEntityParser.FillList<ParaObjects.Status>(ar.xmlReceived);
 
                         if (objectlist.Data.Count == 0)
                         {
@@ -125,6 +126,7 @@ namespace ParatureSDK.ApiHandler.Entities
 
             return StatusList;
         }
+
         static ParaObjects.Status StatusFillDetails(Int64 StatusId, ParaCredentials ParaCredentials)
         {
             ParaObjects.Status Status = new ParaObjects.Status();
@@ -132,7 +134,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.status, StatusId);
             if (ar.HasException == false)
             {
-                Status = StatusParser.StatusFill(ar.xmlReceived);
+                Status = ParaEntityParser.EntityFill<ParaObjects.Status>(ar.xmlReceived);
             }
             else
             {

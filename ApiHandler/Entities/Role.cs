@@ -35,7 +35,7 @@ namespace ParatureSDK.ApiHandler.Entities
         public static ParaObjects.Role RoleGetDetails(XmlDocument RoleXML)
         {
             ParaObjects.Role role = new ParaObjects.Role();
-            role = RoleParser.RoleFill(RoleXML);
+            role = ParaEntityParser.EntityFill<ParaObjects.Role>(RoleXML);
 
             return role;
         }
@@ -49,7 +49,7 @@ namespace ParatureSDK.ApiHandler.Entities
         public static ParaEntityList<ParaObjects.Role> RolesGetList(XmlDocument RoleListXML)
         {
             var rolesList = new ParaEntityList<ParaObjects.Role>();
-            rolesList = RoleParser.RolesFillList(RoleListXML);
+            rolesList = ParaEntityParser.FillList<ParaObjects.Role>(RoleListXML);
 
             rolesList.ApiCallResponse.xmlReceived = RoleListXML;
 
@@ -87,7 +87,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, Module, ParaEnums.ParatureEntity.role, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                RolesList = RoleParser.RolesFillList(ar.xmlReceived);
+                RolesList = ParaEntityParser.FillList<ParaObjects.Role>(ar.xmlReceived);
             }
             RolesList.ApiCallResponse = ar;
 
@@ -108,7 +108,7 @@ namespace ParatureSDK.ApiHandler.Entities
 
                         ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.role, query.BuildQueryArguments());
 
-                        objectlist = RoleParser.RolesFillList(ar.xmlReceived);
+                        objectlist = ParaEntityParser.FillList<ParaObjects.Role>(ar.xmlReceived);
 
                         if (objectlist.Data.Count == 0)
                         {
@@ -138,7 +138,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.role, roleId);
             if (ar.HasException == false)
             {
-                Role = RoleParser.RoleFill(ar.xmlReceived);
+                Role = ParaEntityParser.EntityFill<ParaObjects.Role>(ar.xmlReceived);
             }
             else
             {

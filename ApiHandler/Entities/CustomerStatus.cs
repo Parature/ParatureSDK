@@ -25,7 +25,7 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <summary>
         /// Get the list of Customers from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Status> CustomerStatusGetList(ParaCredentials paraCredentials)
+        public static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusGetList(ParaCredentials paraCredentials)
         {
             return CustomerStatusFillList(paraCredentials, new CustomerStatusQuery());
         }
@@ -33,7 +33,7 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <summary>
         /// Get the list of Customers from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Status> CustomerStatusGetList(ParaCredentials paraCredentials, CustomerStatusQuery query)
+        public static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusGetList(ParaCredentials paraCredentials, CustomerStatusQuery query)
         {
             return CustomerStatusFillList(paraCredentials, query);
         }
@@ -46,7 +46,7 @@ namespace ParatureSDK.ApiHandler.Entities
         /// </param>
         public static ParaObjects.Status CustomerStatusGetDetails(XmlDocument customerStatusXml)
         {
-            var customerStatus = CustomerStatusParser.CustomerStatusFill(customerStatusXml);
+            var customerStatus = ParaEntityParser.EntityFill<ParaObjects.CustomerStatus>(customerStatusXml);
 
             customerStatus.ApiCallResponse.xmlReceived = customerStatusXml;
             customerStatus.ApiCallResponse.Objectid = customerStatus.Id;
@@ -60,9 +60,9 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <param name="customerStatusListXml">
         /// The CustomerStatus List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaEntityList<ParaObjects.Status> CustomerStatusGetList(XmlDocument customerStatusListXml)
+        public static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusGetList(XmlDocument customerStatusListXml)
         {
-            var customerStatussList = CustomerStatusParser.CustomerStatusFillList(customerStatusListXml);
+            var customerStatussList = ParaEntityParser.FillList<ParaObjects.CustomerStatus>(customerStatusListXml);
 
             customerStatussList.ApiCallResponse.xmlReceived = customerStatusListXml;
 
@@ -72,21 +72,17 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <summary>
         /// Fills a Sla list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Status> CustomerStatusFillList(ParaCredentials paraCredentials, CustomerStatusQuery query)
+        private static ParaEntityList<ParaObjects.CustomerStatus> CustomerStatusFillList(ParaCredentials paraCredentials, CustomerStatusQuery query)
         {
 
-            var customerStatusList = new ParaEntityList<ParaObjects.Status>();
+            var customerStatusList = new ParaEntityList<ParaObjects.CustomerStatus>();
             var ar = new ApiCallResponse();
             ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Customer, ParaEnums.ParatureEntity.status, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                customerStatusList = CustomerStatusParser.CustomerStatusFillList(ar.xmlReceived);
+                customerStatusList = ParaEntityParser.FillList<ParaObjects.CustomerStatus>(ar.xmlReceived);
             }
             customerStatusList.ApiCallResponse = ar;
-
-
-
-
 
             return customerStatusList;
         }
@@ -98,7 +94,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.CustomerStatus, customerStatusId);
             if (ar.HasException == false)
             {
-                customerStatus = CustomerStatusParser.CustomerStatusFill(ar.xmlReceived);
+                customerStatus = ParaEntityParser.EntityFill<ParaObjects.CustomerStatus>(ar.xmlReceived);
             }
             else
             {

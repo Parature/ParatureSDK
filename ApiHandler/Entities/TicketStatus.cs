@@ -46,7 +46,7 @@ namespace ParatureSDK.ApiHandler.Entities
         public static ParaObjects.TicketStatus TicketStatusGetDetails(XmlDocument ticketStatusXml)
         {
             ParaObjects.TicketStatus ticketStatus = new ParaObjects.TicketStatus();
-            ticketStatus = TicketStatusParser.TicketStatusFill(ticketStatusXml);
+            ticketStatus = ParaEntityParser.EntityFill<ParaObjects.TicketStatus>(ticketStatusXml);
 
             ticketStatus.ApiCallResponse.xmlReceived = ticketStatusXml;
             ticketStatus.ApiCallResponse.Objectid = ticketStatus.Id;
@@ -63,7 +63,7 @@ namespace ParatureSDK.ApiHandler.Entities
         public static ParaEntityList<ParaObjects.TicketStatus> TicketStatusGetList(XmlDocument ticketStatusListXml)
         {
             var ticketStatussList = new ParaEntityList<ParaObjects.TicketStatus>();
-            ticketStatussList = TicketStatusParser.TicketStatusFillList(ticketStatusListXml);
+            ticketStatussList = ParaEntityParser.FillList<ParaObjects.TicketStatus>(ticketStatusListXml);
 
             ticketStatussList.ApiCallResponse.xmlReceived = ticketStatusListXml;
 
@@ -81,7 +81,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Ticket, ParaEnums.ParatureEntity.status, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                TicketStatusList = TicketStatusParser.TicketStatusFillList(ar.xmlReceived);
+                TicketStatusList = ParaEntityParser.FillList<ParaObjects.TicketStatus>(ar.xmlReceived);
             }
             TicketStatusList.ApiCallResponse = ar;
 
@@ -102,7 +102,7 @@ namespace ParatureSDK.ApiHandler.Entities
 
                         ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.TicketStatus, query.BuildQueryArguments());
 
-                        objectlist = TicketStatusParser.TicketStatusFillList(ar.xmlReceived);
+                        objectlist = ParaEntityParser.FillList<ParaObjects.TicketStatus>(ar.xmlReceived);
 
                         if (objectlist.Data.Count == 0)
                         {
@@ -133,7 +133,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.TicketStatus, ticketStatusId);
             if (ar.HasException == false)
             {
-                TicketStatus = TicketStatusParser.TicketStatusFill(ar.xmlReceived);
+                TicketStatus = ParaEntityParser.EntityFill<ParaObjects.TicketStatus>(ar.xmlReceived);
             }
             else
             {

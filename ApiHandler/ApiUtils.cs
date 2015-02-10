@@ -138,7 +138,7 @@ namespace ParatureSDK.ApiHandler
 
             var attaDoc = upresp.xmlReceived;
 
-            var attach = AttachmentParser.AttachmentFill(attaDoc);
+            var attach = ParaEntityParser.EntityFill<ParaObjects.Attachment>(attaDoc);
             return attach;
         }
 
@@ -164,7 +164,7 @@ namespace ParatureSDK.ApiHandler
             if (String.IsNullOrEmpty(postUrl) == false)
             {
                 var attaDoc = ApiCallFactory.FilePerformUpload(postUrl, attachment, contentType, fileName, pc.Instanceid, pc).xmlReceived;
-                attach = AttachmentParser.AttachmentFill(attaDoc);
+                attach = ParaEntityParser.EntityFill<ParaObjects.Attachment>(attaDoc);
             }
             else
             {

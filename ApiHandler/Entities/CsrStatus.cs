@@ -51,7 +51,7 @@ namespace ParatureSDK.ApiHandler.Entities
         public static ParaObjects.CsrStatus CsrStatusGetDetails(XmlDocument csrStatusXml)
         {
             ParaObjects.CsrStatus CsrStatus = new ParaObjects.CsrStatus();
-            CsrStatus = CsrStatusParser.CsrStatusFill(csrStatusXml);
+            CsrStatus = ParaEntityParser.EntityFill<ParaObjects.CsrStatus>(csrStatusXml);
 
             CsrStatus.ApiCallResponse.xmlReceived = csrStatusXml;
             CsrStatus.ApiCallResponse.Objectid = CsrStatus.Id;
@@ -68,7 +68,7 @@ namespace ParatureSDK.ApiHandler.Entities
         public static ParaEntityList<ParaObjects.CsrStatus> CsrStatusGetList(XmlDocument csrStatusListXml)
         {
             var CsrStatussList = new ParaEntityList<ParaObjects.CsrStatus>();
-            CsrStatussList = CsrStatusParser.CsrStatusFillList(csrStatusListXml);
+            CsrStatussList = ParaEntityParser.FillList<ParaObjects.CsrStatus>(csrStatusListXml);
 
             CsrStatussList.ApiCallResponse.xmlReceived = csrStatusListXml;
 
@@ -86,7 +86,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Csr, ParaEnums.ParatureEntity.status, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                CsrStatusList = CsrStatusParser.CsrStatusFillList(ar.xmlReceived);
+                CsrStatusList = ParaEntityParser.FillList<ParaObjects.CsrStatus>(ar.xmlReceived);
             }
             CsrStatusList.ApiCallResponse = ar;
             return CsrStatusList;
@@ -99,7 +99,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.CsrStatus, csrStatusId);
             if (ar.HasException == false)
             {
-                CsrStatus = CsrStatusParser.CsrStatusFill(ar.xmlReceived);
+                CsrStatus = ParaEntityParser.EntityFill<ParaObjects.CsrStatus>(ar.xmlReceived);
             }
             else
             {

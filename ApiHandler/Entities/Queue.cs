@@ -31,7 +31,7 @@ namespace ParatureSDK.ApiHandler.Entities
         public static ParaObjects.Queue QueueGetDetails(XmlDocument queueXml)
         {
             ParaObjects.Queue queue = new ParaObjects.Queue();
-            queue = QueueParser.QueueFill(queueXml);
+            queue = ParaEntityParser.EntityFill<ParaObjects.Queue>(queueXml);
 
             return queue;
         }
@@ -45,7 +45,7 @@ namespace ParatureSDK.ApiHandler.Entities
         public static ParaEntityList<ParaObjects.Queue> QueueGetList(XmlDocument queueListXml)
         {
             var queuesList = new ParaEntityList<ParaObjects.Queue>();
-            queuesList = QueueParser.QueueFillList(queueListXml);
+            queuesList = ParaEntityParser.FillList<ParaObjects.Queue>(queueListXml);
 
             queuesList.ApiCallResponse.xmlReceived = queueListXml;
 
@@ -78,7 +78,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Queue, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                QueueList = QueueParser.QueueFillList(ar.xmlReceived);
+                QueueList = ParaEntityParser.FillList<ParaObjects.Queue>(ar.xmlReceived);
             }
             QueueList.ApiCallResponse = ar;
 
@@ -99,7 +99,7 @@ namespace ParatureSDK.ApiHandler.Entities
 
                         ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Queue, query.BuildQueryArguments());
 
-                        objectlist = QueueParser.QueueFillList(ar.xmlReceived);
+                        objectlist = ParaEntityParser.FillList<ParaObjects.Queue>(ar.xmlReceived);
 
                         if (objectlist.Data.Count == 0)
                         {
@@ -129,7 +129,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.Queue, queueId);
             if (ar.HasException == false)
             {
-                Queue = QueueParser.QueueFill(ar.xmlReceived);
+                Queue = ParaEntityParser.EntityFill<ParaObjects.Queue>(ar.xmlReceived);
             }
             else
             {

@@ -238,7 +238,7 @@ namespace ParatureSDK.ApiHandler
             public static ParaObjects.CsrStatus GetDetails(XmlDocument CsrStatusXML)
             {
                 ParaObjects.CsrStatus CsrStatus = new ParaObjects.CsrStatus();
-                CsrStatus = CsrStatusParser.CsrStatusFill(CsrStatusXML);
+                CsrStatus = ParaEntityParser.EntityFill<ParaObjects.CsrStatus>(CsrStatusXML);
 
                 CsrStatus.ApiCallResponse.xmlReceived = CsrStatusXML;
                 CsrStatus.ApiCallResponse.Objectid = CsrStatus.Id;
@@ -255,7 +255,7 @@ namespace ParatureSDK.ApiHandler
             public static ParaEntityList<ParaObjects.CsrStatus> GetList(XmlDocument CsrStatusListXML)
             {
                 var CsrStatussList = new ParaEntityList<ParaObjects.CsrStatus>();
-                CsrStatussList = CsrStatusParser.CsrStatusFillList(CsrStatusListXML);
+                CsrStatussList = ParaEntityParser.FillList<ParaObjects.CsrStatus>(CsrStatusListXML);
 
                 CsrStatussList.ApiCallResponse.xmlReceived = CsrStatusListXML;
 
@@ -283,7 +283,7 @@ namespace ParatureSDK.ApiHandler
                 ar = ApiCallFactory.ObjectSecondLevelGetList(ParaCredentials, ParaEnums.ParatureModule.Csr, ParaEnums.ParatureEntity.status, new ArrayList(0));
                 if (ar.HasException == false)
                 {
-                    CsrStatusList = CsrStatusParser.CsrStatusFillList(ar.xmlReceived);
+                    CsrStatusList = ParaEntityParser.FillList<ParaObjects.CsrStatus>(ar.xmlReceived);
                 }
                 CsrStatusList.ApiCallResponse = ar;
                 return CsrStatusList;
@@ -297,7 +297,7 @@ namespace ParatureSDK.ApiHandler
                 ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.CsrStatus, CsrStatusid);
                 if (ar.HasException == false)
                 {
-                    CsrStatus = CsrStatusParser.CsrStatusFill(ar.xmlReceived);
+                    CsrStatus = ParaEntityParser.EntityFill<ParaObjects.CsrStatus>(ar.xmlReceived);
                 }
                 else
                 {

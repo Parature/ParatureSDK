@@ -15,7 +15,7 @@ namespace ParatureSDK.ApiHandler.Entities
         /// </param>
         public static ParaEntityList<ParaObjects.View> ViewGetList(XmlDocument viewListXml)
         {
-            var viewsList = TicketViewParser.ViewFillList(viewListXml);
+            var viewsList = ParaEntityParser.FillList<ParaObjects.View>(viewListXml);
 
             viewsList.ApiCallResponse.xmlReceived = viewListXml;
 
@@ -40,7 +40,7 @@ namespace ParatureSDK.ApiHandler.Entities
             var ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Ticket, ParaEnums.ParatureEntity.view, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                viewList = TicketViewParser.ViewFillList(ar.xmlReceived);
+                viewList = ParaEntityParser.FillList<ParaObjects.View>(ar.xmlReceived);
             }
             viewList.ApiCallResponse = ar;
             return viewList;

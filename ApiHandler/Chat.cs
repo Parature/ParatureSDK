@@ -228,14 +228,14 @@ namespace ParatureSDK.ApiHandler
             return chat;
         }
 
-        static public List<ChatTranscript> ChatTranscripts(Int64 ChatID, ParaCredentials pc)
+        static public ParaEntityList<ChatTranscript> ChatTranscripts(Int64 ChatID, ParaCredentials pc)
         {
-            List<ChatTranscript> transcripts = new List<ChatTranscript>() ;
+            var transcripts = new ParaEntityList<ChatTranscript>();
             ApiCallResponse ar = ApiCallFactory.ObjectGetDetail(pc, ParaEnums.ParatureEntity.ChatTranscript, ChatID);
 
             if (ar.HasException == false)
             {
-                transcripts = ChatParser.ChatTranscriptsFillList(ar.xmlReceived);
+                transcripts = ParaEntityParser.FillList<ParaObjects.ChatTranscript>(ar.xmlReceived);
             }
 
             return transcripts;
