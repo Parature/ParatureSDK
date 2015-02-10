@@ -31,11 +31,5 @@ namespace ParatureSDK.ParaHelper
 
             return modified;
         }
-
-
-        internal static string SafeHtmlDecode(string input)
-        {
-            return input.Replace("&lt;", "<").Replace("&gt;", ">").Replace("&amp;", "&");
-        }
     }
 }

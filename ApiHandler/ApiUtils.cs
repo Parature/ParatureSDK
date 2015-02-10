@@ -58,7 +58,7 @@ namespace ParatureSDK.ApiHandler
                     tempAr = ApiCallFactory.ObjectGetList(paraCredentials, module, rtn.Query.BuildQueryArguments());
                     callStopWatch.Stop();
 
-                    ParserUtils.ObjectFillList(tempAr.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
+                    ParaEntityParser.ObjectFillList(tempAr.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
 
                     testTimePerPage = (int)(callStopWatch.ElapsedMilliseconds);
 
@@ -80,7 +80,7 @@ namespace ParatureSDK.ApiHandler
 
                 //first page call
                 rtn.apiResponse = ApiCallFactory.ObjectGetList(paraCredentials, module, rtn.Query.BuildQueryArguments());
-                rtn.objectList = ParserUtils.ObjectFillList(rtn.apiResponse.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
+                rtn.objectList = ParaEntityParser.ObjectFillList(rtn.apiResponse.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
             }
             else
             {
@@ -95,7 +95,7 @@ namespace ParatureSDK.ApiHandler
                     tempAr = ApiCallFactory.ObjectGetList(paraCredentials, module, rtn.Query.BuildQueryArguments());
                     callStopWatch.Stop();
 
-                    var tempObjectList = ParserUtils.ObjectFillList(tempAr.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
+                    var tempObjectList = ParaEntityParser.ObjectFillList(tempAr.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
 
                     testTimePerPage = (int)(callStopWatch.ElapsedMilliseconds);
                     double testTimePagesRequired = (int)Math.Ceiling((double)tempObjectList.TotalItems / (double)pageSizeSampleSet[i]);

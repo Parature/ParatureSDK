@@ -183,7 +183,6 @@
     <Compile Include="TrustAllCertificatePolicy.cs" />
     <Compile Include="XmlGenerator.cs" />
     <Compile Include="XmlToObjectParser\ParaEntityParser.cs" />
-    <Compile Include="XmlToObjectParser\ParserUtils.cs" />
     <Compile Include="XmlToObjectParser\AttachmentParser.cs" />
   </ItemGroup>
   <ItemGroup>
