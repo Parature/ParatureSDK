@@ -14,7 +14,7 @@ namespace ParatureSDK.Fields
         public string Value;
         [XmlAttribute("viewOrder")]
         public Int64 ViewOrder;
-        public bool Dependent = false;
+        public bool? Dependent = false;
         [XmlAttribute("selected")]
         public bool Selected = false;
 

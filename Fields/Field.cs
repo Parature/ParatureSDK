@@ -24,6 +24,7 @@ namespace ParatureSDK.Fields
         /// This Value will be populated with the field's value. 
         /// For example, if this is a textbox field, this will hold the textbox's default field.
         /// </summary>
+        [XmlIgnore]
         public object Value;
 
         /// <summary>
