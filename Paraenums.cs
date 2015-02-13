@@ -404,5 +404,38 @@ namespace ParatureSDK
             /// </summary>
             json = 3
         }
+
+        public enum ArticleStatusType
+        {
+            /// <summary>
+            /// Returns all Articles
+            /// </summary>
+            all = 1,
+            /// <summary>
+            /// Returns Articles not in the Trash Bin. Default
+            /// </summary>
+            active = 2,
+
+            /// <summary>
+            /// Returns Articles in the Trash Bin
+            /// </summary>
+            trash =3
+        }
+
+        public enum ArticleSerchOption
+        {
+            /// <summary>
+            /// Match all words. Default
+            /// </summary>
+            allwords = 1,
+            /// <summary>
+            /// Match if any of the provided keywords are found
+            /// </summary>
+            anywords = 2,
+            /// <summary>
+            /// Only match if the keywords match exactly
+            /// </summary>
+            exactwords = 3
+        }
     }
 }
