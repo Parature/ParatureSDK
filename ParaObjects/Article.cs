@@ -333,6 +333,31 @@ namespace ParatureSDK.ParaObjects
             }
         }
 
+        /// <summary>
+        /// List of articles that are related to the this article. Introduced in 15.1
+        /// </summary>
+        public List<Article> Related_Articles
+        {
+            get
+            {
+                return GetFieldValue<List<Article>>("Related_Articles"); 
+                
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Related_Articles");
+                if (field == null)
+                {
+                    field = new StaticField
+                    {
+                        Name = "Related_Articles",
+                        FieldDataType = ParaEnums.FieldDataType.EntityReference
+                    };
+                    StaticFields.Add(field);
+                }
+            }
+        }
+
         public Article()
         {
         }
