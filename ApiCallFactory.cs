@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 using Microsoft.VisualBasic;
 using ParatureSDK.Fields;
 using ParatureSDK.ParaHelper;
@@ -17,12 +18,6 @@ namespace ParatureSDK
     /// </summary>    
     static internal class ApiCallFactory
     {
-        //No longer need with the new Throttler class
-        //private static System.Timers.Timer callTimer = null;
-        //private static bool wait = false;
-        //private static System.Timers.Timer ThrottlerCleaner = null;
-        //private static Hashtable throttlers = new Hashtable();
-
         private static Dictionary<Int64, DateTime> Throttlers = new Dictionary<long, DateTime>();
 
         /// <summary>
@@ -120,24 +115,17 @@ namespace ParatureSDK
         /// </param>
         public static ApiCallResponse EntityCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, System.Xml.XmlDocument fileToPost, Int64 objectid)
         {
-            string ApiCallUrl;
             // Getting the standard API URL to call.
-            ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entity, objectid, false);
+            var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entity, objectid, false);
 
-            ParaEnums.ApiCallHttpMethod apicallhttpmethod;
             // To set up the call method, we check if this is a create (the objectid=0 in that case)
             // or an update (when we received an objectid>0)
-            if (objectid == 0)
-            {
-                apicallhttpmethod = ParaEnums.ApiCallHttpMethod.Post;
-            }
-            else
-            {
-                apicallhttpmethod = ParaEnums.ApiCallHttpMethod.Update;
-            }
+            var apicallhttpmethod = (objectid == 0) 
+                ? ParaEnums.ApiCallHttpMethod.Post 
+                : ParaEnums.ApiCallHttpMethod.Update;
 
             // Calling the next method that manages the call.
-            return ApiMakeCall(ApiCallUrl, apicallhttpmethod, fileToPost, paracredentials.Instanceid, paracredentials);
+            return ApiMakeCall(apiCallUrl, apicallhttpmethod, fileToPost, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -161,21 +149,20 @@ namespace ParatureSDK
         ///</param>
         public static ApiCallResponse ObjectDelete(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid, bool purge)
         {
-            string ApiCallUrl;
+            string apiCallUrl;
 
             if (purge == true)
             {
-                ArrayList arguments = new ArrayList();
-                arguments.Add("_purge_=true");
-                ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectid, arguments);
+                var arguments = new ArrayList {"_purge_=true"};
+                apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectid, arguments);
             }
             else
             {
-                ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectid, false);
+                apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectid, false);
             }
 
 
-            return ApiMakeCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
+            return ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -195,21 +182,10 @@ namespace ParatureSDK
         /// </param>
         public static ApiCallResponse EntityDelete(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, Int64 entityid)
         {
-            string ApiCallUrl;
+            var arguments = new ArrayList {"_purge_=true"};
+            var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entity, entityid, arguments);
 
-            //if (purge == true)
-            //{
-            ArrayList arguments = new ArrayList();
-            arguments.Add("_purge_=true");
-            ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entity, entityid, arguments);
-            //}
-            //else
-            //{
-            //    ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entity, entityid, false);
-            //}
-
-
-            return ApiMakeCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
+            return ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -229,37 +205,32 @@ namespace ParatureSDK
         ///</param>
         public static ApiCallResponse ObjectGetDetail(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid)
         {
+            var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectid, false);
 
-            string ApiCallUrl;
-
-            ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectid, false);
-
-            return ApiMakeCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            return ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
 
-        /// <summary>
-        /// Use this method to get the details of an Entity that you plan to fill.
-        /// </summary>
-        /// <param name="paracredentials">
-        ///The credentials to be used for making the API call. 
-        ///Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
-        ///</param>
-        /// <param name="module">
-        ///The name of the entity to create or update. Choose from the ParatureEntity enum list. 
-        ///Value Type: <see cref="ParaEnums.ParatureEntity" />   (Paraenums.ParatureEntity)
-        ///</param>
+        ///  <summary>
+        ///  Use this method to get the details of an Entity that you plan to fill.
+        ///  </summary>
+        ///  <param name="paracredentials">
+        /// The credentials to be used for making the API call. 
+        /// Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
+        /// </param>
+        ///  <param name="module">
+        /// The name of the entity to create or update. Choose from the ParatureEntity enum list. 
+        /// Value Type: <see cref="ParaEnums.ParatureEntity" />   (Paraenums.ParatureEntity)
+        /// </param>
+        /// <param name="entity"></param>
         /// <param name="objectid">
-        ///The id of the object to create or update. 
-        ///Value Type: <see cref="Int64" />   (System.int64)
-        ///</param>
+        /// The id of the object to create or update. 
+        /// Value Type: <see cref="Int64" />   (System.int64)
+        /// </param>
         public static ApiCallResponse ObjectGetDetail(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, Int64 objectid)
         {
+            var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entity, objectid, false);
 
-            string ApiCallUrl;
-
-            ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entity, objectid, false);
-
-            return ApiMakeCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            return ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -277,17 +248,15 @@ namespace ParatureSDK
         ///The id of the object to create or update. 
         ///Value Type: <see cref="Int64" />   (System.int64)
         ///</param>
-        /// <param name="Arguments">
+        /// <param name="arguments">
         ///The list of extra optional arguments you need to include in the call. For example, for a ticket, we might want to get the action history.
         ///Value Type: <see cref="ArrayList" />   (System.String[])
         ///</param>
-        public static ApiCallResponse ObjectGetDetail(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid, ArrayList Arguments)
+        public static ApiCallResponse ObjectGetDetail(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid, ArrayList arguments)
         {
-            string ApiCallUrl;
+            var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectid, arguments);
 
-            ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectid, Arguments);
-
-            return ApiMakeCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            return ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -300,15 +269,14 @@ namespace ParatureSDK
         /// <param name="module">
         ///The name of the module to create or update. Choose from the ParatureModule enum list. 
         ///</param>
-        /// <param name="Arguments">
+        /// <param name="arguments">
         ///The list of extra optional arguments you need to include in the call. For example, any fields filtering, any custom fields to include, etc.
         ///Value Type: <see cref="ArrayList" />   
         ///</param>
-        public static ApiCallResponse ObjectGetList(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ArrayList Arguments)
+        public static ApiCallResponse ObjectGetList(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ArrayList arguments)
         {
-            string ApiCallUrl;
-            ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, 0, Arguments);
-            return ApiMakeCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, 0, arguments);
+            return ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -321,18 +289,17 @@ namespace ParatureSDK
         /// <param name="entity">
         ///The name of the entity to list. Choose from the ParatureEntity enum list. 
         ///</param>      
-        public static ApiCallResponse ObjectGetList(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, ArrayList Arguments)
+        public static ApiCallResponse ObjectGetList(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, ArrayList arguments)
         {
-            string ApiCallUrl;
-            ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entity, 0, Arguments);
-            return ApiMakeCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entity, 0, arguments);
+            return ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
 
 
-        public static ApiCallResponse ObjectSecondLevelGetList(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ParaEnums.ParatureEntity entity, ArrayList Arguments)
+        public static ApiCallResponse ObjectSecondLevelGetList(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ParaEnums.ParatureEntity entity, ArrayList arguments)
         {
             string ApiCallUrl;
-            ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteCustomUrl(paracredentials, module, entity, Arguments);
+            ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteCustomUrl(paracredentials, module, entity, arguments);
             return ApiMakeCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
 
@@ -516,13 +483,13 @@ namespace ParatureSDK
 
                 while (attemptNumber < 5 && (resp.httpResponseCode == 500 || resp.httpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
                 {
-                    buildAutoRetryAPIErrorLogMessage(ref callLogger, attemptNumber.ToString(), callurl,
+                    BuildAutoRetryApiErrorLogMessage(ref callLogger, attemptNumber.ToString(), callurl,
                         ApiCallHttpMethod.ToString(), resp.httpResponseCode.ToString(), resp.ExceptionDetails,
                         resp.xmlSent, resp.xmlReceived);
 
                     attemptNumber++;
 
-                    HandleRandomAPIErrorsSleepTime(attemptNumber, paracredentials);
+                    HandleRandomApiErrorsSleepTime(attemptNumber, paracredentials);
 
                     // try the call again
                     resp = MakeThrottledCall(callurl, ApiCallHttpMethod, XmlPosted, accountID, paracredentials);
@@ -530,7 +497,7 @@ namespace ParatureSDK
                 }
                 if (attemptNumber > 1 && paracredentials.logRetries)
                 {
-                    buildAutoRetryAPIErrorLogMessage(ref callLogger, attemptNumber.ToString(), callurl,
+                    BuildAutoRetryApiErrorLogMessage(ref callLogger, attemptNumber.ToString(), callurl,
                         ApiCallHttpMethod.ToString(), resp.httpResponseCode.ToString(), resp.ExceptionDetails,
                         resp.xmlSent, resp.xmlReceived);
                 }
@@ -562,19 +529,19 @@ namespace ParatureSDK
 
                 while (attemptNumber < 5 && (resp.httpResponseCode == 500 || resp.httpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
                 {
-                    buildAutoRetryAPIErrorLogMessage(ref callLogger, attemptNumber.ToString(),
+                    BuildAutoRetryApiErrorLogMessage(ref callLogger, attemptNumber.ToString(),
                         callurl, ApiCallHttpMethod.ToString(), resp.httpResponseCode.ToString(),
                         resp.ExceptionDetails, null, resp.xmlReceived);
 
                     attemptNumber++;
 
-                    HandleRandomAPIErrorsSleepTime(attemptNumber, paracredentials);
+                    HandleRandomApiErrorsSleepTime(attemptNumber, paracredentials);
                     // try the call again
                     resp = MakeThrottledCall(callurl, ApiCallHttpMethod, doc, accountID, paracredentials);
                 }
                 if (attemptNumber > 1 && paracredentials.logRetries)
                 {
-                    buildAutoRetryAPIErrorLogMessage(ref callLogger, attemptNumber.ToString(),
+                    BuildAutoRetryApiErrorLogMessage(ref callLogger, attemptNumber.ToString(),
                         callurl, ApiCallHttpMethod.ToString(), resp.httpResponseCode.ToString(),
                         resp.ExceptionDetails, null, resp.xmlReceived);
                 }
@@ -587,6 +554,7 @@ namespace ParatureSDK
 
             return resp;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -598,7 +566,7 @@ namespace ParatureSDK
         /// <param name="message"></param>
         /// <param name="sent"></param>
         /// <param name="received"></param>
-        private static void buildAutoRetryAPIErrorLogMessage(ref StringBuilder callLogger, string attemptNumber, string URL, string Method, string responseCode, string message, System.Xml.XmlDocument sent, System.Xml.XmlDocument received)
+        private static void BuildAutoRetryApiErrorLogMessage(ref StringBuilder callLogger, string attemptNumber, string URL, string Method, string responseCode, string message, System.Xml.XmlDocument sent, System.Xml.XmlDocument received)
         {
             //TODO determine use of this mehtod
             callLogger.AppendLine("Call [" + attemptNumber + "]");
@@ -613,7 +581,7 @@ namespace ParatureSDK
             callLogger.AppendLine("XML Received [" + ((received == null) ? "" : received.InnerXml) + "]");
         }
 
-        private static void HandleRandomAPIErrorsSleepTime(Int32 attemptNumber, ParaCredentials paracredentials)
+        private static void HandleRandomApiErrorsSleepTime(Int32 attemptNumber, ParaCredentials paracredentials)
         {
             Int32 sleepTime = 0;
 
@@ -657,33 +625,30 @@ namespace ParatureSDK
 
         public static ApiCallResponse FileUploadGetUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module)
         {
-            System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-            doc = null;
-            ApiCallResponse resp = MakeThrottledCall(ApiUrlBuilder.ApiObjectReadUpdateDeleteCustomUrl(paracredentials, module, "upload"), ParaEnums.ApiCallHttpMethod.Get, doc, paracredentials.Instanceid, paracredentials);
+            XmlDocument doc = null;
+            var resp = MakeThrottledCall(ApiUrlBuilder.ApiObjectReadUpdateDeleteCustomUrl(paracredentials, module, "upload"), ParaEnums.ApiCallHttpMethod.Get, doc, paracredentials.Instanceid, paracredentials);
 
-            #region handing Random API server issues
             // Handling our servers having issues
-            if (paracredentials.AutoretryMode != ParaEnums.AutoRetryMode.None && (resp.httpResponseCode == 500 || resp.httpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
+            if (paracredentials.AutoretryMode != ParaEnums.AutoRetryMode.None 
+                && (resp.httpResponseCode == 500 || resp.httpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
             {
-                StringBuilder callLogger = new StringBuilder();
-                Int32 attemptNumber = 1;
+                var callLogger = new StringBuilder();
+                var attemptNumber = 1;
 
                 while (attemptNumber < 5 && (resp.httpResponseCode == 500 || resp.httpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
                 {
-                    buildAutoRetryAPIErrorLogMessage(ref callLogger, attemptNumber.ToString(), resp.CalledUrl,
+                    BuildAutoRetryApiErrorLogMessage(ref callLogger, attemptNumber.ToString(), resp.CalledUrl,
                         resp.httpCallMethod, resp.httpResponseCode.ToString(), resp.ExceptionDetails,
                         resp.xmlSent, resp.xmlReceived);
 
                     attemptNumber++;
 
-                    HandleRandomAPIErrorsSleepTime(attemptNumber, paracredentials);
+                    HandleRandomApiErrorsSleepTime(attemptNumber, paracredentials);
 
                     // try the call again
                     resp = MakeThrottledCall(ApiUrlBuilder.ApiObjectReadUpdateDeleteCustomUrl(paracredentials, module, "upload"), ParaEnums.ApiCallHttpMethod.Get, doc, paracredentials.Instanceid, paracredentials);
                 }
             }
-
-            #endregion
 
             return resp;
         }
@@ -732,22 +697,20 @@ namespace ParatureSDK
         /// </summary>
         static ApiCallResponse MakeThrottledCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Net.Mail.Attachment att, int accountID, ParaCredentials paraCredentials)
         {
-            ApiCallResponse resp = new ApiCallResponse();
-            resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, att, accountID, paraCredentials);
-            int sleepTime = 121000;
+            var resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, att, accountID, paraCredentials);
+            var sleepTime = 121000;
 
             while ((resp.httpResponseCode == 503 || resp.httpResponseCode == 0) && sleepTime < 240000)
             {
 
                 // The call has been rejected by the API throttling service.
                 System.Threading.Thread.Sleep(sleepTime);
-                //calls.Clear();
                 resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, att, accountID, paraCredentials);
                 sleepTime += 60000;
             }
 
             sleepTime = 2000;
-            while (resp.httpResponseCode == 401 && sleepTime<6001)
+            while (resp.httpResponseCode == 401 && sleepTime < 6001)
             {
                 // The call has been rejected by the API throttling service.
                 System.Threading.Thread.Sleep(2000);
@@ -960,52 +923,39 @@ namespace ParatureSDK
         {
             string responseFromServer = "";
 
-
-            //if (pc.retriesWaitTime <= 500)
-            //{
-                //Calling the auto throttling method.
-                ThrottlingManagerPause(accountID, pc.retriesWaitTime);
-            //}
+            ThrottlingManagerPause(accountID, pc.retriesWaitTime);
 
             try
             {
-                using (HttpWebResponse HttpWResp = req.GetResponse() as HttpWebResponse)
+                using (var httpWResp = req.GetResponse() as HttpWebResponse)
                 {
                     try
                     {
-                        ac.httpResponseCode = (int)HttpWResp.StatusCode;
+                        ac.httpResponseCode = (int)httpWResp.StatusCode;
                     }
-                    catch (Exception ExRespCode)
+                    catch (Exception exRespCode)
                     {
                         ac.httpResponseCode = -1;
                     }
 
-                    StreamReader reader = new StreamReader(HttpWResp.GetResponseStream());
+                    var reader = new StreamReader(httpWResp.GetResponseStream());
 
                     responseFromServer = reader.ReadToEnd().ToString();
 
                     reader.Close();
 
-                    if (responseFromServer != null)
+                    try
                     {
-                        try
-                        {
-                            ac.xmlReceived.LoadXml(responseFromServer);
-                        }
-
-                        catch (Exception ex)
-                        {
-                            ac.xmlReceived = null;
-                        }
-
+                        ac.xmlReceived.LoadXml(responseFromServer);
                     }
-                    else
+                    catch (Exception ex)
                     {
                         ac.xmlReceived = null;
                     }
+
                     try
                     {
-                        ac.httpResponseCode = (int)HttpWResp.StatusCode;
+                        ac.httpResponseCode = (int)httpWResp.StatusCode;
                         if (ac.httpResponseCode == 201)
                         {
                             try
@@ -1033,7 +983,7 @@ namespace ParatureSDK
                 try
                 {
                     ac.httpResponseCode = (int)((((HttpWebResponse)ex.Response).StatusCode));
-                    ac.ExceptionDetails = ex.Message.ToString();
+                    ac.ExceptionDetails = ex.Message;
                 }
                 catch
                 {
@@ -1053,11 +1003,9 @@ namespace ParatureSDK
 
 
                 string exresponseFromServer = "";
-                //StreamReader exreader= new StreamReader();
                 try
                 {
-
-                    StreamReader exreader = new StreamReader(((WebException)ex).Response.GetResponseStream());
+                    var exreader = new StreamReader(((WebException)ex).Response.GetResponseStream());
                     exresponseFromServer = exreader.ReadToEnd().ToString();
                     exreader.Close();
 
@@ -1117,6 +1065,7 @@ namespace ParatureSDK
                 {
 
                 }
+
                 // xml sent and xml received cleanup
                 // TEMP FIX
                 if (ac.xmlReceived != null && string.IsNullOrEmpty(ac.xmlReceived.InnerXml))
@@ -1138,25 +1087,25 @@ namespace ParatureSDK
         /// <summary>
         /// Manage the sleep time needed between calls to avoid throttling.
         /// </summary>
-        static void ThrottlingManagerPause(Int64 AccountID, Int32 WaitTimeMilliseconds)
+        static void ThrottlingManagerPause(Int64 entId, Int32 waitTimeMilliseconds)
         {
-            if (Throttlers.ContainsKey(AccountID))
+            if (Throttlers.ContainsKey(entId))
             {
-                // We have already made a call previously for this account.
+                // We have already made a call previously for this entity.
 
                 // Getting the cutoff time
-                DateTime cutoff = DateTime.UtcNow;
+                var cutoff = DateTime.UtcNow;
 
                 // Getting the time the last call was made.
-                DateTime lastCall = Throttlers[AccountID];
+                var lastCall = Throttlers[entId];
 
                 // Getting the time difference between the last call and the current time
-                TimeSpan sp = cutoff.Subtract(lastCall);
-                if (sp.TotalMilliseconds < WaitTimeMilliseconds)
+                var sp = cutoff.Subtract(lastCall);
+                if (sp.TotalMilliseconds < waitTimeMilliseconds)
                 {
                     // deciding the sleep time needed, and then sleeping
-                    Int32 SleepTime =  WaitTimeMilliseconds -(int) Math.Floor(sp.TotalMilliseconds)  ;
-                    System.Threading.Thread.Sleep( SleepTime);
+                    var sleepTime =  waitTimeMilliseconds -(int) Math.Floor(sp.TotalMilliseconds)  ;
+                    System.Threading.Thread.Sleep( sleepTime);
                 }
             }
         }
@@ -1164,22 +1113,22 @@ namespace ParatureSDK
         /// <summary>
         /// Set the datetime of the last call made.
         /// </summary>
-        static void ThrottlingManagerSet(Int64 AccountID)
+        static void ThrottlingManagerSet(Int64 accountId)
         {
-            if (Throttlers.ContainsKey(AccountID))
+            if (Throttlers.ContainsKey(accountId))
             {
-                Throttlers[AccountID] = DateTime.UtcNow;
+                Throttlers[accountId] = DateTime.UtcNow;
             }
             else
             {
                 try
                 {
-                    Throttlers.Add(AccountID, DateTime.UtcNow);
+                    Throttlers.Add(accountId, DateTime.UtcNow);
                 }
                 catch (Exception ex)
                 {
                     // Another thread probably added the AccountID to the dictionary                    
-                    Throttlers[AccountID] = DateTime.UtcNow; 
+                    Throttlers[accountId] = DateTime.UtcNow; 
                 }
             }
         }        

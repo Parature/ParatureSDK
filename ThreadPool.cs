@@ -18,22 +18,19 @@ namespace ParatureSDK
             private ParaCredentials _paracredentials = null;
             private ParaEnums.ParatureModule _module;
             private System.Collections.ArrayList _Arguments = null;
-            private int _requestdepth;
-            
+
             /// <summary>
             /// 
             /// </summary>
             /// <param name="paracredentials"></param>
             /// <param name="module"></param>
-            /// <param name="Arguments"></param>
-            /// <param name="requestdepth"></param>
-            public ObjectList(ParaCredentials paracredentials, ParaEnums.ParatureModule module, System.Collections.ArrayList Arguments, int requestdepth)
+            /// <param name="arguments"></param>
+            public ObjectList(ParaCredentials paracredentials, ParaEnums.ParatureModule module, System.Collections.ArrayList arguments)
             {
                 sem.WaitOne();
                 _paracredentials = paracredentials;
                 _module = module;
-                _Arguments = new System.Collections.ArrayList(Arguments);
-                _requestdepth = requestdepth;
+                _Arguments = new System.Collections.ArrayList(arguments);
             }
 
             /// <summary>
@@ -53,7 +50,8 @@ namespace ParatureSDK
             /// 
             /// </summary>
             /// <param name="chatList"></param>
-            public void Go(ParaEntityList<ParaObjects.Chat> chatList, Boolean IncludeTranscripts)
+            /// <param name="includeTranscripts"></param>
+            public void Go(ParaEntityList<ParaObjects.Chat> chatList, Boolean includeTranscripts)
             {
                 var ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
                 var objectlist = ParaEntityParser.FillList<ParaObjects.Chat>(ar.xmlReceived);

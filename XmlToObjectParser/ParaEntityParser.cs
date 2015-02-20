@@ -38,7 +38,7 @@ namespace ParatureSDK.XmlToObjectParser
             return list;
         }
 
-        static internal PagedData.PagedData ObjectFillList(XmlDocument xmlresp, Boolean MinimalisticLoad, int requestdepth, ParaCredentials ParaCredentials, ParaEnums.ParatureModule module)
+        static internal PagedData.PagedData ObjectFillList(XmlDocument xmlresp, Boolean minimalisticLoad, int requestdepth, ParaCredentials paraCredentials, ParaEnums.ParatureModule module)
         {
             switch (module)
             {
@@ -56,8 +56,8 @@ namespace ParatureSDK.XmlToObjectParser
                     return FillList<Product>(xmlresp);
                 case ParaEnums.ParatureModule.Asset:
                     return FillList<Asset>(xmlresp);
-                    //case Paraenums.ParatureModule.Chat:
-                    //    return ChatParser.ChatsFillList(xmlresp, false, false, requestdepth, ParaCredentials);
+                case ParaEnums.ParatureModule.Chat:
+                    return FillList<Chat>(xmlresp);
                 default:
                     throw new Exception("Unknown Module For the Object Fill list");
             }

@@ -46,18 +46,6 @@ namespace ParatureSDK
         }
 
         /// <summary>
-        /// Mainly used in Synchronization integration projects to mark what should be done with an item.
-        /// </summary>
-        public enum Operation
-        {
-            Create,
-            Update,
-            Delete,
-            Transition,
-            Ignore
-        }
-
-        /// <summary>
         /// List all possible criteria you can use when querying a list of objects.
         /// </summary>
         public enum QueryCriteria
@@ -82,12 +70,6 @@ namespace ParatureSDK
 
         }
 
-        public enum QueryAccountProperties
-        {
-            Accountid = 10,
-            SlaID = 20
-        }
-
         /// <summary>
         /// Lists the possible type of actions you can run against an object (like ticket, for example)
         /// </summary>
@@ -105,7 +87,6 @@ namespace ParatureSDK
             CommentTech = 9,
             Other = 10
         }
-
 
         /// <summary>
         /// When reading an object: Account, Ticket, Contact, etc, this enum will provide indications regarding the level of depth of the information returned.
@@ -125,35 +106,6 @@ namespace ParatureSDK
             /// </summary>
             ThirdLevel = 3
         }
-
-
-        /// <summary>
-        /// When making API calls, there are only certain type of operations that can be done. This enum provides you with the possible values.
-        /// </summary>
-        internal enum ApiCallType
-        {
-            /// <summary>
-            /// Read a specific object's information
-            /// </summary>
-            Read = 0,
-            /// <summary>
-            /// List items for an object
-            /// </summary>
-            List = 1,
-            /// <summary>
-            /// Create an object
-            /// </summary>
-            Create = 2,
-            /// <summary>
-            /// Update an object
-            /// </summary>
-            Update = 3,
-            /// <summary>
-            /// Delete an object
-            /// </summary>
-            Delete = 4,
-        }
-
 
         /// <summary>
         /// Represents the data type of the field returned.
@@ -261,7 +213,6 @@ namespace ParatureSDK
             /// Deletes an object
             /// </summary>
             Delete = 3
-
         }
 
 
@@ -403,39 +354,6 @@ namespace ParatureSDK
             /// Returns a json format
             /// </summary>
             json = 3
-        }
-
-        public enum ArticleStatusType
-        {
-            /// <summary>
-            /// Returns all Articles
-            /// </summary>
-            all = 1,
-            /// <summary>
-            /// Returns Articles not in the Trash Bin. Default
-            /// </summary>
-            active = 2,
-
-            /// <summary>
-            /// Returns Articles in the Trash Bin
-            /// </summary>
-            trash =3
-        }
-
-        public enum ArticleSerchOption
-        {
-            /// <summary>
-            /// Match all words. Default
-            /// </summary>
-            allwords = 1,
-            /// <summary>
-            /// Match if any of the provided keywords are found
-            /// </summary>
-            anywords = 2,
-            /// <summary>
-            /// Only match if the keywords match exactly
-            /// </summary>
-            exactwords = 3
         }
     }
 }

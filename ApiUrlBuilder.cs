@@ -19,56 +19,22 @@ namespace ParatureSDK
                 customstring = "/" + customstring;
             }
             
-            string ApiCallUrl = ApiBuildBasicUrl(paracredentials) + module.ToString() + customstring + "?" + ApiToken(paracredentials);
-            return ApiCallUrl;
+            string apiCallUrl = ApiBuildBasicUrl(paracredentials) + module + customstring + "?" + ApiToken(paracredentials);
+            return apiCallUrl;
         }
-
 
         internal static string ApiObjectReadUpdateDeleteCustomUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ParaEnums.ParatureEntity entity, ArrayList Arguments)
         {
-            string ApiCallUrl = ApiBuildBasicUrl(paracredentials) + module.ToString() + "/" + entity.ToString() + "?" + ApiToken(paracredentials);
+            var apiCallUrl = ApiBuildBasicUrl(paracredentials) + module + "/" + entity + "?" + ApiToken(paracredentials);
             if (Arguments.Count > 0)
             {
                 for (int i = 0; i <= Arguments.Count - 1; i++)
                 {
-                    ApiCallUrl = ApiCallUrl + "&" + Arguments[i].ToString();
+                    apiCallUrl = apiCallUrl + "&" + Arguments[i];
                 }
             }
-            return ApiCallUrl;
+            return apiCallUrl;
         }
-
-        internal static string ApiObjectReadUpdateDeleteCustomUrl(ParaCredentials paracredentails, ParaEnums.ParatureEntity entity, string customstring)
-        {
-            if (string.IsNullOrEmpty(customstring))
-            {
-                customstring = "/";
-            }
-            else
-            {
-                customstring = "/" + customstring;
-            }
-            string ApiCallUrl = ApiBuildBasicUrl(paracredentails) + customstring + "?" + ApiToken(paracredentails);
-            return ApiCallUrl;
-        }
-
-        /// <summary>
-        /// Build the API URL to call, Add a simple customString to be appended at the end of the call. This is not a module specific call.
-        /// </summary>
-        internal static string ApiObjectReadUpdateDeleteCustomUrl(ParaCredentials paracredentials, string customstring)
-        {
-            if (string.IsNullOrEmpty(customstring))
-            {
-                customstring = "/";
-            }
-            else
-            {
-                customstring = "/" + customstring;
-            }
-
-            string ApiCallUrl = ApiBuildBasicUrl(paracredentials) + customstring + "?" + ApiToken(paracredentials);
-            return ApiCallUrl;
-        }
-
 
         /// <summary>
         /// Build the API URL to call. Since a simple read (without any further options) is the same as an update, as well as a delete, this method will generate that same link for these operations. Also, indicates whether you are requesting a schema a link, or an actual operation link
@@ -91,21 +57,18 @@ namespace ParatureSDK
                 }
                 else
                 {
-                    customstring = "/" + objectId.ToString();
+                    customstring = "/" + objectId;
                 }
             }
-            var apiCallUrl = ApiBuildBasicUrl(paracredentials) + module.ToString() + customstring + "?" + ApiToken(paracredentials);
+            var apiCallUrl = ApiBuildBasicUrl(paracredentials) + module + customstring + "?" + ApiToken(paracredentials);
             return apiCallUrl;
         }
-
 
         /// <summary>
         /// Build the API URL to call. Since a simple read (without any further options) is the same as an update, as well as a delete, this method will generate that same link for these operations. Also, indicates whether you are requesting a schema a link, or an actual operation link
         /// </summary>
         internal static string ApiObjectReadUpdateDeleteUrl(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, Int64 objectId, bool IsSchema)
         {
-
-            //string objectnum;
             string customstring;
             string entityName = entity.ToString();
             if (IsSchema == true)
@@ -123,17 +86,17 @@ namespace ParatureSDK
                 {
                     if (entity != ParaEnums.ParatureEntity.ChatTranscript)
                     {
-                        customstring = "/" + objectId.ToString();
+                        customstring = "/" + objectId;
                     }
                     else
                     {
                         entityName = "Chat";
-                        customstring = string.Format("/{0}/transcript", objectId.ToString());
+                        customstring = string.Format("/{0}/transcript", objectId);
                     }
                 }
             }
-            string ApiCallUrl = ApiBuildBasicUrl(paracredentials) + entityName + customstring + "?" + ApiToken(paracredentials);
-            return ApiCallUrl;
+            var apiCallUrl = ApiBuildBasicUrl(paracredentials) + entityName + customstring + "?" + ApiToken(paracredentials);
+            return apiCallUrl;
         }
 
         /// <summary>
@@ -142,17 +105,17 @@ namespace ParatureSDK
         internal static string ApiObjectReadUpdateDeleteUrl(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, Int64 objectId, ArrayList Arguments)
         {
 
-            string ApiCallUrl = ApiObjectReadUpdateDeleteUrl(paracredentials, entity, objectId, false);
+            var apiCallUrl = ApiObjectReadUpdateDeleteUrl(paracredentials, entity, objectId, false);
             if (Arguments.Count > 0)
             {
                 for (int i = 0; i <= Arguments.Count - 1; i++)
                 {
-                    ApiCallUrl = ApiCallUrl + "&" + Arguments[i].ToString();
+                    apiCallUrl = apiCallUrl + "&" + Arguments[i];
                 }
             }
 
 
-            return ApiCallUrl;
+            return apiCallUrl;
         }
 
         /// <summary>
@@ -160,18 +123,18 @@ namespace ParatureSDK
         /// </summary>
         internal static string ApiObjectReadUpdateDeleteUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectId, ArrayList Arguments)
         {
-            string ApiCallUrl = ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectId, false);
+            var apiCallUrl = ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectId, false);
             if (Arguments != null)
             {
                 if (Arguments.Count > 0)
                 {
-                    for (int i = 0; i <= Arguments.Count - 1; i++)
+                    for (var i = 0; i <= Arguments.Count - 1; i++)
                     {
-                        ApiCallUrl = ApiCallUrl + "&" + Arguments[i].ToString();
+                        apiCallUrl = apiCallUrl + "&" + Arguments[i];
                     }
                 }
             }
-            return ApiCallUrl;
+            return apiCallUrl;
         }
 
         /// <summary>
@@ -179,10 +142,9 @@ namespace ParatureSDK
         /// </summary>
         static string ApiBuildBasicUrl(ParaCredentials paracredentials)
         {
-            string basicLink = paracredentials.ServerfarmAddress + "/api/" + paracredentials.Apiversion + "/" + paracredentials.Instanceid + "/" + paracredentials.Departmentid + "/";
+            var basicLink = paracredentials.ServerfarmAddress + "/api/" + paracredentials.Apiversion + "/" + paracredentials.Instanceid + "/" + paracredentials.Departmentid + "/";
 
             return basicLink;
-
         }
 
         /// <summary>
@@ -190,10 +152,8 @@ namespace ParatureSDK
         /// </summary>
         static string ApiToken(ParaCredentials paracredentials)
         {
-            string ApiTokenQS = "_token_=" + paracredentials.Token.ToString();
-            return ApiTokenQS;
-
+            var apiTokenQs = "_token_=" + paracredentials.Token;
+            return apiTokenQs;
         }
-
     }
 }

@@ -256,7 +256,7 @@ namespace ParatureSDK.ApiHandler
                         //ApiCallFactory.waitCheck(ParaCredentials.Accountid);
                         Query.PageNumber = i;
                         //implement semaphore right here (in the thread pool instance to control the generation of threads
-                        var instance = new ThreadPool.ObjectList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments(), requestdepth);
+                        var instance = new ThreadPool.ObjectList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments());
                         t = new Thread(() => instance.Go(CustomersList));
                         t.Start();
                     }
