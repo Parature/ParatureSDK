@@ -85,15 +85,15 @@ namespace ParatureSDK.ParaObjects
         /// <param name="fieldId">Custom Field Id</param>
         /// <typeparam name="T">Type of the value</typeparam>
         /// <exception cref="InvalidCastException">Thrown if the type provided is incorrect</exception>
-        public T GetFieldValue<T>(int fieldId)
+        public string GetFieldValue(int fieldId)
         {
             var field = this[fieldId];
             if (field != null)
             {
-                return (T)field.Value;
+                return field.Value;
             }
 
-            return default(T);
+            return default(string);
         }
 
         /// <summary>
@@ -107,9 +107,10 @@ namespace ParatureSDK.ParaObjects
         /// </summary>
         [XmlElement("Custom_Field")]
         public List<CustomField> CustomFields = new List<CustomField>();
+
         /// <summary>
         /// This method accepts a custom field id and will reset all of its values: if this custom field has any options, they will be 
-        /// all unselected. If the custom field value is not set to "", this method will set it. Basically, the field will be empty.            /// 
+        /// all unselected. If the custom field value is not set to "", this method will set it. Basically, the field will be empty. 
         /// </summary>           
         /// <returns>Returns True if the custom field was modified, False if there was no need to modify the custom field.</returns>
         public bool CustomFieldReset(Int64 customFieldId)
@@ -444,11 +445,8 @@ namespace ParatureSDK.ParaObjects
         public abstract string GetReadableName();
 
         ///  <summary>
-        ///  Adds a custom field to the account object, with the value you specify.
+        ///  Adds a custom field to the object, with the value you specify.
         ///  </summary>
-        ///  <param name="account">
-        ///  The account object you need to add the custom field to.
-        ///  </param>
         ///  <param name="customFieldId">
         ///  The id of the custom field to add.
         ///  </param>
@@ -462,40 +460,33 @@ namespace ParatureSDK.ParaObjects
             var modified = false;
             var found = false;
             var cf = new CustomField();
-            if (customFieldId > 0)
+            foreach (var cfn in customFields.Where(cfn => cfn.Id == customFieldId))
             {
-                foreach (var cfn in customFields)
-                {
-                    if (cfn.Id == customFieldId)
-                    {
-                        cf = cfn;
-                        found = true;
-                        break;
-                    }
-                }
+                cf = cfn;
+                found = true;
+                break;
+            }
 
-                // Not found in the list of CFs, need to add this field.
-                if (found == false)
-                {
-                    cf.Id = customFieldId;
-                    modified = true;
-                }
+            // Not found in the list of CFs, need to add this field.
+            if (found == false)
+            {
+                cf.Id = customFieldId;
+                modified = true;
+            }
 
-                if (String.Compare(cf.GetFieldValue<string>(), customFieldValue, ignoreCase) != 0)
+            if (String.Compare(cf.GetFieldValue<string>(), customFieldValue, ignoreCase) != 0)
+            {
+                modified = true;
+                if (String.IsNullOrEmpty(customFieldValue))
                 {
-                    modified = true;
-                    if (String.IsNullOrEmpty(customFieldValue))
-                    {
-                        cf.FlagToDelete = true;
-                    }
-                    cf.Value = customFieldValue;
+                    cf.FlagToDelete = true;
                 }
+                cf.Value = customFieldValue;
+            }
 
-                if (found == false)
-                {
-                    CustomFields.Add(cf);
-                }
-
+            if (found == false)
+            {
+                CustomFields.Add(cf);
             }
 
             return modified;
