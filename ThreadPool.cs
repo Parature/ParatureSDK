@@ -137,6 +137,15 @@ namespace ParatureSDK
                 articleList.ApiCallResponse = ar;
                 sem.Release();
             }
+
+            public void Go<T>(ParaEntityList<T> entityList) where T: ParaEntity
+            {
+                var ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
+                var objectlist = ParaEntityParser.FillList<T>(ar.XmlReceived);
+                objectlist.Data.AddRange(objectlist.Data);
+                objectlist.ApiCallResponse = ar;
+                sem.Release();
+            }
         }
     }
 }

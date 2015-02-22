@@ -54,7 +54,7 @@ namespace ParatureSDK.ApiHandler
         {
             var ar = new ApiCallResponse();
             var doc = new System.Xml.XmlDocument();
-            doc = XmlGenerator.AssetGenerateXml(Asset);
+            doc = XmlGenerator.GenerateXml(Asset);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Asset, doc, 0);
             Asset.Id = ar.Id;
             return ar;
@@ -66,7 +66,7 @@ namespace ParatureSDK.ApiHandler
         public static ApiCallResponse Update(ParaObjects.Asset Asset, ParaCredentials ParaCredentials)
         {
             ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Asset, XmlGenerator.AssetGenerateXml(Asset), Asset.Id);
+            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Asset, XmlGenerator.GenerateXml(Asset), Asset.Id);
             return ar;
         }
 
@@ -314,7 +314,7 @@ namespace ParatureSDK.ApiHandler
             ApiCallResponse ar = new ApiCallResponse();
 
 
-            ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Asset, Assetid);
+            ar = ApiCallFactory.ObjectGetDetail<ParaObjects.Asset>(ParaCredentials, ParaEnums.ParatureModule.Asset, Assetid);
 
             if (ar.HasException == false)
             {

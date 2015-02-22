@@ -56,7 +56,7 @@ namespace ParatureSDK.ApiHandler
                 arguments.Add("_includePassword_=" + IncludePasswordInNotification.ToString().ToLower());
             }
 
-            var doc = XmlGenerator.CustomerGenerateXml(customer);
+            var doc = XmlGenerator.GenerateXml(customer);
             var ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Customer, doc, 0, arguments);
             customer.Id = ar.Id;
             return ar;
@@ -85,7 +85,7 @@ namespace ParatureSDK.ApiHandler
                 //arguments.Add("_include_password_=" + IncludePasswordInNotification.ToString().ToLower());
             }
             var ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Customer, XmlGenerator.CustomerGenerateXml(Customer), Customer.Id, arguments);
+            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Customer, XmlGenerator.GenerateXml(Customer), Customer.Id, arguments);
             return ar;
         }
 
@@ -312,7 +312,7 @@ namespace ParatureSDK.ApiHandler
         static ParaObjects.Customer FillDetails(Int64 customerId, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
         {
             var customer = new ParaObjects.Customer();
-            var ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Customer, customerId);
+            var ar = ApiCallFactory.ObjectGetDetail<ParaObjects.Customer>(ParaCredentials, ParaEnums.ParatureModule.Customer, customerId);
             if (ar.HasException == false)
             {
                 customer = ParaEntityParser.EntityFill<ParaObjects.Customer>(ar.XmlReceived);

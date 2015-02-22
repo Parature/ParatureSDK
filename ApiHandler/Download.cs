@@ -53,7 +53,7 @@ namespace ParatureSDK.ApiHandler
         {
             var ar = new ApiCallResponse();
             var doc = new System.Xml.XmlDocument();
-            doc = XmlGenerator.DownloadGenerateXML(Download);
+            doc = XmlGenerator.GenerateXml(Download);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Download, doc, 0);
             Download.Id = ar.Id;
             return ar;
@@ -66,7 +66,7 @@ namespace ParatureSDK.ApiHandler
         {
             var ar = new ApiCallResponse();
 
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Download, XmlGenerator.DownloadGenerateXML(Download), Download.Id);
+            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Download, XmlGenerator.GenerateXml(Download), Download.Id);
 
 
             return ar;
@@ -304,7 +304,7 @@ namespace ParatureSDK.ApiHandler
             int requestdepth = (int)RequestDepth;
             ParaObjects.Download Download = new ParaObjects.Download(true);
             ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Download, Downloadid);
+            ar = ApiCallFactory.ObjectGetDetail<ParaObjects.Download>(ParaCredentials, ParaEnums.ParatureModule.Download, Downloadid);
             if (ar.HasException == false)
             {
                 Download = ParaEntityParser.EntityFill<ParaObjects.Download>(ar.XmlReceived);
@@ -395,7 +395,7 @@ namespace ParatureSDK.ApiHandler
             {
                 ApiCallResponse ar = new ApiCallResponse();
                 System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-                doc = XmlGenerator.DownloadFolderGenerateXML(downloadfolder);
+                doc = XmlGenerator.GenerateXml(downloadfolder);
                 ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, doc, 0);
                 downloadfolder.Id = ar.Id;
                 return ar;
@@ -407,7 +407,7 @@ namespace ParatureSDK.ApiHandler
             public static ApiCallResponse Update(ParaObjects.DownloadFolder downloadfolder, ParaCredentials ParaCredentials)
             {
                 ApiCallResponse ar = new ApiCallResponse();
-                ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, XmlGenerator.DownloadFolderGenerateXML(downloadfolder), downloadfolder.Id);
+                ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, XmlGenerator.GenerateXml(downloadfolder), downloadfolder.Id);
 
                 return ar;
             }

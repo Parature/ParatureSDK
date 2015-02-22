@@ -33,7 +33,6 @@ namespace ParatureSDK.ApiHandler
             //  call time multiplied by the calls required.  The calls required is calculated by dividing the 
             //  total records by the page size then rounded up. Currently we do this by stepping through a 
             //  fixed set of test calls, but this should be refactored to a more dynamic calculation.
-            //ParaObjects.PagedData objectList;
             ApiCallResponse tempAr;
             var testTimePerPage = 0.0;    //units are milliseconds
             var callStopWatch = new Stopwatch();
@@ -123,7 +122,7 @@ namespace ParatureSDK.ApiHandler
         /// </summary>
         public static ApiCallResponse ActionRun(Int64 objectId, Action action, ParaCredentials pc, ParaEnums.ParatureModule module)
         {
-            var doc = XmlGenerator.ActionGenerateXml(action, module);
+            var doc = XmlGenerator.GenerateXml(action, module);
             var ar = ApiCallFactory.ObjectCreateUpdate(pc, module, doc, objectId);
             return ar;
         }

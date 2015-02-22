@@ -51,7 +51,7 @@ namespace ParatureSDK.ApiHandler
         {
             ApiCallResponse ar = new ApiCallResponse();
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-            doc = XmlGenerator.TicketGenerateXml(ticket);
+            doc = XmlGenerator.GenerateXml(ticket);
             ar = ApiCallFactory.ObjectCreateUpdate(pc, ParaEnums.ParatureModule.Ticket, doc, 0);
             ticket.Id = ar.Id;
             return ar;
@@ -63,7 +63,7 @@ namespace ParatureSDK.ApiHandler
         public static ApiCallResponse Update(ParaObjects.Ticket ticket, ParaCredentials pc)
         {
             ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectCreateUpdate(pc, ParaEnums.ParatureModule.Ticket, XmlGenerator.TicketGenerateXml(ticket), ticket.Id);
+            ar = ApiCallFactory.ObjectCreateUpdate(pc, ParaEnums.ParatureModule.Ticket, XmlGenerator.GenerateXml(ticket), ticket.Id);
             return ar;
         }
 
@@ -332,7 +332,7 @@ namespace ParatureSDK.ApiHandler
             }
             else
             {
-                ar = ApiCallFactory.ObjectGetDetail(pc, ParaEnums.ParatureModule.Ticket, ticketNumber);
+                ar = ApiCallFactory.ObjectGetDetail<ParaObjects.Ticket>(pc, ParaEnums.ParatureModule.Ticket, ticketNumber);
             }
 
 

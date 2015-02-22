@@ -66,7 +66,7 @@ namespace ParatureSDK.ApiHandler
         {
             ApiCallResponse ar = new ApiCallResponse();
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-            doc = XmlGenerator.ProductGenerateXml(Product);
+            doc = XmlGenerator.GenerateXml(Product);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, doc, 0);
             Product.Id = ar.Id;
             return ar;
@@ -79,7 +79,7 @@ namespace ParatureSDK.ApiHandler
         {
             ApiCallResponse ar = new ApiCallResponse();
 
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, XmlGenerator.ProductGenerateXml(Product), Product.Id);
+            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, XmlGenerator.GenerateXml(Product), Product.Id);
 
 
             return ar;
@@ -315,7 +315,7 @@ namespace ParatureSDK.ApiHandler
             var Product = new ParaObjects.Product();
             //Product = null;
             var ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Product, Productid);
+            ar = ApiCallFactory.ObjectGetDetail<ParaObjects.Product>(ParaCredentials, ParaEnums.ParatureModule.Product, Productid);
             if (ar.HasException == false)
             {
                 Product = ParaEntityParser.EntityFill<ParaObjects.Product>(ar.XmlReceived);
@@ -406,7 +406,7 @@ namespace ParatureSDK.ApiHandler
             {
                 ApiCallResponse ar = new ApiCallResponse();
                 System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-                doc = XmlGenerator.ProductFolderGenerateXML(ProductFolder);
+                doc = XmlGenerator.GenerateXml(ProductFolder);
                 ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.ProductFolder, doc, 0);
                 ProductFolder.Id = ar.Id;
                 return ar;
@@ -418,7 +418,7 @@ namespace ParatureSDK.ApiHandler
             public static ApiCallResponse Update(ParaObjects.ProductFolder ProductFolder, ParaCredentials ParaCredentials)
             {
                 ApiCallResponse ar = new ApiCallResponse();
-                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, XmlGenerator.ProductFolderGenerateXML(ProductFolder), ProductFolder.Id);
+                ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, XmlGenerator.GenerateXml(ProductFolder), ProductFolder.Id);
                 return ar;
             }
 

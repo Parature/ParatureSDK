@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -43,6 +44,12 @@ namespace ParatureSDK
         {
             // Calling the next method that manages the call.
             return ObjectCreateUpdate(paracredentials, module, fileToPost, objectid, null);
+        }
+
+        public static ApiCallResponse ObjectCreateUpdate<T>(ParaCredentials paracredentials, System.Xml.XmlDocument fileToPost, Int64 objectid)
+        {
+            // Calling the next method that manages the call.
+            return ObjectCreateUpdate<T>(paracredentials, fileToPost, objectid, null);
         }
 
         ///  <summary>
@@ -96,6 +103,40 @@ namespace ParatureSDK
             // Calling the next method that manages the call.
             return ApiMakeCall(apiCallUrl, apicallhttpmethod, fileToPost, paracredentials.Instanceid, paracredentials);
         }
+
+        public static ApiCallResponse ObjectCreateUpdate<T>(ParaCredentials paracredentials, XmlDocument fileToPost, Int64 objectid, ArrayList arguments)
+        {
+            var entityType = typeof (T).ToString();
+            if (arguments == null)
+            {
+                arguments = new ArrayList();
+            }
+            switch (entityType)
+            {
+                case "Ticket":
+                case "Account":
+                case "Customer":
+                case "Product":
+                case "Asset":
+                    if (paracredentials.EnforceRequiredFields == false)
+                    {
+                        arguments.Add("_enforceRequiredFields_=" + paracredentials.EnforceRequiredFields.ToString().ToLower());
+                    }
+                    break;
+            }
+            // Getting the standard API URL to call.
+            var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entityType, objectid, arguments);
+
+            // To set up the call method, we check if this is a create (the objectid=0 in that case)
+            // or an update (when we received an objectid>0)
+            var apicallhttpmethod = (objectid == 0)
+                ? ParaEnums.ApiCallHttpMethod.Post
+                : ParaEnums.ApiCallHttpMethod.Update;
+
+            // Calling the next method that manages the call.
+            return ApiMakeCall(apiCallUrl, apicallhttpmethod, fileToPost, paracredentials.Instanceid, paracredentials);
+        }
+
 
         ///  <summary>
         ///  This method will create/update an Object in Parature.
@@ -158,7 +199,26 @@ namespace ParatureSDK
             }
             else
             {
-                apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectid, false);
+                apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module.ToString(), objectid, false);
+            }
+
+
+            return ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
+        }
+
+        public static ApiCallResponse ObjectDelete<T>(ParaCredentials paracredentials, Int64 objectid, bool purge)
+        {
+            var entityType = typeof (T).ToString();
+            string apiCallUrl;
+
+            if (purge)
+            {
+                var arguments = new ArrayList { "_purge_=true" };
+                apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entityType, objectid, arguments);
+            }
+            else
+            {
+                apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entityType, objectid, false);
             }
 
 
@@ -203,9 +263,10 @@ namespace ParatureSDK
         ///The id of the object to create or update. 
         ///Value Type: <see cref="Int64" />   (System.int64)
         ///</param>
-        public static ApiCallResponse ObjectGetDetail(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid)
+        public static ApiCallResponse ObjectGetDetail<T>(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid) where T: ParaEntity
         {
-            var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectid, false);
+            var entityName = typeof (T).ToString();
+            var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entityName, objectid, false);
 
             return ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
@@ -286,6 +347,27 @@ namespace ParatureSDK
         ///The credentials to be used for making the API call. 
         ///Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
         ///</param>
+        /// <param name="module">
+        ///The name of the module to create or update. Choose from the ParatureModule enum list. 
+        ///</param>
+        /// <param name="arguments">
+        ///The list of extra optional arguments you need to include in the call. For example, any fields filtering, any custom fields to include, etc.
+        ///Value Type: <see cref="ArrayList" />   
+        ///</param>
+        public static ApiCallResponse ObjectGetList<T>(ParaCredentials paracredentials, ArrayList arguments)
+        {
+            var entityType = typeof (T).ToString();
+            var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entityType, 0, arguments);
+            return ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+        }
+
+        /// <summary>
+        /// Use this method to get a list of objects that you plan to fill.
+        /// </summary>
+        /// <param name="paracredentials">
+        ///The credentials to be used for making the API call. 
+        ///Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
+        ///</param>
         /// <param name="entity">
         ///The name of the entity to list. Choose from the ParatureEntity enum list. 
         ///</param>      
@@ -308,11 +390,20 @@ namespace ParatureSDK
         /// </summary>
         public static ApiCallResponse ObjectGetSchema(ParaCredentials paracredentials, ParaEnums.ParatureModule module)
         {
-            string ApiCallUrl;
+            var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module.ToString(), 0, true);
 
-            ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, 0, true);
+            return ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+        }
 
-            return ApiMakeCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+        /// <summary>
+        /// Use this method to get the Schema XML of an object.
+        /// </summary>
+        public static ApiCallResponse ObjectGetSchema<T>(ParaCredentials paracredentials, ParaEnums.ParatureModule module)
+        {
+            var entityType = typeof (T).ToString();
+            var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entityType, 0, true);
+
+            return ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
         }
 
         /// <summary>
@@ -322,7 +413,7 @@ namespace ParatureSDK
         {
             string ApiCallUrl;
             paracredentials.EnforceRequiredFields = false;
-            ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, 0, true);
+            ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module.ToString(), 0, true);
 
             if (baseObject.CustomFields != null)
             {
@@ -339,19 +430,19 @@ namespace ParatureSDK
             switch (module)
             {
                 case ParaEnums.ParatureModule.Account:
-                    doc = XmlGenerator.AccountGenerateXml((ParaObjects.Account)baseObject);
+                    doc = XmlGenerator.GenerateXml((ParaObjects.Account)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Customer:
-                    doc = XmlGenerator.CustomerGenerateXml((ParaObjects.Customer)baseObject);
+                    doc = XmlGenerator.GenerateXml((ParaObjects.Customer)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Product:
-                    doc = XmlGenerator.ProductGenerateXml((ParaObjects.Product)baseObject);
+                    doc = XmlGenerator.GenerateXml((ParaObjects.Product)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Asset:
-                    doc = XmlGenerator.AssetGenerateXml((ParaObjects.Asset)baseObject);
+                    doc = XmlGenerator.GenerateXml((ParaObjects.Asset)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Ticket:
-                    doc = XmlGenerator.TicketGenerateXml((ParaObjects.Ticket)baseObject);
+                    doc = XmlGenerator.GenerateXml((ParaObjects.Ticket)baseObject);
                     break;
                 default:
                     break;
@@ -439,7 +530,7 @@ namespace ParatureSDK
             else
             {
                 // The call was successfull, deleting the item
-                ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, ar.Id, false);
+                ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module.ToString(), ar.Id, false);
                 ar = ApiMakeCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
 
                 // purging the item
@@ -451,6 +542,143 @@ namespace ParatureSDK
 
             return baseObject;
         }
+
+        /// <summary>
+        /// Use this method to determine if any custom fields have custom validation
+        /// </summary>
+        public static T ObjectCheckCustomFieldTypes<T>(ParaCredentials paracredentials, ParaEntity baseObject) where T: ParaEntity, new()
+        {
+            var entityType = typeof (T).ToString();
+            paracredentials.EnforceRequiredFields = false;
+            var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entityType, 0, true);
+
+            if (baseObject.CustomFields != null)
+            {
+                foreach (var cf in baseObject.CustomFields
+                    .Where(cf => cf.FieldDataType == ParaEnums.FieldDataType.String))
+                {
+                    cf.Value = "a";
+                }
+            }
+
+            var doc = new XmlDocument();
+            switch (entityType)
+            {
+                case "Account":
+                    doc = XmlGenerator.GenerateXml((Account)baseObject);
+                    break;
+                case "Customer":
+                    doc = XmlGenerator.GenerateXml((Customer)baseObject);
+                    break;
+                case "Product":
+                    doc = XmlGenerator.GenerateXml((Product)baseObject);
+                    break;
+                case "Asset":
+                    doc = XmlGenerator.GenerateXml((Asset)baseObject);
+                    break;
+                case "Ticket":
+                    doc = XmlGenerator.GenerateXml((Ticket)baseObject);
+                    break;
+                default:
+                    break;
+            }
+
+            var ar = ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Post, doc, paracredentials.Instanceid, paracredentials);
+
+            if (ar.HasException)
+            {
+                string errors = ar.ExceptionDetails;
+
+                string[] errorLines = errors.Split(';');
+
+                foreach (string line in errorLines)
+                {
+
+                    //added below line, since the validation message is changed for the API call
+                    var tempLine = line.Contains("Short Name") 
+                        ? line.Remove(line.IndexOf(", Short Name"), line.IndexOf("]") - line.IndexOf(", Short Name")) 
+                        : line;
+
+                    tempLine = tempLine.ToLower().Trim();
+
+                    string id;
+
+                    if (tempLine.StartsWith("invalid field validation message"))
+                    {
+
+                        if (line.ToLower().Contains("us phone number"))
+                        {
+                            var m = Regex.Match(line, @"Invalid Field Validation Message : (.+?) is not a valid US phone number");
+                            id = m.Groups[1].Value.Trim();
+
+                            foreach (CustomField cf in baseObject.CustomFields)
+                            {
+                                if (cf.Id == long.Parse(id))
+                                {
+                                    cf.FieldDataType = ParaEnums.FieldDataType.UsPhone;
+                                }
+                            }
+                        }
+                        else if (tempLine.Contains("email address"))
+                        {
+                            Match m = Regex.Match(line, @"Invalid Field Validation Message : The Email Address '(.+?)' is not valid.");
+                            id = m.Groups[1].Value.Trim();
+
+                            foreach (CustomField cf in baseObject.CustomFields)
+                            {
+                                if (cf.Id == long.Parse(id))
+                                {
+                                    cf.FieldDataType = ParaEnums.FieldDataType.Email;
+                                }
+                            }
+                        }
+                        else if (tempLine.Contains("international phone number"))
+                        {
+                            Match m = Regex.Match(line, @"Invalid Field Validation Message : (.+?) is not a valid international phone number");
+                            id = m.Groups[1].Value.Trim();
+
+                            foreach (CustomField cf in baseObject.CustomFields)
+                            {
+                                if (cf.Id == long.Parse(id))
+                                {
+                                    cf.FieldDataType = ParaEnums.FieldDataType.InternationalPhone;
+                                }
+                            }
+                        }
+                        else if (tempLine.Contains("url"))
+                        {
+                            Match m = Regex.Match(line, @"Invalid Field Validation Message : (.+?) is an invalid URL.");
+                            id = m.Groups[1].Value.Trim();
+                            if (Information.IsNumeric(id.Trim()))
+                            {
+                                foreach (CustomField cf in baseObject.CustomFields)
+                                {
+                                    if (cf.Id == long.Parse(id.Trim()))
+                                    {
+                                        cf.FieldDataType = ParaEnums.FieldDataType.Url;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // The call was successfull, deleting the item
+                apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entityType, ar.Id, false);
+                ar = ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
+
+                // purging the item
+                ArrayList arguments = new ArrayList();
+                arguments.Add("_purge_=true");
+                apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entityType, ar.Id, arguments);
+                ar = ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
+            }
+
+            return baseObject as T;
+        }
+
 
         /// <summary>
         /// Use this method to get the Schema XML of an object.

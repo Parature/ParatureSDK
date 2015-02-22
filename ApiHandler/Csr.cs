@@ -79,7 +79,7 @@ namespace ParatureSDK.ApiHandler
         {
             ApiCallResponse ar = new ApiCallResponse();
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-            doc = XmlGenerator.CsrGenerateXML(Csr);
+            doc = XmlGenerator.GenerateXml(Csr);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Csr, doc, 0);
             Csr.Id = ar.Id;
             return ar;
@@ -116,7 +116,7 @@ namespace ParatureSDK.ApiHandler
         {
             ApiCallResponse ar = new ApiCallResponse();
 
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Csr, XmlGenerator.CsrGenerateXML(Csr), Csr.Id);
+            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Csr, XmlGenerator.GenerateXml(Csr), Csr.Id);
 
 
             return ar;
@@ -191,7 +191,7 @@ namespace ParatureSDK.ApiHandler
         {
             ParaObjects.Csr Csr = new ParaObjects.Csr();
             ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Csr, Csrid);
+            ar = ApiCallFactory.ObjectGetDetail<ParaObjects.Csr>(ParaCredentials, ParaEnums.ParatureModule.Csr, Csrid);
             if (ar.HasException == false)
             {
                 Csr = ParaEntityParser.EntityFill<ParaObjects.Csr>(ar.XmlReceived);
