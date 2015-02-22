@@ -49,7 +49,7 @@ namespace ParatureSDK.ApiHandler.Entities
             var departmentslist = new ParaEntityList<ParaObjects.Department>();
             departmentslist = ParaEntityParser.FillList<ParaObjects.Department>(departmentListXml);
 
-            departmentslist.ApiCallResponse.xmlReceived = departmentListXml;
+            departmentslist.ApiCallResponse.XmlReceived = departmentListXml;
 
             return departmentslist;
         }
@@ -72,7 +72,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Department, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                departmentsList = ParaEntityParser.FillList<ParaObjects.Department>(ar.xmlReceived);
+                departmentsList = ParaEntityParser.FillList<ParaObjects.Department>(ar.XmlReceived);
             }
             departmentsList.ApiCallResponse = ar;
             return departmentsList;
@@ -85,7 +85,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.Department, departmentid);
             if (ar.HasException == false)
             {
-                department = ParaEntityParser.EntityFill<ParaObjects.Department>(ar.xmlReceived);
+                department = ParaEntityParser.EntityFill<ParaObjects.Department>(ar.XmlReceived);
             }
             else
             {

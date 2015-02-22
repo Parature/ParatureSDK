@@ -51,7 +51,7 @@ namespace ParatureSDK.ApiHandler.Entities
             var rolesList = new ParaEntityList<ParaObjects.Role>();
             rolesList = ParaEntityParser.FillList<ParaObjects.Role>(RoleListXML);
 
-            rolesList.ApiCallResponse.xmlReceived = RoleListXML;
+            rolesList.ApiCallResponse.XmlReceived = RoleListXML;
 
             return rolesList;
         }
@@ -87,7 +87,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, Module, ParaEnums.ParatureEntity.role, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                RolesList = ParaEntityParser.FillList<ParaObjects.Role>(ar.xmlReceived);
+                RolesList = ParaEntityParser.FillList<ParaObjects.Role>(ar.XmlReceived);
             }
             RolesList.ApiCallResponse = ar;
 
@@ -108,7 +108,7 @@ namespace ParatureSDK.ApiHandler.Entities
 
                         ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.role, query.BuildQueryArguments());
 
-                        objectlist = ParaEntityParser.FillList<ParaObjects.Role>(ar.xmlReceived);
+                        objectlist = ParaEntityParser.FillList<ParaObjects.Role>(ar.XmlReceived);
 
                         if (objectlist.Data.Count == 0)
                         {
@@ -138,7 +138,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.role, roleId);
             if (ar.HasException == false)
             {
-                Role = ParaEntityParser.EntityFill<ParaObjects.Role>(ar.xmlReceived);
+                Role = ParaEntityParser.EntityFill<ParaObjects.Role>(ar.XmlReceived);
             }
             else
             {

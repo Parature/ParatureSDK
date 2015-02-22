@@ -15,11 +15,11 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// Call method performed: eg: Post, Put, Delete, etc...
         /// </summary>
-        public string httpCallMethod = "";
+        public string HttpCallMethod = "";
         /// <summary>
         /// The Http response code that was returned. This might be 0 if the server did not respond.
         /// </summary>
-        public int httpResponseCode = 0;
+        public int HttpResponseCode = 0;
         /// <summary>
         /// Whether or not there was an exception.
         /// </summary>
@@ -31,17 +31,17 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The XML that was received back from the server. Will only contain data when a proper XML is returned. This will be null if an exception was encountered. Please check first whether there was an exception or not, then check if this XML document is not null, before trying to use it.
         /// </summary>
-        public XmlDocument xmlReceived = new XmlDocument();
+        public XmlDocument XmlReceived = new XmlDocument();
         /// <summary>
         /// The XML that was sent to the server when making the API Call. In case of of a list or a retrieve, there is not XML that is sent. Please check first whether this is a null object or not, before using it.
         /// </summary>
-        public XmlDocument xmlSent = new XmlDocument();
+        public XmlDocument XmlSent = new XmlDocument();
 
         /// <summary>
         /// If you were inserting or updating a record, check this value, if it is more than 0, it means the operations
         /// was successfull. Otherwise, it means there was an issue. If you created a new object, this value will hold the new id.
         /// </summary>
-        public Int64 Objectid = 0;
+        public Int64 Id = 0;
 
         /// <summary>
         /// Number of API retries made to get the call to go through
@@ -55,13 +55,13 @@ namespace ParatureSDK.ParaObjects
         public ApiCallResponse(ApiCallResponse apiCallResponse)
         {
             CalledUrl = apiCallResponse.CalledUrl;
-            httpCallMethod = apiCallResponse.httpCallMethod;
-            httpResponseCode = apiCallResponse.httpResponseCode;
+            HttpCallMethod = apiCallResponse.HttpCallMethod;
+            HttpResponseCode = apiCallResponse.HttpResponseCode;
             HasException = apiCallResponse.HasException;
             ExceptionDetails = apiCallResponse.ExceptionDetails;
-            xmlReceived = apiCallResponse.xmlReceived;
-            xmlSent = apiCallResponse.xmlSent;
-            Objectid = apiCallResponse.Objectid;
+            XmlReceived = apiCallResponse.XmlReceived;
+            XmlSent = apiCallResponse.XmlSent;
+            Id = apiCallResponse.Id;
         }
     }
 }

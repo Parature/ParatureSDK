@@ -58,7 +58,7 @@ namespace ParatureSDK.ApiHandler
 
             var doc = XmlGenerator.CustomerGenerateXml(customer);
             var ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Customer, doc, 0, arguments);
-            customer.Id = ar.Objectid;
+            customer.Id = ar.Id;
             return ar;
         }
 
@@ -143,8 +143,8 @@ namespace ParatureSDK.ApiHandler
             customer = ParaEntityParser.EntityFill<ParaObjects.Customer>(CustomerXML);
             customer.FullyLoaded = true;
 
-            customer.ApiCallResponse.xmlReceived = CustomerXML;
-            customer.ApiCallResponse.Objectid = customer.Id;
+            customer.ApiCallResponse.XmlReceived = CustomerXML;
+            customer.ApiCallResponse.Id = customer.Id;
 
             customer.IsDirty = false;
             return customer;
@@ -161,7 +161,7 @@ namespace ParatureSDK.ApiHandler
             var customersList = new ParaEntityList<ParaObjects.Customer>();
             customersList = ParaEntityParser.FillList<ParaObjects.Customer>(CustomerListXML);
 
-            customersList.ApiCallResponse.xmlReceived = CustomerListXML;
+            customersList.ApiCallResponse.XmlReceived = CustomerListXML;
 
             return customersList;
         }
@@ -238,7 +238,7 @@ namespace ParatureSDK.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    CustomersList = ParaEntityParser.FillList<ParaObjects.Customer>(ar.xmlReceived);
+                    CustomersList = ParaEntityParser.FillList<ParaObjects.Customer>(ar.XmlReceived);
                 }
                 CustomersList.ApiCallResponse = ar;
             }
@@ -285,7 +285,7 @@ namespace ParatureSDK.ApiHandler
                             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments());
                             if (ar.HasException == false)
                             {
-                                CustomersList.Data.AddRange(ParaEntityParser.FillList<ParaObjects.Customer>(ar.xmlReceived).Data);
+                                CustomersList.Data.AddRange(ParaEntityParser.FillList<ParaObjects.Customer>(ar.XmlReceived).Data);
                                 CustomersList.ResultsReturned = CustomersList.Data.Count;
                                 CustomersList.PageNumber = Query.PageNumber;
                             }
@@ -315,7 +315,7 @@ namespace ParatureSDK.ApiHandler
             var ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Customer, customerId);
             if (ar.HasException == false)
             {
-                customer = ParaEntityParser.EntityFill<ParaObjects.Customer>(ar.xmlReceived);
+                customer = ParaEntityParser.EntityFill<ParaObjects.Customer>(ar.XmlReceived);
                 customer.FullyLoaded = true;
             }
             else
@@ -336,7 +336,7 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                customer = ParaEntityParser.EntityFill<ParaObjects.Customer>(ar.xmlReceived);
+                customer = ParaEntityParser.EntityFill<ParaObjects.Customer>(ar.XmlReceived);
             }
             customer.ApiCallResponse = ar;
             return customer;

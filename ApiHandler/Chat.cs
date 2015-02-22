@@ -101,7 +101,7 @@ namespace ParatureSDK.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Chat, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    ChatList = ParaEntityParser.FillList<ParaObjects.Chat>(ar.xmlReceived);
+                    ChatList = ParaEntityParser.FillList<ParaObjects.Chat>(ar.XmlReceived);
                 }
                 ChatList.ApiCallResponse = ar;
             }
@@ -149,7 +149,7 @@ namespace ParatureSDK.ApiHandler
                             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Customer, Query.BuildQueryArguments());
                             if (ar.HasException == false)
                             {
-                                ChatList.Data.AddRange(ParaEntityParser.FillList<ParaObjects.Chat>(ar.xmlReceived).Data);
+                                ChatList.Data.AddRange(ParaEntityParser.FillList<ParaObjects.Chat>(ar.XmlReceived).Data);
                                 ChatList.ResultsReturned = ChatList.Data.Count;
                                 ChatList.PageNumber = Query.PageNumber;
                             }
@@ -187,7 +187,7 @@ namespace ParatureSDK.ApiHandler
             ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Chat, chatid, arl);
             if (ar.HasException == false)
             {
-                chat = ParaEntityParser.EntityFill<ParaObjects.Chat>(ar.xmlReceived);
+                chat = ParaEntityParser.EntityFill<ParaObjects.Chat>(ar.XmlReceived);
                 chat.FullyLoaded = true;
             }
             else
@@ -208,7 +208,7 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                chat = ParaEntityParser.EntityFill<ParaObjects.Chat>(ar.xmlReceived);
+                chat = ParaEntityParser.EntityFill<ParaObjects.Chat>(ar.XmlReceived);
             }
             chat.ApiCallResponse = ar;
             return chat;
@@ -235,7 +235,7 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                transcripts = ParaEntityParser.FillList<ParaObjects.ChatTranscript>(ar.xmlReceived);
+                transcripts = ParaEntityParser.FillList<ParaObjects.ChatTranscript>(ar.XmlReceived);
             }
 
             return transcripts;

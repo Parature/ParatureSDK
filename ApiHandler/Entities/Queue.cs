@@ -47,7 +47,7 @@ namespace ParatureSDK.ApiHandler.Entities
             var queuesList = new ParaEntityList<ParaObjects.Queue>();
             queuesList = ParaEntityParser.FillList<ParaObjects.Queue>(queueListXml);
 
-            queuesList.ApiCallResponse.xmlReceived = queueListXml;
+            queuesList.ApiCallResponse.XmlReceived = queueListXml;
 
             return queuesList;
         }
@@ -78,7 +78,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Queue, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                QueueList = ParaEntityParser.FillList<ParaObjects.Queue>(ar.xmlReceived);
+                QueueList = ParaEntityParser.FillList<ParaObjects.Queue>(ar.XmlReceived);
             }
             QueueList.ApiCallResponse = ar;
 
@@ -99,7 +99,7 @@ namespace ParatureSDK.ApiHandler.Entities
 
                         ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Queue, query.BuildQueryArguments());
 
-                        objectlist = ParaEntityParser.FillList<ParaObjects.Queue>(ar.xmlReceived);
+                        objectlist = ParaEntityParser.FillList<ParaObjects.Queue>(ar.XmlReceived);
 
                         if (objectlist.Data.Count == 0)
                         {
@@ -129,7 +129,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.Queue, queueId);
             if (ar.HasException == false)
             {
-                Queue = ParaEntityParser.EntityFill<ParaObjects.Queue>(ar.xmlReceived);
+                Queue = ParaEntityParser.EntityFill<ParaObjects.Queue>(ar.XmlReceived);
             }
             else
             {

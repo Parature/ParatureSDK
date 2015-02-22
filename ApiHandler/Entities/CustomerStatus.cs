@@ -48,8 +48,8 @@ namespace ParatureSDK.ApiHandler.Entities
         {
             var customerStatus = ParaEntityParser.EntityFill<ParaObjects.CustomerStatus>(customerStatusXml);
 
-            customerStatus.ApiCallResponse.xmlReceived = customerStatusXml;
-            customerStatus.ApiCallResponse.Objectid = customerStatus.Id;
+            customerStatus.ApiCallResponse.XmlReceived = customerStatusXml;
+            customerStatus.ApiCallResponse.Id = customerStatus.Id;
 
             return customerStatus;
         }
@@ -64,7 +64,7 @@ namespace ParatureSDK.ApiHandler.Entities
         {
             var customerStatussList = ParaEntityParser.FillList<ParaObjects.CustomerStatus>(customerStatusListXml);
 
-            customerStatussList.ApiCallResponse.xmlReceived = customerStatusListXml;
+            customerStatussList.ApiCallResponse.XmlReceived = customerStatusListXml;
 
             return customerStatussList;
         }
@@ -80,7 +80,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, ParaEnums.ParatureModule.Customer, ParaEnums.ParatureEntity.status, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                customerStatusList = ParaEntityParser.FillList<ParaObjects.CustomerStatus>(ar.xmlReceived);
+                customerStatusList = ParaEntityParser.FillList<ParaObjects.CustomerStatus>(ar.XmlReceived);
             }
             customerStatusList.ApiCallResponse = ar;
 
@@ -94,7 +94,7 @@ namespace ParatureSDK.ApiHandler.Entities
             ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.CustomerStatus, customerStatusId);
             if (ar.HasException == false)
             {
-                customerStatus = ParaEntityParser.EntityFill<ParaObjects.CustomerStatus>(ar.xmlReceived);
+                customerStatus = ParaEntityParser.EntityFill<ParaObjects.CustomerStatus>(ar.XmlReceived);
             }
             else
             {

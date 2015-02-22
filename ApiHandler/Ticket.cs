@@ -24,7 +24,7 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                ticket = ParaEntityParser.EntityFill<ParaObjects.Ticket>(ar.xmlReceived);
+                ticket = ParaEntityParser.EntityFill<ParaObjects.Ticket>(ar.XmlReceived);
             }
             ticket.ApiCallResponse = ar;
             return ticket;
@@ -53,7 +53,7 @@ namespace ParatureSDK.ApiHandler
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
             doc = XmlGenerator.TicketGenerateXml(ticket);
             ar = ApiCallFactory.ObjectCreateUpdate(pc, ParaEnums.ParatureModule.Ticket, doc, 0);
-            ticket.Id = ar.Objectid;
+            ticket.Id = ar.Id;
             return ar;
         }
 
@@ -141,8 +141,8 @@ namespace ParatureSDK.ApiHandler
             ticket = ParaEntityParser.EntityFill<ParaObjects.Ticket>(ticketXml);
             ticket.FullyLoaded = true;
 
-            ticket.ApiCallResponse.xmlReceived = ticketXml;
-            ticket.ApiCallResponse.Objectid = ticket.Id;
+            ticket.ApiCallResponse.XmlReceived = ticketXml;
+            ticket.ApiCallResponse.Id = ticket.Id;
 
             ticket.IsDirty = false;
             return ticket;
@@ -159,7 +159,7 @@ namespace ParatureSDK.ApiHandler
             var ticketsList = new ParaEntityList<ParaObjects.Ticket>();
             ticketsList = ParaEntityParser.FillList<ParaObjects.Ticket>(ticketListXml);
 
-            ticketsList.ApiCallResponse.xmlReceived = ticketListXml;
+            ticketsList.ApiCallResponse.XmlReceived = ticketListXml;
 
             return ticketsList;
         }
@@ -236,7 +236,7 @@ namespace ParatureSDK.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(pc, ParaEnums.ParatureModule.Ticket, query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    ticketsList = ParaEntityParser.FillList<ParaObjects.Ticket>(ar.xmlReceived);
+                    ticketsList = ParaEntityParser.FillList<ParaObjects.Ticket>(ar.XmlReceived);
                 }
                 ticketsList.ApiCallResponse = ar;
             }
@@ -280,7 +280,7 @@ namespace ParatureSDK.ApiHandler
                             ar = ApiCallFactory.ObjectGetList(pc, ParaEnums.ParatureModule.Ticket, query.BuildQueryArguments());
                             if (ar.HasException == false)
                             {
-                                var objectlist = ParaEntityParser.FillList<ParaObjects.Ticket>(ar.xmlReceived);
+                                var objectlist = ParaEntityParser.FillList<ParaObjects.Ticket>(ar.XmlReceived);
 
                                 ticketsList.Data.AddRange(objectlist.Data);
                                 ticketsList.ResultsReturned = ticketsList.Data.Count;
@@ -338,7 +338,7 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                Ticket = ParaEntityParser.EntityFill<ParaObjects.Ticket>(ar.xmlReceived);
+                Ticket = ParaEntityParser.EntityFill<ParaObjects.Ticket>(ar.XmlReceived);
                 Ticket.FullyLoaded = true;
             }
             else

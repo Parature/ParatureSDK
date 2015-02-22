@@ -24,7 +24,7 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                Product = ParaEntityParser.EntityFill<ParaObjects.Product>(ar.xmlReceived);
+                Product = ParaEntityParser.EntityFill<ParaObjects.Product>(ar.XmlReceived);
             }
             Product.ApiCallResponse = ar;
             return Product;
@@ -68,7 +68,7 @@ namespace ParatureSDK.ApiHandler
             System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
             doc = XmlGenerator.ProductGenerateXml(Product);
             ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Product, doc, 0);
-            Product.Id = ar.Objectid;
+            Product.Id = ar.Id;
             return ar;
         }
 
@@ -136,8 +136,8 @@ namespace ParatureSDK.ApiHandler
             product = ParaEntityParser.EntityFill<ParaObjects.Product>(ProductXML);
             product.FullyLoaded = true;
 
-            product.ApiCallResponse.xmlReceived = ProductXML;
-            product.ApiCallResponse.Objectid = product.Id;
+            product.ApiCallResponse.XmlReceived = ProductXML;
+            product.ApiCallResponse.Id = product.Id;
 
             product.IsDirty = false;
             return product;
@@ -154,7 +154,7 @@ namespace ParatureSDK.ApiHandler
             var productsList = new ParaEntityList<ParaObjects.Product>();
             productsList = ParaEntityParser.FillList<ParaObjects.Product>(ProductListXML);
 
-            productsList.ApiCallResponse.xmlReceived = ProductListXML;
+            productsList.ApiCallResponse.XmlReceived = ProductListXML;
 
             return productsList;
         }
@@ -233,7 +233,7 @@ namespace ParatureSDK.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Product, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    ProductsList = ParaEntityParser.FillList<ParaObjects.Product>(ar.xmlReceived);
+                    ProductsList = ParaEntityParser.FillList<ParaObjects.Product>(ar.XmlReceived);
                 }
                 ProductsList.ApiCallResponse = ar;
             }
@@ -283,7 +283,7 @@ namespace ParatureSDK.ApiHandler
 
                             if (ar.HasException == false)
                             {
-                                objectlist = ParaEntityParser.FillList<ParaObjects.Product>(ar.xmlReceived);
+                                objectlist = ParaEntityParser.FillList<ParaObjects.Product>(ar.XmlReceived);
                                 ProductsList.Data.AddRange(objectlist.Data);
                                 ProductsList.ResultsReturned = ProductsList.Data.Count;
                                 ProductsList.PageNumber = Query.PageNumber;
@@ -318,7 +318,7 @@ namespace ParatureSDK.ApiHandler
             ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureModule.Product, Productid);
             if (ar.HasException == false)
             {
-                Product = ParaEntityParser.EntityFill<ParaObjects.Product>(ar.xmlReceived);
+                Product = ParaEntityParser.EntityFill<ParaObjects.Product>(ar.XmlReceived);
                 Product.FullyLoaded = true;
             }
             else
@@ -408,7 +408,7 @@ namespace ParatureSDK.ApiHandler
                 System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
                 doc = XmlGenerator.ProductFolderGenerateXML(ProductFolder);
                 ar = ApiCallFactory.EntityCreateUpdate(ParaCredentials, ParaEnums.ParatureEntity.ProductFolder, doc, 0);
-                ProductFolder.Id = ar.Objectid;
+                ProductFolder.Id = ar.Id;
                 return ar;
             }
 
@@ -463,8 +463,8 @@ namespace ParatureSDK.ApiHandler
                 productFolder = ParaEntityParser.EntityFill<ParaObjects.ProductFolder>(ProductFolderXML);
                 productFolder.FullyLoaded = true;
 
-                productFolder.ApiCallResponse.xmlReceived = ProductFolderXML;
-                productFolder.ApiCallResponse.Objectid = productFolder.Id;
+                productFolder.ApiCallResponse.XmlReceived = ProductFolderXML;
+                productFolder.ApiCallResponse.Id = productFolder.Id;
 
                 return productFolder;
             }
@@ -509,7 +509,7 @@ namespace ParatureSDK.ApiHandler
                 var productFoldersList = new ParaEntityList<ParaObjects.ProductFolder>();
                 productFoldersList = ParaEntityParser.FillList<ParaObjects.ProductFolder>(ProductFolderListXML);
 
-                productFoldersList.ApiCallResponse.xmlReceived = ProductFolderListXML;
+                productFoldersList.ApiCallResponse.XmlReceived = ProductFolderListXML;
 
                 return productFoldersList;
             }
@@ -536,7 +536,7 @@ namespace ParatureSDK.ApiHandler
                     ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.ProductFolder, Query.BuildQueryArguments());
                     if (ar.HasException == false)
                     {
-                        ProductFoldersList = ParaEntityParser.FillList<ParaObjects.ProductFolder>(ar.xmlReceived);
+                        ProductFoldersList = ParaEntityParser.FillList<ParaObjects.ProductFolder>(ar.XmlReceived);
                     }
                     ProductFoldersList.ApiCallResponse = ar;
                 }
@@ -556,7 +556,7 @@ namespace ParatureSDK.ApiHandler
                             Query.PageNumber = Query.PageNumber + 1;
 
                             ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureEntity.ProductFolder, Query.BuildQueryArguments());
-                            ProductFoldersList.Data.AddRange(ParaEntityParser.FillList<ParaObjects.ProductFolder>(ar.xmlReceived).Data);
+                            ProductFoldersList.Data.AddRange(ParaEntityParser.FillList<ParaObjects.ProductFolder>(ar.XmlReceived).Data);
                             ProductFoldersList.ResultsReturned = ProductFoldersList.Data.Count;
                             ProductFoldersList.PageNumber = Query.PageNumber;
                         }
@@ -584,7 +584,7 @@ namespace ParatureSDK.ApiHandler
                 ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.ProductFolder, ProductFolderid);
                 if (ar.HasException == false)
                 {
-                    ProductFolder = ParaEntityParser.EntityFill<ParaObjects.ProductFolder>(ar.xmlReceived);
+                    ProductFolder = ParaEntityParser.EntityFill<ParaObjects.ProductFolder>(ar.XmlReceived);
                     ProductFolder.FullyLoaded = true;
                 }
                 else

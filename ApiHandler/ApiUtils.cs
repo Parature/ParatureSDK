@@ -58,7 +58,7 @@ namespace ParatureSDK.ApiHandler
                     tempAr = ApiCallFactory.ObjectGetList(paraCredentials, module, rtn.Query.BuildQueryArguments());
                     callStopWatch.Stop();
 
-                    ParaEntityParser.ObjectFillList(tempAr.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
+                    ParaEntityParser.ObjectFillList(tempAr.XmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
 
                     testTimePerPage = (int)(callStopWatch.ElapsedMilliseconds);
 
@@ -80,7 +80,7 @@ namespace ParatureSDK.ApiHandler
 
                 //first page call
                 rtn.apiResponse = ApiCallFactory.ObjectGetList(paraCredentials, module, rtn.Query.BuildQueryArguments());
-                rtn.objectList = ParaEntityParser.ObjectFillList(rtn.apiResponse.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
+                rtn.objectList = ParaEntityParser.ObjectFillList(rtn.apiResponse.XmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
             }
             else
             {
@@ -95,7 +95,7 @@ namespace ParatureSDK.ApiHandler
                     tempAr = ApiCallFactory.ObjectGetList(paraCredentials, module, rtn.Query.BuildQueryArguments());
                     callStopWatch.Stop();
 
-                    var tempObjectList = ParaEntityParser.ObjectFillList(tempAr.xmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
+                    var tempObjectList = ParaEntityParser.ObjectFillList(tempAr.XmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
 
                     testTimePerPage = (int)(callStopWatch.ElapsedMilliseconds);
                     double testTimePagesRequired = (int)Math.Ceiling((double)tempObjectList.TotalItems / (double)pageSizeSampleSet[i]);
@@ -131,12 +131,12 @@ namespace ParatureSDK.ApiHandler
         public static Attachment UploadFile(ParaEnums.ParatureModule module, ParaCredentials pc, System.Net.Mail.Attachment attachment)
         {
             var postUrlR = ApiCallFactory.FileUploadGetUrl(pc, module);
-            var uploadUrlDoc = postUrlR.xmlReceived;
+            var uploadUrlDoc = postUrlR.XmlReceived;
             var postUrl = AttachmentParser.AttachmentGetUrlToPost(uploadUrlDoc);
 
             var upresp = ApiCallFactory.FilePerformUpload(postUrl, attachment, pc.Instanceid, pc);
 
-            var attaDoc = upresp.xmlReceived;
+            var attaDoc = upresp.XmlReceived;
 
             var attach = ParaEntityParser.EntityFill<ParaObjects.Attachment>(attaDoc);
             return attach;
@@ -159,11 +159,11 @@ namespace ParatureSDK.ApiHandler
         {
             Attachment attach;
             var postUrl = "";
-            postUrl = AttachmentParser.AttachmentGetUrlToPost(ApiCallFactory.FileUploadGetUrl(pc, module).xmlReceived);
+            postUrl = AttachmentParser.AttachmentGetUrlToPost(ApiCallFactory.FileUploadGetUrl(pc, module).XmlReceived);
 
             if (String.IsNullOrEmpty(postUrl) == false)
             {
-                var attaDoc = ApiCallFactory.FilePerformUpload(postUrl, attachment, contentType, fileName, pc.Instanceid, pc).xmlReceived;
+                var attaDoc = ApiCallFactory.FilePerformUpload(postUrl, attachment, contentType, fileName, pc.Instanceid, pc).XmlReceived;
                 attach = ParaEntityParser.EntityFill<ParaObjects.Attachment>(attaDoc);
             }
             else

@@ -439,13 +439,13 @@ namespace ParatureSDK
             else
             {
                 // The call was successfull, deleting the item
-                ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, ar.Objectid, false);
+                ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, ar.Id, false);
                 ar = ApiMakeCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
 
                 // purging the item
                 ArrayList arguments = new ArrayList();
                 arguments.Add("_purge_=true");
-                ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, ar.Objectid, arguments);
+                ApiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, module, ar.Id, arguments);
                 ar = ApiMakeCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
             }
 
@@ -476,16 +476,16 @@ namespace ParatureSDK
 
             #region handing Random API server issues
             // Handling our servers having issues
-            if (paracredentials.AutoretryMode != ParaEnums.AutoRetryMode.None && ((resp.httpResponseCode == 500 && resp.ExceptionDetails.ToLower().Contains("invalid action given the current status of the ticket") == false) || resp.httpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
+            if (paracredentials.AutoretryMode != ParaEnums.AutoRetryMode.None && ((resp.HttpResponseCode == 500 && resp.ExceptionDetails.ToLower().Contains("invalid action given the current status of the ticket") == false) || resp.HttpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
             {
                 StringBuilder callLogger = new StringBuilder();
                 Int32 attemptNumber = 1;
 
-                while (attemptNumber < 5 && (resp.httpResponseCode == 500 || resp.httpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
+                while (attemptNumber < 5 && (resp.HttpResponseCode == 500 || resp.HttpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
                 {
                     BuildAutoRetryApiErrorLogMessage(ref callLogger, attemptNumber.ToString(), callurl,
-                        ApiCallHttpMethod.ToString(), resp.httpResponseCode.ToString(), resp.ExceptionDetails,
-                        resp.xmlSent, resp.xmlReceived);
+                        ApiCallHttpMethod.ToString(), resp.HttpResponseCode.ToString(), resp.ExceptionDetails,
+                        resp.XmlSent, resp.XmlReceived);
 
                     attemptNumber++;
 
@@ -498,8 +498,8 @@ namespace ParatureSDK
                 if (attemptNumber > 1 && paracredentials.logRetries)
                 {
                     BuildAutoRetryApiErrorLogMessage(ref callLogger, attemptNumber.ToString(), callurl,
-                        ApiCallHttpMethod.ToString(), resp.httpResponseCode.ToString(), resp.ExceptionDetails,
-                        resp.xmlSent, resp.xmlReceived);
+                        ApiCallHttpMethod.ToString(), resp.HttpResponseCode.ToString(), resp.ExceptionDetails,
+                        resp.XmlSent, resp.XmlReceived);
                 }
                 callLogger = null;
             }
@@ -522,16 +522,16 @@ namespace ParatureSDK
 
             #region handling Random API server issues
             // Handling our servers having issues
-            if (paracredentials.AutoretryMode != ParaEnums.AutoRetryMode.None && (resp.httpResponseCode == 500 || resp.httpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
+            if (paracredentials.AutoretryMode != ParaEnums.AutoRetryMode.None && (resp.HttpResponseCode == 500 || resp.HttpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
             {
                 StringBuilder callLogger = new StringBuilder();
                
 
-                while (attemptNumber < 5 && (resp.httpResponseCode == 500 || resp.httpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
+                while (attemptNumber < 5 && (resp.HttpResponseCode == 500 || resp.HttpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
                 {
                     BuildAutoRetryApiErrorLogMessage(ref callLogger, attemptNumber.ToString(),
-                        callurl, ApiCallHttpMethod.ToString(), resp.httpResponseCode.ToString(),
-                        resp.ExceptionDetails, null, resp.xmlReceived);
+                        callurl, ApiCallHttpMethod.ToString(), resp.HttpResponseCode.ToString(),
+                        resp.ExceptionDetails, null, resp.XmlReceived);
 
                     attemptNumber++;
 
@@ -542,8 +542,8 @@ namespace ParatureSDK
                 if (attemptNumber > 1 && paracredentials.logRetries)
                 {
                     BuildAutoRetryApiErrorLogMessage(ref callLogger, attemptNumber.ToString(),
-                        callurl, ApiCallHttpMethod.ToString(), resp.httpResponseCode.ToString(),
-                        resp.ExceptionDetails, null, resp.xmlReceived);
+                        callurl, ApiCallHttpMethod.ToString(), resp.HttpResponseCode.ToString(),
+                        resp.ExceptionDetails, null, resp.XmlReceived);
                 }
                 callLogger = null;
             }
@@ -630,16 +630,16 @@ namespace ParatureSDK
 
             // Handling our servers having issues
             if (paracredentials.AutoretryMode != ParaEnums.AutoRetryMode.None 
-                && (resp.httpResponseCode == 500 || resp.httpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
+                && (resp.HttpResponseCode == 500 || resp.HttpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
             {
                 var callLogger = new StringBuilder();
                 var attemptNumber = 1;
 
-                while (attemptNumber < 5 && (resp.httpResponseCode == 500 || resp.httpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
+                while (attemptNumber < 5 && (resp.HttpResponseCode == 500 || resp.HttpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
                 {
                     BuildAutoRetryApiErrorLogMessage(ref callLogger, attemptNumber.ToString(), resp.CalledUrl,
-                        resp.httpCallMethod, resp.httpResponseCode.ToString(), resp.ExceptionDetails,
-                        resp.xmlSent, resp.xmlReceived);
+                        resp.HttpCallMethod, resp.HttpResponseCode.ToString(), resp.ExceptionDetails,
+                        resp.XmlSent, resp.XmlReceived);
 
                     attemptNumber++;
 
@@ -671,7 +671,7 @@ namespace ParatureSDK
             ApiCallResponse resp = new ApiCallResponse();
             resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, XmlPosted, accountID, pc);
             int sleepTime = 121000;
-            while ((resp.httpResponseCode == 503 || resp.httpResponseCode == 0) && sleepTime < 240000)
+            while ((resp.HttpResponseCode == 503 || resp.HttpResponseCode == 0) && sleepTime < 240000)
             {
                 // The call has been rejected by the API throttling service.                
                 System.Threading.Thread.Sleep(sleepTime);
@@ -681,7 +681,7 @@ namespace ParatureSDK
             }
 
             sleepTime = 2000;
-            while (resp.httpResponseCode == 401 && sleepTime < 6001)
+            while (resp.HttpResponseCode == 401 && sleepTime < 6001)
             {
                 // The call has been rejected by the API throttling service.
                 System.Threading.Thread.Sleep(2000);
@@ -700,7 +700,7 @@ namespace ParatureSDK
             var resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, att, accountID, paraCredentials);
             var sleepTime = 121000;
 
-            while ((resp.httpResponseCode == 503 || resp.httpResponseCode == 0) && sleepTime < 240000)
+            while ((resp.HttpResponseCode == 503 || resp.HttpResponseCode == 0) && sleepTime < 240000)
             {
 
                 // The call has been rejected by the API throttling service.
@@ -710,7 +710,7 @@ namespace ParatureSDK
             }
 
             sleepTime = 2000;
-            while (resp.httpResponseCode == 401 && sleepTime < 6001)
+            while (resp.HttpResponseCode == 401 && sleepTime < 6001)
             {
                 // The call has been rejected by the API throttling service.
                 System.Threading.Thread.Sleep(2000);
@@ -730,7 +730,7 @@ namespace ParatureSDK
             resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, Attachment, ContentType, FileName, accountID, paraCredentials);
             int sleepTime = 121000;
 
-            while ((resp.httpResponseCode == 503 || resp.httpResponseCode == 0) && sleepTime < 240000)
+            while ((resp.HttpResponseCode == 503 || resp.HttpResponseCode == 0) && sleepTime < 240000)
             {
                 // The call has been rejected by the API throttling service.
                 System.Threading.Thread.Sleep(sleepTime);
@@ -740,7 +740,7 @@ namespace ParatureSDK
             }
 
             sleepTime = 2000;
-            while (resp.httpResponseCode == 401 && sleepTime < 10001)
+            while (resp.HttpResponseCode == 401 && sleepTime < 10001)
             {
                 // The call has been rejected by the API throttling service.
                 System.Threading.Thread.Sleep(2000);
@@ -765,7 +765,7 @@ namespace ParatureSDK
             System.Net.ServicePointManager.CertificatePolicy = new TrustAllCertificatePolicy();
 
             req.Method = ParaEnumProvider.ApiHttpPostProvider(ApiCallHttpMethod);
-            ac.httpCallMethod = req.Method;
+            ac.HttpCallMethod = req.Method;
             req.KeepAlive = false;
             
             //2 minutes request timeout
@@ -786,11 +786,11 @@ namespace ParatureSDK
                 {
                     postStream.Write(bytedata, 0, bytedata.Length);
                 }
-                ac.xmlSent = XmlPosted;
+                ac.XmlSent = XmlPosted;
             }
             else
             {
-                ac.xmlSent = null;
+                ac.XmlSent = null;
             }
 
             ac.HasException = false;
@@ -814,7 +814,7 @@ namespace ParatureSDK
             HttpWebRequest req = WebRequest.Create(uriAddress) as HttpWebRequest;
             req.Method = ParaEnumProvider.ApiHttpPostProvider(ApiCallHttpMethod);
             req.KeepAlive = false;
-            ac.httpCallMethod = req.Method;
+            ac.HttpCallMethod = req.Method;
 
             req.AllowWriteStreamBuffering = true;
             req.ReadWriteTimeout = 10 * 60 * 1000;
@@ -870,7 +870,7 @@ namespace ParatureSDK
             HttpWebRequest req = WebRequest.Create(uriAddress) as HttpWebRequest;
             req.Method = ParaEnumProvider.ApiHttpPostProvider(ApiCallHttpMethod);
             req.KeepAlive = false;
-            ac.httpCallMethod = req.Method;
+            ac.HttpCallMethod = req.Method;
 
             req.AllowWriteStreamBuffering = true;
             req.ReadWriteTimeout = 10 * 60 * 1000;
@@ -931,11 +931,11 @@ namespace ParatureSDK
                 {
                     try
                     {
-                        ac.httpResponseCode = (int)httpWResp.StatusCode;
+                        ac.HttpResponseCode = (int)httpWResp.StatusCode;
                     }
                     catch (Exception exRespCode)
                     {
-                        ac.httpResponseCode = -1;
+                        ac.HttpResponseCode = -1;
                     }
 
                     var reader = new StreamReader(httpWResp.GetResponseStream());
@@ -946,31 +946,31 @@ namespace ParatureSDK
 
                     try
                     {
-                        ac.xmlReceived.LoadXml(responseFromServer);
+                        ac.XmlReceived.LoadXml(responseFromServer);
                     }
                     catch (Exception ex)
                     {
-                        ac.xmlReceived = null;
+                        ac.XmlReceived = null;
                     }
 
                     try
                     {
-                        ac.httpResponseCode = (int)httpWResp.StatusCode;
-                        if (ac.httpResponseCode == 201)
+                        ac.HttpResponseCode = (int)httpWResp.StatusCode;
+                        if (ac.HttpResponseCode == 201)
                         {
                             try
                             {
-                                ac.Objectid = Int64.Parse(ac.xmlReceived.DocumentElement.Attributes["id"].Value);
+                                ac.Id = Int64.Parse(ac.XmlReceived.DocumentElement.Attributes["id"].Value);
                             }
                             catch (Exception exx)
                             {
-                                ac.Objectid = 0;
+                                ac.Id = 0;
                             }
                         }
                     }
                     catch (Exception exx)
                     {
-                        ac.httpResponseCode = -1;
+                        ac.HttpResponseCode = -1;
                     }
 
                     ac.HasException = false;
@@ -982,7 +982,7 @@ namespace ParatureSDK
             {
                 try
                 {
-                    ac.httpResponseCode = (int)((((HttpWebResponse)ex.Response).StatusCode));
+                    ac.HttpResponseCode = (int)((((HttpWebResponse)ex.Response).StatusCode));
                     ac.ExceptionDetails = ex.Message;
                 }
                 catch
@@ -1017,9 +1017,9 @@ namespace ParatureSDK
                 }
                 catch (Exception exread)
                 {
-                    if (ac.httpResponseCode == 0)
+                    if (ac.HttpResponseCode == 0)
                     {
-                        ac.httpResponseCode = 503;
+                        ac.HttpResponseCode = 503;
                     }
                 }
 
@@ -1027,14 +1027,14 @@ namespace ParatureSDK
                 {
                     try
                     {
-                        ac.xmlReceived.LoadXml(exresponseFromServer);
+                        ac.XmlReceived.LoadXml(exresponseFromServer);
 
-                        System.Xml.XmlNode mainnode = ac.xmlReceived.DocumentElement;
+                        System.Xml.XmlNode mainnode = ac.XmlReceived.DocumentElement;
                         if (mainnode.LocalName.ToLower() == "error")
                         {
                             if (mainnode.Attributes["code"].InnerText.ToLower() != "")
                             {
-                                ac.httpResponseCode = int.Parse(mainnode.Attributes["code"].InnerText.ToString());
+                                ac.HttpResponseCode = int.Parse(mainnode.Attributes["code"].InnerText.ToString());
                             }
                             if (mainnode.Attributes["message"].InnerText.ToLower() != "")
                             {
@@ -1044,12 +1044,12 @@ namespace ParatureSDK
                     }
                     catch (Exception exp)
                     {
-                        ac.xmlReceived = null;
+                        ac.XmlReceived = null;
                     }
                 }
                 else
                 {
-                    ac.xmlReceived = null;
+                    ac.XmlReceived = null;
                 }
             }
             finally
@@ -1068,13 +1068,13 @@ namespace ParatureSDK
 
                 // xml sent and xml received cleanup
                 // TEMP FIX
-                if (ac.xmlReceived != null && string.IsNullOrEmpty(ac.xmlReceived.InnerXml))
+                if (ac.XmlReceived != null && string.IsNullOrEmpty(ac.XmlReceived.InnerXml))
                 {
-                    ac.xmlReceived = null;
+                    ac.XmlReceived = null;
                 }
-                if (ac.xmlSent != null && string.IsNullOrEmpty(ac.xmlSent.InnerXml))
+                if (ac.XmlSent != null && string.IsNullOrEmpty(ac.XmlSent.InnerXml))
                 {
-                    ac.xmlSent = null;
+                    ac.XmlSent = null;
                 }
             }
             
