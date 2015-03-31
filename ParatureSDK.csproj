@@ -135,6 +135,7 @@
     <Compile Include="ParaObjects\ApiCallResponse.cs" />
     <Compile Include="ParaObjects\Article.cs" />
     <Compile Include="ParaObjects\ArticleFolder.cs" />
+    <Compile Include="ParaObjects\ArticleTranslation.cs" />
     <Compile Include="ParaObjects\Asset.cs" />
     <Compile Include="ParaObjects\Attachment.cs" />
     <Compile Include="ParaObjects\Chat.cs" />
