@@ -132,6 +132,7 @@
     <Compile Include="ParaObjects\ActionBase.cs" />
     <Compile Include="ParaObjects\ActionHistory.cs" />
     <Compile Include="ParaObjects\ActionHistoryPerformer.cs" />
+    <Compile Include="ParaObjects\ActionHistoryTarget.cs" />
     <Compile Include="ParaObjects\ApiCallResponse.cs" />
     <Compile Include="ParaObjects\Article.cs" />
     <Compile Include="ParaObjects\ArticleFolder.cs" />

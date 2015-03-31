@@ -28,8 +28,7 @@ namespace ParatureSDK.ApiHandler
         /// </summary>
         public static ApiCallResponse Update(ParaObjects.Account account, ParaCredentials paraCredentials)
         {
-            var ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, ParaEnums.ParatureModule.Account, XmlGenerator.GenerateXml(account), account.Id);
+            var ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, ParaEnums.ParatureModule.Account, XmlGenerator.GenerateXml(account), account.Id);
             return ar;
         }
 
@@ -49,8 +48,7 @@ namespace ParatureSDK.ApiHandler
         /// </param>
         public static ParaObjects.Account GetDetails(Int64 accountid, ParaCredentials pc, ParaEnums.RequestDepth requestDepth)
         {
-            ParaObjects.Account account = new ParaObjects.Account();
-            account = FillDetails(accountid, pc, requestDepth, true);
+            var account = FillDetails(accountid, pc, requestDepth, true);
             return account;
         }
 
@@ -62,8 +60,7 @@ namespace ParatureSDK.ApiHandler
         /// </param>
         public static ParaObjects.Account GetDetails(XmlDocument accountXml)
         {
-            ParaObjects.Account account = new ParaObjects.Account();
-            account = ParaEntityParser.EntityFill<ParaObjects.Account>(accountXml);
+            var account = ParaEntityParser.EntityFill<ParaObjects.Account>(accountXml);
             account.FullyLoaded = true;
 
             account.ApiCallResponse.XmlReceived = accountXml;
@@ -85,9 +82,7 @@ namespace ParatureSDK.ApiHandler
         /// </param>
         public static ParaObjects.Account GetDetails(Int64 accountid, ParaCredentials pc)
         {
-
-            ParaObjects.Account account = new ParaObjects.Account();
-            account = FillDetails(accountid, pc, ParaEnums.RequestDepth.Standard, true);
+            var account = FillDetails(accountid, pc, ParaEnums.RequestDepth.Standard, true);
 
             return account;
 
@@ -110,8 +105,7 @@ namespace ParatureSDK.ApiHandler
         /// </param>
         public static ParaEntityList<ParaObjects.Account> GetList(XmlDocument accountListXml)
         {
-            var accountsList = new ParaEntityList<ParaObjects.Account>();
-            accountsList = ParaEntityParser.FillList<ParaObjects.Account>(accountListXml);
+            var accountsList = ParaEntityParser.FillList<ParaObjects.Account>(accountListXml);
 
             accountsList.ApiCallResponse.XmlReceived = accountListXml;
 
@@ -291,9 +285,8 @@ namespace ParatureSDK.ApiHandler
         /// </summary>            
         public static ParaObjects.Account Schema(ParaCredentials pc)
         {
-            ParaObjects.Account account = new ParaObjects.Account();
-            ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectGetSchema(pc, ParaEnums.ParatureModule.Account);
+            var account = new ParaObjects.Account();
+            var ar = ApiCallFactory.ObjectGetSchema(pc, ParaEnums.ParatureModule.Account);
 
             if (ar.HasException == false)
             {
@@ -311,7 +304,7 @@ namespace ParatureSDK.ApiHandler
         /// </summary> 
         static public ParaObjects.Account SchemaWithCustomFieldTypes(ParaCredentials pc)
         {
-            ParaObjects.Account account = Schema(pc);
+            var account = Schema(pc);
 
             account = (ParaObjects.Account)ApiCallFactory.ObjectCheckCustomFieldTypes(pc, ParaEnums.ParatureModule.Account, account);
 

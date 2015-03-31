@@ -265,7 +265,7 @@ namespace ParatureSDK
         ///</param>
         public static ApiCallResponse ObjectGetDetail<T>(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid) where T: ParaEntity
         {
-            var entityName = typeof (T).ToString();
+            var entityName = typeof (T).Name;
             var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entityName, objectid, false);
 
             return ApiMakeCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
