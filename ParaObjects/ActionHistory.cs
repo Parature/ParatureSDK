@@ -27,10 +27,15 @@ namespace ParatureSDK.ParaObjects
         public TicketStatusReference New_Status = new TicketStatusReference();
         public String Comments;
         /// <summary>
+        /// Populated comments by the system, generally on routing or TSAs
+        /// </summary>
+        [XmlElement("Systemcomments")]
+        public String SystemComments;
+        /// <summary>
         /// Whether this action was exposed to the customer or not.
         /// </summary>
         public bool Show_To_Customer;
-        public int Time_Spent;
+        public long Time_Spent;
         /// <summary>
         /// The date this action took place.
         /// </summary>

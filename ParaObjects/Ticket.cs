@@ -773,7 +773,7 @@ namespace ParatureSDK.ParaObjects
         {
             foreach (Attachment at in Ticket_Attachments)
             {
-                if (at.GUID == AttachmentGuid)
+                if (at.Guid == AttachmentGuid)
                 {
                     Ticket_Attachments.Remove(at);
                 }

@@ -17,7 +17,11 @@ namespace ParatureSDK.Fields
         public bool? Dependent = false;
         [XmlAttribute("selected")]
         public bool Selected = false;
-
+        /// <summary>
+        /// With regards to Field Dependencies:
+        /// Pseudo-URI for the field that gets displayed by enabling this field. 
+        /// </summary>
+        public string Enables;
         /// <summary>
         /// If the custom field option has dependent fields, or dependant field options, they will be listed under the DependantCustomFields collection.
         /// </summary>

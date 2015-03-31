@@ -470,7 +470,7 @@ namespace ParatureSDK.ParaObjects
         public void AttachmentsAdd(ParaCredentials paracredentials, System.Net.Mail.Attachment EmailAttachment)
         {
             Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, EmailAttachment);
-            Guid = Attachment.GUID;
+            Guid = Attachment.Guid;
         }
             
         /// <summary>
@@ -492,7 +492,7 @@ namespace ParatureSDK.ParaObjects
         public void AttachmentsAdd(ParaCredentials paracredentials, Byte[] Attachment, string contentType, string FileName)
         {
             this.Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, Attachment, contentType, FileName);
-            Guid = this.Attachment.GUID;
+            Guid = this.Attachment.Guid;
         }
 
         /// <summary>
@@ -513,7 +513,7 @@ namespace ParatureSDK.ParaObjects
         public void AttachmentsAdd(ParaCredentials paracredentials, string text, string contentType, string FileName)
         {
             Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, text, contentType, FileName);
-            Guid = Attachment.GUID;
+            Guid = Attachment.Guid;
         }
 
         /// <summary>
@@ -534,7 +534,7 @@ namespace ParatureSDK.ParaObjects
         public void AttachmentsUpdate(ParaCredentials paracredentials, string text, string contentType, string FileName)
         {
             Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, text, contentType, FileName);
-            Guid = Attachment.GUID;
+            Guid = Attachment.Guid;
             Name = FileName;
         }
 
@@ -546,7 +546,7 @@ namespace ParatureSDK.ParaObjects
         public void AttachmentsUpdate(ParaCredentials paracredentials, Byte[] Attachment, string contentType, string FileName)
         {
             this.Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, Attachment, contentType, FileName);
-            Guid = this.Attachment.GUID;
+            Guid = this.Attachment.Guid;
             Name = FileName;
         }
 
