@@ -13,11 +13,11 @@ namespace ParatureSDK.ParaObjects
 
         // Will be loaded with the CSR id and name, only if it was a CSR that performed the action.
         [XmlElement("Csr")]
-        public Csr CsrPerformer = new Csr();
+        public Csr CsrTarget = new Csr();
 
         // Will be loaded with the Customer id and name, only if it was a Customer that performed the action.
         [XmlElement("Customer")]
-        public Customer CustomerPerformer = new Customer();
+        public Customer CustomerTarget = new Customer();
 
         public ActionHistoryTarget()
         {
@@ -26,8 +26,8 @@ namespace ParatureSDK.ParaObjects
         public ActionHistoryTarget(ActionHistoryTarget actionHistoryperformer)
         {
             ActionHistoryTargetType = actionHistoryperformer.ActionHistoryTargetType;
-            CsrPerformer = actionHistoryperformer.CsrPerformer;
-            CustomerPerformer = actionHistoryperformer.CustomerPerformer;
+            CsrTarget = actionHistoryperformer.CsrTarget;
+            CustomerTarget = actionHistoryperformer.CustomerTarget;
         }
 
         public string GetDisplayName()
@@ -35,9 +35,9 @@ namespace ParatureSDK.ParaObjects
             switch (ActionHistoryTargetType)
             {
                 case ParaEnums.ActionHistoryPerformerType.Csr:
-                    return CsrPerformer.Full_Name;
+                    return CsrTarget.Full_Name;
                 case ParaEnums.ActionHistoryPerformerType.Customer:
-                    return CustomerPerformer.Full_Name;
+                    return CustomerTarget.Full_Name;
                 case ParaEnums.ActionHistoryPerformerType.System:
                     return "System";
                 default:
