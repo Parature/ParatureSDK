@@ -419,30 +419,30 @@ namespace ParatureSDK
             {
                 foreach (CustomField cf in baseObject.CustomFields)
                 {
-                    if (cf.FieldDataType == ParaEnums.FieldDataType.String)
+                    if (cf.FieldType == "string")
                     {
                         cf.Value = "a";
                     }
                 }
             }
 
-            System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+            var doc = new XmlDocument();
             switch (module)
             {
                 case ParaEnums.ParatureModule.Account:
-                    doc = XmlGenerator.GenerateXml((ParaObjects.Account)baseObject);
+                    doc = XmlGenerator.GenerateXml((Account)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Customer:
-                    doc = XmlGenerator.GenerateXml((ParaObjects.Customer)baseObject);
+                    doc = XmlGenerator.GenerateXml((Customer)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Product:
-                    doc = XmlGenerator.GenerateXml((ParaObjects.Product)baseObject);
+                    doc = XmlGenerator.GenerateXml((Product)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Asset:
-                    doc = XmlGenerator.GenerateXml((ParaObjects.Asset)baseObject);
+                    doc = XmlGenerator.GenerateXml((Asset)baseObject);
                     break;
                 case ParaEnums.ParatureModule.Ticket:
-                    doc = XmlGenerator.GenerateXml((ParaObjects.Ticket)baseObject);
+                    doc = XmlGenerator.GenerateXml((Ticket)baseObject);
                     break;
                 default:
                     break;
@@ -475,11 +475,11 @@ namespace ParatureSDK
                             Match m = Regex.Match(line, @"Invalid Field Validation Message : (.+?) is not a valid US phone number");
                             id = m.Groups[1].Value.Trim();
 
-                            foreach (CustomField cf in baseObject.CustomFields)
+                            foreach (var cf in baseObject.CustomFields)
                             {
                                 if (cf.Id == long.Parse(id))
                                 {
-                                    cf.FieldDataType = ParaEnums.FieldDataType.UsPhone;
+                                    cf.FieldType = "usphone";
                                 }
                             }
                         }
@@ -488,11 +488,11 @@ namespace ParatureSDK
                             Match m = Regex.Match(line, @"Invalid Field Validation Message : The Email Address '(.+?)' is not valid.");
                             id = m.Groups[1].Value.Trim();
 
-                            foreach (CustomField cf in baseObject.CustomFields)
+                            foreach (var cf in baseObject.CustomFields)
                             {
                                 if (cf.Id == long.Parse(id))
                                 {
-                                    cf.FieldDataType = ParaEnums.FieldDataType.Email;
+                                    cf.FieldType = "email";
                                 }
                             }
                         }
@@ -505,7 +505,7 @@ namespace ParatureSDK
                             {
                                 if (cf.Id == long.Parse(id))
                                 {
-                                    cf.FieldDataType = ParaEnums.FieldDataType.InternationalPhone;
+                                    cf.FieldType = "internationalphone";
                                 }
                             }
                         }
@@ -519,7 +519,7 @@ namespace ParatureSDK
                             {
                                 if (cf.Id == long.Parse(id.Trim()))
                                 {
-                                    cf.FieldDataType = ParaEnums.FieldDataType.Url;
+                                    cf.FieldType = "url";
                                 }
                             }
                             }
@@ -555,7 +555,7 @@ namespace ParatureSDK
             if (baseObject.CustomFields != null)
             {
                 foreach (var cf in baseObject.CustomFields
-                    .Where(cf => cf.FieldDataType == ParaEnums.FieldDataType.String))
+                    .Where(cf => cf.FieldType == "string"))
                 {
                     cf.Value = "a";
                 }
@@ -615,7 +615,7 @@ namespace ParatureSDK
                             {
                                 if (cf.Id == long.Parse(id))
                                 {
-                                    cf.FieldDataType = ParaEnums.FieldDataType.UsPhone;
+                                    cf.FieldType = "usdate";
                                 }
                             }
                         }
@@ -628,7 +628,7 @@ namespace ParatureSDK
                             {
                                 if (cf.Id == long.Parse(id))
                                 {
-                                    cf.FieldDataType = ParaEnums.FieldDataType.Email;
+                                    cf.FieldType = "email";
                                 }
                             }
                         }
@@ -641,7 +641,7 @@ namespace ParatureSDK
                             {
                                 if (cf.Id == long.Parse(id))
                                 {
-                                    cf.FieldDataType = ParaEnums.FieldDataType.InternationalPhone;
+                                    cf.FieldType = "internationalphone";
                                 }
                             }
                         }
@@ -655,7 +655,7 @@ namespace ParatureSDK
                                 {
                                     if (cf.Id == long.Parse(id.Trim()))
                                     {
-                                        cf.FieldDataType = ParaEnums.FieldDataType.Url;
+                                        cf.FieldType = "url";
                                     }
                                 }
                             }

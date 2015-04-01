@@ -30,7 +30,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Ticket_Number",
-                        FieldDataType = ParaEnums.FieldDataType.String
+                        FieldType = "text",
+                        DataType = "string"
                     };
                     StaticFields.Add(field);
                 }
@@ -56,7 +57,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Ticket_Product",
-                        FieldDataType = ParaEnums.FieldDataType.EntityReference
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -82,7 +84,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Ticket_Status",
-                        FieldDataType = ParaEnums.FieldDataType.Status
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -108,7 +111,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Ticket_Asset",
-                        FieldDataType = ParaEnums.FieldDataType.EntityReference
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -131,7 +135,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Ticket_Sla",
-                        FieldDataType = ParaEnums.FieldDataType.Sla
+                        FieldType = "dropdown",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -159,7 +164,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Department",
-                        FieldDataType = ParaEnums.FieldDataType.Department
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -185,7 +191,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Ticket_Customer",
-                        FieldDataType = ParaEnums.FieldDataType.EntityReference
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -211,7 +218,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Additional_Contact",
-                        FieldDataType = ParaEnums.FieldDataType.EntityReference
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -237,7 +245,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Entered_By",
-                        FieldDataType = ParaEnums.FieldDataType.EntityReference
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -263,7 +272,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Assigned_To",
-                        FieldDataType = ParaEnums.FieldDataType.EntityReference
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -289,7 +299,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Email_Notification",
-                        FieldDataType = ParaEnums.FieldDataType.Boolean
+                        FieldType = "checkbox",
+                        DataType = "boolean"
                     };
                     StaticFields.Add(field);
                 }
@@ -315,7 +326,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Email_Notification_Additional_Contact",
-                        FieldDataType = ParaEnums.FieldDataType.Boolean
+                        FieldType = "checkbox",
+                        DataType = "boolean"
                     };
                     StaticFields.Add(field);
                 }
@@ -341,7 +353,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Hide_From_Customer",
-                        FieldDataType = ParaEnums.FieldDataType.Boolean
+                        FieldType = "checkbox",
+                        DataType = "boolean"
                     };
                     StaticFields.Add(field);
                 }
@@ -367,7 +380,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Cc_Csr",
-                        FieldDataType = ParaEnums.FieldDataType.EntityReference
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -393,7 +407,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Cc_Customer",
-                        FieldDataType = ParaEnums.FieldDataType.EntityReference
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -402,21 +417,22 @@ namespace ParatureSDK.ParaObjects
             }
         }
 
-        public bool Dont_Overwrite_Sla_In_Rr
+        public bool Overwrite_Sla_In_Rr
         {
             get
             {
-                return GetFieldValue<bool>("Dont_Overwrite_Sla_In_Rr");
+                return GetFieldValue<bool>("Overwrite_Sla_In_Rr");
             }
             set
             {
-                var field = StaticFields.FirstOrDefault(f => f.Name == "Dont_Overwrite_Sla_In_Rr");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Overwrite_Sla_In_Rr");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
-                        Name = "Dont_Overwrite_Sla_In_Rr",
-                        FieldDataType = ParaEnums.FieldDataType.Boolean
+                        Name = "Overwrite_Sla_In_Rr",
+                        FieldType = "checkbox",
+                        DataType = "boolean"
                     };
                     StaticFields.Add(field);
                 }
@@ -439,7 +455,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Initial_Resolution_Target_Duration",
-                        FieldDataType = ParaEnums.FieldDataType.Int
+                        FieldType = "int",
+                        DataType = "int"
                     };
                     StaticFields.Add(field);
                 }
@@ -462,7 +479,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Initial_Response_Target_Duration",
-                        FieldDataType = ParaEnums.FieldDataType.Int
+                        FieldType = "int",
+                        DataType = "int"
                     };
                     StaticFields.Add(field);
                 }
@@ -488,7 +506,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Ticket_Queue",
-                        FieldDataType = ParaEnums.FieldDataType.Queue
+                        FieldType = "dropdown",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -514,7 +533,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Ticket_Parent",
-                        FieldDataType = ParaEnums.FieldDataType.EntityReference
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -540,7 +560,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Ticket_Children",
-                        FieldDataType = ParaEnums.FieldDataType.EntityReference
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -566,7 +587,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Related_Chats",
-                        FieldDataType = ParaEnums.FieldDataType.EntityReference
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -592,7 +614,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Ticket_Attachments",
-                        FieldDataType = ParaEnums.FieldDataType.Attachment
+                        FieldType = "entitymultiple",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -618,8 +641,7 @@ namespace ParatureSDK.ParaObjects
                 {
                     field = new StaticField()
                     {
-                        Name = "Actions",
-                        FieldDataType = ParaEnums.FieldDataType.Action
+                        Name = "Actions"
                     };
                     StaticFields.Add(field);
                 }
@@ -646,8 +668,7 @@ namespace ParatureSDK.ParaObjects
                 {
                     field = new StaticField()
                     {
-                        Name = "ActionHistory",
-                        FieldDataType = ParaEnums.FieldDataType.History
+                        Name = "ActionHistory"
                     };
                     StaticFields.Add(field);
                 }
@@ -670,7 +691,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Date_Created",
-                        FieldDataType = ParaEnums.FieldDataType.DateTime
+                        FieldType = "usdate",
+                        DataType = "date"
                     };
                     StaticFields.Add(field);
                 }
@@ -693,7 +715,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Date_Updated",
-                        FieldDataType = ParaEnums.FieldDataType.DateTime
+                        FieldType = "usdate",
+                        DataType = "date"
                     };
                     StaticFields.Add(field);
                 }

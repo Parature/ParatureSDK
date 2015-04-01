@@ -23,7 +23,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Full_Name",
-                        FieldDataType = ParaEnums.FieldDataType.String
+                        FieldType = "text",
+                        DataType = "string"
                     };
                     StaticFields.Add(field);
                 }
@@ -45,7 +46,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Email",
-                        FieldDataType = ParaEnums.FieldDataType.String
+                        FieldType = "text",
+                        DataType = "string"
                     };
                     StaticFields.Add(field);
                 }
@@ -67,7 +69,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Fax",
-                        FieldDataType = ParaEnums.FieldDataType.String
+                        FieldType = "text",
+                        DataType = "string"
                     };
                     StaticFields.Add(field);
                 }
@@ -89,7 +92,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Phone_1",
-                        FieldDataType = ParaEnums.FieldDataType.InternationalPhone
+                        FieldType = "text",
+                        DataType = "string"
                     };
                     StaticFields.Add(field);
                 }
@@ -111,7 +115,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Phone_2",
-                        FieldDataType = ParaEnums.FieldDataType.String
+                        FieldType = "text",
+                        DataType = "string"
                     };
                     StaticFields.Add(field);
                 }
@@ -133,7 +138,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Screen_Name",
-                        FieldDataType = ParaEnums.FieldDataType.String
+                        FieldType = "text",
+                        DataType = "string"
                     };
                     StaticFields.Add(field);
                 }
@@ -159,7 +165,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Date_Format",
-                        FieldDataType = ParaEnums.FieldDataType.String
+                        FieldType = "text",
+                        DataType = "string"
                     };
                     StaticFields.Add(field);
                 }
@@ -181,7 +188,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Password",
-                        FieldDataType = ParaEnums.FieldDataType.String
+                        FieldType = "password",
+                        DataType = "string"
                     };
                     StaticFields.Add(field);
                 }
@@ -203,7 +211,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Timezone",
-                        FieldDataType = ParaEnums.FieldDataType.Timezone
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -225,7 +234,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Status",
-                        FieldDataType = ParaEnums.FieldDataType.Status
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -247,7 +257,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Date_Created",
-                        FieldDataType = ParaEnums.FieldDataType.DateTime
+                        FieldType = "usdate",
+                        DataType = "date"
                     };
                     StaticFields.Add(field);
                 }
@@ -272,7 +283,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Role",
-                        FieldDataType = ParaEnums.FieldDataType.Role
+                        FieldType = "entity",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }

@@ -47,7 +47,6 @@ namespace ParatureSDK.Fields
             Name = customField.Name;
             Required = customField.Required;
             Editable = customField.Editable;
-            FieldDataType = customField.FieldDataType;
             MultiValue = customField.MultiValue;
             MaxLength = customField.MaxLength;
 
