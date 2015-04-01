@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace ParatureSDK.Fields
 {
     /// <summary>
-    /// A custom field option is actually one of the possible values a custom field can take. So this can be an option in a dropdown, or a checkbox in a CheckBoxList field.
+    /// A field option is actually one of the possible values a custom field can take. So this can be an option in a dropdown, or a checkbox in a CheckBoxList field.
     /// </summary>
-    public class CustomFieldOptions
+    public class FieldOptions
     {
         [XmlAttribute("id")]
         public Int64 Id = 0;
@@ -21,23 +22,20 @@ namespace ParatureSDK.Fields
         /// With regards to Field Dependencies:
         /// Pseudo-URI for the field that gets displayed by enabling this field. 
         /// </summary>
-        public string Enables;
-        /// <summary>
-        /// If the custom field option has dependent fields, or dependant field options, they will be listed under the DependantCustomFields collection.
-        /// </summary>
-        public List<DependantCustomFields> DependantCustomFields = new List<DependantCustomFields>();
+        [XmlElement("Enables")]
+        public List<string> Enables = new List<string>();
 
-        public CustomFieldOptions()
+        public FieldOptions()
         {
         }
 
-        public CustomFieldOptions(CustomFieldOptions customFieldOptions)
+        public FieldOptions(FieldOptions customFieldOptions)
         {
             Id = customFieldOptions.Id;
             Value = customFieldOptions.Value;
             Selected = customFieldOptions.Selected;
             Dependent = customFieldOptions.Dependent;
-            DependantCustomFields = new List<DependantCustomFields>(customFieldOptions.DependantCustomFields);
+            Enables = customFieldOptions.Enables;
         }
     }
 }

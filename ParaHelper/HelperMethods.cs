@@ -16,9 +16,9 @@ namespace ParatureSDK.ParaHelper
             
             foreach (var cf in matchingFields)
             {
-                if (cf.CustomFieldOptionsCollection.Count > 0)
+                if (cf.Options.Count > 0)
                 {
-                    var selectedFieldsTrue = cf.CustomFieldOptionsCollection.Where(cfo => cfo.Selected);
+                    var selectedFieldsTrue = cf.Options.Where(cfo => cfo.Selected);
                     foreach (var cfo in selectedFieldsTrue)
                     {
                         cfo.Selected = false;

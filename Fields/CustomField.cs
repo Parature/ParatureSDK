@@ -25,7 +25,7 @@ namespace ParatureSDK.Fields
         /// If this is a custom field that holds multiple options, this collection of CustomFieldOptions will be populated.
         /// </summary>
         [XmlElement("Option")]
-        public List<CustomFieldOptions> CustomFieldOptionsCollection = new List<CustomFieldOptions>();
+        public List<FieldOptions> Options = new List<FieldOptions>();
 
         /// <summary>
         /// Value of the Custom field. Can be integer, string, text, or date/time values
@@ -51,13 +51,13 @@ namespace ParatureSDK.Fields
             MultiValue = customField.MultiValue;
             MaxLength = customField.MaxLength;
 
-            if (customField.CustomFieldOptionsCollection != null)
+            if (customField.Options != null)
             {
-                CustomFieldOptionsCollection = new List<CustomFieldOptions>();
+                Options = new List<FieldOptions>();
 
-                foreach (var cfo in customField.CustomFieldOptionsCollection)
+                foreach (var cfo in customField.Options)
                 {
-                    CustomFieldOptionsCollection.Add(new CustomFieldOptions(cfo));
+                    Options.Add(new FieldOptions(cfo));
                 }
             }
 

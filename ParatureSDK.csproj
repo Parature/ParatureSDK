@@ -109,7 +109,7 @@
     <Compile Include="EntityQuery\TimezoneQuery.cs" />
     <Compile Include="EntityQuery\ViewQuery.cs" />
     <Compile Include="Fields\CustomField.cs" />
-    <Compile Include="Fields\CustomFieldOptions.cs" />
+    <Compile Include="Fields\FieldOptions.cs" />
     <Compile Include="Fields\DependantCustomFields.cs" />
     <Compile Include="Fields\Field.cs" />
     <Compile Include="Fields\StaticField.cs" />

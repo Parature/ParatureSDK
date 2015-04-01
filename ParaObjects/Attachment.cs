@@ -12,11 +12,11 @@ namespace ParatureSDK.ParaObjects
         /// This is the unique identifier of the Attachment/Download file in your Parature license.
         /// </summary>
         [XmlElement("Guid")]
-        public string Guid = "";
+        public string Guid;
         /// <summary>
         /// The name of the attachment.
         /// </summary>
-        public string Name = "";
+        public string Name;
 
         /// <summary>
         /// This is the public permanent URL
@@ -33,7 +33,7 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The details of the error message, if the call generated an exception.
         /// </summary>
-        public string Error = "";
+        public string Error;
         /// <summary>
         /// Whether or not there was an exception.
         /// </summary>
