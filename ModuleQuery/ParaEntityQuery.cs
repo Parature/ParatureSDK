@@ -54,6 +54,20 @@ namespace ParatureSDK.ModuleQuery
         }
 
         /// <summary>
+        /// Add a custom field filter to the query for multiple values. Does not work for boolean field types. Query acts like a union of all provided values.
+        /// </summary>
+        /// <param name="customFieldId">The id of the custom field to query on</param>
+        /// <param name="criteria">The query criteria</param>
+        /// <param name="values">The list of possible values</param>
+        public void AddCustomFieldInListFilter(Int64 customFieldId, ParaEnums.QueryCriteria criteria,
+            IEnumerable<string> values)
+        {
+            var processedValues = values.Select(value => ProcessEncoding(value)).ToList();
+
+            QueryFilterAdd("FID" + customFieldId, criteria, string.Join(",", processedValues));
+        }
+
+        /// <summary>
         /// Adds a custom field based filter to the query. Use this method for Custom Fields that are NOT multi values. 
         /// </summary>
         /// <param name="customFieldId">
