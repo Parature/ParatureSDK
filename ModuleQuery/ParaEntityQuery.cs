@@ -125,6 +125,30 @@ namespace ParatureSDK.ModuleQuery
         }
 
         /// <summary>
+        /// Add a custom field filter for NULL or NOT NULL. Use with any custom fields
+        /// </summary>
+        /// <param name="customFieldId">
+        /// The id of the multi value custom field you would like to filter your query on.
+        /// </param>
+        /// <param name="fieldFilter">Null or Not Null filter</param>
+        public void AddCustomFieldFilter(Int64 customFieldId, ParaEnums.FieldValueFilter fieldFilter)
+        {
+            string filterValue = "";
+
+            switch (fieldFilter)
+            {
+                case ParaEnums.FieldValueFilter.IsNotNull:
+                    filterValue = "_IS_NOT_NULL_";
+                    break;
+                case ParaEnums.FieldValueFilter.IsNull:
+                    filterValue = "_IS_NULL_";
+                    break;
+            }
+
+            QueryFilterAdd("FID" + customFieldId, ParaEnums.QueryCriteria.Equal, filterValue);
+        }
+
+        /// <summary>
         /// Add a custom field to the query returned returned 
         /// </summary>
         public void IncludeCustomField(Int64 customFieldid)

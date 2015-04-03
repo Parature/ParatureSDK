@@ -70,6 +70,22 @@ namespace ParatureSDK
 
         }
 
+
+        /// <summary>
+        /// Use to specify if field contains or does not contain a value
+        /// </summary>
+        public enum FieldValueFilter
+        {
+            /// <summary>
+            /// Use for filtering if a field that does not contain a value
+            /// </summary>
+            IsNull,
+            /// <summary>
+            /// Use for filtering if a field contains any value
+            /// </summary>
+            IsNotNull
+        }
+
         /// <summary>
         /// Lists the possible type of actions you can run against an object (like ticket, for example)
         /// </summary>
