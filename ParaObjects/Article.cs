@@ -474,7 +474,6 @@ namespace ParatureSDK.ParaObjects
             get
             {
                 return GetFieldValue<List<Article>>("Related_Articles"); 
-                
             }
             set
             {
@@ -489,6 +488,8 @@ namespace ParatureSDK.ParaObjects
                     };
                     StaticFields.Add(field);
                 }
+
+                field.Value = value;
             }
         }
 
