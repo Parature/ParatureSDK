@@ -441,7 +441,7 @@ namespace ParatureSDK.ParaObjects
             } 
         }
 
-        public Int64 Initial_Resolution_Target_Duration
+        public Int64? Initial_Resolution_Target_Duration
         {
             get
             {
@@ -465,7 +465,31 @@ namespace ParatureSDK.ParaObjects
             }  
         }
 
-        public Int64 Initial_Response_Target_Duration
+        public DateTime? Initial_Resolution_Date
+        {
+            get
+            {
+                return GetFieldValue<DateTime>("Initial_Resolution_Date");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Initial_Resolution_Date");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Initial_Resolution_Date",
+                        FieldType = "usdate",
+                        DataType = "date"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public Int64? Initial_Response_Target_Duration
         {
             get
             {
@@ -487,6 +511,270 @@ namespace ParatureSDK.ParaObjects
 
                 field.Value = value;
             }  
+        }
+
+        public Int64? Initial_Resolution_Duration_Bh
+        {
+            get
+            {
+                return GetFieldValue<Int64>("Initial_Resolution_Duration_Bh");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Initial_Resolution_Duration_Bh");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Initial_Resolution_Duration_Bh",
+                        FieldType = "int",
+                        DataType = "int"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public Int64? Initial_Response_Duration_Bh
+        {
+            get
+            {
+                return GetFieldValue<Int64>("Initial_Response_Duration_Bh");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Initial_Response_Duration_Bh");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Initial_Response_Duration_Bh",
+                        FieldType = "int",
+                        DataType = "int"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public DateTime? Resolution_Violation_Date_Bh
+        {
+            get
+            {
+                return GetFieldValue<DateTime>("Resolution_Violation_Date_Bh");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Resolution_Violation_Date_Bh");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Resolution_Violation_Date_Bh",
+                        FieldType = "usdate",
+                        DataType = "date"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public DateTime? Response_Violation_Date_Bh
+        {
+            get
+            {
+                return GetFieldValue<DateTime>("Response_Violation_Date_Bh");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Response_Violation_Date_Bh");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Response_Violation_Date_Bh",
+                        FieldType = "usdate",
+                        DataType = "date"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public SlaReference Response_Sla
+        {
+            get
+            {
+                return GetFieldValue<SlaReference>("Response_Sla");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Response_Sla");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Response_Sla",
+                        FieldType = "dropdown",
+                        DataType = "entity"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public SlaReference Resolution_Sla
+        {
+            get
+            {
+                return GetFieldValue<SlaReference>("Resolution_Sla");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Resolution_Sla");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Resolution_Sla",
+                        FieldType = "dropdown",
+                        DataType = "entity"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public Int64? Warning_Time
+        {
+            get
+            {
+                return GetFieldValue<Int64>("Warning_Time");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Warning_Time");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Warning_Time",
+                        FieldType = "int",
+                        DataType = "int"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public Int64? Last_Resolution_Duration_Bh
+        {
+            get
+            {
+                return GetFieldValue<Int64>("Last_Resolution_Duration_Bh");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Last_Resolution_Duration_Bh");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Last_Resolution_Duration_Bh",
+                        FieldType = "int",
+                        DataType = "int"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public Int64? Initial_Response_Userid
+        {
+            get
+            {
+                return GetFieldValue<Int64>("Initial_Response_Userid");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Initial_Response_Userid");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Initial_Response_Userid",
+                        FieldType = "int",
+                        DataType = "int"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public Int64? Initial_Resolution_Userid
+        {
+            get
+            {
+                return GetFieldValue<Int64>("Initial_Resolution_Userid");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Initial_Resolution_Userid");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Initial_Resolution_Userid",
+                        FieldType = "int",
+                        DataType = "int"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public Int64? Final_Resolution_Userid
+        {
+            get
+            {
+                return GetFieldValue<Int64>("Final_Resolution_Userid");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Final_Resolution_Userid");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Final_Resolution_Userid",
+                        FieldType = "int",
+                        DataType = "int"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
         }
 
         /// <summary>
