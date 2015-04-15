@@ -520,18 +520,18 @@ namespace ParatureSDK.ParaObjects
 
         internal bool CustomFieldSetFieldOption(Int64 customFieldid, Int64 customFieldOptionId, IEnumerable<CustomField> customFields, bool resetOtherOptions)
         {
-            bool modified = false;
+            var modified = false;
 
             if (customFieldid > 0 && customFieldOptionId > 0)
             {
-                bool found = false;
+                var found = false;
                 foreach (var cfn in customFields)
                 {
                     if (cfn.Id == customFieldid)
                     {
                         found = true;
                         bool optionFound = false;
-                        foreach (FieldOptions option in cfn.Options)
+                        foreach (var option in cfn.Options)
                         {
                             if (option.Id == customFieldOptionId)
                             {
@@ -561,10 +561,12 @@ namespace ParatureSDK.ParaObjects
                         }
                         if (optionFound == false)
                         {
-                            FieldOptions NewOption = new FieldOptions();
-                            NewOption.Id = customFieldOptionId;
-                            NewOption.Selected = true;
-                            cfn.Options.Add(NewOption);
+                            var newOption = new FieldOptions
+                            {
+                                Id = customFieldOptionId, 
+                                Selected = true
+                            };
+                            cfn.Options.Add(newOption);
                             modified = true;
                             found = true;
                         }
