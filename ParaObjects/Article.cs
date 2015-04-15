@@ -58,7 +58,7 @@ namespace ParatureSDK.ParaObjects
             }
         }
 
-        public bool Hide_On_Portal
+        public bool? Hide_On_Portal
         {
             get
             {
@@ -82,7 +82,7 @@ namespace ParatureSDK.ParaObjects
             }
         }
 
-        public bool Is_Portal_Search_Pinned 
+        public bool? Is_Portal_Search_Pinned 
         {
             get
             {
@@ -106,7 +106,7 @@ namespace ParatureSDK.ParaObjects
             }
         }
 
-        public bool Is_Desk_Search_Pinned
+        public bool? Is_Desk_Search_Pinned
         {
             get
             {
@@ -186,7 +186,7 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// Whether this article is published or not.
         /// </summary>
-        public Boolean Published
+        public Boolean? Published
         {
             get
             {
@@ -240,7 +240,7 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The average rating this article received.
         /// </summary>
-        public Int32 Rating
+        public Int32? Rating
         {
             get
             {
@@ -264,7 +264,7 @@ namespace ParatureSDK.ParaObjects
             }
         }
 
-        public Int32 Portal_Search_Weight
+        public Int32? Portal_Search_Weight
         {
             get
             {
@@ -288,7 +288,7 @@ namespace ParatureSDK.ParaObjects
             }
         }
 
-        public Int32 Desk_Search_Weight
+        public Int32? Desk_Search_Weight
         {
             get
             {
@@ -315,7 +315,7 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The number of times this article has been viewed.
         /// </summary>
-        public Int32 Times_Viewed
+        public Int32? Times_Viewed
         {
             get
             {

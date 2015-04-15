@@ -397,6 +397,150 @@ namespace ParatureSDK.ParaObjects
             }
         }
 
+        public Int32? Portal_Search_Weight
+        {
+            get
+            {
+                return GetFieldValue<Int32>("Portal_Search_Weight");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Portal_Search_Weight");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Portal_Search_Weight",
+                        FieldType = "int",
+                        DataType = "int"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public Int32? Desk_Search_Weight
+        {
+            get
+            {
+                return GetFieldValue<Int32>("Desk_Search_Weight");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Desk_Search_Weight");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Desk_Search_Weight",
+                        FieldType = "int",
+                        DataType = "int"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public bool? Hide_On_Portal
+        {
+            get
+            {
+                return GetFieldValue<bool>("Hide_On_Portal");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Hide_On_Portal");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Hide_On_Portal",
+                        FieldType = "checkbox",
+                        DataType = "boolean"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public bool? Is_Portal_Search_Pinned
+        {
+            get
+            {
+                return GetFieldValue<bool>("Is_Portal_Search_Pinned ");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Is_Portal_Search_Pinned ");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Is_Portal_Search_Pinned ",
+                        FieldType = "checkbox",
+                        DataType = "boolean"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public bool? Is_Desk_Search_Pinned
+        {
+            get
+            {
+                return GetFieldValue<bool>("Is_Desk_Search_Pinned");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Is_Desk_Search_Pinned");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Is_Desk_Search_Pinned",
+                        FieldType = "checkbox",
+                        DataType = "boolean"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        public string Language
+        {
+            get
+            {
+                return GetFieldValue<string>("Language");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Language");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Language",
+                        FieldType = "text",
+                        DataType = "string"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
         /// <summary>
         /// Certain configuration use the End User License Agreement (EULA). this controls what Eula would 
         /// be associated with this download.
