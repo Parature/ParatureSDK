@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
+using System.Xml;
+using System.Xml.Linq;
 using ParatureSDK.ParaObjects;
 using ParatureSDK.XmlToObjectParser;
 using Action = ParatureSDK.ParaObjects.Action;
@@ -170,6 +173,26 @@ namespace ParatureSDK.ApiHandler
                 attach = new Attachment();
             }
             return attach;
+        }
+
+        /// <summary>
+        /// Remove the static fields, which screw up the deserializer when fetching the schema
+        /// </summary>
+        /// <param name="xmlReceived"></param>
+        /// <returns></returns>
+        public static XmlDocument RemoveStaticFieldsNodes(XmlDocument xmlReceived)
+        {
+            var xmlPurged = XDocument.Parse(xmlReceived.OuterXml);
+            xmlPurged.Root.Elements()
+                .Where(node => node.Name.LocalName != "Custom_Field")
+                .Remove();
+
+            var xmlDocument = new XmlDocument();
+            using (var xmlReader = xmlPurged.CreateReader())
+            {
+                xmlDocument.Load(xmlReader);
+            }
+            return xmlDocument;
         }
     }
 }

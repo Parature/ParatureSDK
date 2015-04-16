@@ -208,7 +208,8 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                chat = ParaEntityParser.EntityFill<ParaObjects.Chat>(ar.XmlReceived);
+                var purgedSchema = ApiUtils.RemoveStaticFieldsNodes(ar.XmlReceived);
+                chat = ParaEntityParser.EntityFill<ParaObjects.Chat>(purgedSchema);
             }
             chat.ApiCallResponse = ar;
             return chat;

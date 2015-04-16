@@ -26,7 +26,8 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                Asset = ParaEntityParser.EntityFill<ParaObjects.Asset>(ar.XmlReceived);
+                var purgedSchema = ApiUtils.RemoveStaticFieldsNodes(ar.XmlReceived);
+                Asset = ParaEntityParser.EntityFill<ParaObjects.Asset>(purgedSchema);
             }
             Asset.ApiCallResponse = ar;
             Asset.IsDirty = false;

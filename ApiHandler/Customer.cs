@@ -336,7 +336,8 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                customer = ParaEntityParser.EntityFill<ParaObjects.Customer>(ar.XmlReceived);
+                var purgedSchema = ApiUtils.RemoveStaticFieldsNodes(ar.XmlReceived);
+                customer = ParaEntityParser.EntityFill<ParaObjects.Customer>(purgedSchema);
             }
             customer.ApiCallResponse = ar;
             return customer;

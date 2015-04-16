@@ -24,7 +24,8 @@ namespace ParatureSDK.ApiHandler
             if (ar.HasException == false)
             {
                 var hasMultipleFolders = HasMultipleFoldersAndConvert(ar.XmlReceived);
-                download = ParaEntityParser.EntityFill<ParaObjects.Download>(ar.XmlReceived);
+                var purgedSchema = ApiUtils.RemoveStaticFieldsNodes(ar.XmlReceived);
+                download = ParaEntityParser.EntityFill<ParaObjects.Download>(purgedSchema);
                 download.MultipleFolders = hasMultipleFolders;
             }
 

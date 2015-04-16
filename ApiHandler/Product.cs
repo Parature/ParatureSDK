@@ -16,18 +16,18 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Provides the Schema of the Product module.
         /// </summary>
-        public static ParaObjects.Product Schema(ParaCredentials ParaCredentials)
+        public static ParaObjects.Product Schema(ParaCredentials creds)
         {
-            ParaObjects.Product Product = new ParaObjects.Product();
-            ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Product);
+            var product = new ParaObjects.Product();
+            var ar = ApiCallFactory.ObjectGetSchema(creds, ParaEnums.ParatureModule.Product);
 
             if (ar.HasException == false)
             {
-                Product = ParaEntityParser.EntityFill<ParaObjects.Product>(ar.XmlReceived);
+                var purgedSchema = ApiUtils.RemoveStaticFieldsNodes(ar.XmlReceived);
+                product = ParaEntityParser.EntityFill<ParaObjects.Product>(purgedSchema);
             }
-            Product.ApiCallResponse = ar;
-            return Product;
+            product.ApiCallResponse = ar;
+            return product;
         }
 
         /// <summary>
