@@ -166,6 +166,9 @@ namespace ParatureSDK.ParaObjects
 
         /// <summary>
         /// The list of folders under which the download is listed.
+        /// In certain configurations, there may only be 1 folder allowed. 
+        /// Check the "MultipleFolders" property to see whether more than one folder is allowed.
+        /// If extra folders are added when only one is allowed, the first in the list will sent
         /// </summary>
         public List<DownloadFolder> Folders
         {

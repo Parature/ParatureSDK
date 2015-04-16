@@ -16,94 +16,88 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Provides the Schema of the download module.
         /// </summary>
-        public static ParaObjects.Download Schema(ParaCredentials ParaCredentials)
+        public static ParaObjects.Download Schema(ParaCredentials creds)
         {
-            ParaObjects.Download Download = new ParaObjects.Download(true);
-            ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Download);
+            var download = new ParaObjects.Download(true);
+            var ar = ApiCallFactory.ObjectGetSchema(creds, ParaEnums.ParatureModule.Download);
 
             if (ar.HasException == false)
             {
-                Download = ParaEntityParser.EntityFill<ParaObjects.Download>(ar.XmlReceived);
+                download = ParaEntityParser.EntityFill<ParaObjects.Download>(ar.XmlReceived);
             }
 
-            Download.ApiCallResponse = ar;
-            return Download;
+            download.ApiCallResponse = ar;
+            return download;
         }
 
-        /// <summary>
-        /// Provides the capability to delete a Download.
-        /// </summary>
-        /// <param name="Downloadid">
-        /// The id of the Download to delete
-        /// </param>
+        ///  <summary>
+        ///  Provides the capability to delete a Download.
+        ///  </summary>
+        ///  <param name="downloadId">
+        ///  The id of the Download to delete
+        ///  </param>
+        /// <param name="creds"></param>
         /// <param name="purge">
-        /// If purge is set to true, the Download will be permanently deleted. Otherwise, it will just be 
-        /// moved to the trash bin, so it will still be able to be restored from the service desk.
-        ///</param>
-        public static ApiCallResponse Delete(Int64 Downloadid, ParaCredentials ParaCredentials, bool purge)
+        ///  If purge is set to true, the Download will be permanently deleted. Otherwise, it will just be 
+        ///  moved to the trash bin, so it will still be able to be restored from the service desk.
+        /// </param>
+        public static ApiCallResponse Delete(Int64 downloadId, ParaCredentials creds, bool purge)
         {
-            return ApiCallFactory.ObjectDelete(ParaCredentials, ParaEnums.ParatureModule.Download, Downloadid, purge);
+            return ApiCallFactory.ObjectDelete(creds, ParaEnums.ParatureModule.Download, downloadId, purge);
         }
 
         /// <summary>
         /// Creates a Parature Download. Requires an Object and a credentials object. Will return the Newly Created Downloadid. Returns 0 if the Customer creation fails.
         /// </summary>
-        public static ApiCallResponse Insert(ParaObjects.Download Download, ParaCredentials ParaCredentials)
+        public static ApiCallResponse Insert(ParaObjects.Download download, ParaCredentials creds)
         {
-            var ar = new ApiCallResponse();
-            var doc = new System.Xml.XmlDocument();
-            doc = XmlGenerator.GenerateXml(Download);
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Download, doc, 0);
-            Download.Id = ar.Id;
+            var doc = XmlGenerator.GenerateXml(download);
+            var ar = ApiCallFactory.ObjectCreateUpdate(creds, ParaEnums.ParatureModule.Download, doc, 0);
+            download.Id = ar.Id;
             return ar;
         }
 
         /// <summary>
         /// Updates a Parature Download. Requires an Object and a credentials object.  Will return the updated Downloadid. Returns 0 if the Customer update operation fails.
         /// </summary>
-        public static ApiCallResponse Update(ParaObjects.Download Download, ParaCredentials ParaCredentials)
+        public static ApiCallResponse Update(ParaObjects.Download download, ParaCredentials creds)
         {
-            var ar = new ApiCallResponse();
-
-            ar = ApiCallFactory.ObjectCreateUpdate(ParaCredentials, ParaEnums.ParatureModule.Download, XmlGenerator.GenerateXml(Download), Download.Id);
-
+            var ar = ApiCallFactory.ObjectCreateUpdate(creds, ParaEnums.ParatureModule.Download, XmlGenerator.GenerateXml(download), download.Id);
 
             return ar;
-            //return 0;
         }
 
         /// <summary>
         /// Returns a Download object with all of its properties.
         /// </summary>
-        /// <param name="Downloadid">
+        /// <param name="downloadId">
         ///The Download number that you would like to get the details of. 
         ///Value Type: <see cref="Int64" />   (System.Int64)
         ///</param>
-        /// <param name="ParaCredentials">
+        /// <param name="creds">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
-        /// <param name="RequestDepth">
+        /// <param name="requestDepth">
         /// For a simple Download request, please put 0. <br/>When Requesting a Download, there might be related objects linked to that Download: such as Products, etc. <br/>With a regular Download detail call, generally only the ID and names of the second level objects are loaded. 
         /// </param>
-        public static ParaObjects.Download GetDetails(Int64 Downloadid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        public static ParaObjects.Download GetDetails(Int64 downloadId, ParaCredentials creds, ParaEnums.RequestDepth requestDepth)
         {
-            return FillDetails(Downloadid, ParaCredentials, RequestDepth, true);
+            return FillDetails(downloadId, creds);
         }
 
         /// <summary>
         /// Returns a Download object with all of its properties filled.
         /// </summary>
-        /// <param name="Downloadid">
+        /// <param name="downloadId">
         ///The Customer number that you would like to get the details of. 
         ///Value Type: <see cref="Int64" />   (System.Int64)
         ///</param>
-        /// <param name="ParaCredentials">
+        /// <param name="creds">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
-        public static ParaObjects.Download GetDetails(Int64 Downloadid, ParaCredentials ParaCredentials)
+        public static ParaObjects.Download GetDetails(Int64 downloadId, ParaCredentials creds)
         {
-            return FillDetails(Downloadid, ParaCredentials, ParaEnums.RequestDepth.Standard, true);
+            return FillDetails(downloadId, creds);
         }
 
         internal static Attachment DownloadUploadFile(ParaCredentials ParaCredentials, string text, string contentType, string FileName)
@@ -299,26 +293,46 @@ namespace ParatureSDK.ApiHandler
             return DownloadsList;
         }
 
-        private static ParaObjects.Download FillDetails(Int64 Downloadid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
+        private static ParaObjects.Download FillDetails(Int64 downloadId, ParaCredentials creds)
         {
-            int requestdepth = (int)RequestDepth;
-            ParaObjects.Download Download = new ParaObjects.Download(true);
-            ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectGetDetail<ParaObjects.Download>(ParaCredentials, ParaEnums.ParatureModule.Download, Downloadid);
+            //Note: Download folders is WEIRD.
+            var download = new ParaObjects.Download(true);
+            var ar = ApiCallFactory.ObjectGetDetail<ParaObjects.Download>(creds, ParaEnums.ParatureModule.Download, downloadId);
             if (ar.HasException == false)
             {
-                Download = ParaEntityParser.EntityFill<ParaObjects.Download>(ar.XmlReceived);
-                Download.FullyLoaded = true;
+                var foldersNode = ar.XmlReceived.SelectSingleNode("/Download/Folders");
+                bool hasMultipleFolders;
+                if (foldersNode != null)
+                {
+                    hasMultipleFolders = true;
+                }
+                else
+                {
+                    var singleFolderNode = ar.XmlReceived.SelectSingleNode("/Download/Folder");
+                    if (singleFolderNode != null && singleFolderNode.OwnerDocument != null && singleFolderNode.ParentNode != null)
+                    {
+                        //replace the <Folder> with <Folders> for our parser
+                        var dlFolders = singleFolderNode.InnerXml;
+                        var doc = new XmlDocument();
+                        doc.LoadXml(string.Format("<Folders>{0}</Folders>", dlFolders));
+                        var newNode = singleFolderNode.OwnerDocument.ImportNode(doc.DocumentElement, true);
+                        singleFolderNode.ParentNode.ReplaceChild(newNode, singleFolderNode);
+                    }
+                    hasMultipleFolders = false;
+                }
+                download = ParaEntityParser.EntityFill<ParaObjects.Download>(ar.XmlReceived);
+                download.MultipleFolders = hasMultipleFolders;
+                download.FullyLoaded = true;
             }
             else
             {
-                Download.FullyLoaded = false;
-                Download.Id = 0;
+                download.FullyLoaded = false;
+                download.Id = 0;
             }
 
-            Download.ApiCallResponse = ar;
-            Download.IsDirty = false;
-            return Download;
+            download.ApiCallResponse = ar;
+            download.IsDirty = false;
+            return download;
         }
 
         /// <summary>
