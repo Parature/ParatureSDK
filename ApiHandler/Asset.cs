@@ -267,8 +267,6 @@ namespace ParatureSDK.ApiHandler
                     bool continueCalling = true;
                     while (continueCalling)
                     {
-                        var objectlist = new ParaEntityList<ParaObjects.Asset>();
-
                         if (AssetsList.TotalItems > AssetsList.Data.Count)
                         {
                             // We still need to pull data
@@ -280,7 +278,7 @@ namespace ParatureSDK.ApiHandler
 
                             if (ar.HasException == false)
                             {
-                                objectlist = ParaEntityParser.FillList<ParaObjects.Asset>(ar.XmlReceived);
+                                var objectlist = ParaEntityParser.FillList<ParaObjects.Asset>(ar.XmlReceived);
                                 AssetsList.Data.AddRange(objectlist.Data);
                                 AssetsList.ResultsReturned = AssetsList.Data.Count;
                                 AssetsList.PageNumber = Query.PageNumber;
@@ -309,46 +307,42 @@ namespace ParatureSDK.ApiHandler
 
         private static ParaObjects.Asset FillDetails(Int64 Assetid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
-            int requestdepth = (int)RequestDepth;
-            ParaObjects.Asset Asset = new ParaObjects.Asset();
-            ApiCallResponse ar = new ApiCallResponse();
+            var asset = new ParaObjects.Asset();
 
 
-            ar = ApiCallFactory.ObjectGetDetail<ParaObjects.Asset>(ParaCredentials, ParaEnums.ParatureModule.Asset, Assetid);
+            ApiCallResponse ar = ApiCallFactory.ObjectGetDetail<ParaObjects.Asset>(ParaCredentials, ParaEnums.ParatureModule.Asset, Assetid);
 
             if (ar.HasException == false)
             {
-                Asset = ParaEntityParser.EntityFill<ParaObjects.Asset>(ar.XmlReceived);
-                Asset.FullyLoaded = true;
+                asset = ParaEntityParser.EntityFill<ParaObjects.Asset>(ar.XmlReceived);
+                asset.FullyLoaded = true;
             }
             else
             {
-                Asset.FullyLoaded = false;
-                Asset.Id = 0;
+                asset.FullyLoaded = false;
+                asset.Id = 0;
             }
-            Asset.ApiCallResponse = ar;
-            Asset.IsDirty = false;
-            return Asset;
+            asset.ApiCallResponse = ar;
+            asset.IsDirty = false;
+            return asset;
         }
 
         /// <summary>
         /// Runs an Asset action.
         /// </summary>
-        /// <param name="Assetid">
+        /// <param name="assetId">
         /// The Asset you would like to run this action on.
         /// </param>
-        /// <param name="Action">
+        /// <param name="action">
         /// The action object your would like to run on this ticket.
         /// </param>
-        /// <param name="ParaCredentials">
+        /// <param name="creds">
         /// Your credentials object.
         /// </param>
         /// <returns></returns>
-        public static ApiCallResponse ActionRun(Int64 Assetid, Action Action, ParaCredentials ParaCredentials)
+        public static ApiCallResponse ActionRun(Int64 assetId, Action action, ParaCredentials creds)
         {
-            Action.actionType = ParaEnums.ActionType.Other;
-            ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiUtils.ActionRun(Assetid, Action, ParaCredentials, ParaEnums.ParatureModule.Asset);
+            var ar = ApiUtils.ActionRun(assetId, action, creds, ParaEnums.ParatureModule.Asset);
             return ar;
         }
     }

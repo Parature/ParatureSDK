@@ -352,77 +352,6 @@ namespace ParatureSDK.ApiHandler
         }
 
         /// <summary>
-        /// Grabs a Ticket to the CSR that is making the call.
-        /// </summary>
-        /// <param name="ticketId">
-        /// The Ticket you would like to run this action on.
-        /// </param>
-        /// <param name="actionid">
-        /// The id of action Grab in your license.
-        /// </param>
-        /// <param name="pc">
-        /// Your credentials object.
-        /// </param>
-        /// <returns></returns>
-        public static ApiCallResponse ActionRunGrab(Int64 ticketId, Int64 actionid, ParaCredentials pc)
-        {
-            Action Action = new Action();
-            Action.Id = actionid;
-            Action.actionType = ParaEnums.ActionType.Grab;
-            ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiUtils.ActionRun(ticketId, Action, pc, ParaEnums.ParatureModule.Ticket);
-            return ar;
-        }
-
-        /// <summary>
-        /// Assigns a Ticket to a specific CSR.
-        /// </summary>
-        /// <param name="ticketId">
-        /// The Ticket you would like to run this action on.
-        /// </param>
-        /// <param name="action">
-        /// The action object your would like to run on this ticket.
-        /// </param>
-        /// <param name="pc">
-        /// Your credentials object.
-        /// </param>
-        /// <param name="csrId">
-        /// The CSR you would like to assign this ticket to.
-        /// </param>
-        /// <returns></returns>
-        public static ApiCallResponse ActionRunAssignToCsr(Int64 ticketId, Action action, Int64 csrId, ParaCredentials pc)
-        {
-            action.actionType = ParaEnums.ActionType.Assign;
-            action.AssigntToCsrid = csrId;
-            var ar = ApiUtils.ActionRun(ticketId, action, pc, ParaEnums.ParatureModule.Ticket);
-            return ar;
-        }
-
-        /// <summary>
-        /// Assigns a Ticket to a specific Queue.
-        /// </summary>
-        /// <param name="ticketId">
-        /// The Ticket you would like to run this action on.
-        /// </param>
-        /// <param name="action">
-        /// The action object your would like to run on this ticket.
-        /// </param>
-        /// <param name="paraCredentials">
-        /// Your credentials object.
-        /// </param>
-        /// <param name="queueId">
-        /// The Queue you would like to assign this ticket to.
-        /// </param>
-        /// <returns></returns>
-        public static ApiCallResponse ActionRunAssignToQueue(Int64 ticketId, Action action, Int64 queueId, ParaCredentials paraCredentials)
-        {
-            action.actionType = ParaEnums.ActionType.Assign_Queue;
-            action.AssignToQueueid = queueId;
-            var ar = ApiUtils.ActionRun(ticketId, action, paraCredentials, ParaEnums.ParatureModule.Ticket);
-            return ar;
-        }
-
-        /// <summary>
         /// Assigns a Ticket to a specific Queue.
         /// </summary>
         /// <param name="ticketId">
@@ -437,7 +366,6 @@ namespace ParatureSDK.ApiHandler
         /// <returns></returns>
         public static ApiCallResponse ActionRun(Int64 ticketId, Action action, ParaCredentials pc)
         {
-            action.actionType = ParaEnums.ActionType.Other;
             var ar = ApiUtils.ActionRun(ticketId, action, pc, ParaEnums.ParatureModule.Ticket);
             return ar;
         }

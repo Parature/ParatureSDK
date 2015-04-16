@@ -20,8 +20,8 @@ namespace ParatureSDK
         public enum TicketStatusType
         {
             All,
-            open,
-            closed
+            Open,
+            Closed
         }
 
         /// <summary>
@@ -84,24 +84,6 @@ namespace ParatureSDK
             /// Use for filtering if a field contains any value
             /// </summary>
             IsNotNull
-        }
-
-        /// <summary>
-        /// Lists the possible type of actions you can run against an object (like ticket, for example)
-        /// </summary>
-        public enum ActionType
-        {
-            Assign = 0,
-            Assign_Queue = 1,
-            Grab = 2,
-            Solve = 3,
-            Copy = 4,
-            Escalate = 5,
-            Ask = 6,
-            Comment = 7,
-            Provide = 8,
-            CommentTech = 9,
-            Other = 10
         }
 
         /// <summary>

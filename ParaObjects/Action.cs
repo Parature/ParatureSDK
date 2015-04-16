@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using ParatureSDK.ParaObjects.EntityReferences;
 
 namespace ParatureSDK.ParaObjects
 {
@@ -10,16 +11,17 @@ namespace ParatureSDK.ParaObjects
         public bool FullyLoaded;
         [XmlAttribute("name")]
         public string Name = "";
-        internal ParaEnums.ActionType actionType;
         public string Comment = "";
         /// <summary>
         /// Indicates whether this action will be visible to the customer or not
         /// Only used for tickets.
         /// </summary>
-        public bool VisibleToCustomer = false;
+        public bool ShowToCust = false;
+        public bool ShowToAdditionalContact = false;
+        public bool NotifyParent = false;
         public string EmailText;
-        public ArrayList EmailListCsr;
-        public ArrayList EmailListCustomers;
+        public ArrayList EmailCsrList;
+        public ArrayList EmailCustList;
         public int TimeSpentHours = 0;
         public int TimeSpentMinutes = 0;
 
@@ -29,13 +31,13 @@ namespace ParatureSDK.ParaObjects
         /// This property will only be considered when 
         /// the action if of type Assign to Queue.
         /// </summary>
-        internal Int64 AssignToQueueid = 0;
+        public Int64? AssignToQueue = 0;
 
         /// <summary>
         /// This property will only be considered when 
         /// the action if of type Assign to CSR.
         /// </summary>
-        internal Int64 AssigntToCsrid = 0;
+        public Int64? AssignToCsr = 0;
 
         public Action()
         {
@@ -46,16 +48,15 @@ namespace ParatureSDK.ParaObjects
             FullyLoaded = action.FullyLoaded;
             Id = action.Id;
             Name = action.Name;
-            actionType = action.actionType;
             Comment = action.Comment;
-            VisibleToCustomer = action.VisibleToCustomer;
+            ShowToCust = action.ShowToCust;
             EmailText = action.EmailText;
-            EmailListCsr = action.EmailListCsr;
-            EmailListCustomers = action.EmailListCustomers;
+            EmailCsrList = action.EmailCsrList;
+            EmailCustList = action.EmailCustList;
             TimeSpentHours = action.TimeSpentHours;
             TimeSpentMinutes = action.TimeSpentMinutes;
-            AssignToQueueid = action.AssignToQueueid;
-            AssigntToCsrid = action.AssigntToCsrid;
+            AssignToQueue = action.AssignToQueue;
+            AssignToCsr = action.AssignToCsr;
             Action_Attachments = action.Action_Attachments;
         }
     }
