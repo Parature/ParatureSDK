@@ -30,56 +30,5 @@ namespace ParatureSDK.ParaHelper
             }
             return httpPostMethod;
         }
-
-
-        /// <summary>
-        /// Return the customFieldDataType enum, requires a string. Usually the string comes from the API response.
-        /// </summary>
-        internal static ParaEnums.FieldDataType CustomFieldDataTypeProvider(string dt)
-        {
-            ParaEnums.FieldDataType dataType = ParaEnums.FieldDataType.Unknown;
-            switch (dt.ToLower())
-            {
-                case "boolean":
-
-                    dataType = ParaEnums.FieldDataType.Boolean;
-                    break;
-                case "float":
-
-                    dataType = ParaEnums.FieldDataType.Float;
-                    break;
-                case "attachment":
-
-                    dataType = ParaEnums.FieldDataType.Attachment;
-                    break;
-                case "datetime":
-
-                    dataType = ParaEnums.FieldDataType.DateTime;
-                    break;
-                case "int":
-                    dataType = ParaEnums.FieldDataType.Int;
-
-                    break;
-                case "date":
-                    dataType = ParaEnums.FieldDataType.Date;
-                    break;
-
-
-                case "readonly":
-                    dataType = ParaEnums.FieldDataType.ReadOnly;
-                    break;
-
-
-                case "string":
-                    dataType = ParaEnums.FieldDataType.String;
-                    break;
-
-                case "option":
-                    dataType = ParaEnums.FieldDataType.Option;
-                    break;
-
-            }
-            return dataType;
-        }
     }
 }

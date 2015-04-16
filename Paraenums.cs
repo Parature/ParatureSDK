@@ -106,91 +106,6 @@ namespace ParatureSDK
         }
 
         /// <summary>
-        /// Represents the data type of the field returned.
-        /// </summary>
-        public enum FieldDataType
-        {
-            /// <summary>
-            /// Usually a textbox, textarea or a similar field type
-            /// </summary>
-            [XmlEnum("string")]
-            String = 0,
-            /// <summary>
-            /// DropdownList, CheckBoxList, etc
-            /// </summary>
-            Option = 1,
-            /// <summary>
-            /// A read only field
-            /// </summary>
-            ReadOnly = 2,
-            /// <summary>
-            /// An Integer field
-            /// </summary>
-            Int = 3,
-            /// <summary>
-            /// A date/time field
-            /// </summary>
-            DateTime = 4,
-            /// <summary>
-            /// A date/time field
-            /// </summary>
-            USDate = 14,
-            /// <summary>
-            /// A date/time field
-            /// </summary>
-            [XmlEnum("date")]
-            Date = 8,
-            /// <summary>
-            /// A Boolean field: a field that holds a True or False value
-            /// </summary>
-            [XmlEnum("boolean")]
-            Boolean = 5,
-            /// <summary>
-            /// An attachment field. Used whenever there is an attachment to an object.
-            /// </summary>
-            Attachment = 6,
-            /// <summary>
-            /// A float data type
-            /// </summary>
-            Float = 9,
-            /// <summary>
-            /// A Email data type
-            /// </summary>
-            Email = 10,
-            /// <summary>
-            /// A US Phone data type
-            /// </summary>
-            UsPhone = 11,
-            /// <summary>
-            /// A URL data type
-            /// </summary>
-            Url = 12,
-            /// <summary>
-            /// A International Phone data type
-            /// </summary>
-            InternationalPhone = 13,
-            /// <summary>
-            /// Returns this value only if it couldn't determine the type of the field. Please let us know if you encounter a field of this type.
-            /// </summary>            
-            Unknown = 7,
-            /// <summary>
-            /// Reference to another Parature Module
-            /// </summary>
-            EntityReference = 15,
-            Role = 16,
-            Sla = 17,
-            Folder = 18,
-            Status = 19,
-            Action = 20,
-            Timezone = 21,
-            Eula = 22,
-            Department = 23,
-            Queue = 24,
-            History = 25,
-        }
-
-
-        /// <summary>
         /// Provides with the possible calls methods to the APIs.
         /// </summary>
         internal enum ApiCallHttpMethod
@@ -212,9 +127,6 @@ namespace ParatureSDK
             /// </summary>
             Delete = 3
         }
-
-
-
 
         /// <summary>
         /// This enum lists all the possible modules within Parature. Choose one of these values when calling a method that requires a module.
@@ -257,7 +169,6 @@ namespace ParatureSDK
             /// Chat Module
             /// </summary>
             Chat=8
-
         }
 
         /// <summary>
