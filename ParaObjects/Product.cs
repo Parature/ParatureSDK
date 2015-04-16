@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ParatureSDK.Fields;
+using ParatureSDK.ParaObjects.EntityReferences;
 
 namespace ParatureSDK.ParaObjects
 {
@@ -98,11 +100,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public ProductFolder Folder
+        public ProductFolderReference Folder
         {
             get
             {
-                return GetFieldValue<ProductFolder>("Folder");
+                return GetFieldValue<ProductFolderReference>("Folder");
             }
             set
             {
@@ -112,7 +114,7 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Folder",
-                        FieldType = "entitymultiple",
+                        FieldType = "dropdown",
                         DataType = "entity"
                     };
                     StaticFields.Add(field);
@@ -121,7 +123,7 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public bool InStock
+        public bool? InStock
         {
             get
             {
@@ -242,7 +244,7 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public bool Visible
+        public bool? Visible
         {
             get
             {
@@ -276,7 +278,10 @@ namespace ParatureSDK.ParaObjects
             Id = product.Id;
             Price = product.Price;
             Currency = product.Currency;
-            Folder = new ProductFolder(product.Folder);
+            Folder = new ProductFolderReference()
+            {
+                ProductFolder = product.Folder.ProductFolder
+            };
             InStock = product.InStock;
             Longdesc = product.Longdesc;
             Name = product.Name;

@@ -155,6 +155,7 @@
     <Compile Include="ParaObjects\EntityReferences\CustomerRoleReference.cs" />
     <Compile Include="ParaObjects\EntityReferences\DepartmentReference.cs" />
     <Compile Include="ParaObjects\EntityReferences\EntityReference.cs" />
+    <Compile Include="ParaObjects\EntityReferences\ProductFolderReference.cs" />
     <Compile Include="ParaObjects\EntityReferences\ProductReference.cs" />
     <Compile Include="ParaObjects\EntityReferences\QueueReference.cs" />
     <Compile Include="ParaObjects\EntityReferences\RoleReference.cs" />
