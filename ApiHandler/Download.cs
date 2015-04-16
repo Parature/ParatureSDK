@@ -23,7 +23,9 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
+                var hasMultipleFolders = HasMultipleFoldersAndConvert(ar.XmlReceived);
                 download = ParaEntityParser.EntityFill<ParaObjects.Download>(ar.XmlReceived);
+                download.MultipleFolders = hasMultipleFolders;
             }
 
             download.ApiCallResponse = ar;
@@ -118,16 +120,18 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Returns an download object from a XML Document. No calls to the APIs are made when calling this method.
         /// </summary>
-        /// <param name="DownloadXML">
+        /// <param name="downloadXml">
         /// The Download XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaObjects.Download GetDetails(XmlDocument DownloadXML)
+        public static ParaObjects.Download GetDetails(XmlDocument downloadXml)
         {
             var download = new ParaObjects.Download(true);
-            download = ParaEntityParser.EntityFill<ParaObjects.Download>(DownloadXML);
+            var hasMultipleFolders = HasMultipleFoldersAndConvert(downloadXml);
+            download = ParaEntityParser.EntityFill<ParaObjects.Download>(downloadXml);
+            download.MultipleFolders = hasMultipleFolders;
             download.FullyLoaded = true;
 
-            download.ApiCallResponse.XmlReceived = DownloadXML;
+            download.ApiCallResponse.XmlReceived = downloadXml;
             download.ApiCallResponse.Id = download.Id;
 
             download.IsDirty = false;
@@ -218,7 +222,7 @@ namespace ParatureSDK.ApiHandler
                 ar = ApiCallFactory.ObjectGetList(ParaCredentials, ParaEnums.ParatureModule.Download, Query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
-                    DownloadsList = ParaEntityParser.FillList<ParaObjects.Download>(ar.XmlReceived);
+                    DownloadsList = ParaEntityParser.FillListDownload(ar.XmlReceived);
                 }
                 DownloadsList.ApiCallResponse = ar;
             }
@@ -268,7 +272,7 @@ namespace ParatureSDK.ApiHandler
 
                             if (ar.HasException == false)
                             {
-                                objectlist = ParaEntityParser.FillList<ParaObjects.Download>(ar.XmlReceived);
+                                objectlist = ParaEntityParser.FillListDownload(ar.XmlReceived);
                                 DownloadsList.Data.AddRange(objectlist.Data);
                                 DownloadsList.ResultsReturned = DownloadsList.Data.Count;
                                 DownloadsList.PageNumber = Query.PageNumber;
@@ -300,26 +304,8 @@ namespace ParatureSDK.ApiHandler
             var ar = ApiCallFactory.ObjectGetDetail<ParaObjects.Download>(creds, ParaEnums.ParatureModule.Download, downloadId);
             if (ar.HasException == false)
             {
-                var foldersNode = ar.XmlReceived.SelectSingleNode("/Download/Folders");
-                bool hasMultipleFolders;
-                if (foldersNode != null)
-                {
-                    hasMultipleFolders = true;
-                }
-                else
-                {
-                    var singleFolderNode = ar.XmlReceived.SelectSingleNode("/Download/Folder");
-                    if (singleFolderNode != null && singleFolderNode.OwnerDocument != null && singleFolderNode.ParentNode != null)
-                    {
-                        //replace the <Folder> with <Folders> for our parser
-                        var dlFolders = singleFolderNode.InnerXml;
-                        var doc = new XmlDocument();
-                        doc.LoadXml(string.Format("<Folders>{0}</Folders>", dlFolders));
-                        var newNode = singleFolderNode.OwnerDocument.ImportNode(doc.DocumentElement, true);
-                        singleFolderNode.ParentNode.ReplaceChild(newNode, singleFolderNode);
-                    }
-                    hasMultipleFolders = false;
-                }
+                var xmlReceived = ar.XmlReceived;
+                var hasMultipleFolders = HasMultipleFoldersAndConvert(xmlReceived);
                 download = ParaEntityParser.EntityFill<ParaObjects.Download>(ar.XmlReceived);
                 download.MultipleFolders = hasMultipleFolders;
                 download.FullyLoaded = true;
@@ -333,6 +319,36 @@ namespace ParatureSDK.ApiHandler
             download.ApiCallResponse = ar;
             download.IsDirty = false;
             return download;
+        }
+
+        /// <summary>
+        /// Modify the XML so it can be parsed, and check to see if it supports multiple folders
+        /// </summary>
+        /// <param name="xmlReceived"></param>
+        /// <returns></returns>
+        internal static bool HasMultipleFoldersAndConvert(XmlDocument xmlReceived)
+        {
+            var foldersNode = xmlReceived.SelectSingleNode("/Download/Folders");
+            bool hasMultipleFolders;
+            if (foldersNode != null)
+            {
+                hasMultipleFolders = true;
+            }
+            else
+            {
+                var singleFolderNode = xmlReceived.SelectSingleNode("/Download/Folder");
+                if (singleFolderNode != null && singleFolderNode.OwnerDocument != null && singleFolderNode.ParentNode != null)
+                {
+                    //replace the <Folder> with <Folders> for our parser
+                    var dlFolders = singleFolderNode.InnerXml;
+                    var doc = new XmlDocument();
+                    doc.LoadXml(string.Format("<Folders>{0}</Folders>", dlFolders));
+                    var newNode = singleFolderNode.OwnerDocument.ImportNode(doc.DocumentElement, true);
+                    singleFolderNode.ParentNode.ReplaceChild(newNode, singleFolderNode);
+                }
+                hasMultipleFolders = false;
+            }
+            return hasMultipleFolders;
         }
 
         /// <summary>
@@ -531,23 +547,23 @@ namespace ParatureSDK.ApiHandler
             static ParaObjects.DownloadFolder FillDetails(Int64 DownloadFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 int requestdepth = (int)RequestDepth;
-                ParaObjects.DownloadFolder DownloadFolder = new ParaObjects.DownloadFolder();
+                var downloadFolder = new ParaObjects.DownloadFolder();
                 //Customer = null;
-                ApiCallResponse ar = new ApiCallResponse();
+                var ar = new ApiCallResponse();
                 ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.DownloadFolder, DownloadFolderid);
                 if (ar.HasException == false)
                 {
-                    DownloadFolder = ParaEntityParser.EntityFill<ParaObjects.DownloadFolder>(ar.XmlReceived);
-                    DownloadFolder.FullyLoaded = true;
+                    downloadFolder = ParaEntityParser.EntityFill<ParaObjects.DownloadFolder>(ar.XmlReceived);
+                    downloadFolder.FullyLoaded = true;
                 }
                 else
                 {
-                    DownloadFolder.FullyLoaded = false;
-                    DownloadFolder.Id = 0;
+                    downloadFolder.FullyLoaded = false;
+                    downloadFolder.Id = 0;
                 }
 
-                DownloadFolder.ApiCallResponse = ar;
-                return DownloadFolder;
+                downloadFolder.ApiCallResponse = ar;
+                return downloadFolder;
             }
 
             /// <summary>

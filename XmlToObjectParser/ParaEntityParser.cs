@@ -38,6 +38,35 @@ namespace ParatureSDK.XmlToObjectParser
             return list;
         }
 
+        /// <summary>
+        /// Download module can have a config that changes the schema... 
+        /// This does the same as the generic FillList method, but overwrites the XML to account for the changing schema
+        /// Specific node is "Folder" vs "Folders"
+        /// </summary>
+        /// <param name="xmlDoc"></param>
+        /// <returns></returns>
+        public static ParaEntityList<Download> FillListDownload(XmlDocument xmlDoc)
+        {
+            //Generate the paged data parsed object. Data prop will be empty
+            var list = EntityFill<ParaEntityList<Download>>(xmlDoc);
+            var docNode = xmlDoc.DocumentElement;
+
+            //Fill the list of entities
+            foreach (XmlNode xn in docNode.ChildNodes)
+            {
+                var xDoc = new XmlDocument();
+                xDoc.LoadXml(xn.OuterXml);
+                var hasMultipleDownloadFolders = ApiHandler.Download.HasMultipleFoldersAndConvert(xDoc);
+                var dl = EntityFill<Download>(xDoc);
+                dl.MultipleFolders = hasMultipleDownloadFolders;
+
+                list.Data.Add(dl);
+
+            }
+
+            return list;
+        }
+
         static internal PagedData.PagedData ObjectFillList(XmlDocument xmlresp, Boolean minimalisticLoad, int requestdepth, ParaCredentials paraCredentials, ParaEnums.ParatureModule module)
         {
             switch (module)
