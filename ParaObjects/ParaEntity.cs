@@ -50,7 +50,7 @@ namespace ParatureSDK.ParaObjects
         /// </summary>
         /// <param name="fieldId">Custom Field Id</param>
         /// <returns>CustomField if found, otherwise null</returns>
-        public CustomField this[int fieldId]
+        public CustomField this[Int64 fieldId]
         {
             get { return CustomFields.FirstOrDefault(f => f.Id == fieldId); }
             set
@@ -126,9 +126,9 @@ namespace ParatureSDK.ParaObjects
         /// <returns>
         /// returns True if the custom field was modified (or created), False if there was no need to modify the custom field.
         ///</returns>
-        public bool CustomFieldSetValue(Int64 customFieldId, string customFieldValue, bool ignoreCase)
+        public bool CustomFieldSetValue(Int64 cfId, string cfValue, bool ignoreCase)
         {
-            return DirtyStateManager(CustomFieldSetValue(customFieldId, customFieldValue, CustomFields, ignoreCase));
+            return DirtyStateManager(CustomFieldSetValue(cfId, cfValue, CustomFields, ignoreCase));
         }
 
         /// <summary>
@@ -139,9 +139,9 @@ namespace ParatureSDK.ParaObjects
         /// <returns>
         /// returns True if the custom field was modified (or created), False if there was no need to modify the custom field.
         ///</returns>
-        public bool CustomFieldSetValue(Int64 customFieldId, string customFieldValue)
+        public bool CustomFieldSetValue(Int64 cfId, string cfValue)
         {
-            return CustomFieldSetValue(customFieldId, customFieldValue, true);
+            return CustomFieldSetValue(cfId, cfValue, true);
         }
 
         /// <summary>
@@ -152,9 +152,9 @@ namespace ParatureSDK.ParaObjects
         /// <returns>
         /// returns True if the custom field was modified (or created), False if there was no need to modify the custom field.
         ///</returns>
-        public bool CustomFieldSetValue(Int64 customFieldId, bool customFieldValue)
+        public bool CustomFieldSetValue(Int64 cfId, bool cfValue)
         {
-            return DirtyStateManager(CustomFieldSetValue(customFieldId, customFieldValue.ToString().ToLower(), CustomFields, true));
+            return DirtyStateManager(CustomFieldSetValue(cfId, cfValue.ToString().ToLower(), CustomFields, true));
         }
 
         /// <summary>
@@ -165,10 +165,10 @@ namespace ParatureSDK.ParaObjects
         /// <returns>
         /// returns True if the custom field was modified (or created), False if there was no need to modify the custom field.
         ///</returns>
-        public bool CustomFieldSetValue(Int64 customFieldId, DateTime customFieldValue)
+        public bool CustomFieldSetValue(Int64 cfId, DateTime cfValue)
         {
-            string date = customFieldValue.ToString("yyyy-MM-ddTHH:mm:ss");
-            return DirtyStateManager(CustomFieldSetValue(customFieldId, date, CustomFields, true));
+            string date = cfValue.ToString("yyyy-MM-ddTHH:mm:ss");
+            return DirtyStateManager(CustomFieldSetValue(cfId, date, CustomFields, true));
         }
 
         /// <summary>
@@ -176,21 +176,15 @@ namespace ParatureSDK.ParaObjects
         /// sure to send the custom field back with an empty value so that it deletes the value stored in Parature 
         /// for this custom field.
         /// </summary>
-        public void CustomFieldFlagToDelete(Int64 customFieldId)
+        public void CustomFieldFlagToDelete(Int64 cfId)
         {
-            if (customFieldId > 0)
+            var fields = new List<CustomField>();
+            foreach (var cf in CustomFields.Where(cf => cf.Id == cfId))
             {
-                List<CustomField> fields = new List<CustomField>();
-                foreach (CustomField cf in CustomFields)
-                {
-                    if (cf.Id == customFieldId)
-                    {
-                        fields.Add(cf);
-                        DirtyStateManager(HelperMethods.CustomFieldReset(customFieldId, fields));
-                        cf.FlagToDelete = true;
-                        break;
-                    }
-                }
+                fields.Add(cf);
+                DirtyStateManager(HelperMethods.CustomFieldReset(cfId, fields));
+                cf.FlagToDelete = true;
+                break;
             }
         }
 
@@ -203,9 +197,9 @@ namespace ParatureSDK.ParaObjects
         /// <returns>
         /// returns True if the custom field was modified (or created), False if there was no need to modify the custom field.
         /// </returns>
-        public bool CustomFieldSetSelectedFieldOption(Int64 customFieldId, Int64 customFieldOptionId)
+        public bool CustomFieldSetSelectedFieldOption(Int64 cfId, Int64 cfOptionId)
         {
-            return DirtyStateManager(CustomFieldSetFieldOption(customFieldId, customFieldOptionId, CustomFields, true));
+            return DirtyStateManager(CustomFieldSetFieldOption(cfId, cfOptionId, true));
         }
 
         /// <summary>
@@ -217,9 +211,9 @@ namespace ParatureSDK.ParaObjects
         /// <returns>
         /// returns True if the custom field was modified (or created), False if there was no need to modify the custom field.
         /// </returns>
-        public bool CustomFieldSetSelectedFieldOption(Int64 customFieldId, string customFieldOptionName, bool ignoreCase)
+        public bool CustomFieldSetSelectedFieldOption(Int64 cfId, string cfOptionName, bool ignoreCase)
         {
-            return DirtyStateManager(CustomFieldSetFieldOption(customFieldId, customFieldOptionName, CustomFields, true, ignoreCase));
+            return DirtyStateManager(CustomFieldSetFieldOption(cfId, cfOptionName, CustomFields, true, ignoreCase));
         }
 
         /// <summary>
@@ -231,38 +225,31 @@ namespace ParatureSDK.ParaObjects
         /// <returns>
         /// returns True if the custom field was modified (or created), False if there was no need to modify the custom field.
         /// </returns>
-        public bool CustomFieldAddSelectedFieldOption(Int64 customFieldId, Int64 customFieldOptionId)
+        public bool CustomFieldAddSelectedFieldOption(Int64 cfId, Int64 cfOptionId)
         {
-            return DirtyStateManager(CustomFieldSetFieldOption(customFieldId, customFieldOptionId, CustomFields, false));
+            return DirtyStateManager(CustomFieldSetFieldOption(cfId, cfOptionId, false));
         }
 
         /// <summary>
         /// Allows you to add an option to the selected field options already in this custom field.
         /// </summary>
-        public bool CustomFieldAddSelectedFieldOption(Int64 customFieldId, string customFieldOptionName, bool ignoreCase)
+        public bool CustomFieldAddSelectedFieldOption(Int64 cfId, string cfOptionName, bool ignoreCase)
         {
-            return DirtyStateManager(CustomFieldSetFieldOption(customFieldId, customFieldOptionName, CustomFields, false, ignoreCase));
+            return DirtyStateManager(CustomFieldSetFieldOption(cfId, cfOptionName, CustomFields, false, ignoreCase));
         }
 
         /// <summary>
         /// Returns the selected custom field option object for a custom field. Will return the first encountered selected 
         /// field options object.
         /// </summary>           
-        public FieldOptions CustomFieldGetSelectedOption(Int64 customFieldId)
+        public FieldOption CustomFieldGetSelectedOption(Int64 cfId)
         {
-            foreach (CustomField cf in CustomFields)
+            var custField = this[cfId];
+            if (custField != null)
             {
-                if (cf.Id == customFieldId)
-                {
-                    foreach (FieldOptions cfo in cf.Options)
-                    {
-                        if (cfo.Selected == true)
-                        {
-                            return cfo;
-                        }
-                    }
-                }
+                return custField.GetSelectedFieldOptions().FirstOrDefault();
             }
+
             return null;
         }
 
@@ -270,10 +257,10 @@ namespace ParatureSDK.ParaObjects
         /// Returns the selected custom field option object for a custom field. Will return the first encountered selected 
         /// field options object.
         /// </summary>  
-        public FieldOptions CustomFieldGetSelectedOption(CustomField customField)
+        public FieldOption CustomFieldGetSelectedOption(CustomField cf)
         {
 
-            foreach (FieldOptions cfo in customField.Options)
+            foreach (FieldOption cfo in cf.Options)
             {
                 if (cfo.Selected == true)
                 {
@@ -288,13 +275,13 @@ namespace ParatureSDK.ParaObjects
         /// Returns the selected custom field option object for a custom field. Will return the first encountered selected 
         /// field options object.
         /// </summary>  
-        public FieldOptions CustomFieldGetSelectedOption(string customFieldName)
+        public FieldOption CustomFieldGetSelectedOption(string cfName)
         {
             foreach (CustomField cf in CustomFields)
             {
-                if (cf.Name == customFieldName)
+                if (cf.Name == cfName)
                 {
-                    foreach (FieldOptions cfo in cf.Options)
+                    foreach (FieldOption cfo in cf.Options)
                     {
                         if (cfo.Selected == true)
                         {
@@ -309,39 +296,31 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// Returns the list of all selected custom field options objects for a custom field.             
         /// </summary>  
-        public List<FieldOptions> CustomFieldGetSelectedOptions(Int64 customFieldid)
+        public IEnumerable<FieldOption> CustomFieldGetSelectedOptions(Int64 cfId)
         {
-            List<FieldOptions> SelectedOptions = new List<FieldOptions>();
-            foreach (CustomField cf in CustomFields)
+            var custField = this[cfId];
+            if (custField != null)
             {
-                if (cf.Id == customFieldid)
-                {
-                    foreach (FieldOptions cfo in cf.Options)
-                    {
-                        if (cfo.Selected == true)
-                        {
-                            SelectedOptions.Add(cfo);
-                        }
-                    }
-                }
+                return custField.GetSelectedFieldOptions();
             }
-            return SelectedOptions;
+
+            return null;
         }
 
         /// <summary>
         /// Returns the list of all custom field options for a custom field.
         /// </summary>
-        /// <param name="customFieldId"></param>
+        /// <param name="cfId"></param>
         /// <returns></returns>
-        public List<FieldOptions> CustomFieldGetOptions(Int64 customFieldId)
+        public List<FieldOption> CustomFieldGetOptions(Int64 cfId)
         {
-            List<FieldOptions> options = new List<FieldOptions>();
+            List<FieldOption> options = new List<FieldOption>();
                 
             foreach (CustomField cf in CustomFields)
             {
-                if (cf.Id == customFieldId)
+                if (cf.Id == cfId)
                 {
-                    foreach (FieldOptions cfo in cf.Options)
+                    foreach (FieldOption cfo in cf.Options)
                     {
                         options.Add(cfo);
                     }
@@ -355,10 +334,10 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// Returns the list of all selected custom field options objects for a custom field.             
         /// </summary>  
-        public List<FieldOptions> CustomFieldGetSelectedOptions(CustomField customField)
+        public List<FieldOption> CustomFieldGetSelectedOptions(CustomField cf)
         {
-            List<FieldOptions> SelectedOptions = new List<FieldOptions>();
-            foreach (FieldOptions cfo in customField.Options)
+            List<FieldOption> SelectedOptions = new List<FieldOption>();
+            foreach (FieldOption cfo in cf.Options)
             {
                 if (cfo.Selected == true)
                 {
@@ -372,14 +351,14 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// Returns the list of all selected custom field options objects for a custom field.             
         /// </summary>  
-        public List<FieldOptions> CustomFieldGetSelectedOptions(string customFieldName)
+        public List<FieldOption> CustomFieldGetSelectedOptions(string cfName)
         {
-            List<FieldOptions> SelectedOptions = new List<FieldOptions>();
+            List<FieldOption> SelectedOptions = new List<FieldOption>();
             foreach (CustomField cf in CustomFields)
             {
-                if (cf.Name == customFieldName)
+                if (cf.Name == cfName)
                 {
-                    foreach (FieldOptions cfo in cf.Options)
+                    foreach (FieldOption cfo in cf.Options)
                     {
                         if (cfo.Selected == true)
                         {
@@ -395,13 +374,13 @@ namespace ParatureSDK.ParaObjects
         /// Returns the display name for the custom field id you specified.  Will return empty string if
         /// the custom field is not found.
         /// </summary>
-        /// <param name="customFieldId"></param>
+        /// <param name="cfId"></param>
         /// <returns></returns>
-        public string CustomFieldGetDisplayName(Int64 customFieldId)
+        public string CustomFieldGetDisplayName(Int64 cfId)
         {
             foreach (CustomField cf in CustomFields)
             {
-                if (cf.Id == customFieldId)
+                if (cf.Id == cfId)
                 {
                     return cf.Name;
                 }
@@ -414,9 +393,9 @@ namespace ParatureSDK.ParaObjects
         ///  Return the id for the custom field name you specified.  Will return -1 if the custom field is not found 
         ///  or duplicates are found.  Search will be case-insensitive.
         /// </summary>
-        /// <param name="customFieldName"></param>
+        /// <param name="cfName"></param>
         /// <returns></returns>
-        public Int64 CustomFieldGetId(string customFieldName)
+        public Int64 CustomFieldGetId(string cfName)
         {
             Int64 customFieldId = -1;
 
@@ -424,7 +403,7 @@ namespace ParatureSDK.ParaObjects
             {
                 foreach(CustomField cf in CustomFields)
                 {
-                    if (cf.Name.ToLower() == customFieldName.ToLower())
+                    if (cf.Name.ToLower() == cfName.ToLower())
                     {
                         if (customFieldId != -1)
                         {
@@ -447,20 +426,20 @@ namespace ParatureSDK.ParaObjects
         ///  <summary>
         ///  Adds a custom field to the object, with the value you specify.
         ///  </summary>
-        ///  <param name="customFieldId">
+        ///  <param name="cfId">
         ///  The id of the custom field to add.
         ///  </param>
-        ///  <param name="customFieldValue">
+        ///  <param name="cfValue">
         ///  The value to set for the cust field.
         /// </param>
         /// <param name="customFields"></param>
         /// <param name="ignoreCase"></param>
-        internal bool CustomFieldSetValue(Int64 customFieldId, string customFieldValue, IEnumerable<CustomField> customFields, bool ignoreCase)
+        internal bool CustomFieldSetValue(Int64 cfId, string cfValue, IEnumerable<CustomField> customFields, bool ignoreCase)
         {
             var modified = false;
             var found = false;
             var cf = new CustomField();
-            foreach (var cfn in customFields.Where(cfn => cfn.Id == customFieldId))
+            foreach (var cfn in customFields.Where(cfn => cfn.Id == cfId))
             {
                 cf = cfn;
                 found = true;
@@ -470,18 +449,18 @@ namespace ParatureSDK.ParaObjects
             // Not found in the list of CFs, need to add this field.
             if (found == false)
             {
-                cf.Id = customFieldId;
+                cf.Id = cfId;
                 modified = true;
             }
 
-            if (String.Compare(cf.GetFieldValue<string>(), customFieldValue, ignoreCase) != 0)
+            if (String.Compare(cf.GetFieldValue<string>(), cfValue, ignoreCase) != 0)
             {
                 modified = true;
-                if (String.IsNullOrEmpty(customFieldValue))
+                if (String.IsNullOrEmpty(cfValue))
                 {
                     cf.FlagToDelete = true;
                 }
-                cf.Value = customFieldValue;
+                cf.Value = cfValue;
             }
 
             if (found == false)
@@ -492,100 +471,50 @@ namespace ParatureSDK.ParaObjects
             return modified;
         }
 
-        internal bool CustomFieldSetFieldOption(Int64 customFieldid, string customFieldOptionName, IEnumerable<CustomField> customFields, bool resetOtherOptions, bool ignoreCase)
+        internal bool CustomFieldSetFieldOption(Int64 cfId, string customFieldOptionName, IEnumerable<CustomField> customFields, bool resetOtherOptions, bool ignoreCase)
         {
-
-
-            if (customFieldid > 0 && String.IsNullOrEmpty(customFieldOptionName) == false)
+            if (cfId <= 0 || String.IsNullOrEmpty(customFieldOptionName) != false) return false;
+            foreach (var cfn in customFields)
             {
-                foreach (CustomField cfn in customFields)
+                if (cfn.Id == cfId)
                 {
-                    if (cfn.Id == customFieldid)
+                    foreach (var option in cfn.Options)
                     {
-                        foreach (FieldOptions option in cfn.Options)
+                        if (String.Compare(option.Value, customFieldOptionName, ignoreCase) == 0)
                         {
-                            if (String.Compare(option.Value, customFieldOptionName, ignoreCase) == 0)
-                            {
-                                return CustomFieldSetFieldOption(customFieldid, option.Id, customFields, resetOtherOptions);
-                            }
+                            return CustomFieldSetFieldOption(cfId, option.Id, resetOtherOptions);
                         }
-
-                        break;
                     }
 
+                    break;
                 }
+
             }
             return false;
         }
 
-        internal bool CustomFieldSetFieldOption(Int64 customFieldid, Int64 customFieldOptionId, IEnumerable<CustomField> customFields, bool resetOtherOptions)
+        internal bool CustomFieldSetFieldOption(Int64 cfId, Int64 customFieldOptionId, bool resetOtherOptions)
         {
             var modified = false;
+            var custField = this[cfId];
 
-            if (customFieldid > 0 && customFieldOptionId > 0)
+            if (custField != null)
             {
-                var found = false;
-                foreach (var cfn in customFields)
-                {
-                    if (cfn.Id == customFieldid)
-                    {
-                        found = true;
-                        bool optionFound = false;
-                        foreach (var option in cfn.Options)
-                        {
-                            if (option.Id == customFieldOptionId)
-                            {
-                                if (option.Selected == false)
-                                {
-                                    modified = true;
-                                    option.Selected = true;
-                                }
-
-                                optionFound = true;
-                                if (resetOtherOptions == false)
-                                {
-                                    break;
-                                }
-                            }
-                            else
-                            {
-                                if (resetOtherOptions == true)
-                                {
-                                    if (option.Selected == true)
-                                    {
-                                        modified = true;
-                                        option.Selected = false;
-                                    }
-                                }
-                            }
-                        }
-                        if (optionFound == false)
-                        {
-                            var newOption = new FieldOptions
-                            {
-                                Id = customFieldOptionId, 
-                                Selected = true
-                            };
-                            cfn.Options.Add(newOption);
-                            modified = true;
-                            found = true;
-                        }
-                        break;
-                    }
-                }
-                if (found == false)
-                {
-                    var cf = new CustomField {Id = customFieldid};
-                    var newOption = new FieldOptions
-                    {
-                        Id = customFieldOptionId,
-                        Selected = true
-                    };
-                    cf.Options.Add(newOption);
-                    modified = true;
-                    CustomFields.Add(cf);
-                }
+                custField.SetFieldOption(customFieldOptionId, resetOtherOptions);
             }
+            else
+            {
+                var cf = new CustomField { Id = cfId };
+                var newOption = new FieldOption
+                {
+                    Id = customFieldOptionId,
+                    Selected = true
+                };
+                cf.Options.Add(newOption);
+                modified = true;
+                CustomFields.Add(cf);
+            }
+
             return modified;
         }
     }

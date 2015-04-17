@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace ParatureSDK.Fields
@@ -25,7 +26,55 @@ namespace ParatureSDK.Fields
         /// If this is a custom field that holds multiple options, this collection of CustomFieldOptions will be populated.
         /// </summary>
         [XmlElement("Option")]
-        public List<FieldOptions> Options = new List<FieldOptions>();
+        public List<FieldOption> Options = new List<FieldOption>();
+
+        public bool SetFieldOption(Int64 optId, bool resetOtherOptions)
+        {
+            var modified = false;
+            var optionFound = false;
+            foreach (var option in this.Options)
+            {
+                if (option.Id == optId)
+                {
+                    if (option.Selected == false)
+                    {
+                        modified = true;
+                        option.Selected = true;
+                    }
+
+                    optionFound = true;
+                    if (resetOtherOptions == false)
+                    {
+                        return modified;
+                    }
+                }
+                else
+                {
+                    if (resetOtherOptions && option.Selected)
+                    {
+                        modified = true;
+                        option.Selected = false;
+                    }
+                }
+            }
+            if (optionFound == false)
+            {
+                var newOption = new FieldOption
+                {
+                    Id = optId,
+                    Selected = true
+                };
+                this.Options.Add(newOption);
+                modified = true;
+            }
+
+            return modified;
+        }
+
+        public IEnumerable<FieldOption> GetSelectedFieldOptions()
+        {
+            return Options.Where(opt => opt.Selected);
+        }
 
         /// <summary>
         /// Value of the Custom field. Can be integer, string, text, or date/time values
@@ -52,11 +101,11 @@ namespace ParatureSDK.Fields
 
             if (customField.Options != null)
             {
-                Options = new List<FieldOptions>();
+                Options = new List<FieldOption>();
 
                 foreach (var cfo in customField.Options)
                 {
-                    Options.Add(new FieldOptions(cfo));
+                    Options.Add(new FieldOption(cfo));
                 }
             }
 

@@ -8,7 +8,7 @@ namespace ParatureSDK.Fields
     /// <summary>
     /// A field option is actually one of the possible values a custom field can take. So this can be an option in a dropdown, or a checkbox in a CheckBoxList field.
     /// </summary>
-    public class FieldOptions
+    public class FieldOption
     {
         [XmlAttribute("id")]
         public Int64 Id = 0;
@@ -25,11 +25,11 @@ namespace ParatureSDK.Fields
         [XmlElement("Enables")]
         public List<string> Enables = new List<string>();
 
-        public FieldOptions()
+        public FieldOption()
         {
         }
 
-        public FieldOptions(FieldOptions customFieldOptions)
+        public FieldOption(FieldOption customFieldOptions)
         {
             Id = customFieldOptions.Id;
             Value = customFieldOptions.Value;
