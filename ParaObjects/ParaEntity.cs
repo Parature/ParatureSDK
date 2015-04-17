@@ -247,7 +247,7 @@ namespace ParatureSDK.ParaObjects
             var custField = this[cfId];
             if (custField != null)
             {
-                return custField.GetSelectedFieldOptions().FirstOrDefault();
+                return custField.GetSelectedOptions().FirstOrDefault();
             }
 
             return null;
@@ -301,7 +301,7 @@ namespace ParatureSDK.ParaObjects
             var custField = this[cfId];
             if (custField != null)
             {
-                return custField.GetSelectedFieldOptions();
+                return custField.GetSelectedOptions();
             }
 
             return null;
@@ -500,7 +500,7 @@ namespace ParatureSDK.ParaObjects
 
             if (custField != null)
             {
-                custField.SetFieldOption(customFieldOptionId, resetOtherOptions);
+                custField.SetSelectedOption(customFieldOptionId, resetOtherOptions);
             }
             else
             {

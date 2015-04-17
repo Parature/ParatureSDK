@@ -28,7 +28,7 @@ namespace ParatureSDK.Fields
         [XmlElement("Option")]
         public List<FieldOption> Options = new List<FieldOption>();
 
-        public bool SetFieldOption(Int64 optId, bool resetOtherOptions)
+        public bool SetSelectedOption(Int64 optId, bool resetOtherOptions)
         {
             var modified = false;
             var optionFound = false;
@@ -50,7 +50,8 @@ namespace ParatureSDK.Fields
                 }
                 else
                 {
-                    if (resetOtherOptions && option.Selected)
+                    if ((resetOtherOptions || MultiValue)
+                        && option.Selected)
                     {
                         modified = true;
                         option.Selected = false;
@@ -71,7 +72,7 @@ namespace ParatureSDK.Fields
             return modified;
         }
 
-        public IEnumerable<FieldOption> GetSelectedFieldOptions()
+        public IEnumerable<FieldOption> GetSelectedOptions()
         {
             return Options.Where(opt => opt.Selected);
         }
