@@ -1,9 +1,12 @@
+using System.Xml.Serialization;
+
 namespace ParatureSDK.ParaObjects
 {
     public class TicketStatus : Status
     {
-        public string Customer_Text = "";
-        public ParaEnums.TicketStatusType StatusType = ParaEnums.TicketStatusType.All;
+        public string Customer_Text;
+        [XmlAttribute("status-type")]
+        public string StatusType;
 
 
         public TicketStatus()
