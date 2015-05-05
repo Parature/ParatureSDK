@@ -87,7 +87,6 @@
     <Compile Include="ApiHandler\Entities\Queue.cs" />
     <Compile Include="ApiHandler\Entities\Role.cs" />
     <Compile Include="ApiHandler\Entities\Sla.cs" />
-    <Compile Include="ApiHandler\Entities\Status.cs" />
     <Compile Include="ApiHandler\Entities\TicketStatus.cs" />
     <Compile Include="ApiHandler\Entities\TicketView.cs" />
     <Compile Include="ApiHandler\Entities\Timezone.cs" />
