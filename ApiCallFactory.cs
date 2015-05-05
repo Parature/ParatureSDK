@@ -6,11 +6,13 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Xml;
 using Microsoft.VisualBasic;
 using ParatureSDK.Fields;
 using ParatureSDK.ParaHelper;
 using ParatureSDK.ParaObjects;
+using Attachment = System.Net.Mail.Attachment;
 
 namespace ParatureSDK
 {
@@ -40,13 +42,13 @@ namespace ParatureSDK
         ///When creating or updating an object, you will need to pass the properly formatted XML document to be sent to the server.
         ///Value Type: <see cref="String" />   (System.String)
         ///</param>
-        public static ApiCallResponse ObjectCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureModule module, System.Xml.XmlDocument fileToPost, Int64 objectid)
+        public static ApiCallResponse ObjectCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureModule module, XmlDocument fileToPost, Int64 objectid)
         {
             // Calling the next method that manages the call.
             return ObjectCreateUpdate(paracredentials, module, fileToPost, objectid, null);
         }
 
-        public static ApiCallResponse ObjectCreateUpdate<T>(ParaCredentials paracredentials, System.Xml.XmlDocument fileToPost, Int64 objectid)
+        public static ApiCallResponse ObjectCreateUpdate<T>(ParaCredentials paracredentials, XmlDocument fileToPost, Int64 objectid)
         {
             // Calling the next method that manages the call.
             return ObjectCreateUpdate<T>(paracredentials, fileToPost, objectid, null);
@@ -72,7 +74,7 @@ namespace ParatureSDK
         /// Value Type: <see cref="Int64" />   (System.Int64)
         /// </param>
         /// <param name="arguments"></param>
-        public static ApiCallResponse ObjectCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureModule module, System.Xml.XmlDocument fileToPost, Int64 objectid, ArrayList arguments)
+        public static ApiCallResponse ObjectCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureModule module, XmlDocument fileToPost, Int64 objectid, ArrayList arguments)
         {
             if (arguments == null)
             {
@@ -137,7 +139,6 @@ namespace ParatureSDK
             return ApiMakeCall(apiCallUrl, apicallhttpmethod, fileToPost, paracredentials.Instanceid, paracredentials);
         }
 
-
         ///  <summary>
         ///  This method will create/update an Object in Parature.
         ///  </summary>
@@ -154,7 +155,7 @@ namespace ParatureSDK
         /// When creating or updating an object, you will need to pass the properly formatted XML document to be sent to the server.
         /// Value Type: <see cref="String" />   (System.String)
         /// </param>
-        public static ApiCallResponse EntityCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, System.Xml.XmlDocument fileToPost, Int64 objectid)
+        public static ApiCallResponse EntityCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, XmlDocument fileToPost, Int64 objectid)
         {
             // Getting the standard API URL to call.
             var apiCallUrl = ApiUrlBuilder.ApiObjectReadUpdateDeleteUrl(paracredentials, entity, objectid, false);
@@ -698,9 +699,9 @@ namespace ParatureSDK
         /// <summary>
         /// This method makes the call to the API Server and return a class holding the response. It is used when you are also posting an XML To the server (in the case of a create, or an update).
         /// </summary>
-        static ApiCallResponse ApiMakeCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Xml.XmlDocument XmlPosted, int accountID, ParaCredentials paracredentials)
+        static ApiCallResponse ApiMakeCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, XmlDocument xmlPosted, int accountId, ParaCredentials paracredentials)
         {
-            ApiCallResponse resp = MakeThrottledCall(callurl, ApiCallHttpMethod, XmlPosted, accountID, paracredentials);
+            ApiCallResponse resp = MakeThrottledCall(callurl, httpMethod, xmlPosted, accountId, paracredentials);
 
             #region handing Random API server issues
             // Handling our servers having issues
@@ -712,7 +713,7 @@ namespace ParatureSDK
                 while (attemptNumber < 5 && (resp.HttpResponseCode == 500 || resp.HttpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
                 {
                     BuildAutoRetryApiErrorLogMessage(ref callLogger, attemptNumber.ToString(), callurl,
-                        ApiCallHttpMethod.ToString(), resp.HttpResponseCode.ToString(), resp.ExceptionDetails,
+                        httpMethod.ToString(), resp.HttpResponseCode.ToString(), resp.ExceptionDetails,
                         resp.XmlSent, resp.XmlReceived);
 
                     attemptNumber++;
@@ -720,13 +721,13 @@ namespace ParatureSDK
                     HandleRandomApiErrorsSleepTime(attemptNumber, paracredentials);
 
                     // try the call again
-                    resp = MakeThrottledCall(callurl, ApiCallHttpMethod, XmlPosted, accountID, paracredentials);
+                    resp = MakeThrottledCall(callurl, httpMethod, xmlPosted, accountId, paracredentials);
 
                 }
                 if (attemptNumber > 1 && paracredentials.logRetries)
                 {
                     BuildAutoRetryApiErrorLogMessage(ref callLogger, attemptNumber.ToString(), callurl,
-                        ApiCallHttpMethod.ToString(), resp.HttpResponseCode.ToString(), resp.ExceptionDetails,
+                        httpMethod.ToString(), resp.HttpResponseCode.ToString(), resp.ExceptionDetails,
                         resp.XmlSent, resp.XmlReceived);
                 }
                 callLogger = null;
@@ -741,39 +742,36 @@ namespace ParatureSDK
         /// This method makes the call to the API Server and return a class holding the response.
         /// </summary>
         /// 
-        static ApiCallResponse ApiMakeCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, int accountID, ParaCredentials paracredentials)
+        static ApiCallResponse ApiMakeCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, int accountId, ParaCredentials paracredentials)
         {
-            System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
-            doc = null;
-            ApiCallResponse resp = MakeThrottledCall(callurl, ApiCallHttpMethod, doc, accountID, paracredentials);
+            XmlDocument doc = null;
+            var resp = MakeThrottledCall(callurl, httpMethod, doc, accountId, paracredentials);
             Int16 attemptNumber = 1;
 
             #region handling Random API server issues
             // Handling our servers having issues
             if (paracredentials.AutoretryMode != ParaEnums.AutoRetryMode.None && (resp.HttpResponseCode == 500 || resp.HttpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
             {
-                StringBuilder callLogger = new StringBuilder();
+                var callLogger = new StringBuilder();
                
-
                 while (attemptNumber < 5 && (resp.HttpResponseCode == 500 || resp.HttpResponseCode == 401 || resp.ExceptionDetails.Contains("An unexpected error occurred")))
                 {
                     BuildAutoRetryApiErrorLogMessage(ref callLogger, attemptNumber.ToString(),
-                        callurl, ApiCallHttpMethod.ToString(), resp.HttpResponseCode.ToString(),
+                        callurl, httpMethod.ToString(), resp.HttpResponseCode.ToString(),
                         resp.ExceptionDetails, null, resp.XmlReceived);
 
                     attemptNumber++;
 
                     HandleRandomApiErrorsSleepTime(attemptNumber, paracredentials);
                     // try the call again
-                    resp = MakeThrottledCall(callurl, ApiCallHttpMethod, doc, accountID, paracredentials);
+                    resp = MakeThrottledCall(callurl, httpMethod, doc, accountId, paracredentials);
                 }
                 if (attemptNumber > 1 && paracredentials.logRetries)
                 {
                     BuildAutoRetryApiErrorLogMessage(ref callLogger, attemptNumber.ToString(),
-                        callurl, ApiCallHttpMethod.ToString(), resp.HttpResponseCode.ToString(),
+                        callurl, httpMethod.ToString(), resp.HttpResponseCode.ToString(),
                         resp.ExceptionDetails, null, resp.XmlReceived);
                 }
-                callLogger = null;
             }
 
             #endregion
@@ -788,18 +786,18 @@ namespace ParatureSDK
         /// </summary>
         /// <param name="callLogger"></param>
         /// <param name="attemptNumber"></param>
-        /// <param name="URL"></param>
-        /// <param name="Method"></param>
+        /// <param name="url"></param>
+        /// <param name="method"></param>
         /// <param name="responseCode"></param>
         /// <param name="message"></param>
         /// <param name="sent"></param>
         /// <param name="received"></param>
-        private static void BuildAutoRetryApiErrorLogMessage(ref StringBuilder callLogger, string attemptNumber, string URL, string Method, string responseCode, string message, System.Xml.XmlDocument sent, System.Xml.XmlDocument received)
+        private static void BuildAutoRetryApiErrorLogMessage(ref StringBuilder callLogger, string attemptNumber, string url, string method, string responseCode, string message, XmlDocument sent, XmlDocument received)
         {
             //TODO determine use of this mehtod
             callLogger.AppendLine("Call [" + attemptNumber + "]");
-            callLogger.AppendLine("Call URL [" + URL + "]");
-            callLogger.AppendLine("Call Method [" + Method + "]");
+            callLogger.AppendLine("Call URL [" + url + "]");
+            callLogger.AppendLine("Call Method [" + method + "]");
             callLogger.AppendLine("Call Time [" + DateTime.Now.ToString("MM/dd/yyyy-HH:mm:ss' GMT'z") + "]");
             callLogger.AppendLine("HTTP Response [" + responseCode + "]");
             callLogger.AppendLine("Exception Message [" + message + "]");
@@ -848,7 +846,7 @@ namespace ParatureSDK
             }
 
             // The call had issues with our APIs, sleeping a little bit.               
-            System.Threading.Thread.Sleep(sleepTime);
+            Thread.Sleep(sleepTime);
         }
 
         public static ApiCallResponse FileUploadGetUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module)
@@ -881,30 +879,30 @@ namespace ParatureSDK
             return resp;
         }
 
-        public static ApiCallResponse FilePerformUpload(string PostUrl, System.Net.Mail.Attachment Attachment, int accountID, ParaCredentials paraCredentials)
+        public static ApiCallResponse FilePerformUpload(string postUrl, Attachment attachment, int accountId, ParaCredentials paraCredentials)
         {
-            return MakeThrottledCall(PostUrl, ParaEnums.ApiCallHttpMethod.Post, Attachment, accountID, paraCredentials);
+            return MakeThrottledCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment, accountId, paraCredentials);
         }
 
-        public static ApiCallResponse FilePerformUpload(string PostUrl, Byte[] Attachment, string contentType, string FileName, int accountID, ParaCredentials paraCredentials)
+        public static ApiCallResponse FilePerformUpload(string postUrl, Byte[] attachment, string contentType, string fileName, int accountId, ParaCredentials paraCredentials)
         {
-            return MakeThrottledCall(PostUrl, ParaEnums.ApiCallHttpMethod.Post, Attachment, contentType, FileName, accountID, paraCredentials);
+            return MakeThrottledCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment, contentType, fileName, accountId, paraCredentials);
         }
 
         /// <summary>
         /// Manages throttling when making a call to the server.
         /// </summary>
-        static ApiCallResponse MakeThrottledCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Xml.XmlDocument XmlPosted, int accountID, ParaCredentials pc)
+        static ApiCallResponse MakeThrottledCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, XmlDocument xmlPosted, int accountId, ParaCredentials pc)
         {
-            ApiCallResponse resp = new ApiCallResponse();
-            resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, XmlPosted, accountID, pc);
+            var resp = new ApiCallResponse();
+            resp = ApiMakeTheCall(callurl, httpMethod, xmlPosted, accountId, pc);
             int sleepTime = 121000;
             while ((resp.HttpResponseCode == 503 || resp.HttpResponseCode == 0) && sleepTime < 240000)
             {
                 // The call has been rejected by the API throttling service.                
-                System.Threading.Thread.Sleep(sleepTime);
+                Thread.Sleep(sleepTime);
                 //calls.Clear();
-                resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, XmlPosted, accountID, pc);
+                resp = ApiMakeTheCall(callurl, httpMethod, xmlPosted, accountId, pc);
                 sleepTime += 60000;
             }
 
@@ -912,8 +910,8 @@ namespace ParatureSDK
             while (resp.HttpResponseCode == 401 && sleepTime < 6001)
             {
                 // The call has been rejected by the API throttling service.
-                System.Threading.Thread.Sleep(2000);
-                resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, XmlPosted, accountID, pc);
+                Thread.Sleep(2000);
+                resp = ApiMakeTheCall(callurl, httpMethod, xmlPosted, accountId, pc);
                 sleepTime += 2000;
             }
 
@@ -923,17 +921,17 @@ namespace ParatureSDK
         /// <summary>
         /// Manages throttling when making a call to the server.
         /// </summary>
-        static ApiCallResponse MakeThrottledCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Net.Mail.Attachment att, int accountID, ParaCredentials paraCredentials)
+        static ApiCallResponse MakeThrottledCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, Attachment att, int accountId, ParaCredentials paraCredentials)
         {
-            var resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, att, accountID, paraCredentials);
+            var resp = ApiMakeTheCall(callurl, httpMethod, att, accountId, paraCredentials);
             var sleepTime = 121000;
 
             while ((resp.HttpResponseCode == 503 || resp.HttpResponseCode == 0) && sleepTime < 240000)
             {
 
                 // The call has been rejected by the API throttling service.
-                System.Threading.Thread.Sleep(sleepTime);
-                resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, att, accountID, paraCredentials);
+                Thread.Sleep(sleepTime);
+                resp = ApiMakeTheCall(callurl, httpMethod, att, accountId, paraCredentials);
                 sleepTime += 60000;
             }
 
@@ -941,8 +939,8 @@ namespace ParatureSDK
             while (resp.HttpResponseCode == 401 && sleepTime < 6001)
             {
                 // The call has been rejected by the API throttling service.
-                System.Threading.Thread.Sleep(2000);
-                resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, att, accountID, paraCredentials);
+                Thread.Sleep(2000);
+                resp = ApiMakeTheCall(callurl, httpMethod, att, accountId, paraCredentials);
                 sleepTime += 2000;
             }
 
@@ -952,18 +950,18 @@ namespace ParatureSDK
         /// <summary>
         /// Manages throttling when making a call to the server.
         /// </summary>
-        static ApiCallResponse MakeThrottledCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, Byte[] Attachment, string ContentType, string FileName, int accountID, ParaCredentials paraCredentials)
+        static ApiCallResponse MakeThrottledCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, Byte[] attachment, string contentType, string fileName, int accountId, ParaCredentials paraCredentials)
         {
             ApiCallResponse resp = new ApiCallResponse();
-            resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, Attachment, ContentType, FileName, accountID, paraCredentials);
+            resp = ApiMakeTheCall(callurl, httpMethod, attachment, contentType, fileName, accountId, paraCredentials);
             int sleepTime = 121000;
 
             while ((resp.HttpResponseCode == 503 || resp.HttpResponseCode == 0) && sleepTime < 240000)
             {
                 // The call has been rejected by the API throttling service.
-                System.Threading.Thread.Sleep(sleepTime);
+                Thread.Sleep(sleepTime);
                 //calls.Clear();
-                resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, Attachment, ContentType, FileName, accountID, paraCredentials);
+                resp = ApiMakeTheCall(callurl, httpMethod, attachment, contentType, fileName, accountId, paraCredentials);
                 sleepTime += 60000;
             }
 
@@ -971,8 +969,8 @@ namespace ParatureSDK
             while (resp.HttpResponseCode == 401 && sleepTime < 10001)
             {
                 // The call has been rejected by the API throttling service.
-                System.Threading.Thread.Sleep(2000);
-                resp = ApiMakeTheCall(callurl, ApiCallHttpMethod, Attachment, ContentType, FileName, accountID, paraCredentials);
+                Thread.Sleep(2000);
+                resp = ApiMakeTheCall(callurl, httpMethod, attachment, contentType, fileName, accountId, paraCredentials);
                 sleepTime += 2000;
             }
 
@@ -983,7 +981,7 @@ namespace ParatureSDK
         /// <summary>
         /// The true call is being made by this method.
         /// </summary>
-        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Xml.XmlDocument XmlPosted, int accountID, ParaCredentials paraCredentials)
+        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, XmlDocument xmlPosted, int accountId, ParaCredentials paraCredentials)
         {
             var ac = new ApiCallResponse();
             var uriAddress = new Uri(callurl);
@@ -992,19 +990,19 @@ namespace ParatureSDK
             //TODO: This shouldn't be used! This is insecure.
             ServicePointManager.CertificatePolicy = new TrustAllCertificatePolicy();
 
-            req.Method = ParaEnumProvider.ApiHttpPostProvider(ApiCallHttpMethod);
+            req.Method = ParaEnumProvider.ApiHttpPostProvider(httpMethod);
             ac.HttpCallMethod = req.Method;
             req.KeepAlive = false;
             
             //2 minutes request timeout
             req.Timeout = 120 * 1000;
 
-            if (XmlPosted != null)
+            if (xmlPosted != null)
             {
                 req.ContentType = "application/x-www-form-urlencoded";
 
                 // Create a byte array of the data we want to send
-                var bytedata = Encoding.UTF8.GetBytes(XmlPosted.OuterXml);
+                var bytedata = Encoding.UTF8.GetBytes(xmlPosted.OuterXml);
 
                 // Set the content length in the request headers   
                 req.ContentLength = bytedata.Length;
@@ -1014,7 +1012,7 @@ namespace ParatureSDK
                 {
                     postStream.Write(bytedata, 0, bytedata.Length);
                 }
-                ac.XmlSent = XmlPosted;
+                ac.XmlSent = xmlPosted;
             }
             else
             {
@@ -1023,14 +1021,14 @@ namespace ParatureSDK
 
             ac.HasException = false;
             ac.CalledUrl = callurl;
-            return ApiHttpRequestProcessor(ac, req, accountID, paraCredentials);
+            return ApiHttpRequestProcessor(ac, req, accountId, paraCredentials);
 
         }
 
         /// <summary>
         /// The call, with passing a binary file.
         /// </summary>
-        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, System.Net.Mail.Attachment att, int accountID, ParaCredentials paraCredentials)
+        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, Attachment att, int accountId, ParaCredentials paraCredentials)
         {
 
             string Boundary = "--ParaBoundary";
@@ -1040,7 +1038,7 @@ namespace ParatureSDK
             Uri uriAddress = new Uri(callurl);
 
             HttpWebRequest req = WebRequest.Create(uriAddress) as HttpWebRequest;
-            req.Method = ParaEnumProvider.ApiHttpPostProvider(ApiCallHttpMethod);
+            req.Method = ParaEnumProvider.ApiHttpPostProvider(httpMethod);
             req.KeepAlive = false;
             ac.HttpCallMethod = req.Method;
 
@@ -1061,8 +1059,8 @@ namespace ParatureSDK
             string header = sb.ToString();
             string endboundary = LineBreak + Boundary + "--";
             //int CurrOffset=0;
-            byte[] FooterBytes = System.Text.Encoding.ASCII.GetBytes(endboundary);
-            byte[] HeadBytes = System.Text.Encoding.ASCII.GetBytes(header);
+            byte[] FooterBytes = Encoding.ASCII.GetBytes(endboundary);
+            byte[] HeadBytes = Encoding.ASCII.GetBytes(header);
             //req.ContentLength = header.Length +  Filebytes.Length + endboundary.Length;
             req.ContentLength = HeadBytes.Length + Filebytes.Length + FooterBytes.Length;
             Stream reqStreamTest = req.GetRequestStream();
@@ -1079,24 +1077,24 @@ namespace ParatureSDK
             ac.CalledUrl = callurl;
 
 
-            return ApiHttpRequestProcessor(ac, req, accountID, paraCredentials);
+            return ApiHttpRequestProcessor(ac, req, accountId, paraCredentials);
 
         }
 
         /// <summary>
         /// The call, with passing a binary file.
         /// </summary>
-        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod ApiCallHttpMethod, Byte[] Attachment, string ContentType, string FileName, int accountID, ParaCredentials paraCredentials)
+        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, Byte[] attachment, string contentType, string fileName, int accountId, ParaCredentials paraCredentials)
         {
 
             string Boundary = "--ParaBoundary";
             string LineBreak = "\r\n";
-            string ContentDisposition = string.Format("Content-Disposition: {0}; name=\"{1}\"; filename=\"{1}\"", ContentType, FileName);
+            string ContentDisposition = string.Format("Content-Disposition: {0}; name=\"{1}\"; filename=\"{1}\"", contentType, fileName);
             ApiCallResponse ac = new ApiCallResponse();
             Uri uriAddress = new Uri(callurl);
 
             HttpWebRequest req = WebRequest.Create(uriAddress) as HttpWebRequest;
-            req.Method = ParaEnumProvider.ApiHttpPostProvider(ApiCallHttpMethod);
+            req.Method = ParaEnumProvider.ApiHttpPostProvider(httpMethod);
             req.KeepAlive = false;
             ac.HttpCallMethod = req.Method;
 
@@ -1104,27 +1102,27 @@ namespace ParatureSDK
             req.ReadWriteTimeout = 10 * 60 * 1000;
             req.Timeout = -1;
 
-            req.ContentType = ContentType + "; boundary:" + Boundary; ;
+            req.ContentType = contentType + "; boundary:" + Boundary; ;
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(Boundary);
             sb.AppendLine(ContentDisposition);
-            sb.AppendLine("Content-Type: " + ContentType);
+            sb.AppendLine("Content-Type: " + contentType);
             sb.AppendLine("");
 
             string header = sb.ToString();
             string endboundary = LineBreak + Boundary + "--";
 
-            byte[] FooterBytes = System.Text.Encoding.ASCII.GetBytes(endboundary);
-            byte[] HeadBytes = System.Text.Encoding.ASCII.GetBytes(header);
+            byte[] FooterBytes = Encoding.ASCII.GetBytes(endboundary);
+            byte[] HeadBytes = Encoding.ASCII.GetBytes(header);
 
-            req.ContentLength = HeadBytes.Length + Attachment.Length + FooterBytes.Length;
+            req.ContentLength = HeadBytes.Length + attachment.Length + FooterBytes.Length;
             Stream reqStreamTest = req.GetRequestStream();
             // String to Byte Array
-            byte[] TotalRequest = new byte[HeadBytes.Length + Attachment.Length + FooterBytes.Length];
+            byte[] TotalRequest = new byte[HeadBytes.Length + attachment.Length + FooterBytes.Length];
             HeadBytes.CopyTo(TotalRequest, 0);
-            Attachment.CopyTo(TotalRequest, HeadBytes.Length);
-            FooterBytes.CopyTo(TotalRequest, HeadBytes.Length + Attachment.Length);
+            attachment.CopyTo(TotalRequest, HeadBytes.Length);
+            FooterBytes.CopyTo(TotalRequest, HeadBytes.Length + attachment.Length);
             reqStreamTest.Write(TotalRequest, 0, TotalRequest.Length);
 
             reqStreamTest.Close();
@@ -1132,7 +1130,7 @@ namespace ParatureSDK
             ac.HasException = false;
             ac.CalledUrl = callurl;
 
-            return ApiHttpRequestProcessor(ac, req, accountID, paraCredentials);
+            return ApiHttpRequestProcessor(ac, req, accountId, paraCredentials);
         }
 
         /// <summary>
@@ -1146,12 +1144,13 @@ namespace ParatureSDK
         /// The http web Request object. Each ApiMakeCall method will have its own http webrequest information. This method will make 
         /// the http call with the request object passed to it.
         /// </param>
+        /// <param name="accountId"></param>
         /// <returns></returns>
-        static ApiCallResponse ApiHttpRequestProcessor(ApiCallResponse ac, HttpWebRequest req, int accountID, ParaCredentials pc)
+        static ApiCallResponse ApiHttpRequestProcessor(ApiCallResponse ac, HttpWebRequest req, int accountId, ParaCredentials pc)
         {
             string responseFromServer = "";
 
-            ThrottlingManagerPause(accountID, pc.retriesWaitTime);
+            ThrottlingManagerPause(accountId, pc.retriesWaitTime);
 
             try
             {
@@ -1257,7 +1256,7 @@ namespace ParatureSDK
                     {
                         ac.XmlReceived.LoadXml(exresponseFromServer);
 
-                        System.Xml.XmlNode mainnode = ac.XmlReceived.DocumentElement;
+                        XmlNode mainnode = ac.XmlReceived.DocumentElement;
                         if (mainnode.LocalName.ToLower() == "error")
                         {
                             if (mainnode.Attributes["code"].InnerText.ToLower() != "")
@@ -1307,7 +1306,7 @@ namespace ParatureSDK
             }
             
             // Set the last call time.
-            ThrottlingManagerSet(accountID);
+            ThrottlingManagerSet(accountId);
 
             return ac;
         }
@@ -1333,7 +1332,7 @@ namespace ParatureSDK
                 {
                     // deciding the sleep time needed, and then sleeping
                     var sleepTime =  waitTimeMilliseconds -(int) Math.Floor(sp.TotalMilliseconds)  ;
-                    System.Threading.Thread.Sleep( sleepTime);
+                    Thread.Sleep( sleepTime);
                 }
             }
         }
