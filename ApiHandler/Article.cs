@@ -318,20 +318,21 @@ namespace ParatureSDK.ApiHandler
             /// <summary>
             /// Provides the Schema of the article folder entity.
             /// </summary>
-            /// <param name="ParaCredentials"></param>
+            /// <param name="creds"></param>
             /// <returns></returns>
-            public static ParaObjects.ArticleFolder Schema(ParaCredentials ParaCredentials)
+            public static ParaObjects.ArticleFolder Schema(ParaCredentials creds)
             {
-                ParaObjects.ArticleFolder ArticleFolder = new ParaObjects.ArticleFolder();
-                ApiCallResponse ar = new ApiCallResponse();
-                ar = ApiCallFactory.EntityGetSchema(ParaCredentials, ParaEnums.ParatureEntity.ArticleFolder);
+                var articleFolder = new ParaObjects.ArticleFolder();
+                var ar = new ApiCallResponse();
+                ar = ApiCallFactory.EntityGetSchema(creds, ParaEnums.ParatureEntity.ArticleFolder);
 
                 if (ar.HasException == false)
                 {
-                    ArticleFolder = ParaEntityParser.EntityFill<ParaObjects.ArticleFolder>(ar.XmlReceived);
+                    var purgedSchema = ApiUtils.RemoveStaticFieldsNodes(ar.XmlReceived);
+                    articleFolder = ParaEntityParser.EntityFill<ParaObjects.ArticleFolder>(purgedSchema);
                 }
-                ArticleFolder.ApiCallResponse = ar;
-                return ArticleFolder;
+                articleFolder.ApiCallResponse = ar;
+                return articleFolder;
             }
 
             /// <summary>

@@ -8,7 +8,10 @@ using ParatureSDK.ParaObjects;
 
 namespace ParatureSDK
 {
-    public class XmlApiSerializer
+    /// <summary>
+    /// WIP if we ever decide to create a serializer using the XmlSerializer class
+    /// </summary>
+    internal class XmlApiSerializer
     {
         public static string Serialize(Object ent)
         {

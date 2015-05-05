@@ -988,9 +988,9 @@ namespace ParatureSDK
             var ac = new ApiCallResponse();
             var uriAddress = new Uri(callurl);
             var req = WebRequest.Create(uriAddress) as HttpWebRequest;
-            //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 
-            System.Net.ServicePointManager.CertificatePolicy = new TrustAllCertificatePolicy();
+            //TODO: This shouldn't be used! This is insecure.
+            ServicePointManager.CertificatePolicy = new TrustAllCertificatePolicy();
 
             req.Method = ParaEnumProvider.ApiHttpPostProvider(ApiCallHttpMethod);
             ac.HttpCallMethod = req.Method;
@@ -1004,7 +1004,7 @@ namespace ParatureSDK
                 req.ContentType = "application/x-www-form-urlencoded";
 
                 // Create a byte array of the data we want to send
-                byte[] bytedata = UTF8Encoding.UTF8.GetBytes(XmlPosted.OuterXml);
+                var bytedata = Encoding.UTF8.GetBytes(XmlPosted.OuterXml);
 
                 // Set the content length in the request headers   
                 req.ContentLength = bytedata.Length;

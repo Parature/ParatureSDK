@@ -271,23 +271,20 @@ namespace ParatureSDK.ApiHandler
                 return FillList(ParaCredentials);
             }
 
-
             /// <summary>
             /// Fills an Csr Status object.
             /// </summary>
             private static ParaEntityList<ParaObjects.CsrStatus> FillList(ParaCredentials ParaCredentials)
             {
 
-                var CsrStatusList = new ParaEntityList<ParaObjects.CsrStatus>();
-                //DownloadsList = null;
-                ApiCallResponse ar = new ApiCallResponse();
-                ar = ApiCallFactory.ObjectSecondLevelGetList(ParaCredentials, ParaEnums.ParatureModule.Csr, ParaEnums.ParatureEntity.status, new ArrayList(0));
+                var csrStatusList = new ParaEntityList<ParaObjects.CsrStatus>();
+                var ar = ApiCallFactory.ObjectSecondLevelGetList(ParaCredentials, ParaEnums.ParatureModule.Csr, ParaEnums.ParatureEntity.status, new ArrayList(0));
                 if (ar.HasException == false)
                 {
-                    CsrStatusList = ParaEntityParser.FillList<ParaObjects.CsrStatus>(ar.XmlReceived);
+                    csrStatusList = ParaEntityParser.FillList<ParaObjects.CsrStatus>(ar.XmlReceived);
                 }
-                CsrStatusList.ApiCallResponse = ar;
-                return CsrStatusList;
+                csrStatusList.ApiCallResponse = ar;
+                return csrStatusList;
             }
 
             private static ParaObjects.CsrStatus FillDetails(Int64 CsrStatusid, ParaCredentials ParaCredentials)
