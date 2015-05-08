@@ -35,17 +35,6 @@ namespace ParatureSDK
         }
 
         /// <summary>
-        /// This enum defines the behaviour of the api handler when unhandled errors occured: should it retry the call or not.
-        /// </summary>
-        public enum AutoRetryMode
-        {
-            None,
-            WebApplication,
-            ConsoleApp,
-            Auto
-        }
-
-        /// <summary>
         /// List all possible criteria you can use when querying a list of objects.
         /// </summary>
         public enum QueryCriteria

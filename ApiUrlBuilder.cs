@@ -8,7 +8,7 @@ namespace ParatureSDK
         /// <summary>
         /// Build the API URL to call, Add a simple customString to be appended at the end of the call. Used for special instances, like requesting an upload URL.
         /// </summary>
-        internal static string ApiObjectReadUpdateDeleteCustomUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module, string customstring)
+        internal static string ApiObjectCustomUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module, string customstring)
         {
             if (string.IsNullOrEmpty(customstring))
             {
@@ -23,14 +23,14 @@ namespace ParatureSDK
             return apiCallUrl;
         }
 
-        internal static string ApiObjectReadUpdateDeleteCustomUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ParaEnums.ParatureEntity entity, ArrayList Arguments)
+        internal static string ApiObjectCustomUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ParaEnums.ParatureEntity entity, ArrayList arguments)
         {
             var apiCallUrl = ApiBuildBasicUrl(paracredentials) + module + "/" + entity + "?" + ApiToken(paracredentials);
-            if (Arguments.Count > 0)
+            if (arguments.Count > 0)
             {
-                for (int i = 0; i <= Arguments.Count - 1; i++)
+                for (int i = 0; i <= arguments.Count - 1; i++)
                 {
-                    apiCallUrl = apiCallUrl + "&" + Arguments[i];
+                    apiCallUrl = apiCallUrl + "&" + arguments[i];
                 }
             }
             return apiCallUrl;
@@ -39,7 +39,7 @@ namespace ParatureSDK
         /// <summary>
         /// Build the API URL to call. Since a simple read (without any further options) is the same as an update, as well as a delete, this method will generate that same link for these operations. Also, indicates whether you are requesting a schema a link, or an actual operation link
         /// </summary>
-        internal static string ApiObjectReadUpdateDeleteUrl(ParaCredentials paracredentials, string module, Int64 objectId, bool isSchema)
+        internal static string ApiObjectUrl(ParaCredentials paracredentials, string module, Int64 objectId, bool isSchema)
         {
             string customstring;
             if (isSchema)
@@ -65,7 +65,7 @@ namespace ParatureSDK
         /// <summary>
         /// Build the API URL to call. Since a simple read (without any further options) is the same as an update, as well as a delete, this method will generate that same link for these operations. Also, indicates whether you are requesting a schema a link, or an actual operation link
         /// </summary>
-        internal static string ApiObjectReadUpdateDeleteUrl(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, Int64 objectId, bool isSchema)
+        internal static string ApiObjectUrl(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, Int64 objectId, bool isSchema)
         {
             string customstring;
             string entityName = entity.ToString();
@@ -100,10 +100,10 @@ namespace ParatureSDK
         /// <summary>
         /// Build the API URL to call. Since a simple read (without any further options) is the same as an update, as well as a delete, this method will generate that same link for these operations. Also, indicates whether you are requesting a schema a link, or an actual operation link
         /// </summary>
-        internal static string ApiObjectReadUpdateDeleteUrl(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, Int64 objectId, ArrayList arguments)
+        internal static string ApiObjectUrl(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, Int64 objectId, ArrayList arguments)
         {
 
-            var apiCallUrl = ApiObjectReadUpdateDeleteUrl(paracredentials, entity, objectId, false);
+            var apiCallUrl = ApiObjectUrl(paracredentials, entity, objectId, false);
             if (arguments.Count > 0)
             {
                 for (int i = 0; i <= arguments.Count - 1; i++)
@@ -119,9 +119,9 @@ namespace ParatureSDK
         /// <summary>
         /// Build the API URL to call. Since a simple read (without any further options) is the same as an update, as well as a delete, this method will generate that same link for these operations. This methods accepts a list of extra arguments to pass to the API url through the query string.
         /// </summary>
-        internal static string ApiObjectReadUpdateDeleteUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectId, ArrayList arguments)
+        internal static string ApiObjectUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectId, ArrayList arguments)
         {
-            var apiCallUrl = ApiObjectReadUpdateDeleteUrl(paracredentials, module.ToString(), objectId, false);
+            var apiCallUrl = ApiObjectUrl(paracredentials, module.ToString(), objectId, false);
             if (arguments != null)
             {
                 if (arguments.Count > 0)
@@ -135,9 +135,9 @@ namespace ParatureSDK
             return apiCallUrl;
         }
 
-        internal static string ApiObjectReadUpdateDeleteUrl(ParaCredentials paracredentials, string module, Int64 objectId, ArrayList arguments)
+        internal static string ApiObjectUrl(ParaCredentials paracredentials, string module, Int64 objectId, ArrayList arguments)
         {
-            var apiCallUrl = ApiObjectReadUpdateDeleteUrl(paracredentials, module, objectId, false);
+            var apiCallUrl = ApiObjectUrl(paracredentials, module, objectId, false);
             if (arguments != null)
             {
                 if (arguments.Count > 0)

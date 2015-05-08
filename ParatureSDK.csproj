@@ -183,7 +183,6 @@
     <Compile Include="ModuleQuery\ParaEntityQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThreadPool.cs" />
-    <Compile Include="TrustAllCertificatePolicy.cs" />
     <Compile Include="XmlGenerator.cs" />
     <Compile Include="XmlApiSerializer.cs" />
     <Compile Include="XmlToObjectParser\ParaEntityParser.cs" />

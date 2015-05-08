@@ -10,7 +10,7 @@ using ParatureSDK.XmlToObjectParser;
 
 namespace ParatureSDK.ApiHandler
 {
-    public class ApiRequest
+    internal class ApiRequest
     {
         /// <summary>
         /// Create a Parature Account. Requires an Object and a credentials object. Will return the Newly Created accountId. Returns 0 if the entity creation fails.
