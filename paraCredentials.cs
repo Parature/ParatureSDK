@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using ParatureSDK.ParaObjects;
-
 namespace ParatureSDK
 {
     /// <summary>
@@ -55,7 +52,7 @@ namespace ParatureSDK
         /// <param name="instanceid">Instance ID</param>
         /// <param name="departmentid">Department ID</param>
         /// <param name="enforceRequiredFields">Whether to enforce required custom fields or not</param>
-        public ParaCredentials(string token, string serverfarmaddress, ParaEnums.ApiVersion apiversion, int instanceid, int departmentid, bool enforceRequiredFields, Dictionary<string, ParaEntityBaseProperties> schemaCache)
+        public ParaCredentials(string token, string serverfarmaddress, ParaEnums.ApiVersion apiversion, int instanceid, int departmentid, bool enforceRequiredFields)
         {
             PrevalidateCalls = false;
             SetCredentials(token, serverfarmaddress, apiversion, instanceid, departmentid, enforceRequiredFields);
