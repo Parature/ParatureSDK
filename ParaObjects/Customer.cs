@@ -315,7 +315,7 @@ namespace ParatureSDK.ParaObjects
                 {
                     field = new StaticField()
                     {
-                        Name = "Last_Name",
+                        Name = "Password",
                         FieldType = "password",
                         DataType = "string"
                     };
