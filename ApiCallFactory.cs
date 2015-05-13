@@ -725,7 +725,7 @@ namespace ParatureSDK
 
             ac.HasException = false;
             ac.CalledUrl = apiCallUrl;
-            return ApiHttpRequestProcessor(ac, req, accountId, creds);
+            return ApiHttpRequestProcessor(ac, req);
         }
 
         /// <summary>
@@ -771,7 +771,7 @@ namespace ParatureSDK
 
             ac.HasException = false;
             ac.CalledUrl = callurl;
-            return ApiHttpRequestProcessor(ac, req, accountId, paraCredentials);
+            return ApiHttpRequestProcessor(ac, req);
 
         }
 
@@ -781,13 +781,13 @@ namespace ParatureSDK
         static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, Attachment att, int accountId, ParaCredentials paraCredentials)
         {
 
-            string Boundary = "--ParaBoundary";
-            string LineBreak = "\r\n";
-            string ContentDisposition = string.Format("Content-Disposition: {0}; name=\"{1}\"; filename=\"{1}\"", att.ContentType.MediaType, att.ContentType.Name);
-            ApiCallResponse ac = new ApiCallResponse();
-            Uri uriAddress = new Uri(callurl);
+            const string boundary = "--ParaBoundary";
+            const string lineBreak = "\r\n";
+            var contentDisposition = string.Format("Content-Disposition: {0}; name=\"{1}\"; filename=\"{1}\"", att.ContentType.MediaType, att.ContentType.Name);
+            var ac = new ApiCallResponse();
+            var uriAddress = new Uri(callurl);
 
-            HttpWebRequest req = WebRequest.Create(uriAddress) as HttpWebRequest;
+            var req = WebRequest.Create(uriAddress) as HttpWebRequest;
             req.Method = ParaEnumProvider.ApiHttpPostProvider(httpMethod);
             req.KeepAlive = false;
             ac.HttpCallMethod = req.Method;
@@ -799,38 +799,37 @@ namespace ParatureSDK
             //Provide a way for the user to configure the connection -> proxy, timeout, etc
             ApiRequestSettings.GlobalPreRequest(req);
 
-            req.ContentType = att.ContentType.MediaType + "; boundary:" + Boundary; ;
+            req.ContentType = att.ContentType.MediaType + "; boundary:" + boundary; ;
 
-            byte[] Filebytes = new byte[Convert.ToInt32(att.ContentStream.Length - 1) + 1];
-            att.ContentStream.Read(Filebytes, 0, Filebytes.Length);
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine(Boundary);
-            sb.AppendLine(ContentDisposition);
+            var filebytes = new byte[Convert.ToInt32(att.ContentStream.Length - 1) + 1];
+            att.ContentStream.Read(filebytes, 0, filebytes.Length);
+            var sb = new StringBuilder();
+            sb.AppendLine(boundary);
+            sb.AppendLine(contentDisposition);
             sb.AppendLine("Content-Type: " + att.ContentType.MediaType);
             sb.AppendLine("");
-            // sb.AppendLine(Boundary + "--");
+
             string header = sb.ToString();
-            string endboundary = LineBreak + Boundary + "--";
-            //int CurrOffset=0;
-            byte[] FooterBytes = Encoding.ASCII.GetBytes(endboundary);
-            byte[] HeadBytes = Encoding.ASCII.GetBytes(header);
-            //req.ContentLength = header.Length +  Filebytes.Length + endboundary.Length;
-            req.ContentLength = HeadBytes.Length + Filebytes.Length + FooterBytes.Length;
-            Stream reqStreamTest = req.GetRequestStream();
+            string endboundary = lineBreak + boundary + "--";
+
+            byte[] footerBytes = Encoding.ASCII.GetBytes(endboundary);
+            byte[] headBytes = Encoding.ASCII.GetBytes(header);
+
+            req.ContentLength = headBytes.Length + filebytes.Length + footerBytes.Length;
+            var reqStreamTest = req.GetRequestStream();
             // String to Byte Array
-            byte[] TotalRequest = new byte[HeadBytes.Length + Filebytes.Length + FooterBytes.Length];
-            HeadBytes.CopyTo(TotalRequest, 0);
-            Filebytes.CopyTo(TotalRequest, HeadBytes.Length);
-            FooterBytes.CopyTo(TotalRequest, HeadBytes.Length + Filebytes.Length);
-            reqStreamTest.Write(TotalRequest, 0, TotalRequest.Length);
+            var totalRequest = new byte[headBytes.Length + filebytes.Length + footerBytes.Length];
+            headBytes.CopyTo(totalRequest, 0);
+            filebytes.CopyTo(totalRequest, headBytes.Length);
+            footerBytes.CopyTo(totalRequest, headBytes.Length + filebytes.Length);
+            reqStreamTest.Write(totalRequest, 0, totalRequest.Length);
 
             reqStreamTest.Close();
 
             ac.HasException = false;
             ac.CalledUrl = callurl;
 
-
-            return ApiHttpRequestProcessor(ac, req, accountId, paraCredentials);
+            return ApiHttpRequestProcessor(ac, req);
 
         }
 
@@ -840,13 +839,13 @@ namespace ParatureSDK
         static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, Byte[] attachment, string contentType, string fileName, int accountId, ParaCredentials paraCredentials)
         {
 
-            string Boundary = "--ParaBoundary";
-            string LineBreak = "\r\n";
-            string ContentDisposition = string.Format("Content-Disposition: {0}; name=\"{1}\"; filename=\"{1}\"", contentType, fileName);
-            ApiCallResponse ac = new ApiCallResponse();
-            Uri uriAddress = new Uri(callurl);
+            const string boundary = "--ParaBoundary";
+            const string lineBreak = "\r\n";
+            string contentDisposition = string.Format("Content-Disposition: {0}; name=\"{1}\"; filename=\"{1}\"", contentType, fileName);
+            var ac = new ApiCallResponse();
+            var uriAddress = new Uri(callurl);
 
-            HttpWebRequest req = WebRequest.Create(uriAddress) as HttpWebRequest;
+            var req = WebRequest.Create(uriAddress) as HttpWebRequest;
             req.Method = ParaEnumProvider.ApiHttpPostProvider(httpMethod);
             req.KeepAlive = false;
             ac.HttpCallMethod = req.Method;
@@ -858,35 +857,35 @@ namespace ParatureSDK
             //Provide a way for the user to configure the connection -> proxy, timeout, etc
             ApiRequestSettings.GlobalPreRequest(req);
 
-            req.ContentType = contentType + "; boundary:" + Boundary; ;
+            req.ContentType = contentType + "; boundary:" + boundary; ;
 
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine(Boundary);
-            sb.AppendLine(ContentDisposition);
+            var sb = new StringBuilder();
+            sb.AppendLine(boundary);
+            sb.AppendLine(contentDisposition);
             sb.AppendLine("Content-Type: " + contentType);
             sb.AppendLine("");
 
-            string header = sb.ToString();
-            string endboundary = LineBreak + Boundary + "--";
+            var header = sb.ToString();
+            const string endBoundary = lineBreak + boundary + "--";
 
-            byte[] FooterBytes = Encoding.ASCII.GetBytes(endboundary);
-            byte[] HeadBytes = Encoding.ASCII.GetBytes(header);
+            var footerBytes = Encoding.ASCII.GetBytes(endBoundary);
+            var headBytes = Encoding.ASCII.GetBytes(header);
 
-            req.ContentLength = HeadBytes.Length + attachment.Length + FooterBytes.Length;
-            Stream reqStreamTest = req.GetRequestStream();
+            req.ContentLength = headBytes.Length + attachment.Length + footerBytes.Length;
+            var reqStreamTest = req.GetRequestStream();
             // String to Byte Array
-            byte[] TotalRequest = new byte[HeadBytes.Length + attachment.Length + FooterBytes.Length];
-            HeadBytes.CopyTo(TotalRequest, 0);
-            attachment.CopyTo(TotalRequest, HeadBytes.Length);
-            FooterBytes.CopyTo(TotalRequest, HeadBytes.Length + attachment.Length);
-            reqStreamTest.Write(TotalRequest, 0, TotalRequest.Length);
+            var totalRequest = new byte[headBytes.Length + attachment.Length + footerBytes.Length];
+            headBytes.CopyTo(totalRequest, 0);
+            attachment.CopyTo(totalRequest, headBytes.Length);
+            footerBytes.CopyTo(totalRequest, headBytes.Length + attachment.Length);
+            reqStreamTest.Write(totalRequest, 0, totalRequest.Length);
 
             reqStreamTest.Close();
 
             ac.HasException = false;
             ac.CalledUrl = callurl;
 
-            return ApiHttpRequestProcessor(ac, req, accountId, paraCredentials);
+            return ApiHttpRequestProcessor(ac, req);
         }
 
         /// <summary>
@@ -900,11 +899,10 @@ namespace ParatureSDK
         /// The http web Request object. Each ApiMakeCall method will have its own http webrequest information. This method will make 
         /// the http call with the request object passed to it.
         /// </param>
-        /// <param name="accountId"></param>
         /// <returns></returns>
-        static ApiCallResponse ApiHttpRequestProcessor(ApiCallResponse ac, HttpWebRequest req, int accountId, ParaCredentials pc)
+        static ApiCallResponse ApiHttpRequestProcessor(ApiCallResponse ac, HttpWebRequest req)
         {
-            string responseFromServer = "";
+            var responseFromServer = "";
 
             try
             {
