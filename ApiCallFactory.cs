@@ -754,6 +754,9 @@ namespace ParatureSDK
                 // Set the content length in the request headers   
                 req.ContentLength = bytedata.Length;
 
+                //Provide a way for the user to configure the connection -> proxy, timeout, etc
+                ApiRequestSettings.GlobalPreRequest(req);
+
                 // Write data   
                 using (Stream postStream = req.GetRequestStream())
                 {
@@ -792,6 +795,9 @@ namespace ParatureSDK
             req.AllowWriteStreamBuffering = true;
             req.ReadWriteTimeout = 10 * 60 * 1000;
             req.Timeout = -1;
+
+            //Provide a way for the user to configure the connection -> proxy, timeout, etc
+            ApiRequestSettings.GlobalPreRequest(req);
 
             req.ContentType = att.ContentType.MediaType + "; boundary:" + Boundary; ;
 
@@ -848,6 +854,9 @@ namespace ParatureSDK
             req.AllowWriteStreamBuffering = true;
             req.ReadWriteTimeout = 10 * 60 * 1000;
             req.Timeout = -1;
+
+            //Provide a way for the user to configure the connection -> proxy, timeout, etc
+            ApiRequestSettings.GlobalPreRequest(req);
 
             req.ContentType = contentType + "; boundary:" + Boundary; ;
 

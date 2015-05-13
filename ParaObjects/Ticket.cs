@@ -729,11 +729,11 @@ namespace ParatureSDK.ParaObjects
             }
         }
 
-        public Int64? Initial_Resolution_Userid
+        public CsrReference Initial_Resolution_Userid
         {
             get
             {
-                return GetFieldValue<Int64>("Initial_Resolution_Userid");
+                return GetFieldValue<CsrReference>("Initial_Resolution_Userid");
             }
             set
             {
@@ -743,8 +743,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Initial_Resolution_Userid",
-                        FieldType = "int",
-                        DataType = "int"
+                        FieldType = "dropdown",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
@@ -753,11 +753,11 @@ namespace ParatureSDK.ParaObjects
             }
         }
 
-        public Int64? Final_Resolution_Userid
+        public CsrReference Final_Resolution_Userid
         {
             get
             {
-                return GetFieldValue<Int64>("Final_Resolution_Userid");
+                return GetFieldValue<CsrReference>("Final_Resolution_Userid");
             }
             set
             {
@@ -767,8 +767,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Final_Resolution_Userid",
-                        FieldType = "int",
-                        DataType = "int"
+                        FieldType = "dropdown",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }

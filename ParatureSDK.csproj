@@ -93,6 +93,7 @@
     <Compile Include="ApiHandler\Product.cs" />
     <Compile Include="ApiHandler\ApiUtils.cs" />
     <Compile Include="ApiHandler\Ticket.cs" />
+    <Compile Include="ApiRequestSettings.cs" />
     <Compile Include="ApiUrlBuilder.cs" />
     <Compile Include="EntityQuery\ArticleFolderQuery.cs" />
     <Compile Include="EntityQuery\CsrStatusQuery.cs" />
