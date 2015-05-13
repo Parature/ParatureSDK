@@ -100,7 +100,7 @@ namespace ParatureSDK
                 : ParaEnums.ApiCallHttpMethod.Update;
 
             // Calling the next method that manages the call.
-            return ApiMakeTheCall(apiCallUrl, apicallhttpmethod, fileToPost, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(apiCallUrl, apicallhttpmethod, fileToPost);
         }
 
         public static ApiCallResponse ObjectCreateUpdate<T>(ParaCredentials paracredentials, XmlDocument fileToPost, Int64 objectid, ArrayList arguments)
@@ -133,7 +133,7 @@ namespace ParatureSDK
                 : ParaEnums.ApiCallHttpMethod.Update;
 
             // Calling the next method that manages the call.
-            return ApiMakeTheCall(apiCallUrl, apicallhttpmethod, fileToPost, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(apiCallUrl, apicallhttpmethod, fileToPost);
         }
 
         ///  <summary>
@@ -164,7 +164,7 @@ namespace ParatureSDK
                 : ParaEnums.ApiCallHttpMethod.Update;
 
             // Calling the next method that manages the call.
-            return ApiMakeTheCall(apiCallUrl, apicallhttpmethod, fileToPost, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(apiCallUrl, apicallhttpmethod, fileToPost);
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace ParatureSDK
             }
 
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete);
         }
 
         public static ApiCallResponse ObjectDelete<T>(ParaCredentials paracredentials, Int64 objectid, bool purge)
@@ -220,7 +220,7 @@ namespace ParatureSDK
             }
 
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete);
         }
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace ParatureSDK
             var arguments = new ArrayList {"_purge_=true"};
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entity, entityid, arguments);
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete);
         }
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace ParatureSDK
             var entityName = typeof (T).Name;
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityName, objectid, false);
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
 
         ///  <summary>
@@ -289,7 +289,7 @@ namespace ParatureSDK
         {
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entity, objectid, false);
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
 
         /// <summary>
@@ -315,7 +315,7 @@ namespace ParatureSDK
         {
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, module, objectid, arguments);
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
 
         /// <summary>
@@ -335,7 +335,7 @@ namespace ParatureSDK
         public static ApiCallResponse ObjectGetList(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ArrayList arguments)
         {
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, module, 0, arguments);
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
 
         /// <summary>
@@ -356,7 +356,7 @@ namespace ParatureSDK
         {
             var entityType = typeof (T).ToString();
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityType, 0, arguments);
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
 
         /// <summary>
@@ -372,7 +372,7 @@ namespace ParatureSDK
         public static ApiCallResponse ObjectGetList(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, ArrayList arguments)
         {
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entity, 0, arguments);
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
 
 
@@ -380,7 +380,7 @@ namespace ParatureSDK
         {
             string ApiCallUrl;
             ApiCallUrl = ApiUrlBuilder.ApiObjectCustomUrl(paracredentials, module, entity, arguments);
-            return ApiMakeTheCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
 
         /// <summary>
@@ -390,7 +390,7 @@ namespace ParatureSDK
         {
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, module.ToString(), 0, true);
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
 
         /// <summary>
@@ -401,7 +401,7 @@ namespace ParatureSDK
             var entityType = typeof (T).ToString();
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityType, 0, true);
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
 
         /// <summary>
@@ -446,7 +446,7 @@ namespace ParatureSDK
                     break;
             }
 
-            ApiCallResponse ar = ApiMakeTheCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Post, doc, paracredentials.Instanceid, paracredentials);
+            ApiCallResponse ar = ApiMakeTheCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Post, doc);
 
             if (ar.HasException)
             {
@@ -529,13 +529,13 @@ namespace ParatureSDK
             {
                 // The call was successfull, deleting the item
                 ApiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, module.ToString(), ar.Id, false);
-                ar = ApiMakeTheCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
+                ar = ApiMakeTheCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Delete);
 
                 // purging the item
                 ArrayList arguments = new ArrayList();
                 arguments.Add("_purge_=true");
                 ApiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, module, ar.Id, arguments);
-                ar = ApiMakeTheCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
+                ar = ApiMakeTheCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Delete);
             }
 
             return baseObject;
@@ -581,7 +581,7 @@ namespace ParatureSDK
                     break;
             }
 
-            var ar = ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Post, doc, paracredentials.Instanceid, paracredentials);
+            var ar = ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Post, doc);
 
             if (ar.HasException)
             {
@@ -665,13 +665,13 @@ namespace ParatureSDK
             {
                 // The call was successfull, deleting the item
                 apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityType, ar.Id, false);
-                ar = ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
+                ar = ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete);
 
                 // purging the item
                 ArrayList arguments = new ArrayList();
                 arguments.Add("_purge_=true");
                 apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityType, ar.Id, arguments);
-                ar = ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, paracredentials.Instanceid, paracredentials);
+                ar = ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete);
             }
 
             return baseObject as T;
@@ -689,26 +689,26 @@ namespace ParatureSDK
 
             ApiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entity, 0, true);
 
-            return ApiMakeTheCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            return ApiMakeTheCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
 
         public static ApiCallResponse FileUploadGetUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module)
         {
-            var resp = ApiMakeTheCall(ApiUrlBuilder.ApiObjectCustomUrl(paracredentials, module, "upload"), ParaEnums.ApiCallHttpMethod.Get, paracredentials.Instanceid, paracredentials);
+            var resp = ApiMakeTheCall(ApiUrlBuilder.ApiObjectCustomUrl(paracredentials, module, "upload"), ParaEnums.ApiCallHttpMethod.Get);
             return resp;
         }
 
         public static ApiCallResponse FilePerformUpload(string postUrl, Attachment attachment, int accountId, ParaCredentials paraCredentials)
         {
-            return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment, accountId, paraCredentials);
+            return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment);
         }
 
         public static ApiCallResponse FilePerformUpload(string postUrl, Byte[] attachment, string contentType, string fileName, int accountId, ParaCredentials paraCredentials)
         {
-            return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment, contentType, fileName, accountId, paraCredentials);
+            return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment, contentType, fileName);
         }
 
-        private static ApiCallResponse ApiMakeTheCall(string apiCallUrl, ParaEnums.ApiCallHttpMethod httpMethod, int accountId, ParaCredentials creds)
+        private static ApiCallResponse ApiMakeTheCall(string apiCallUrl, ParaEnums.ApiCallHttpMethod httpMethod)
         {
             var ac = new ApiCallResponse();
             var uriAddress = new Uri(apiCallUrl);
@@ -731,7 +731,7 @@ namespace ParatureSDK
         /// <summary>
         /// The true call is being made by this method.
         /// </summary>
-        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, XmlDocument xmlPosted, int accountId, ParaCredentials paraCredentials)
+        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, XmlDocument xmlPosted)
         {
             var ac = new ApiCallResponse();
             var uriAddress = new Uri(callurl);
@@ -778,7 +778,7 @@ namespace ParatureSDK
         /// <summary>
         /// The call, with passing a binary file.
         /// </summary>
-        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, Attachment att, int accountId, ParaCredentials paraCredentials)
+        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, Attachment att)
         {
 
             const string boundary = "--ParaBoundary";
@@ -836,7 +836,7 @@ namespace ParatureSDK
         /// <summary>
         /// The call, with passing a binary file.
         /// </summary>
-        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, Byte[] attachment, string contentType, string fileName, int accountId, ParaCredentials paraCredentials)
+        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, Byte[] attachment, string contentType, string fileName)
         {
 
             const string boundary = "--ParaBoundary";
