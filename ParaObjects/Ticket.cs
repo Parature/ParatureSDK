@@ -705,11 +705,11 @@ namespace ParatureSDK.ParaObjects
             }
         }
 
-        public Int64? Initial_Response_Userid
+        public CsrReference Initial_Response_Userid
         {
             get
             {
-                return GetFieldValue<Int64>("Initial_Response_Userid");
+                return GetFieldValue<CsrReference>("Initial_Response_Userid");
             }
             set
             {
@@ -719,8 +719,8 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Initial_Response_Userid",
-                        FieldType = "int",
-                        DataType = "int"
+                        FieldType = "dropdown",
+                        DataType = "entity"
                     };
                     StaticFields.Add(field);
                 }
