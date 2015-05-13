@@ -7,6 +7,6 @@ namespace ParatureSDK.ParaObjects.EntityReferences
 {
     public class TicketStatusReference: StatusReference
     {
-        public Status Status { get; set; }
+        public TicketStatus Status { get; set; }
     }
 }
