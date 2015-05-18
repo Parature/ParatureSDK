@@ -467,6 +467,30 @@ namespace ParatureSDK.ParaObjects
         }
 
         /// <summary>
+        /// Comma separated list of keywords that describe a KB article
+        /// </summary>
+        public string Keywords
+        {
+            get { return GetFieldValue<string>("Keywords"); }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Keywords");
+                if (field == null)
+                {
+                    field = new StaticField
+                    {
+                        Name = "Keywords",
+                        FieldType = "text",
+                        DataType = "string"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        /// <summary>
         /// List of articles that are related to the this article. Introduced in 15.1
         /// </summary>
         public List<Article> Related_Articles
