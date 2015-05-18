@@ -33,16 +33,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ParaConnect">
-      <HintPath>..\..\..\..\..\..\Workspace\ParaConnect2010\ParaConnect2010\bin\Debug\ParaConnect.dll</HintPath>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="ParatureAPI">
+      <HintPath>packages\ParatureSDK.1.0.1\lib\ParatureAPI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -56,15 +57,11 @@
     <Compile Include="Exercise07GetSchemas.cs" />
     <Compile Include="Exercise08CreateObjects.cs" />
     <Compile Include="Exercise09UpdateObjects.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="LIBs\ParaConnect.dll" />
-    <Content Include="LIBs\ParaConnect.xml" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
