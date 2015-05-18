@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
-using ParatureAPI;
+using ParatureSDK;
 
 namespace Exercises
 {
@@ -46,7 +46,7 @@ namespace Exercises
         {
             get
             {
-                return new ParaCredentials(Token, ServerDomain, Paraenums.ApiVersion.v1, AcctID, DeptID, false);
+                return new ParaCredentials(Token, ServerDomain, ParaEnums.ApiVersion.v1, AcctID, DeptID, false);
             }
         }
     }

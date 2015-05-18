@@ -2,7 +2,7 @@
 
 ##Description
 
-The purpose of the exercises included in this project is to show how to use the SDK to make Parature API calls.
+The purpose of the exercises included in this project is to show how to use the SDK to make Parature API calls. These particular exercises work with the lastest version of the SDK.
 
 ##Instructions
 

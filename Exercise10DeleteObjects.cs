@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ParatureAPI;
+using ParatureSDK;
 
 namespace Exercises
 {
@@ -12,7 +12,7 @@ namespace Exercises
         {
             bool isSuccess;
 
-            var trashResponse = ApiHandler.Customer.CustomerDelete(customerID, CredentialProvider.Creds, false);
+            var trashResponse = ParatureSDK.ApiHandler.Customer.CustomerDelete(customerID, CredentialProvider.Creds, false);
 
             isSuccess = !trashResponse.HasException;
 
@@ -23,7 +23,7 @@ namespace Exercises
         {
             bool isSuccess;
 
-            var purgeResponse = ApiHandler.Customer.CustomerDelete(customerID, CredentialProvider.Creds, true);
+            var purgeResponse = ParatureSDK.ApiHandler.Customer.CustomerDelete(customerID, CredentialProvider.Creds, true);
 
             isSuccess = !purgeResponse.HasException;
 

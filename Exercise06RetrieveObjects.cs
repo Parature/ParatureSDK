@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ParatureAPI;
+using ParatureSDK;
 
 namespace Exercises
 {
@@ -10,21 +10,21 @@ namespace Exercises
     {
         public static ParaObjects.Customer getCustomer(long customerID)
         {
-            var customer = ApiHandler.Customer.CustomerGetDetails(customerID, CredentialProvider.Creds);
+            var customer = ParatureSDK.ApiHandler.Customer.CustomerGetDetails(customerID, CredentialProvider.Creds);
 
             return customer;
         }
 
         public static ParaObjects.Account getAccount(long accountID)
         {
-            var account = ApiHandler.Account.AccountGetDetails(accountID, CredentialProvider.Creds);
+            var account = ParatureSDK.ApiHandler.Account.AccountGetDetails(accountID, CredentialProvider.Creds);
 
             return account;
         }
 
         public static ParaObjects.Article getArticle(long articleID)
         {
-            var article = ApiHandler.Article.ArticleGetDetails(articleID, CredentialProvider.Creds);
+            var article = ParatureSDK.ApiHandler.Article.ArticleGetDetails(articleID, CredentialProvider.Creds);
 
             return article;
         }

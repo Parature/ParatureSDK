@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ParatureAPI;
+using ParatureSDK;
 
 namespace Exercises
 {
@@ -14,7 +14,7 @@ namespace Exercises
             folderQuery.RetrieveAllRecords = true;
             folderQuery.AddCustomFilter("Is_Private=true");
 
-            var folders = ApiHandler.Article.ArticleFolder.ArticleFoldersGetList(CredentialProvider.Creds, folderQuery);
+            var folders = ParatureSDK.ApiHandler.Article.ArticleFolder.ArticleFoldersGetList(CredentialProvider.Creds, folderQuery);
 
             return folders;
         }
@@ -23,9 +23,9 @@ namespace Exercises
         {
             var folderQuery = new EntityQuery.ArticleFolderQuery();
             folderQuery.RetrieveAllRecords = true;
-            folderQuery.AddStaticFieldFilter(EntityQuery.ArticleFolderQuery.ArticleFolderStaticFields.ParentFolder, Paraenums.QueryCriteria.Equal, parentID.ToString());
+            folderQuery.AddStaticFieldFilter(EntityQuery.ArticleFolderQuery.ArticleFolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, parentID.ToString());
 
-            var folders = ApiHandler.Article.ArticleFolder.ArticleFoldersGetList(CredentialProvider.Creds, folderQuery);
+            var folders = ParatureSDK.ApiHandler.Article.ArticleFolder.ArticleFoldersGetList(CredentialProvider.Creds, folderQuery);
 
             return folders;
         }
@@ -34,9 +34,9 @@ namespace Exercises
         {
             var folderQuery = new EntityQuery.ArticleFolderQuery();
             folderQuery.RetrieveAllRecords = true;
-            folderQuery.AddStaticFieldFilter(EntityQuery.ArticleFolderQuery.ArticleFolderStaticFields.Name, Paraenums.QueryCriteria.Equal, folderName);
+            folderQuery.AddStaticFieldFilter(EntityQuery.ArticleFolderQuery.ArticleFolderStaticFields.Name, ParaEnums.QueryCriteria.Equal, folderName);
 
-            var folders = ApiHandler.Article.ArticleFolder.ArticleFoldersGetList(CredentialProvider.Creds, folderQuery);
+            var folders = ParatureSDK.ApiHandler.Article.ArticleFolder.ArticleFoldersGetList(CredentialProvider.Creds, folderQuery);
 
             return folders;
         }

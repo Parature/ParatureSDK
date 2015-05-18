@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ParatureAPI;
+using ParatureSDK;
 
 namespace Exercises
 {
@@ -10,7 +10,7 @@ namespace Exercises
     {
         public static ParaObjects.Account CreateAccount(string accountName)
         {
-            var emptyAccount = ApiHandler.Account.AccountSchema(CredentialProvider.Creds);
+            var emptyAccount = ParatureSDK.ApiHandler.Account.AccountSchema(CredentialProvider.Creds);
 
             emptyAccount.Account_Name = accountName;
             emptyAccount.Sla = new ParaObjects.Sla { SlaID = 1 }; //Default SLA
@@ -19,7 +19,7 @@ namespace Exercises
             //emptyAccount.CustomFieldSetValue(fieldID, value); //String, Date, Checkbox
             //emptyAccount.CustomFieldSetSelectedFieldOption(fieldID, optionid) //Dropdown, Radio, Multiple Dropdown
         
-            var accountCreateResponse = ApiHandler.Account.AccountInsert(emptyAccount, CredentialProvider.Creds);
+            var accountCreateResponse = ParatureSDK.ApiHandler.Account.AccountInsert(emptyAccount, CredentialProvider.Creds);
 
             emptyAccount.Accountid = accountCreateResponse.Objectid; 
             //Create response only provides an object ID, returning our modified schema
@@ -29,7 +29,7 @@ namespace Exercises
 
         public static ParaObjects.Customer CreateCustomer(string firstname, string lastname, string email, string password, long accountID)
         {
-            var emptyCustomer = ApiHandler.Customer.CustomerSchema(CredentialProvider.Creds);
+            var emptyCustomer = ParatureSDK.ApiHandler.Customer.CustomerSchema(CredentialProvider.Creds);
             emptyCustomer.First_Name = firstname;
             emptyCustomer.Last_Name = lastname;
             emptyCustomer.Sla = new ParaObjects.Sla { SlaID = 1 }; //Still need to provide even though inherited from the Account
@@ -39,7 +39,7 @@ namespace Exercises
             emptyCustomer.Password_Confirm = password;
             emptyCustomer.Status = new ParaObjects.CustomerStatus { StatusID = 2 }; // Customer status are universal 1 = Pending, 2 = Registered, 3 = Trashed, 16 = Unregistered
 
-            var customerCreateResponse = ApiHandler.Customer.CustomerInsert(emptyCustomer, CredentialProvider.Creds);
+            var customerCreateResponse = ParatureSDK.ApiHandler.Customer.CustomerInsert(emptyCustomer, CredentialProvider.Creds);
 
             emptyCustomer.customerid = customerCreateResponse.Objectid;
 
@@ -48,12 +48,12 @@ namespace Exercises
 
         public static ParaObjects.ArticleFolder CreateKBFolder(string name, bool isPrivate, long parentFolderID)
         {
-            var emptyFolder = ApiHandler.Article.ArticleFolder.ArticleFolderSchema(CredentialProvider.Creds);
+            var emptyFolder = ParatureSDK.ApiHandler.Article.ArticleFolder.ArticleFolderSchema(CredentialProvider.Creds);
             emptyFolder.Name = name;
             emptyFolder.Parent_Folder = new ParaObjects.ArticleFolder { FolderID = parentFolderID };
             emptyFolder.Is_Private = isPrivate;
 
-            var createResponse = ApiHandler.Article.ArticleFolder.Insert(emptyFolder, CredentialProvider.Creds);
+            var createResponse = ParatureSDK.ApiHandler.Article.ArticleFolder.Insert(emptyFolder, CredentialProvider.Creds);
 
             emptyFolder.FolderID = createResponse.Objectid;
 
@@ -62,7 +62,7 @@ namespace Exercises
 
         public static ParaObjects.Article CreateArticle(string title, string content, bool published, List<long> folders)
         {
-            var emptyArticle = ApiHandler.Article.ArticleSchema(CredentialProvider.Creds);
+            var emptyArticle = ParatureSDK.ApiHandler.Article.ArticleSchema(CredentialProvider.Creds);
             emptyArticle.Question = title;
             emptyArticle.Answer = content;
             emptyArticle.Published = published;
@@ -74,7 +74,7 @@ namespace Exercises
                 emptyArticle.Folders.Add(new ParaObjects.Folder { FolderID = folderID });
             }
 
-            var createResponse = ApiHandler.Article.ArticleInsert(emptyArticle, CredentialProvider.Creds);
+            var createResponse = ParatureSDK.ApiHandler.Article.ArticleInsert(emptyArticle, CredentialProvider.Creds);
 
             emptyArticle.Articleid = createResponse.Objectid;
 

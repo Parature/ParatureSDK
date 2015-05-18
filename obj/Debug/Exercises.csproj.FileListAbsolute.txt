@@ -9,3 +9,4 @@ C:\Users\adhong\Desktop\Parature_API_Exercises\obj\Debug\Exercises.pdb
 C:\Repos\ParatureSDK-Exercises\bin\Debug\Exercises.exe.config
 C:\Repos\ParatureSDK-Exercises\obj\Debug\Exercises.exe
 C:\Repos\ParatureSDK-Exercises\obj\Debug\Exercises.pdb
+C:\Repos\ParatureSDK-Exercises\obj\Debug\Exercises.csprojResolveAssemblyReference.cache

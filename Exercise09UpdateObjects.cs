@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ParatureAPI;
+using ParatureSDK;
 
 namespace Exercises
 {
@@ -13,7 +13,7 @@ namespace Exercises
 
             bool isSuccess;
 
-            var updateResponse = ApiHandler.Customer.CustomerUpdate(modifiedCustomer, CredentialProvider.Creds);
+            var updateResponse = ParatureSDK.ApiHandler.Customer.CustomerUpdate(modifiedCustomer, CredentialProvider.Creds);
 
             isSuccess = !updateResponse.HasException;
 
@@ -24,7 +24,7 @@ namespace Exercises
         {
             bool isSuccess;
 
-            var updateResponse = ApiHandler.Account.AccountUpdate(modifiedAccount, CredentialProvider.Creds);
+            var updateResponse = ParatureSDK.ApiHandler.Account.AccountUpdate(modifiedAccount, CredentialProvider.Creds);
 
             isSuccess = !updateResponse.HasException;
 

@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ParatureAPI;
+using ParatureSDK;
+using ParatureSDK.ParaObjects;
 
 namespace Exercises
 {
     class Exercise02ListAccounts
     {
         //List all of the accounts
-        public static ParaObjects.AccountsList getAllAccounts()
+        public static ParaEntityList<ParatureSDK.ParaObjects.Account> getAllAccounts()
         {
             //Query object is a query string builder
-            var accountQuery = new ModuleQuery.AccountQuery();
+            var accountQuery = new ParatureSDK.ModuleQuery.AccountQuery();
             accountQuery.RetrieveAllRecords = true; //Retrieve all records will maximize page size and make necessary additional calls to retrieve all pages
 
-            var accounts = ApiHandler.Account.AccountsGetList(CredentialProvider.Creds, accountQuery);
+            var accounts = ParatureSDK.ApiHandler.Account.GetList(CredentialProvider.Creds, accountQuery);
 
             var apiResponse = accounts.ApiCallResponse; //API response is provided with object
 
@@ -30,50 +31,51 @@ namespace Exercises
             return accounts;
         }
 
-        public static ParaObjects.AccountsList searchAccountsByName(string accountName) {
-            var accountQuery = new ModuleQuery.AccountQuery();
+        public static ParaEntityList<ParatureSDK.ParaObjects.Account> searchAccountsByName(string accountName)
+        {
+            var accountQuery = new ParatureSDK.ModuleQuery.AccountQuery();
             accountQuery.RetrieveAllRecords = true;
             
             //There is a difference between static fields and custom fields
-            accountQuery.AddStaticFieldFilter(ModuleQuery.AccountQuery.AccountStaticFields.Accountname, Paraenums.QueryCriteria.Equal, accountName);
+            accountQuery.AddStaticFieldFilter(ParatureSDK.ModuleQuery.AccountQuery.AccountStaticFields.Accountname, ParatureSDK.ParaEnums.QueryCriteria.Equal, accountName);
 
-            var accounts = ApiHandler.Account.AccountsGetList(CredentialProvider.Creds, accountQuery);
+            var accounts = ParatureSDK.ApiHandler.Account.GetList(CredentialProvider.Creds, accountQuery);
 
             return accounts;
         }
 
-        public static ParaObjects.AccountsList searchAccountsByField(long fieldID, string fieldValue)
+        public static ParaEntityList<ParatureSDK.ParaObjects.Account> searchAccountsByField(long fieldID, string fieldValue)
         {
-            var accountQuery = new ModuleQuery.AccountQuery();
+            var accountQuery = new ParatureSDK.ModuleQuery.AccountQuery();
             accountQuery.RetrieveAllRecords = true;
-            accountQuery.AddCustomFieldFilter(fieldID, Paraenums.QueryCriteria.Equal, fieldValue);
+            accountQuery.AddCustomFieldFilter(fieldID, ParatureSDK.ParaEnums.QueryCriteria.Equal, fieldValue);
             
-            var accounts = ApiHandler.Account.AccountsGetList(CredentialProvider.Creds, accountQuery);
+            var accounts = ParatureSDK.ApiHandler.Account.GetList(CredentialProvider.Creds, accountQuery);
 
             return accounts;
         }
 
         //Overload for an option field
-        public static ParaObjects.AccountsList searchAccountsByField(long fieldID, long fieldValue)
+        public static ParaEntityList<ParatureSDK.ParaObjects.Account> searchAccountsByField(long fieldID, long fieldValue)
         {
             //field value would be option ID
-            var accountQuery = new ModuleQuery.AccountQuery();
+            var accountQuery = new ParatureSDK.ModuleQuery.AccountQuery();
             accountQuery.RetrieveAllRecords = true;
-            accountQuery.AddCustomFieldFilter(fieldID, Paraenums.QueryCriteria.Equal, fieldValue);
+            accountQuery.AddCustomFieldFilter(fieldID, ParaEnums.QueryCriteria.Equal, fieldValue);
 
-            var accounts = ApiHandler.Account.AccountsGetList(CredentialProvider.Creds, accountQuery);
+            var accounts = ParatureSDK.ApiHandler.Account.GetList(CredentialProvider.Creds, accountQuery);
 
             return accounts;
         }
 
-        public static ParaObjects.AccountsList getAccountsByView(long viewID)
+        public static ParaEntityList<ParatureSDK.ParaObjects.Account> getAccountsByView(long viewID)
         {
             //field value would be option ID
-            var accountQuery = new ModuleQuery.AccountQuery();
+            var accountQuery = new ParatureSDK.ModuleQuery.AccountQuery();
             accountQuery.RetrieveAllRecords = true;
             accountQuery.View = viewID;
 
-            var accounts = ApiHandler.Account.AccountsGetList(CredentialProvider.Creds, accountQuery);
+            var accounts = ParatureSDK.ApiHandler.Account.GetList(CredentialProvider.Creds, accountQuery);
 
             return accounts;
         }
