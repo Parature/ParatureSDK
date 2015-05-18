@@ -12,7 +12,7 @@ namespace Exercises
         {
             bool isSuccess;
 
-            var trashResponse = ParatureSDK.ApiHandler.Customer.CustomerDelete(customerID, CredentialProvider.Creds, false);
+            var trashResponse = ParatureSDK.ApiHandler.Customer.Delete(customerID, CredentialProvider.Creds, false);
 
             isSuccess = !trashResponse.HasException;
 
@@ -23,7 +23,7 @@ namespace Exercises
         {
             bool isSuccess;
 
-            var purgeResponse = ParatureSDK.ApiHandler.Customer.CustomerDelete(customerID, CredentialProvider.Creds, true);
+            var purgeResponse = ParatureSDK.ApiHandler.Customer.Delete(customerID, CredentialProvider.Creds, true);
 
             isSuccess = !purgeResponse.HasException;
 

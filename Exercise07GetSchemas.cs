@@ -3,35 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ParatureSDK;
+using ParatureSDK.ParaObjects;
 
 namespace Exercises
 {
     class Exercise07GetSchemas
     {
-        public static ParaObjects.Customer CustomerSchema()
+        public static Customer CustomerSchema()
         {
-            var customer = ParatureSDK.ApiHandler.Customer.CustomerSchema(CredentialProvider.Creds);
+            var customer = ParatureSDK.ApiHandler.Customer.Schema(CredentialProvider.Creds);
 
             return customer;
         }
 
-        public static ParaObjects.Account AccountSchema()
+        public static Account AccountSchema()
         {
-            var account = ParatureSDK.ApiHandler.Account.AccountSchema(CredentialProvider.Creds);
+            var account = ParatureSDK.ApiHandler.Account.Schema(CredentialProvider.Creds);
 
             return account;
         }
 
-        public static ParaObjects.Article ArticleSchema()
+        public static Article ArticleSchema()
         {
-            var article = ParatureSDK.ApiHandler.Article.ArticleSchema(CredentialProvider.Creds);
+            var article = ParatureSDK.ApiHandler.Article.Schema(CredentialProvider.Creds);
 
             return article;
         }
 
-        public static ParaObjects.ArticleFolder ArticleFolderSchema()
+        public static ArticleFolder ArticleFolderSchema()
         {
-            var articleFoler = ParatureSDK.ApiHandler.Article.ArticleFolder.ArticleFolderSchema(CredentialProvider.Creds);
+            var articleFoler = ParatureSDK.ApiHandler.Article.ArticleFolder.Schema(CredentialProvider.Creds);
 
             return articleFoler;
         }

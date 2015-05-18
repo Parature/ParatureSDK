@@ -3,28 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ParatureSDK;
+using ParatureSDK.ParaObjects;
 
 namespace Exercises
 {
     class Exercise06RetrieveObjects
     {
-        public static ParaObjects.Customer getCustomer(long customerID)
+        public static Customer getCustomer(long customerID)
         {
-            var customer = ParatureSDK.ApiHandler.Customer.CustomerGetDetails(customerID, CredentialProvider.Creds);
+            var customer = ParatureSDK.ApiHandler.Customer.GetDetails(customerID, CredentialProvider.Creds);
 
             return customer;
         }
 
-        public static ParaObjects.Account getAccount(long accountID)
+        public static Account getAccount(long accountID)
         {
-            var account = ParatureSDK.ApiHandler.Account.AccountGetDetails(accountID, CredentialProvider.Creds);
+            var account = ParatureSDK.ApiHandler.Account.GetDetails(accountID, CredentialProvider.Creds);
 
             return account;
         }
 
-        public static ParaObjects.Article getArticle(long articleID)
+        public static Article getArticle(long articleID)
         {
-            var article = ParatureSDK.ApiHandler.Article.ArticleGetDetails(articleID, CredentialProvider.Creds);
+            var article = ParatureSDK.ApiHandler.Article.GetDetails(articleID, CredentialProvider.Creds);
 
             return article;
         }

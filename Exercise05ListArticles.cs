@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ParatureSDK;
+using ParatureSDK.ParaObjects;
 
 namespace Exercises
 {
@@ -10,47 +11,45 @@ namespace Exercises
     {
         public static int getArticleCount()
         {
-            var articleQuery = new ModuleQuery.ArticleQuery();
+            var articleQuery = new ParatureSDK.ModuleQuery.ArticleQuery();
             articleQuery.RetrieveAllRecords = true;
             articleQuery.TotalOnly = true;
 
-            var articles = ParatureSDK.ApiHandler.Article.ArticlesGetList(CredentialProvider.Creds, articleQuery);
+            var articles = ParatureSDK.ApiHandler.Article.GetList(CredentialProvider.Creds, articleQuery);
 
             return articles.TotalItems;
         }
 
-        public static ParaObjects.ArticlesList getArticles()
+        public static ParaEntityList<Article> getArticles()
         {
-            var articleQuery = new ModuleQuery.ArticleQuery();
+            var articleQuery = new ParatureSDK.ModuleQuery.ArticleQuery();
             articleQuery.RetrieveAllRecords = true;
 
-            var articles = ParatureSDK.ApiHandler.Article.ArticlesGetList(CredentialProvider.Creds, articleQuery);
+            var articles = ParatureSDK.ApiHandler.Article.GetList(CredentialProvider.Creds, articleQuery);
 
             return articles;
         }
 
-        public static ParaObjects.ArticlesList getPublishedArticles()
+        public static ParaEntityList<Article> getPublishedArticles()
         {
-            var articleQuery = new ModuleQuery.ArticleQuery();
-            articleQuery.AddStaticFieldFilter(ModuleQuery.ArticleQuery.ArticleStaticFields.Published, ParaEnums.QueryCriteria.Equal, true);
+            var articleQuery = new ParatureSDK.ModuleQuery.ArticleQuery();
+            articleQuery.AddStaticFieldFilter(ParatureSDK.ModuleQuery.ArticleQuery.ArticleStaticFields.Published, ParaEnums.QueryCriteria.Equal, true);
             articleQuery.RetrieveAllRecords = true;
 
-            var articles = ParatureSDK.ApiHandler.Article.ArticlesGetList(CredentialProvider.Creds, articleQuery);
+            var articles = ParatureSDK.ApiHandler.Article.GetList(CredentialProvider.Creds, articleQuery);
 
             return articles;
         }
 
-        public static ParaObjects.ArticlesList getArticlesByFolder(long folderID)
+        public static ParaEntityList<Article> getArticlesByFolder(long folderID)
         {
-            var articleQuery = new ModuleQuery.ArticleQuery();
-            articleQuery.AddStaticFieldFilter(ModuleQuery.ArticleQuery.ArticleStaticFields.Folders, ParaEnums.QueryCriteria.Equal, folderID.ToString());
+            var articleQuery = new ParatureSDK.ModuleQuery.ArticleQuery();
+            articleQuery.AddStaticFieldFilter(ParatureSDK.ModuleQuery.ArticleQuery.ArticleStaticFields.Folders, ParaEnums.QueryCriteria.Equal, folderID.ToString());
             articleQuery.RetrieveAllRecords = true;
 
-            var articles = ParatureSDK.ApiHandler.Article.ArticlesGetList(CredentialProvider.Creds, articleQuery);
+            var articles = ParatureSDK.ApiHandler.Article.GetList(CredentialProvider.Creds, articleQuery);
 
             return articles;
         }
-
-
     }
 }

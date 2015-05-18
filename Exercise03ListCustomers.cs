@@ -3,54 +3,55 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ParatureSDK;
+using ParatureSDK.ParaObjects;
 
 namespace Exercises
 {
     class Exercise03ListCustomers
     {
         //Customers by account and date
-        public static ParaObjects.CustomersList getCustomersByAccountAndDate(long acccountID, DateTime date)
+        public static ParaEntityList<Customer> getCustomersByAccountAndDate(long acccountID, DateTime date)
         {
-            var customerQuery = new ModuleQuery.CustomerQuery();
+            var customerQuery = new ParatureSDK.ModuleQuery.CustomerQuery();
             customerQuery.RetrieveAllRecords = true;
-            customerQuery.AddStaticFieldFilter(ModuleQuery.CustomerQuery.CustomerStaticFields.AccountID, ParaEnums.QueryCriteria.Equal, acccountID.ToString());
+            customerQuery.AddStaticFieldFilter(ParatureSDK.ModuleQuery.CustomerQuery.CustomerStaticFields.AccountID, ParaEnums.QueryCriteria.Equal, acccountID.ToString());
             //Use a custom filter if correct enums aren't available
             customerQuery.AddCustomFilter(String.Format("Date_Created_max_={0}/{1}/{2}", date.Month, date.Day, date.Year));
 
-            var customers = ParatureSDK.ApiHandler.Customer.CustomersGetList(CredentialProvider.Creds, customerQuery);
+            var customers = ParatureSDK.ApiHandler.Customer.GetList(CredentialProvider.Creds, customerQuery);
 
             return customers;
         }
 
-        public static ParaObjects.CustomersList getCustomersByEmail(string email)
+        public static ParaEntityList<Customer> getCustomersByEmail(string email)
         {
-            var customerQuery = new ModuleQuery.CustomerQuery();
+            var customerQuery = new ParatureSDK.ModuleQuery.CustomerQuery();
             customerQuery.RetrieveAllRecords = true;
-            customerQuery.AddStaticFieldFilter(ModuleQuery.CustomerQuery.CustomerStaticFields.CustomerEmail, ParaEnums.QueryCriteria.Equal, email);
+            customerQuery.AddStaticFieldFilter(ParatureSDK.ModuleQuery.CustomerQuery.CustomerStaticFields.CustomerEmail, ParaEnums.QueryCriteria.Equal, email);
 
-            var customers = ParatureSDK.ApiHandler.Customer.CustomersGetList(CredentialProvider.Creds, customerQuery);
+            var customers = ParatureSDK.ApiHandler.Customer.GetList(CredentialProvider.Creds, customerQuery);
 
             return customers;
         }
 
-        public static ParaObjects.CustomersList getCustomersByStatus(long statusID)
+        public static ParaEntityList<Customer> getCustomersByStatus(long statusID)
         {
-            var customerQuery = new ModuleQuery.CustomerQuery();
+            var customerQuery = new ParatureSDK.ModuleQuery.CustomerQuery();
             customerQuery.RetrieveAllRecords = true;
-            customerQuery.AddStaticFieldFilter(ModuleQuery.CustomerQuery.CustomerStaticFields.Status, ParaEnums.QueryCriteria.Equal, statusID.ToString());
+            customerQuery.AddStaticFieldFilter(ParatureSDK.ModuleQuery.CustomerQuery.CustomerStaticFields.Status, ParaEnums.QueryCriteria.Equal, statusID.ToString());
 
-            var customers = ParatureSDK.ApiHandler.Customer.CustomersGetList(CredentialProvider.Creds, customerQuery);
+            var customers = ParatureSDK.ApiHandler.Customer.GetList(CredentialProvider.Creds, customerQuery);
 
             return customers;
         }
 
-        public static ParaObjects.CustomersList getCustomersAndOrderByLastName()
+        public static ParaEntityList<Customer> getCustomersAndOrderByLastName()
         {
-            var customerQuery = new ModuleQuery.CustomerQuery();
+            var customerQuery = new ParatureSDK.ModuleQuery.CustomerQuery();
             customerQuery.RetrieveAllRecords = true;
-            customerQuery.AddSortOrder(ModuleQuery.CustomerQuery.CustomerStaticFields.LastName, ParaEnums.QuerySortBy.Asc);
+            customerQuery.AddSortOrder(ParatureSDK.ModuleQuery.CustomerQuery.CustomerStaticFields.LastName, ParaEnums.QuerySortBy.Asc);
 
-            var customers = ParatureSDK.ApiHandler.Customer.CustomersGetList(CredentialProvider.Creds, customerQuery);
+            var customers = ParatureSDK.ApiHandler.Customer.GetList(CredentialProvider.Creds, customerQuery);
 
             return customers;
         }
