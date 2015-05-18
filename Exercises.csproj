@@ -57,6 +57,7 @@
     <Compile Include="Exercise07GetSchemas.cs" />
     <Compile Include="Exercise08CreateObjects.cs" />
     <Compile Include="Exercise09UpdateObjects.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
