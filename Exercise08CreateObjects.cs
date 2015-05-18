@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ParatureSDK;
 using ParatureSDK.ParaObjects;
+using ParatureSDK.ParaObjects.EntityReferences;
 
 namespace Exercises
 {
@@ -14,7 +15,7 @@ namespace Exercises
             var emptyAccount = ParatureSDK.ApiHandler.Account.Schema(CredentialProvider.Creds);
 
             emptyAccount.Account_Name = accountName;
-            emptyAccount.Sla = new Sla { Id = 1 }; //Default SLA
+            emptyAccount.Sla = new SlaReference { Sla = new Sla { Id = 1 }}; //Default SLA
             
             //Setting custom fields below
             //emptyAccount.CustomFieldSetValue(fieldID, value); //String, Date, Checkbox
@@ -33,12 +34,15 @@ namespace Exercises
             var emptyCustomer = ParatureSDK.ApiHandler.Customer.Schema(CredentialProvider.Creds);
             emptyCustomer.First_Name = firstname;
             emptyCustomer.Last_Name = lastname;
-            emptyCustomer.Sla = new Sla { Id = 1 }; //Still need to provide even though inherited from the Account
+            emptyCustomer.Sla = new SlaReference {Sla = new Sla {Id = 1}};
             emptyCustomer.Email = email;
-            emptyCustomer.Account = new Account { Id = accountID };
+            emptyCustomer.Account = new AccountReference {Entity = new Account {Id = accountID}};
             emptyCustomer.Password = password; //This in most cases will be randomly generated
             emptyCustomer.Password_Confirm = password;
-            emptyCustomer.Status = new CustomerStatus { Id = 2 }; // Customer status are universal 1 = Pending, 2 = Registered, 3 = Trashed, 16 = Unregistered
+
+            // Customer status are usually 1 = Pending, 2 = Registered, 3 = Trashed, 16 = Unregistered};
+            emptyCustomer.Status = new StatusReference{ Status = new CustomerStatus { Id = 2 }};
+            
 
             var customerCreateResponse = ParatureSDK.ApiHandler.Customer.Insert(emptyCustomer, CredentialProvider.Creds);
 
