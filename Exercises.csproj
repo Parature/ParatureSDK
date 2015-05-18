@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArticleKeywordsExamples.cs" />
     <Compile Include="Exercise01Credentials.cs" />
     <Compile Include="Exercise10DeleteObjects.cs" />
     <Compile Include="Exercise02ListAccounts.cs" />
