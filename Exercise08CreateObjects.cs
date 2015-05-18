@@ -17,6 +17,7 @@ namespace Exercises
             emptyAccount.Account_Name = accountName;
             emptyAccount.Sla = new SlaReference { Sla = new Sla { Id = 1 }}; //Default SLA
             
+            //TODO update custom field setting
             //Setting custom fields below
             //emptyAccount.CustomFieldSetValue(fieldID, value); //String, Date, Checkbox
             //emptyAccount.CustomFieldSetSelectedFieldOption(fieldID, optionid) //Dropdown, Radio, Multiple Dropdown
