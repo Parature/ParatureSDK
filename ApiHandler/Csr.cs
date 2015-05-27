@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Xml;
+using ParatureSDK.EntityQuery;
 using ParatureSDK.ModuleQuery;
 using ParatureSDK.ParaObjects;
 using ParatureSDK.XmlToObjectParser;
@@ -211,101 +212,139 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Contains all the methods needed to work with the Ticket statuses.
         /// </summary>
-        public class CsrStatus
+        public static class Status
         {
+            private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.status;
+            private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Csr;
+
             /// <summary>
-            /// Returns a filled Csr status object.
+            /// Returns a Status object with all of its properties filled.
             /// </summary>
-            /// <param name="CsrStatusid">
-            ///The Status id that you would like to get the details of. 
-            ///Value Type: <see cref="Int64" />   (System.Int64)
+            /// <param name="id">
+            /// The Status number that you would like to get the details of.
+            /// Value Type: <see cref="Int64" />   (System.Int64)
             ///</param>
-            /// <param name="ParaCredentials">
+            /// <param name="creds">
             /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
-            /// </param>                
-            public static ParaObjects.CsrStatus GetDetails(Int64 CsrStatusid, ParaCredentials ParaCredentials)
-            {
-                ParaObjects.CsrStatus CsrStatus = new ParaObjects.CsrStatus();
-                CsrStatus = FillDetails(CsrStatusid, ParaCredentials);
-                return CsrStatus;
-            }
-
-            /// <summary>
-            /// Returns an CsrStatus object from a XML Document. No calls to the APIs are made when calling this method.
-            /// </summary>
-            /// <param name="CsrStatusXML">
-            /// The CsrStatus XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ParaObjects.CsrStatus GetDetails(XmlDocument CsrStatusXML)
+            /// <returns></returns>
+            public static ParaObjects.CsrStatus GetDetails(Int64 id, ParaCredentials creds)
             {
-                ParaObjects.CsrStatus CsrStatus = new ParaObjects.CsrStatus();
-                CsrStatus = ParaEntityParser.EntityFill<ParaObjects.CsrStatus>(CsrStatusXML);
-
-                CsrStatus.ApiCallResponse.XmlReceived = CsrStatusXML;
-                CsrStatus.ApiCallResponse.Id = CsrStatus.Id;
-
-                return CsrStatus;
+                var status = ApiUtils.FillDetails<ParaObjects.CsrStatus>(id, creds, _entityType);
+                return status;
             }
 
             /// <summary>
-            /// Returns an CsrStatus list object from a XML Document. No calls to the APIs are made when calling this method.
+            /// Returns an Status object from a XML Document. No calls to the APIs are made when calling this method.
             /// </summary>
-            /// <param name="CsrStatusListXML">
-            /// The CsrStatus List XML, is should follow the exact template of the XML returned by the Parature APIs.
+            /// <param name="xml">
+            /// The Status XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ParaEntityList<ParaObjects.CsrStatus> GetList(XmlDocument CsrStatusListXML)
+            public static ParaObjects.CsrStatus GetDetails(XmlDocument xml)
             {
-                var CsrStatussList = new ParaEntityList<ParaObjects.CsrStatus>();
-                CsrStatussList = ParaEntityParser.FillList<ParaObjects.CsrStatus>(CsrStatusListXML);
+                var status = ParaEntityParser.EntityFill<ParaObjects.CsrStatus>(xml);
 
-                CsrStatussList.ApiCallResponse.XmlReceived = CsrStatusListXML;
-
-                return CsrStatussList;
+                return status;
             }
 
             /// <summary>
-            /// Provides you with the capability to list statuses
+            /// Returns an Status list object from a XML Document. No calls to the APIs are made when calling this method.
             /// </summary>
-            public static ParaEntityList<ParaObjects.CsrStatus> GetList(ParaCredentials ParaCredentials)
+            /// <param name="listXml">
+            /// The Status List XML, is should follow the exact template of the XML returned by the Parature APIs.
+            /// </param>
+            public static ParaEntityList<ParaObjects.CsrStatus> GetList(XmlDocument listXml)
             {
-                return FillList(ParaCredentials);
+                var statusList = ParaEntityParser.FillList<ParaObjects.CsrStatus>(listXml);
+
+                statusList.ApiCallResponse.XmlReceived = listXml;
+
+                return statusList;
             }
 
             /// <summary>
-            /// Fills an Csr Status object.
+            /// Get the List of Statuss from within your Parature license
             /// </summary>
-            private static ParaEntityList<ParaObjects.CsrStatus> FillList(ParaCredentials ParaCredentials)
+            /// <param name="creds"></param>
+            /// <param name="query"></param>
+            /// <returns></returns>
+            public static ParaEntityList<ParaObjects.CsrStatus> GetList(ParaCredentials creds, StatusQuery query, ParaEnums.ParatureModule module)
             {
-
-                var csrStatusList = new ParaEntityList<ParaObjects.CsrStatus>();
-                var ar = ApiCallFactory.ObjectSecondLevelGetList(ParaCredentials, ParaEnums.ParatureModule.Csr, ParaEnums.ParatureEntity.status, new ArrayList(0));
-                if (ar.HasException == false)
-                {
-                    csrStatusList = ParaEntityParser.FillList<ParaObjects.CsrStatus>(ar.XmlReceived);
-                }
-                csrStatusList.ApiCallResponse = ar;
-                return csrStatusList;
+                return ApiUtils.FillList<ParaObjects.CsrStatus>(creds, query, _entityType, _moduleType);
             }
 
-            private static ParaObjects.CsrStatus FillDetails(Int64 CsrStatusid, ParaCredentials ParaCredentials)
+            public static ParaEntityList<ParaObjects.CsrStatus> GetList(ParaCredentials creds, ParaEnums.ParatureModule module)
             {
-
-                ParaObjects.CsrStatus CsrStatus = new ParaObjects.CsrStatus();
-                ApiCallResponse ar = new ApiCallResponse();
-                ar = ApiCallFactory.ObjectGetDetail(ParaCredentials, ParaEnums.ParatureEntity.CsrStatus, CsrStatusid);
-                if (ar.HasException == false)
-                {
-                    CsrStatus = ParaEntityParser.EntityFill<ParaObjects.CsrStatus>(ar.XmlReceived);
-                }
-                else
-                {
-                    CsrStatus.Id = 0;
-                }
-
-                CsrStatus.ApiCallResponse = ar;
-                return CsrStatus;
+                return ApiUtils.FillList<ParaObjects.CsrStatus>(creds, new StatusQuery(), _entityType, _moduleType);
             }
 
+        }
+
+        public static class Role
+        {
+            private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.role;
+            private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Csr;
+
+            /// <summary>
+            /// Returns a Role object with all of its properties filled.
+            /// </summary>
+            /// <param name="id">
+            /// The Role number that you would like to get the details of.
+            /// Value Type: <see cref="Int64" />   (System.Int64)
+            ///</param>
+            /// <param name="creds">
+            /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
+            /// </param>
+            /// <returns></returns>
+            public static ParaObjects.CsrRole GetDetails(Int64 id, ParaCredentials creds)
+            {
+                var entity = ApiUtils.FillDetails<CsrRole>(id, creds, _entityType);
+                return entity;
+            }
+
+            /// <summary>
+            /// Returns an role object from a XML Document. No calls to the APIs are made when calling this method.
+            /// </summary>
+            /// <param name="xml">
+            /// The Role XML, is should follow the exact template of the XML returned by the Parature APIs.
+            /// </param>
+            public static ParaObjects.CsrRole GetDetails(XmlDocument xml)
+            {
+                var entity = ParaEntityParser.EntityFill<CsrRole>(xml);
+
+                return entity;
+            }
+
+            /// <summary>
+            /// Returns an role list object from a XML Document. No calls to the APIs are made when calling this method.
+            /// </summary>
+            /// <param name="listXml">
+            /// The Role List XML, is should follow the exact template of the XML returned by the Parature APIs.
+            /// </param>
+            public static ParaEntityList<ParaObjects.CsrRole> GetList(XmlDocument listXml)
+            {
+                var list = ParaEntityParser.FillList<CsrRole>(listXml);
+
+                list.ApiCallResponse.XmlReceived = listXml;
+
+                return list;
+            }
+
+            /// <summary>
+            /// Get the List of Roles from within your Parature license
+            /// </summary>
+            /// <param name="creds"></param>
+            /// <param name="query"></param>
+            /// <returns></returns>
+            public static ParaEntityList<ParaObjects.CsrRole> GetList(ParaCredentials creds, RoleQuery query, ParaEnums.ParatureModule module)
+            {
+                return ApiUtils.FillList<CsrRole>(creds, query, _entityType, _moduleType);
+            }
+
+            public static ParaEntityList<ParaObjects.CsrRole> GetList(ParaCredentials creds, ParaEnums.ParatureModule module)
+            {
+                return ApiUtils.FillList<CsrRole>(creds, new RoleQuery(), _entityType, _moduleType);
+            }
         }
     }
 }
