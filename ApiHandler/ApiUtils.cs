@@ -208,6 +208,12 @@ namespace ParatureSDK.ApiHandler
             var ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, module, entity, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
+                //...Customer/status is sending "entities" not "Entities"
+                var xmlStr = ar.XmlReceived.OuterXml;
+                xmlStr = xmlStr.Replace("<entities", "<Entities");
+                xmlStr = xmlStr.Replace("entities>", "Entities>");
+                ar.XmlReceived = ParseXmlDoc(xmlStr);
+
                 rolesList = ParaEntityParser.FillList<T>(ar.XmlReceived);
             }
             rolesList.ApiCallResponse = ar;
@@ -262,6 +268,14 @@ namespace ParatureSDK.ApiHandler
                 role.Id = 0;
             }
             return role;
+        }
+
+        private static XmlDocument ParseXmlDoc(string xmlDoc)
+        {
+            var xml = new XmlDocument();
+            xml.LoadXml(xmlDoc);
+
+            return xml;
         }
     }
 }

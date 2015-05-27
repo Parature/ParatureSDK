@@ -121,7 +121,6 @@
     <Compile Include="ParaHelper\HelperMethods.cs" />
     <Compile Include="ParaHelper\ParaEnumProvider.cs" />
     <Compile Include="ParaObjects\Account.cs" />
-    <Compile Include="ParaObjects\AccountView.cs" />
     <Compile Include="ParaObjects\Action.cs" />
     <Compile Include="ParaObjects\ActionBase.cs" />
     <Compile Include="ParaObjects\ActionHistory.cs" />
@@ -137,11 +136,8 @@
     <Compile Include="ParaObjects\ChatTranscript.cs" />
     <Compile Include="ParaObjects\Csr.cs" />
     <Compile Include="ParaObjects\CsrRole.cs" />
-    <Compile Include="ParaObjects\CsrStatus.cs" />
     <Compile Include="ParaObjects\Customer.cs" />
     <Compile Include="ParaObjects\CustomerRole.cs" />
-    <Compile Include="ParaObjects\CustomerStatus.cs" />
-    <Compile Include="ParaObjects\CustomerView.cs" />
     <Compile Include="ParaObjects\Department.cs" />
     <Compile Include="ParaObjects\Download.cs" />
     <Compile Include="ParaObjects\DownloadFolder.cs" />
@@ -174,8 +170,6 @@
     <Compile Include="ParaObjects\Sla.cs" />
     <Compile Include="ParaObjects\Status.cs" />
     <Compile Include="ParaObjects\Ticket.cs" />
-    <Compile Include="ParaObjects\TicketStatus.cs" />
-    <Compile Include="ParaObjects\TicketView.cs" />
     <Compile Include="ParaObjects\Timezone.cs" />
     <Compile Include="ParaObjects\View.cs" />
     <Compile Include="ParaQuery.cs" />

@@ -13,6 +13,6 @@ namespace ParatureSDK.ParaObjects.EntityReferences
         /// Status of a ticket
         /// </summary>
         [XmlElement("Status", Namespace="Ticket") ]
-        public TicketStatus TicketStatus { get; set; }
+        public Status TicketStatus { get; set; }
     }
 }

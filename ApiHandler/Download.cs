@@ -206,7 +206,6 @@ namespace ParatureSDK.ApiHandler
                 Query = new DownloadQuery();
             }
 
-
             ApiCallResponse ar = new ApiCallResponse();
             var DownloadsList = new ParaEntityList<ParaObjects.Download>();
 

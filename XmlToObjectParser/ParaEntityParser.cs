@@ -50,7 +50,7 @@ namespace ParatureSDK.XmlToObjectParser
         public static ParaEntityList<Download> FillListDownload(XmlDocument xmlDoc)
         {
             //Generate the paged data parsed object. Data prop will be empty
-            var list = EntityFill<ParaEntityList<Download>>(xmlDoc);
+            var list = new ParaEntityList<Download>();
             var docNode = xmlDoc.DocumentElement;
 
             //Fill the list of entities

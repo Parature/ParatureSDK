@@ -228,9 +228,9 @@ namespace ParatureSDK.ApiHandler
             /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
             /// </param>
             /// <returns></returns>
-            public static ParaObjects.CsrStatus GetDetails(Int64 id, ParaCredentials creds)
+            public static ParaObjects.Status GetDetails(Int64 id, ParaCredentials creds)
             {
-                var status = ApiUtils.FillDetails<ParaObjects.CsrStatus>(id, creds, _entityType);
+                var status = ApiUtils.FillDetails<ParaObjects.Status>(id, creds, _entityType);
                 return status;
             }
 
@@ -240,9 +240,9 @@ namespace ParatureSDK.ApiHandler
             /// <param name="xml">
             /// The Status XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ParaObjects.CsrStatus GetDetails(XmlDocument xml)
+            public static ParaObjects.Status GetDetails(XmlDocument xml)
             {
-                var status = ParaEntityParser.EntityFill<ParaObjects.CsrStatus>(xml);
+                var status = ParaEntityParser.EntityFill<ParaObjects.Status>(xml);
 
                 return status;
             }
@@ -253,9 +253,9 @@ namespace ParatureSDK.ApiHandler
             /// <param name="listXml">
             /// The Status List XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ParaEntityList<ParaObjects.CsrStatus> GetList(XmlDocument listXml)
+            public static ParaEntityList<ParaObjects.Status> GetList(XmlDocument listXml)
             {
-                var statusList = ParaEntityParser.FillList<ParaObjects.CsrStatus>(listXml);
+                var statusList = ParaEntityParser.FillList<ParaObjects.Status>(listXml);
 
                 statusList.ApiCallResponse.XmlReceived = listXml;
 
@@ -268,14 +268,14 @@ namespace ParatureSDK.ApiHandler
             /// <param name="creds"></param>
             /// <param name="query"></param>
             /// <returns></returns>
-            public static ParaEntityList<ParaObjects.CsrStatus> GetList(ParaCredentials creds, StatusQuery query)
+            public static ParaEntityList<ParaObjects.Status> GetList(ParaCredentials creds, StatusQuery query)
             {
-                return ApiUtils.FillList<ParaObjects.CsrStatus>(creds, query, _entityType, _moduleType);
+                return ApiUtils.FillList<ParaObjects.Status>(creds, query, _entityType, _moduleType);
             }
 
-            public static ParaEntityList<ParaObjects.CsrStatus> GetList(ParaCredentials creds)
+            public static ParaEntityList<ParaObjects.Status> GetList(ParaCredentials creds)
             {
-                return ApiUtils.FillList<ParaObjects.CsrStatus>(creds, new StatusQuery(), _entityType, _moduleType);
+                return ApiUtils.FillList<ParaObjects.Status>(creds, new StatusQuery(), _entityType, _moduleType);
             }
 
         }

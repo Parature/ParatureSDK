@@ -4,7 +4,7 @@ using ParatureSDK.EntityQuery;
 using ParatureSDK.ParaObjects;
 using ParatureSDK.XmlToObjectParser;
 
-namespace ParatureSDK.ApiHandler.Entities
+namespace ParatureSDK.ApiHandler
 {
     public class Department
     {
@@ -57,10 +57,19 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <summary>
         /// Get the list of Departments from within your Parature license.
         /// </summary>
+        public static ParaEntityList<ParaObjects.Department> GetList(ParaCredentials paraCredentials)
+        {
+            return FillList(paraCredentials, new DepartmentQuery());
+        }
+
+        /// <summary>
+        /// Get the list of Departments from within your Parature license.
+        /// </summary>
         public static ParaEntityList<ParaObjects.Department> GetList(ParaCredentials paraCredentials, DepartmentQuery query)
         {
             return FillList(paraCredentials, query);
         }
+
         /// <summary>
         /// Fills a Departmentslist object.
         /// </summary>
@@ -68,8 +77,7 @@ namespace ParatureSDK.ApiHandler.Entities
         {
 
             var departmentsList = new ParaEntityList<ParaObjects.Department>();
-            ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Department, query.BuildQueryArguments());
+            var ar = ApiCallFactory.ObjectGetList(paraCredentials, ParaEnums.ParatureEntity.Department, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
                 departmentsList = ParaEntityParser.FillList<ParaObjects.Department>(ar.XmlReceived);

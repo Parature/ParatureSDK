@@ -4,7 +4,7 @@ using ParatureSDK.EntityQuery;
 using ParatureSDK.ParaObjects;
 using ParatureSDK.XmlToObjectParser;
 
-namespace ParatureSDK.ApiHandler.Entities
+namespace ParatureSDK.ApiHandler
 {
     public class Sla
     {

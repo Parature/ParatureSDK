@@ -386,9 +386,9 @@ namespace ParatureSDK.ApiHandler
             /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
             /// </param>
             /// <returns></returns>
-            public static ParaObjects.TicketStatus GetDetails(Int64 id, ParaCredentials creds)
+            public static ParaObjects.Status GetDetails(Int64 id, ParaCredentials creds)
             {
-                var status = ApiUtils.FillDetails<ParaObjects.TicketStatus>(id, creds, _entityType);
+                var status = ApiUtils.FillDetails<ParaObjects.Status>(id, creds, _entityType);
                 return status;
             }
 
@@ -398,9 +398,9 @@ namespace ParatureSDK.ApiHandler
             /// <param name="xml">
             /// The Status XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ParaObjects.TicketStatus GetDetails(XmlDocument xml)
+            public static ParaObjects.Status GetDetails(XmlDocument xml)
             {
-                var status = ParaEntityParser.EntityFill<ParaObjects.TicketStatus>(xml);
+                var status = ParaEntityParser.EntityFill<ParaObjects.Status>(xml);
 
                 return status;
             }
@@ -411,9 +411,9 @@ namespace ParatureSDK.ApiHandler
             /// <param name="listXml">
             /// The Status List XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ParaEntityList<ParaObjects.TicketStatus> GetList(XmlDocument listXml)
+            public static ParaEntityList<ParaObjects.Status> GetList(XmlDocument listXml)
             {
-                var statusList = ParaEntityParser.FillList<ParaObjects.TicketStatus>(listXml);
+                var statusList = ParaEntityParser.FillList<ParaObjects.Status>(listXml);
 
                 statusList.ApiCallResponse.XmlReceived = listXml;
 
@@ -426,14 +426,14 @@ namespace ParatureSDK.ApiHandler
             /// <param name="creds"></param>
             /// <param name="query"></param>
             /// <returns></returns>
-            public static ParaEntityList<ParaObjects.TicketStatus> GetList(ParaCredentials creds, StatusQuery query)
+            public static ParaEntityList<ParaObjects.Status> GetList(ParaCredentials creds, StatusQuery query)
             {
-                return ApiUtils.FillList<ParaObjects.TicketStatus>(creds, query, _entityType, _moduleType);
+                return ApiUtils.FillList<ParaObjects.Status>(creds, query, _entityType, _moduleType);
             }
 
-            public static ParaEntityList<ParaObjects.TicketStatus> GetList(ParaCredentials creds)
+            public static ParaEntityList<ParaObjects.Status> GetList(ParaCredentials creds)
             {
-                return ApiUtils.FillList<ParaObjects.TicketStatus>(creds, new StatusQuery(), _entityType, _moduleType);
+                return ApiUtils.FillList<ParaObjects.Status>(creds, new StatusQuery(), _entityType, _moduleType);
             }
         }
 
@@ -453,9 +453,9 @@ namespace ParatureSDK.ApiHandler
             /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
             /// </param>
             /// <returns></returns>
-            public static ParaObjects.TicketView GetDetails(Int64 id, ParaCredentials creds)
+            public static ParaObjects.View GetDetails(Int64 id, ParaCredentials creds)
             {
-                var entity = ApiUtils.FillDetails<ParaObjects.TicketView>(id, creds, _entityType);
+                var entity = ApiUtils.FillDetails<ParaObjects.View>(id, creds, _entityType);
                 return entity;
             }
 
@@ -465,9 +465,9 @@ namespace ParatureSDK.ApiHandler
             /// <param name="xml">
             /// The view XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ParaObjects.TicketView GetDetails(XmlDocument xml)
+            public static ParaObjects.View GetDetails(XmlDocument xml)
             {
-                var entity = ParaEntityParser.EntityFill<ParaObjects.TicketView>(xml);
+                var entity = ParaEntityParser.EntityFill<ParaObjects.View>(xml);
 
                 return entity;
             }
@@ -478,9 +478,9 @@ namespace ParatureSDK.ApiHandler
             /// <param name="listXml">
             /// The view List XML, is should follow the exact template of the XML returned by the Parature APIs.
             /// </param>
-            public static ParaEntityList<ParaObjects.TicketView> GetList(XmlDocument listXml)
+            public static ParaEntityList<ParaObjects.View> GetList(XmlDocument listXml)
             {
-                var list = ParaEntityParser.FillList<ParaObjects.TicketView>(listXml);
+                var list = ParaEntityParser.FillList<ParaObjects.View>(listXml);
 
                 list.ApiCallResponse.XmlReceived = listXml;
 
@@ -493,14 +493,14 @@ namespace ParatureSDK.ApiHandler
             /// <param name="creds"></param>
             /// <param name="query"></param>
             /// <returns></returns>
-            public static ParaEntityList<ParaObjects.TicketView> GetList(ParaCredentials creds, ViewQuery query)
+            public static ParaEntityList<ParaObjects.View> GetList(ParaCredentials creds, ViewQuery query)
             {
-                return ApiUtils.FillList<ParaObjects.TicketView>(creds, query, _entityType, _moduleType);
+                return ApiUtils.FillList<ParaObjects.View>(creds, query, _entityType, _moduleType);
             }
 
-            public static ParaEntityList<ParaObjects.TicketView> GetList(ParaCredentials creds)
+            public static ParaEntityList<ParaObjects.View> GetList(ParaCredentials creds)
             {
-                return ApiUtils.FillList<ParaObjects.TicketView>(creds, new ViewQuery(), _entityType, _moduleType);
+                return ApiUtils.FillList<ParaObjects.View>(creds, new ViewQuery(), _entityType, _moduleType);
             }
         }
     }
