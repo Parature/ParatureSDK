@@ -140,7 +140,7 @@ namespace ParatureSDK.ApiHandler
 
             var attaDoc = upresp.XmlReceived;
 
-            var attach = ParaEntityParser.EntityFill<ParaObjects.Attachment>(attaDoc);
+            var attach = ParaEntityParser.EntityFill<Attachment>(attaDoc);
             return attach;
         }
 
@@ -166,7 +166,7 @@ namespace ParatureSDK.ApiHandler
             if (String.IsNullOrEmpty(postUrl) == false)
             {
                 var attaDoc = ApiCallFactory.FilePerformUpload(postUrl, attachment, contentType, fileName, pc.Instanceid, pc).XmlReceived;
-                attach = ParaEntityParser.EntityFill<ParaObjects.Attachment>(attaDoc);
+                attach = ParaEntityParser.EntityFill<Attachment>(attaDoc);
             }
             else
             {
@@ -193,6 +193,75 @@ namespace ParatureSDK.ApiHandler
                 xmlDocument.Load(xmlReader);
             }
             return xmlDocument;
+        }
+
+        /// <summary>
+        /// Fills a Role list object
+        /// </summary>
+        /// <param name="paraCredentials"></param>
+        /// <param name="query"></param>
+        /// <param name="module"></param>
+        /// <returns></returns>
+        internal static ParaEntityList<T> FillList<T>(ParaCredentials paraCredentials, ParaQuery query, ParaEnums.ParatureEntity entity, ParaEnums.ParatureModule module)
+        {
+            var rolesList = new ParaEntityList<T>();
+            var ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, module, entity, query.BuildQueryArguments());
+            if (ar.HasException == false)
+            {
+                rolesList = ParaEntityParser.FillList<T>(ar.XmlReceived);
+            }
+            rolesList.ApiCallResponse = ar;
+
+            // Checking if the system needs to recursively call all of the data returned.
+            if (query.RetrieveAllRecords)
+            {
+                var continueCalling = true;
+                while (continueCalling)
+                {
+                    if (rolesList.TotalItems > rolesList.Data.Count)
+                    {
+                        // We still need to pull data
+                        // Getting next page's data
+                        query.PageNumber = query.PageNumber + 1;
+
+                        ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, module, entity, query.BuildQueryArguments());
+
+                        var objectlist = ParaEntityParser.FillList<T>(ar.XmlReceived);
+
+                        if (objectlist.Data.Count == 0)
+                        {
+                            continueCalling = false;
+                        }
+
+                        rolesList.Data.AddRange(objectlist.Data);
+                        rolesList.ResultsReturned = rolesList.Data.Count;
+                        rolesList.PageNumber = query.PageNumber;
+                    }
+                    else
+                    {
+                        // That is it, pulled all the items.
+                        continueCalling = false;
+                        rolesList.ApiCallResponse = ar;
+                    }
+                }
+            }
+
+            return rolesList;
+        }
+
+        internal static T FillDetails<T>(Int64 entityId, ParaCredentials paraCredentials, ParaEnums.ParatureEntity entityType) where T: ParaEntityBaseProperties, new()
+        {
+            var role = new T();
+            var ar = ApiCallFactory.ObjectGetDetail(paraCredentials, entityType, entityId);
+            if (ar.HasException == false)
+            {
+                role = ParaEntityParser.EntityFill<T>(ar.XmlReceived);
+            }
+            else
+            {
+                role.Id = 0;
+            }
+            return role;
         }
     }
 }

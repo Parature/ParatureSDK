@@ -10,7 +10,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Account module.
     /// </summary>
-    public class Account
+    public static class Account
     {
         /// <summary>
         /// Create a Parature Account. Requires an Object and a credentials object. Will return the Newly Created accountId. Returns 0 if the account creation fails.
@@ -141,7 +141,6 @@ namespace ParatureSDK.ApiHandler
         {
             return FillList(pc, null, ParaEnums.RequestDepth.Standard);
         }
-
 
         ///  <summary>
         ///  Provides the capability to delete an Account.

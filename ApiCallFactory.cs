@@ -378,9 +378,8 @@ namespace ParatureSDK
 
         public static ApiCallResponse ObjectSecondLevelGetList(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ParaEnums.ParatureEntity entity, ArrayList arguments)
         {
-            string ApiCallUrl;
-            ApiCallUrl = ApiUrlBuilder.ApiObjectCustomUrl(paracredentials, module, entity, arguments);
-            return ApiMakeTheCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
+            var apiCallUrl = ApiUrlBuilder.ApiObjectCustomUrl(paracredentials, module, entity, arguments);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
 
         /// <summary>

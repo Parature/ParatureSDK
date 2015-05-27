@@ -3,10 +3,8 @@ using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects
 {
-    public class Sla
+    public class Sla : ParaEntityBaseProperties
     {
-        [XmlAttribute("id")]
-        public Int64 Id = 0;
         public string Name = "";
 
         public Sla()

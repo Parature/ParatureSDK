@@ -15,10 +15,10 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <param name="paraCredentials">
         ///  The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         ///  </param>               
-        public static ParaObjects.Queue QueueGetDetails(Int64 queueId, ParaCredentials paraCredentials)
+        public static ParaObjects.Queue GetDetails(Int64 queueId, ParaCredentials paraCredentials)
         {
             ParaObjects.Queue queue = new ParaObjects.Queue();
-            queue = QueueFillDetails(queueId, paraCredentials);
+            queue = FillDetails(queueId, paraCredentials);
             return queue;
         }
 
@@ -28,7 +28,7 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <param name="queueXml">
         /// The Queue XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaObjects.Queue QueueGetDetails(XmlDocument queueXml)
+        public static ParaObjects.Queue GetDetails(XmlDocument queueXml)
         {
             ParaObjects.Queue queue = new ParaObjects.Queue();
             queue = ParaEntityParser.EntityFill<ParaObjects.Queue>(queueXml);
@@ -42,7 +42,7 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <param name="queueListXml">
         /// The Queue List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaEntityList<ParaObjects.Queue> QueueGetList(XmlDocument queueListXml)
+        public static ParaEntityList<ParaObjects.Queue> GetList(XmlDocument queueListXml)
         {
             var queuesList = new ParaEntityList<ParaObjects.Queue>();
             queuesList = ParaEntityParser.FillList<ParaObjects.Queue>(queueListXml);
@@ -55,22 +55,22 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <summary>
         /// Get the list of Queues from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Queue> QueueGetList(ParaCredentials paraCredentials)
+        public static ParaEntityList<ParaObjects.Queue> GetList(ParaCredentials paraCredentials)
         {
-            return QueueFillList(paraCredentials, new QueueQuery());
+            return FillList(paraCredentials, new QueueQuery());
         }
 
         /// <summary>
         /// Get the list of Queues from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Queue> QueueGetList(ParaCredentials paraCredentials, QueueQuery query)
+        public static ParaEntityList<ParaObjects.Queue> GetList(ParaCredentials paraCredentials, QueueQuery query)
         {
-            return QueueFillList(paraCredentials, query);
+            return FillList(paraCredentials, query);
         }
         /// <summary>
         /// Fills a Queue List object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Queue> QueueFillList(ParaCredentials paraCredentials, QueueQuery query)
+        private static ParaEntityList<ParaObjects.Queue> FillList(ParaCredentials paraCredentials, QueueQuery query)
         {
 
             var QueueList = new ParaEntityList<ParaObjects.Queue>();
@@ -122,7 +122,7 @@ namespace ParatureSDK.ApiHandler.Entities
             return QueueList;
         }
 
-        private static ParaObjects.Queue QueueFillDetails(Int64 queueId, ParaCredentials paraCredentials)
+        private static ParaObjects.Queue FillDetails(Int64 queueId, ParaCredentials paraCredentials)
         {
             ParaObjects.Queue Queue = new ParaObjects.Queue();
             ApiCallResponse ar = new ApiCallResponse();
@@ -134,7 +134,7 @@ namespace ParatureSDK.ApiHandler.Entities
             else
             {
 
-                Queue.QueueID = 0;
+                Queue.QueueId = 0;
             }
 
             return Queue;

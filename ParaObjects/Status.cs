@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects
 {
-    public class Status
+    public class Status : ParaEntityBaseProperties
     {
         // Specific properties for this module
         /// <summary>
@@ -14,17 +14,6 @@ namespace ParatureSDK.ParaObjects
         /// The status name as customers see it on the portal and in the emails they receive.
         /// </summary>
         public string Description = "";
-
-        /// <summary>
-        /// Contains all the information regarding the API Call that was made.
-        /// </summary>
-        public ApiCallResponse ApiCallResponse = new ApiCallResponse();
-
-        /// <summary>
-        /// 1 = Active, -1 = Deactivated
-        /// </summary>
-        [XmlAttribute("id")]
-        public long Id { get; set; }
 
         public string Name { get; set; }
 

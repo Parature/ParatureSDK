@@ -23,17 +23,19 @@ namespace ParatureSDK.XmlToObjectParser
 
         public static ParaEntityList<TEnt> FillList<TEnt>(XmlDocument xmlDoc)
         {
-            //Generate the paged data parsed object. Data prop will be empty
+            //Generate the paged data parsed object.
             var list = EntityFill<ParaEntityList<TEnt>>(xmlDoc);
             var docNode = xmlDoc.DocumentElement;
 
-            //Fill the list of entities
+            //Resulting in duplicates due to proper deserialization of the "Data" property
+            /*
             foreach (XmlNode xn in docNode.ChildNodes)
             {
                 var xDoc = new XmlDocument();
                 xDoc.LoadXml(xn.OuterXml);
                 list.Data.Add(EntityFill<TEnt>(xDoc));
             }
+            */
 
             return list;
         }

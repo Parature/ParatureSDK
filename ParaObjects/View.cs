@@ -2,44 +2,19 @@ using System;
 
 namespace ParatureSDK.ParaObjects
 {
-    public class View
+    public class View : ParaEntityBaseProperties
     {
-        // Specific properties for this module
-        //private Int64 id
-        private Int64 _ID = 0;
-
-        public Int64 ID
-        {
-            get { return _ID; }
-            set { _ID = value; }
-        }
-
-        private string _Name = "";
-
-        public string Name
-        {
-            get { return _Name; }
-            set { _Name = value; }
-        }
-        /// <summary>
-        /// Indicates whether this object is fully loaded or not. An object that is not fully loaded means 
-        /// that only the id and name are available.
-        /// </summary>
-        public bool FullyLoaded = false;
-
-        /// <summary>
-        /// Contains all the information regarding the API Call that was made.
-        /// </summary>
-        public ApiCallResponse ApiCallResponse = new ApiCallResponse();
-
+        public string Name { get; set; }
 
         public View()
         {
+            Name = "";
+            Id = 0;
         }
 
         public View(View view)
         {
-            ID = view.ID;
+            Id = view.Id;
             Name = view.Name;
             FullyLoaded = view.FullyLoaded;
             ApiCallResponse = new ApiCallResponse(view.ApiCallResponse);

@@ -11,7 +11,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Customer module.
     /// </summary>
-    public class Customer
+    public static class Customer
     {
 
         /// <summary>

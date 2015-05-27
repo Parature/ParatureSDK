@@ -12,7 +12,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Ticket module.
     /// </summary>
-    public class Ticket
+    public static class Ticket
     {
         /// <summary>
         /// Provides the Schema of the Ticket module.

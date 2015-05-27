@@ -6,7 +6,7 @@ using ParatureSDK.XmlToObjectParser;
 
 namespace ParatureSDK.ApiHandler.Entities
 {
-    public partial class Department
+    public class Department
     {
         /// <summary>
         /// Returns a Department object with all of its properties filled.
@@ -17,10 +17,10 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <param name="paraCredentials">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>               
-        public static ParaObjects.Department DepartmentGetDetails(Int64 departmentid, ParaCredentials paraCredentials)
+        public static ParaObjects.Department GetDetails(Int64 departmentid, ParaCredentials paraCredentials)
         {
             ParaObjects.Department department = new ParaObjects.Department();
-            department = DepartmentFillDetails(departmentid, paraCredentials);
+            department = FillDetails(departmentid, paraCredentials);
             return department;
         }
 
@@ -30,7 +30,7 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <param name="departmentXml">
         /// The department XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaObjects.Department DepartmentGetDetails(XmlDocument departmentXml)
+        public static ParaObjects.Department GetDetails(XmlDocument departmentXml)
         {
             ParaObjects.Department department = new ParaObjects.Department();
             department = ParaEntityParser.EntityFill<ParaObjects.Department>(departmentXml);
@@ -44,7 +44,7 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <param name="departmentListXml">
         /// The Departments List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaEntityList<ParaObjects.Department> DepartmentsGetList(XmlDocument departmentListXml)
+        public static ParaEntityList<ParaObjects.Department> GetList(XmlDocument departmentListXml)
         {
             var departmentslist = new ParaEntityList<ParaObjects.Department>();
             departmentslist = ParaEntityParser.FillList<ParaObjects.Department>(departmentListXml);
@@ -57,14 +57,14 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <summary>
         /// Get the list of Departments from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Department> DepartmentsGetList(ParaCredentials paraCredentials, DepartmentQuery query)
+        public static ParaEntityList<ParaObjects.Department> GetList(ParaCredentials paraCredentials, DepartmentQuery query)
         {
-            return DepartmentFillList(paraCredentials, query);
+            return FillList(paraCredentials, query);
         }
         /// <summary>
         /// Fills a Departmentslist object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Department> DepartmentFillList(ParaCredentials paraCredentials, DepartmentQuery query)
+        private static ParaEntityList<ParaObjects.Department> FillList(ParaCredentials paraCredentials, DepartmentQuery query)
         {
 
             var departmentsList = new ParaEntityList<ParaObjects.Department>();
@@ -78,7 +78,7 @@ namespace ParatureSDK.ApiHandler.Entities
             return departmentsList;
         }
 
-        private static ParaObjects.Department DepartmentFillDetails(Int64 departmentid, ParaCredentials paraCredentials)
+        private static ParaObjects.Department FillDetails(Int64 departmentid, ParaCredentials paraCredentials)
         {
             ParaObjects.Department department = new ParaObjects.Department();
             ApiCallResponse ar = new ApiCallResponse();

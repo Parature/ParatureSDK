@@ -6,28 +6,19 @@ namespace ParatureSDK.ParaObjects
     {
         // Specific properties for this module
 
-        private Int32 _QueueID = 0;
+        public int QueueId { get; set; }
 
-        public Int32 QueueID
-        {
-            get { return _QueueID; }
-            set { _QueueID = value; }
-        }
-        private string _Name = "";
-
-        public string Name
-        {
-            get { return _Name; }
-            set { _Name = value; }
-        }
+        public string Name { get; set; }
 
         public Queue()
         {
+            Name = "";
+            QueueId = 0;
         }
 
         public Queue(Queue queue)
         {
-            QueueID = queue.QueueID;
+            QueueId = queue.QueueId;
             Name = queue.Name;
         }
 

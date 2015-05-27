@@ -11,7 +11,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Download module.
     /// </summary>
-    public class Download
+    public static class Download
     {
         /// <summary>
         /// Provides the Schema of the download module.

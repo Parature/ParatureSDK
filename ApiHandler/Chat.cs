@@ -11,7 +11,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Chat module.
     /// </summary>
-    public class Chat
+    public static class Chat
     {
         /// <summary>
         /// Returns a Chat object with all the properties of a chat.

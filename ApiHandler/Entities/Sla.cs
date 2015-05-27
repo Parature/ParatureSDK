@@ -18,10 +18,10 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <param name="paraCredentials">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>               
-        public static ParaObjects.Sla SLAGetDetails(Int64 slaId, ParaCredentials paraCredentials)
+        public static ParaObjects.Sla GetDetails(Int64 slaId, ParaCredentials paraCredentials)
         {
             ParaObjects.Sla Sla = new ParaObjects.Sla();
-            Sla = SlaFillDetails(slaId, paraCredentials);
+            Sla = FillDetails(slaId, paraCredentials);
             return Sla;
         }
 
@@ -31,7 +31,7 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <param name="slaXml">
         /// The Sla XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaObjects.Sla SLAGetDetails(XmlDocument slaXml)
+        public static ParaObjects.Sla GetDetails(XmlDocument slaXml)
         {
             ParaObjects.Sla sla = new ParaObjects.Sla();
             sla = ParaEntityParser.EntityFill<ParaObjects.Sla>(slaXml);
@@ -42,17 +42,17 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <summary>
         /// Get the list of SLAs from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Sla> SLAsGetList(ParaCredentials paraCredentials)
+        public static ParaEntityList<ParaObjects.Sla> GetList(ParaCredentials paraCredentials)
         {
-            return SlaFillList(paraCredentials, new SlaQuery());
+            return FillList(paraCredentials, new SlaQuery());
         }
 
         /// <summary>
         /// Get the list of SLAs from within your Parature license.
         /// </summary>
-        public static ParaEntityList<ParaObjects.Sla> SLAsGetList(ParaCredentials paraCredentials, SlaQuery query)
+        public static ParaEntityList<ParaObjects.Sla> GetList(ParaCredentials paraCredentials, SlaQuery query)
         {
-            return SlaFillList(paraCredentials, query);
+            return FillList(paraCredentials, query);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <param name="slaListXml">
         /// The Sla List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaEntityList<ParaObjects.Sla> SLAsGetList(XmlDocument slaListXml)
+        public static ParaEntityList<ParaObjects.Sla> GetList(XmlDocument slaListXml)
         {
             var slasList = new ParaEntityList<ParaObjects.Sla>();
             slasList = ParaEntityParser.FillList<ParaObjects.Sla>(slaListXml);
@@ -74,7 +74,7 @@ namespace ParatureSDK.ApiHandler.Entities
         /// <summary>
         /// Fills a Sla list object.
         /// </summary>
-        private static ParaEntityList<ParaObjects.Sla> SlaFillList(ParaCredentials paraCredentials, SlaQuery query)
+        private static ParaEntityList<ParaObjects.Sla> FillList(ParaCredentials paraCredentials, SlaQuery query)
         {
 
             var SlasList = new ParaEntityList<ParaObjects.Sla>();
@@ -127,7 +127,7 @@ namespace ParatureSDK.ApiHandler.Entities
             return SlasList;
         }
 
-        private static ParaObjects.Sla SlaFillDetails(Int64 slaId, ParaCredentials paraCredentials)
+        private static ParaObjects.Sla FillDetails(Int64 slaId, ParaCredentials paraCredentials)
         {
             ParaObjects.Sla Sla = new ParaObjects.Sla();
             ApiCallResponse ar = new ApiCallResponse();

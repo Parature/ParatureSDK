@@ -10,7 +10,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Csr module.
     /// </summary>
-    public class Csr
+    public static class Csr
     {
         /// <summary>
         /// Provides the Schema of the CSR module.

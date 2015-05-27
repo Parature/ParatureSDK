@@ -3,10 +3,8 @@ using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects
 {
-    public class Role
+    public class Role : ParaEntityBaseProperties
     {
-        [XmlAttribute("id")]
-        public Int64 Id;
         public string Name;
         public string Description;
         public Role()

@@ -11,7 +11,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Product module.
     /// </summary>
-    public class Product
+    public static class Product
     {
         /// <summary>
         /// Provides the Schema of the Product module.

@@ -11,7 +11,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Knowledge Base module.
     /// </summary>
-    public class Article
+    public static class Article
     {
         /// <summary>
         /// Provides the Schema of the article module.
