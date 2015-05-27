@@ -49,7 +49,7 @@ namespace ParatureSDK.ApiHandler
         /// </param>
         public static ParaObjects.Account GetDetails(Int64 accountid, ParaCredentials pc, ParaEnums.RequestDepth requestDepth)
         {
-            var account = FillDetails(accountid, pc, requestDepth, true);
+            var account = FillDetails(accountid, pc);
             return account;
         }
 
@@ -83,7 +83,7 @@ namespace ParatureSDK.ApiHandler
         /// </param>
         public static ParaObjects.Account GetDetails(Int64 accountid, ParaCredentials pc)
         {
-            var account = FillDetails(accountid, pc, ParaEnums.RequestDepth.Standard, true);
+            var account = FillDetails(accountid, pc);
 
             return account;
 
@@ -260,9 +260,8 @@ namespace ParatureSDK.ApiHandler
             return accountsList;
         }
 
-        private static ParaObjects.Account FillDetails(Int64 accountid, ParaCredentials pc, ParaEnums.RequestDepth requestDepth, bool minimalisticLoad)
+        private static ParaObjects.Account FillDetails(Int64 accountid, ParaCredentials pc)
         {
-            var requestdepth = (int)requestDepth;
             var account = new ParaObjects.Account();
             var ar = ApiCallFactory.ObjectGetDetail<ParaObjects.Account>(pc, ParaEnums.ParatureModule.Account, accountid);
             if (ar.HasException == false)
@@ -368,12 +367,12 @@ namespace ParatureSDK.ApiHandler
             /// <param name="creds"></param>
             /// <param name="query"></param>
             /// <returns></returns>
-            public static ParaEntityList<ParaObjects.AccountView> GetList(ParaCredentials creds, ViewQuery query, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.AccountView> GetList(ParaCredentials creds, ViewQuery query)
             {
                 return ApiUtils.FillList<ParaObjects.AccountView>(creds, query, _entityType, _moduleType);
             }
 
-            public static ParaEntityList<ParaObjects.AccountView> GetList(ParaCredentials creds, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.AccountView> GetList(ParaCredentials creds)
             {
                 return ApiUtils.FillList<ParaObjects.AccountView>(creds, new ViewQuery(), _entityType, _moduleType);
             }

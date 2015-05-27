@@ -449,7 +449,7 @@ namespace ParatureSDK.ApiHandler
             public static ParaObjects.ArticleFolder GetDetails(Int64 ArticleFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
             {
                 ParaObjects.ArticleFolder ArticleFolder = new ParaObjects.ArticleFolder();
-                ArticleFolder = FillDetails(ArticleFolderid, ParaCredentials, RequestDepth);
+                ArticleFolder = FillDetails(ArticleFolderid, ParaCredentials);
 
                 return ArticleFolder;
 
@@ -581,9 +581,8 @@ namespace ParatureSDK.ApiHandler
                 return ArticleFoldersList;
             }
 
-            private static ParaObjects.ArticleFolder FillDetails(Int64 ArticleFolderid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+            private static ParaObjects.ArticleFolder FillDetails(Int64 ArticleFolderid, ParaCredentials ParaCredentials)
             {
-                int requestdepth = (int)RequestDepth;
                 ParaObjects.ArticleFolder ArticleFolder = new ParaObjects.ArticleFolder();
                 //Customer = null;
                 ApiCallResponse ar = new ApiCallResponse();
@@ -608,7 +607,7 @@ namespace ParatureSDK.ApiHandler
             {
 
                 ParaObjects.ArticleFolder ArticleFolder = new ParaObjects.ArticleFolder();
-                ArticleFolder = FillDetails(ArticleFolderid, ParaCredentials, ParaEnums.RequestDepth.Standard);
+                ArticleFolder = FillDetails(ArticleFolderid, ParaCredentials);
 
                 return ArticleFolder;
             }

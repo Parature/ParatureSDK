@@ -106,7 +106,7 @@ namespace ParatureSDK.ApiHandler
         public static ParaObjects.Customer GetDetails(Int64 customerid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
             var Customer = new ParaObjects.Customer();
-            Customer = FillDetails(customerid, ParaCredentials, RequestDepth, true);
+            Customer = FillDetails(customerid, ParaCredentials);
 
             return Customer;
 
@@ -126,7 +126,7 @@ namespace ParatureSDK.ApiHandler
         {
 
             var Customer = new ParaObjects.Customer();
-            Customer = FillDetails(Customerid, ParaCredentials, ParaEnums.RequestDepth.Standard, true);
+            Customer = FillDetails(Customerid, ParaCredentials);
 
             return Customer;
 
@@ -310,7 +310,7 @@ namespace ParatureSDK.ApiHandler
             return CustomersList;
         }
 
-        static ParaObjects.Customer FillDetails(Int64 customerId, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
+        static ParaObjects.Customer FillDetails(Int64 customerId, ParaCredentials ParaCredentials)
         {
             var customer = new ParaObjects.Customer();
             var ar = ApiCallFactory.ObjectGetDetail<ParaObjects.Customer>(ParaCredentials, ParaEnums.ParatureModule.Customer, customerId);
@@ -414,12 +414,12 @@ namespace ParatureSDK.ApiHandler
             /// <param name="creds"></param>
             /// <param name="query"></param>
             /// <returns></returns>
-            public static ParaEntityList<ParaObjects.CustomerRole> GetList(ParaCredentials creds, RoleQuery query, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.CustomerRole> GetList(ParaCredentials creds, RoleQuery query)
             {
                 return ApiUtils.FillList<ParaObjects.CustomerRole>(creds, query, _entityType, _moduleType);
             }
 
-            public static ParaEntityList<ParaObjects.CustomerRole> GetList(ParaCredentials creds, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.CustomerRole> GetList(ParaCredentials creds)
             {
                 return ApiUtils.FillList<ParaObjects.CustomerRole>(creds, new RoleQuery(), _entityType, _moduleType);
             }
@@ -481,12 +481,12 @@ namespace ParatureSDK.ApiHandler
             /// <param name="creds"></param>
             /// <param name="query"></param>
             /// <returns></returns>
-            public static ParaEntityList<ParaObjects.CustomerStatus> GetList(ParaCredentials creds, StatusQuery query, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.CustomerStatus> GetList(ParaCredentials creds, StatusQuery query)
             {
                 return ApiUtils.FillList<ParaObjects.CustomerStatus>(creds, query, _entityType, _moduleType);
             }
 
-            public static ParaEntityList<ParaObjects.CustomerStatus> GetList(ParaCredentials creds, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.CustomerStatus> GetList(ParaCredentials creds)
             {
                 return ApiUtils.FillList<ParaObjects.CustomerStatus>(creds, new StatusQuery(), _entityType, _moduleType);
             }
@@ -548,12 +548,12 @@ namespace ParatureSDK.ApiHandler
             /// <param name="creds"></param>
             /// <param name="query"></param>
             /// <returns></returns>
-            public static ParaEntityList<ParaObjects.CustomerView> GetList(ParaCredentials creds, ViewQuery query, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.CustomerView> GetList(ParaCredentials creds, ViewQuery query)
             {
                 return ApiUtils.FillList<ParaObjects.CustomerView>(creds, query, _entityType, _moduleType);
             }
 
-            public static ParaEntityList<ParaObjects.CustomerView> GetList(ParaCredentials creds, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.CustomerView> GetList(ParaCredentials creds)
             {
                 return ApiUtils.FillList<ParaObjects.CustomerView>(creds, new ViewQuery(), _entityType, _moduleType);
             }

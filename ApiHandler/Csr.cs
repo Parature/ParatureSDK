@@ -268,12 +268,12 @@ namespace ParatureSDK.ApiHandler
             /// <param name="creds"></param>
             /// <param name="query"></param>
             /// <returns></returns>
-            public static ParaEntityList<ParaObjects.CsrStatus> GetList(ParaCredentials creds, StatusQuery query, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.CsrStatus> GetList(ParaCredentials creds, StatusQuery query)
             {
                 return ApiUtils.FillList<ParaObjects.CsrStatus>(creds, query, _entityType, _moduleType);
             }
 
-            public static ParaEntityList<ParaObjects.CsrStatus> GetList(ParaCredentials creds, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.CsrStatus> GetList(ParaCredentials creds)
             {
                 return ApiUtils.FillList<ParaObjects.CsrStatus>(creds, new StatusQuery(), _entityType, _moduleType);
             }
@@ -336,12 +336,12 @@ namespace ParatureSDK.ApiHandler
             /// <param name="creds"></param>
             /// <param name="query"></param>
             /// <returns></returns>
-            public static ParaEntityList<ParaObjects.CsrRole> GetList(ParaCredentials creds, RoleQuery query, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.CsrRole> GetList(ParaCredentials creds, RoleQuery query)
             {
                 return ApiUtils.FillList<CsrRole>(creds, query, _entityType, _moduleType);
             }
 
-            public static ParaEntityList<ParaObjects.CsrRole> GetList(ParaCredentials creds, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.CsrRole> GetList(ParaCredentials creds)
             {
                 return ApiUtils.FillList<CsrRole>(creds, new RoleQuery(), _entityType, _moduleType);
             }

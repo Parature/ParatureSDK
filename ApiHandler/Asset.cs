@@ -104,7 +104,7 @@ namespace ParatureSDK.ApiHandler
         public static ParaObjects.Asset GetDetails(Int64 Assetid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
             ParaObjects.Asset Asset = new ParaObjects.Asset();
-            Asset = FillDetails(Assetid, ParaCredentials, RequestDepth);
+            Asset = FillDetails(Assetid, ParaCredentials);
             return Asset;
         }
 
@@ -306,7 +306,7 @@ namespace ParatureSDK.ApiHandler
 
         }
 
-        private static ParaObjects.Asset FillDetails(Int64 Assetid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
+        private static ParaObjects.Asset FillDetails(Int64 Assetid, ParaCredentials ParaCredentials)
         {
             var asset = new ParaObjects.Asset();
 

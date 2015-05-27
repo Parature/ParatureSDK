@@ -105,7 +105,7 @@ namespace ParatureSDK.ApiHandler
         public static ParaObjects.Ticket GetDetails(Int64 ticketNumber, bool includeHistory, ParaCredentials pc, ParaEnums.RequestDepth requestDepth)
         {
             ParaObjects.Ticket Ticket = new ParaObjects.Ticket();
-            Ticket = FillDetails(ticketNumber, pc, requestDepth, true, includeHistory);
+            Ticket = FillDetails(ticketNumber, pc, includeHistory);
             return Ticket;
         }
 
@@ -127,7 +127,7 @@ namespace ParatureSDK.ApiHandler
         {
 
             ParaObjects.Ticket Ticket = new ParaObjects.Ticket();
-            Ticket = FillDetails(ticketNumber, pc, ParaEnums.RequestDepth.Standard, true, includeHistory);
+            Ticket = FillDetails(ticketNumber, pc, includeHistory);
             return Ticket;
         }
 
@@ -319,11 +319,9 @@ namespace ParatureSDK.ApiHandler
             return ApiUtils.UploadFile(ParaEnums.ParatureModule.Ticket, pc, text, contentType, fileName);
         }
 
-        private static ParaObjects.Ticket FillDetails(Int64 ticketNumber, ParaCredentials pc, ParaEnums.RequestDepth requestDepth, bool minimalisticLoad, bool includeHistory)
+        private static ParaObjects.Ticket FillDetails(Int64 ticketNumber, ParaCredentials pc, bool includeHistory)
         {
-            int requestdepth = (int)requestDepth;
-            ParaObjects.Ticket Ticket = new ParaObjects.Ticket();
-            //Ticket = null;
+            var ticket = new ParaObjects.Ticket();
             ApiCallResponse ar = new ApiCallResponse();
 
             if (includeHistory == true)
@@ -340,17 +338,17 @@ namespace ParatureSDK.ApiHandler
 
             if (ar.HasException == false)
             {
-                Ticket = ParaEntityParser.EntityFill<ParaObjects.Ticket>(ar.XmlReceived);
-                Ticket.FullyLoaded = true;
+                ticket = ParaEntityParser.EntityFill<ParaObjects.Ticket>(ar.XmlReceived);
+                ticket.FullyLoaded = true;
             }
             else
             {
-                Ticket.FullyLoaded = false;
-                Ticket.Id = 0;
+                ticket.FullyLoaded = false;
+                ticket.Id = 0;
             }
-            Ticket.ApiCallResponse = ar;
-            Ticket.IsDirty = false;
-            return Ticket;
+            ticket.ApiCallResponse = ar;
+            ticket.IsDirty = false;
+            return ticket;
         }
 
         /// <summary>
@@ -428,12 +426,12 @@ namespace ParatureSDK.ApiHandler
             /// <param name="creds"></param>
             /// <param name="query"></param>
             /// <returns></returns>
-            public static ParaEntityList<ParaObjects.TicketStatus> GetList(ParaCredentials creds, StatusQuery query, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.TicketStatus> GetList(ParaCredentials creds, StatusQuery query)
             {
                 return ApiUtils.FillList<ParaObjects.TicketStatus>(creds, query, _entityType, _moduleType);
             }
 
-            public static ParaEntityList<ParaObjects.TicketStatus> GetList(ParaCredentials creds, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.TicketStatus> GetList(ParaCredentials creds)
             {
                 return ApiUtils.FillList<ParaObjects.TicketStatus>(creds, new StatusQuery(), _entityType, _moduleType);
             }
@@ -495,12 +493,12 @@ namespace ParatureSDK.ApiHandler
             /// <param name="creds"></param>
             /// <param name="query"></param>
             /// <returns></returns>
-            public static ParaEntityList<ParaObjects.TicketView> GetList(ParaCredentials creds, ViewQuery query, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.TicketView> GetList(ParaCredentials creds, ViewQuery query)
             {
                 return ApiUtils.FillList<ParaObjects.TicketView>(creds, query, _entityType, _moduleType);
             }
 
-            public static ParaEntityList<ParaObjects.TicketView> GetList(ParaCredentials creds, ParaEnums.ParatureModule module)
+            public static ParaEntityList<ParaObjects.TicketView> GetList(ParaCredentials creds)
             {
                 return ApiUtils.FillList<ParaObjects.TicketView>(creds, new ViewQuery(), _entityType, _moduleType);
             }

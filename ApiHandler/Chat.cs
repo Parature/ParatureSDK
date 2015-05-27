@@ -26,7 +26,7 @@ namespace ParatureSDK.ApiHandler
         public static ParaObjects.Chat GetDetails(Int64 chatid, ParaCredentials ParaCredentials)
         {
             ParaObjects.Chat chat = new ParaObjects.Chat();
-            chat = FillDetails(chatid, ParaCredentials, false, false);
+            chat = FillDetails(chatid, ParaCredentials, false);
 
             return chat;
 
@@ -52,7 +52,7 @@ namespace ParatureSDK.ApiHandler
         {
 
             ParaObjects.Chat chat = new ParaObjects.Chat();
-            chat = FillDetails(chatid, ParaCredentials, IncludeHistory, IncludeTranscripts);
+            chat = FillDetails(chatid, ParaCredentials, IncludeHistory);
 
             return chat;
 
@@ -174,7 +174,7 @@ namespace ParatureSDK.ApiHandler
         }
 
             
-        static ParaObjects.Chat FillDetails(Int64 chatid, ParaCredentials ParaCredentials, Boolean IncludeHistory, Boolean IncludeTranscripts)
+        static ParaObjects.Chat FillDetails(Int64 chatid, ParaCredentials ParaCredentials, Boolean IncludeHistory)
         {
             ParaObjects.Chat chat = new ParaObjects.Chat();
             //Customer = null;

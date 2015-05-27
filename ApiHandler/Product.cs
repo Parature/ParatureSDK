@@ -102,7 +102,7 @@ namespace ParatureSDK.ApiHandler
         public static ParaObjects.Product GetDetails(Int64 Productid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth)
         {
             ParaObjects.Product Product = new ParaObjects.Product();
-            Product = FillDetails(Productid, ParaCredentials, RequestDepth, true);
+            Product = FillDetails(Productid, ParaCredentials);
             return Product;
         }
 
@@ -119,7 +119,7 @@ namespace ParatureSDK.ApiHandler
         public static ParaObjects.Product GetDetails(Int64 Productid, ParaCredentials ParaCredentials)
         {
             ParaObjects.Product Product = new ParaObjects.Product();
-            Product = FillDetails(Productid, ParaCredentials, ParaEnums.RequestDepth.Standard, true);
+            Product = FillDetails(Productid, ParaCredentials);
 
             return Product;
         }
@@ -309,9 +309,8 @@ namespace ParatureSDK.ApiHandler
 
         }
                         
-        private static ParaObjects.Product FillDetails(Int64 Productid, ParaCredentials ParaCredentials, ParaEnums.RequestDepth RequestDepth, bool MinimalisticLoad)
+        private static ParaObjects.Product FillDetails(Int64 Productid, ParaCredentials ParaCredentials)
         {
-            int requestdepth = (int)RequestDepth;
             var Product = new ParaObjects.Product();
             //Product = null;
             var ar = new ApiCallResponse();
