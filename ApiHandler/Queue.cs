@@ -17,7 +17,7 @@ namespace ParatureSDK.ApiHandler
         ///  </param>               
         public static ParaObjects.Queue GetDetails(Int64 queueId, ParaCredentials paraCredentials)
         {
-            ParaObjects.Queue queue = new ParaObjects.Queue();
+            var queue = new ParaObjects.Queue();
             queue = FillDetails(queueId, paraCredentials);
             return queue;
         }
@@ -30,7 +30,7 @@ namespace ParatureSDK.ApiHandler
         /// </param>
         public static ParaObjects.Queue GetDetails(XmlDocument queueXml)
         {
-            ParaObjects.Queue queue = new ParaObjects.Queue();
+            var queue = new ParaObjects.Queue();
             queue = ParaEntityParser.EntityFill<ParaObjects.Queue>(queueXml);
 
             return queue;
