@@ -42,8 +42,7 @@ namespace Exercises
             emptyCustomer.Password_Confirm = password;
 
             // Customer status are usually 1 = Pending, 2 = Registered, 3 = Trashed, 16 = Unregistered};
-            emptyCustomer.Status = new StatusReference{ Status = new CustomerStatus { Id = 2 }};
-            
+            emptyCustomer.Status = new StatusReference{ Status = new Status() { Id = 2 }};
 
             var customerCreateResponse = ParatureSDK.ApiHandler.Customer.Insert(emptyCustomer, CredentialProvider.Creds);
 
