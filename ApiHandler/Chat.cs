@@ -173,7 +173,27 @@ namespace ParatureSDK.ApiHandler
             return ChatList;
         }
 
-            
+        static ParaObjects.Chat FillTranscriptDetails(Int64 chatid, ParaCredentials paraCredentials)
+        {
+            //Because chat transcripts return a Chat object with just a list messages, we'll deserialize the transcript into a chat object
+            var chat = new ParaObjects.Chat();
+
+            var ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.ChatTranscript, chatid);
+            if (ar.HasException == false)
+            {
+                chat = ParaEntityParser.EntityFill<ParaObjects.Chat>(ar.XmlReceived);
+                chat.FullyLoaded = true;
+            }
+            else
+            {
+                chat.FullyLoaded = false;
+                chat.Id = 0;
+            }
+            chat.ApiCallResponse = ar;
+            chat.IsDirty = false;
+            return chat;
+        }    
+
         static ParaObjects.Chat FillDetails(Int64 chatid, ParaCredentials ParaCredentials, Boolean IncludeHistory)
         {
             ParaObjects.Chat chat = new ParaObjects.Chat();
@@ -229,17 +249,16 @@ namespace ParatureSDK.ApiHandler
             return chat;
         }
 
-        static public ParaEntityList<ChatTranscript> ChatTranscripts(Int64 ChatID, ParaCredentials pc)
+        /// <summary>
+        /// Retrieve the transcript for a particualr chat
+        /// </summary>
+        /// <param name="chatId"></param>
+        /// <param name="paraCredentials"></param>
+        /// <returns>A list of chat messages</returns>
+        static public List<ChatMessage> GetTranscript(Int64 chatId, ParaCredentials paraCredentials)
         {
-            var transcripts = new ParaEntityList<ChatTranscript>();
-            ApiCallResponse ar = ApiCallFactory.ObjectGetDetail(pc, ParaEnums.ParatureEntity.ChatTranscript, ChatID);
-
-            if (ar.HasException == false)
-            {
-                transcripts = ParaEntityParser.FillList<ParaObjects.ChatTranscript>(ar.XmlReceived);
-            }
-
-            return transcripts;
+            var chat = FillTranscriptDetails(chatId, paraCredentials);
+            return chat.Transcript;
         }
     }
 }

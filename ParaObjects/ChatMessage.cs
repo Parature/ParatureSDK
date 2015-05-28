@@ -12,6 +12,7 @@ namespace ParatureSDK.ParaObjects
     [XmlRoot("Message")]
     public class ChatMessage
     {
+        [XmlAttribute("internal")]
         public bool Internal { get; set; }
         public string Text { get; set; }
         public DateTime Timestamp { get; set; }

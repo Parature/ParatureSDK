@@ -55,6 +55,16 @@ namespace ParatureSDK
             {
                 var ar = ApiCallFactory.ObjectGetList(_paracredentials, _module, _Arguments);
                 var objectlist = ParaEntityParser.FillList<ParaObjects.Chat>(ar.XmlReceived);
+
+                if (includeTranscripts)
+                {
+                    //Fetch transcripts for each chat
+                    foreach (var chat in chatList)
+                    {
+                        chat.Transcript = ApiHandler.Chat.GetTranscript(chat.Id, _paracredentials);
+                    }
+                }
+
                 chatList.Data.AddRange(objectlist.Data);
                 chatList.ApiCallResponse = ar;
                 sem.Release();

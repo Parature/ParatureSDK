@@ -427,7 +427,7 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value.ToString();
             }
         }
-        [XmlArray("Message")]
+        [XmlElement("Message")]
         public List<ChatMessage> Transcript { get; set; }
         
         public Chat()
