@@ -243,29 +243,6 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public Role Customer_Role
-        {
-            get
-            {
-                return GetFieldValue<Role>("Customer_Role");
-            }
-            set
-            {
-                var field = StaticFields.FirstOrDefault(f => f.Name == "Customer_Role");
-                if (field == null)
-                {
-                    field = new StaticField()
-                    {
-                        Name = "Customer_Role",
-                        FieldType = "entity",
-                        DataType = "entity"
-                    };
-                    StaticFields.Add(field);
-                }
-
-                field.Value = value;
-            }
-        }
         public string Ip_Address
         {
             get
