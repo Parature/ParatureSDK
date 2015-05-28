@@ -78,13 +78,6 @@ namespace ParatureSDK.ApiHandler
             {
                 Query = new ChatQuery();
             }
-            // Making a schema call and returning all custom fields to be included in the call.
-            if (Query.IncludeAllCustomFields)
-            {
-                ParaObjects.Customer objschem = new ParaObjects.Customer();
-                objschem = Customer.Schema(ParaCredentials);
-                Query.IncludeCustomField(objschem.CustomFields);
-            }
             ApiCallResponse ar = new ApiCallResponse();
             var ChatList = new ParaEntityList<ParaObjects.Chat>();
 
