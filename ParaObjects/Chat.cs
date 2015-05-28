@@ -148,7 +148,7 @@ namespace ParatureSDK.ParaObjects
                     StaticFields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
         public DateTime Date_Ended
@@ -171,7 +171,7 @@ namespace ParatureSDK.ParaObjects
                     StaticFields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
         public List<Ticket> Related_Tickets
@@ -266,11 +266,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public Boolean Is_Anonymous
+        public bool? Is_Anonymous
         {
             get
             {
-                return GetFieldValue<bool>("Is_Anonymous");
+                return GetFieldValue<bool?>("Is_Anonymous");
             }
             set
             {
@@ -286,7 +286,7 @@ namespace ParatureSDK.ParaObjects
                     StaticFields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
         public string Referrer_Url
@@ -312,11 +312,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public Status Status
+        public StatusReference Status
         {
             get
             {
-                return GetFieldValue<Status>("Status");
+                return GetFieldValue<StatusReference>("Status");
             }
             set
             {
@@ -381,15 +381,15 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public Int64 Sla_Violation
+        public Int64 Sla_Violations
         {
             get
             {
-                return GetFieldValue<Int32>("Sla_Violation");
+                return GetFieldValue<Int32>("Sla_Violations");
             }
             set
             {
-                var field = StaticFields.FirstOrDefault(f => f.Name == "Sla_Violation");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Sla_Violations");
                 if (field == null)
                 {
                     field = new StaticField()
@@ -401,7 +401,7 @@ namespace ParatureSDK.ParaObjects
                     StaticFields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
         [XmlElement("Message")]
