@@ -133,7 +133,6 @@
     <Compile Include="ParaObjects\Asset.cs" />
     <Compile Include="ParaObjects\Attachment.cs" />
     <Compile Include="ParaObjects\Chat.cs" />
-    <Compile Include="ParaObjects\ChatTranscript.cs" />
     <Compile Include="ParaObjects\Csr.cs" />
     <Compile Include="ParaObjects\CsrRole.cs" />
     <Compile Include="ParaObjects\Customer.cs" />
@@ -159,6 +158,7 @@
     <Compile Include="ParaObjects\EntityReferences\TimezoneReference.cs" />
     <Compile Include="ParaObjects\Eula.cs" />
     <Compile Include="ParaObjects\Folder.cs" />
+    <Compile Include="ParaObjects\ChatMessage.cs" />
     <Compile Include="ParaObjects\ParaEntity.cs" />
     <Compile Include="ParaObjects\ParaEntityBaseProperties.cs" />
     <Compile Include="ParaObjects\OptimizationResult.cs" />

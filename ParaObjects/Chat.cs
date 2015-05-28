@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
+using System.Xml.Serialization;
 using ParatureSDK.Fields;
+using ParatureSDK.ParaObjects.EntityReferences;
 
 namespace ParatureSDK.ParaObjects
 {
@@ -102,11 +105,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public Customer Customer
+        public CustomerReference Customer
         {
             get
             {
-                return GetFieldValue<Customer>("Customer");
+                return GetFieldValue<CustomerReference>("Customer");
             }
             set
             {
@@ -217,11 +220,11 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-        public Csr Initial_Csr
+        public CsrReference Initial_Csr
         {
             get
             {
-                return GetFieldValue<Csr>("Initial_Csr");
+                return GetFieldValue<CsrReference>("Initial_Csr");
             }
             set
             {
@@ -424,28 +427,9 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value.ToString();
             }
         }
-        public List<ChatTranscript> ChatTranscripts
-        {
-            get
-            {
-                return GetFieldValue<List<ChatTranscript>>("ChatTranscripts");
-            }
-            set
-            {
-                var field = StaticFields.FirstOrDefault(f => f.Name == "ChatTranscripts");
-                if (field == null)
-                {
-                    field = new StaticField()
-                    {
-                        Name = "ChatTranscripts"
-                    };
-                    StaticFields.Add(field);
-                }
-
-                field.Value = value;
-            }
-        }
-
+        [XmlArray("Message")]
+        public List<ChatMessage> Transcript { get; set; }
+        
         public Chat()
             : base()
         {
