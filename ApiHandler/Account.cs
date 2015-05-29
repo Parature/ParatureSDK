@@ -15,7 +15,7 @@ namespace ParatureSDK.ApiHandler
     {
         private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Account;
 
-        public class View : SecondLevelApiEntity<ParaObjects.View, ViewQuery>
+        public class View : SecondLevelApiEntity<ParaObjects.View, ViewQuery, ParaObjects.Account>
         {
             private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.view;
             private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Account;

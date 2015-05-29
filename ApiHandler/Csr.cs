@@ -18,13 +18,13 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Contains all the methods needed to work with the Ticket statuses.
         /// </summary>
-        public class Status : SecondLevelApiEntity<ParaObjects.Status, StatusQuery>
+        public class Status : SecondLevelApiEntity<ParaObjects.Status, StatusQuery, ParaObjects.Csr>
         {
             private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.status;
             private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Csr;
         }
 
-        public class Role : SecondLevelApiEntity<ParaObjects.CsrRole, RoleQuery>
+        public class Role : SecondLevelApiEntity<ParaObjects.CsrRole, RoleQuery, ParaObjects.Csr>
         {
             private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.role;
             private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Csr;

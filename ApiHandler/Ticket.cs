@@ -72,13 +72,13 @@ namespace ParatureSDK.ApiHandler
             return ar;
         }
 
-        public class Status : SecondLevelApiEntity<ParaObjects.Status, StatusQuery>
+        public class Status : SecondLevelApiEntity<ParaObjects.Status, StatusQuery, ParaObjects.Ticket>
         {
             private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.status;
             private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Ticket;
         }
 
-        public class View : SecondLevelApiEntity<ParaObjects.View, ViewQuery>
+        public class View : SecondLevelApiEntity<ParaObjects.View, ViewQuery, ParaObjects.Ticket>
         {
             private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.view;
             private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Ticket;
