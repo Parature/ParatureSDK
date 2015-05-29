@@ -45,12 +45,12 @@ namespace ParatureSDK.ApiHandler
 
         internal static Attachment AddAttachment(ParaCredentials pc, Byte[] attachment, string contentType, string fileName)
         {
-            return ApiUtils.UploadFile(ParaEnums.ParatureModule.Ticket, pc, attachment, contentType, fileName);
+            return ApiUtils.UploadFile(_module, pc, attachment, contentType, fileName);
         }
         
         internal static Attachment AddAttachment(ParaCredentials pc, string text, string contentType, string fileName)
         {
-            return ApiUtils.UploadFile(ParaEnums.ParatureModule.Ticket, pc, text, contentType, fileName);
+            return ApiUtils.UploadFile(_module, pc, text, contentType, fileName);
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace ParatureSDK.ApiHandler
         /// <returns></returns>
         public static ApiCallResponse ActionRun(Int64 ticketId, Action action, ParaCredentials pc)
         {
-            var ar = ApiUtils.ActionRun(ticketId, action, pc, ParaEnums.ParatureModule.Ticket);
+            var ar = ApiUtils.ActionRun(ticketId, action, pc, _module);
             return ar;
         }
 

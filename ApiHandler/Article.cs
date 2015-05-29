@@ -185,7 +185,7 @@ namespace ParatureSDK.ApiHandler
             {
                 ArticleFolderQuery eq = new ArticleFolderQuery();
                 eq.RetrieveAllRecords = true;
-                return FillList(ParaCredentials, eq, ParaEnums.RequestDepth.Standard);
+                return FillList(ParaCredentials, eq);
             }
 
             /// <summary>
@@ -194,19 +194,7 @@ namespace ParatureSDK.ApiHandler
             /// </summary>
             public static ParaEntityList<ParaObjects.ArticleFolder> GetList(ParaCredentials ParaCredentials, ArticleFolderQuery Query)
             {
-                return FillList(ParaCredentials, Query, ParaEnums.RequestDepth.Standard);
-            }
-
-            /// <summary>
-            /// Provides you with the capability to list Article Folders, following criteria you would set
-            /// by instantiating a ModuleQuery.ArticleQuery object.
-            /// Provides with the capability to pull extra data, by setting the proper request depth. Please be aware that 
-            /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
-            /// the standard field depth.
-            /// </summary>
-            public static ParaEntityList<ParaObjects.ArticleFolder> GetList(ParaCredentials ParaCredentials, ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
-            {
-                return FillList(ParaCredentials, Query, RequestDepth);
+                return FillList(ParaCredentials, Query);
             }
 
             /// <summary>
@@ -228,9 +216,8 @@ namespace ParatureSDK.ApiHandler
             /// <summary>
             /// Fills an Article list object.
             /// </summary>
-            private static ParaEntityList<ParaObjects.ArticleFolder> FillList(ParaCredentials ParaCredentials, ArticleFolderQuery Query, ParaEnums.RequestDepth RequestDepth)
+            private static ParaEntityList<ParaObjects.ArticleFolder> FillList(ParaCredentials ParaCredentials, ArticleFolderQuery Query)
             {
-                int requestdepth = (int)RequestDepth;
                 if (Query == null)
                 {
                     Query = new ArticleFolderQuery();
