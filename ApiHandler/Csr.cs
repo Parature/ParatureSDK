@@ -230,7 +230,7 @@ namespace ParatureSDK.ApiHandler
             /// <returns></returns>
             public static ParaObjects.Status GetDetails(Int64 id, ParaCredentials creds)
             {
-                var status = ApiUtils.FillDetails<ParaObjects.Status>(id, creds, _entityType);
+                var status = ApiUtils.ApiGetEntity<ParaObjects.Status>(creds, _entityType, id);
                 return status;
             }
 
@@ -270,12 +270,12 @@ namespace ParatureSDK.ApiHandler
             /// <returns></returns>
             public static ParaEntityList<ParaObjects.Status> GetList(ParaCredentials creds, StatusQuery query)
             {
-                return ApiUtils.FillList<ParaObjects.Status>(creds, query, _entityType, _moduleType);
+                return ApiUtils.ApiGetEntityList<ParaObjects.Status>(creds, query, _moduleType, _entityType);
             }
 
             public static ParaEntityList<ParaObjects.Status> GetList(ParaCredentials creds)
             {
-                return ApiUtils.FillList<ParaObjects.Status>(creds, new StatusQuery(), _entityType, _moduleType);
+                return ApiUtils.ApiGetEntityList<ParaObjects.Status>(creds, new StatusQuery(), _moduleType, _entityType);
             }
 
         }
@@ -298,7 +298,7 @@ namespace ParatureSDK.ApiHandler
             /// <returns></returns>
             public static ParaObjects.CsrRole GetDetails(Int64 id, ParaCredentials creds)
             {
-                var entity = ApiUtils.FillDetails<CsrRole>(id, creds, _entityType);
+                var entity = ApiUtils.ApiGetEntity<CsrRole>(creds, _entityType, id);
                 return entity;
             }
 
@@ -338,12 +338,12 @@ namespace ParatureSDK.ApiHandler
             /// <returns></returns>
             public static ParaEntityList<ParaObjects.CsrRole> GetList(ParaCredentials creds, RoleQuery query)
             {
-                return ApiUtils.FillList<CsrRole>(creds, query, _entityType, _moduleType);
+                return ApiUtils.ApiGetEntityList<CsrRole>(creds, query, _moduleType, _entityType);
             }
 
             public static ParaEntityList<ParaObjects.CsrRole> GetList(ParaCredentials creds)
             {
-                return ApiUtils.FillList<CsrRole>(creds, new RoleQuery(), _entityType, _moduleType);
+                return ApiUtils.ApiGetEntityList<CsrRole>(creds, new RoleQuery(), _moduleType, _entityType);
             }
         }
     }

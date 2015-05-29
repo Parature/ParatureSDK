@@ -222,7 +222,7 @@ namespace ParatureSDK.ApiHandler
 
             if (Query.RetrieveAllRecords && Query.OptimizePageSize)
             {
-                OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(ProductsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Product);
+                OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(ProductsList, Query, ParaCredentials, ParaEnums.ParatureModule.Product);
                 ar = rslt.apiResponse;
                 Query = (ProductQuery)rslt.Query;
                 ProductsList = ((ParaEntityList<ParaObjects.Product>)rslt.objectList);

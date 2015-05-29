@@ -33,7 +33,7 @@ namespace ParatureSDK.ModuleQuery
         /// </param>        
         public void AddCustomFieldFilter(Int64 customFieldId, ParaEnums.QueryCriteria criteria, DateTime value)
         {
-            QueryFilterAdd("FID" + customFieldId.ToString(), criteria, value.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            QueryFilterAdd("FID" + customFieldId, criteria, value.ToString("yyyy-MM-ddTHH:mm:ssZ"));
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace ParatureSDK.ModuleQuery
                         separator = "";
                     }
                 }
-                filtering = filtering + separator + customFieldOptionId[i].ToString();
+                filtering = filtering + separator + customFieldOptionId[i];
             }
 
             QueryFilterAdd("FID" + customFieldId, criteria, filtering);
@@ -232,7 +232,7 @@ namespace ParatureSDK.ModuleQuery
                 {
                     fieldsList = fieldsList + ",";
                 }
-                fieldsList = fieldsList + _IncludedFields[j].ToString();
+                fieldsList = fieldsList + _IncludedFields[j];
             }
 
 
@@ -257,7 +257,7 @@ namespace ParatureSDK.ModuleQuery
         {
             if (_SortByFields.Count < 5)
             {
-                _SortByFields.Add("FID" + customFieldId.ToString() + "_" + sortDirection.ToString().ToLower() + "_");
+                _SortByFields.Add("FID" + customFieldId + "_" + sortDirection.ToString().ToLower() + "_");
                 return true;
             }
             else

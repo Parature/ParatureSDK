@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
+using ParatureSDK.ModuleQuery;
 using ParatureSDK.ParaObjects;
 using ParatureSDK.XmlToObjectParser;
 using Action = ParatureSDK.ParaObjects.Action;
@@ -19,7 +21,7 @@ namespace ParatureSDK.ApiHandler
         // Because it will be used once then reused, there should be several calls of each page size to ensure accuracy.
         // The optimizeObjectCalls method should also be built out to determine the best case number of 
         // calls depending on current server load.
-        public static OptimizationResult OptimizeObjectPageSize(PagedData.PagedData objectList, ParaQuery query, ParaCredentials paraCredentials, int requestdepth, ParaEnums.ParatureModule module)
+        public static OptimizationResult OptimizeObjectPageSize(PagedData.PagedData objectList, ParaQuery query, ParaCredentials paraCredentials, ParaEnums.ParatureModule module)
         {
             var rtn = new OptimizationResult
             {
@@ -60,7 +62,7 @@ namespace ParatureSDK.ApiHandler
                     tempAr = ApiCallFactory.ObjectGetList(paraCredentials, module, rtn.Query.BuildQueryArguments());
                     callStopWatch.Stop();
 
-                    ParaEntityParser.ObjectFillList(tempAr.XmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
+                    ParaEntityParser.ObjectFillList(tempAr.XmlReceived, module);
 
                     testTimePerPage = (int)(callStopWatch.ElapsedMilliseconds);
 
@@ -82,7 +84,7 @@ namespace ParatureSDK.ApiHandler
 
                 //first page call
                 rtn.apiResponse = ApiCallFactory.ObjectGetList(paraCredentials, module, rtn.Query.BuildQueryArguments());
-                rtn.objectList = ParaEntityParser.ObjectFillList(rtn.apiResponse.XmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
+                rtn.objectList = ParaEntityParser.ObjectFillList(rtn.apiResponse.XmlReceived, module);
             }
             else
             {
@@ -97,7 +99,7 @@ namespace ParatureSDK.ApiHandler
                     tempAr = ApiCallFactory.ObjectGetList(paraCredentials, module, rtn.Query.BuildQueryArguments());
                     callStopWatch.Stop();
 
-                    var tempObjectList = ParaEntityParser.ObjectFillList(tempAr.XmlReceived, rtn.Query.MinimalisticLoad, requestdepth, paraCredentials, module);
+                    var tempObjectList = ParaEntityParser.ObjectFillList(tempAr.XmlReceived, module);
 
                     testTimePerPage = (int)(callStopWatch.ElapsedMilliseconds);
                     double testTimePagesRequired = (int)Math.Ceiling((double)tempObjectList.TotalItems / (double)pageSizeSampleSet[i]);
@@ -198,21 +200,25 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Fills a Role list object
         /// </summary>
-        /// <param name="paraCredentials"></param>
+        /// <param name="creds"></param>
         /// <param name="query"></param>
         /// <param name="module"></param>
+        /// <param name="entity"></param>
         /// <returns></returns>
-        internal static ParaEntityList<T> FillList<T>(ParaCredentials paraCredentials, ParaQuery query, ParaEnums.ParatureEntity entity, ParaEnums.ParatureModule module)
+        internal static ParaEntityList<T> ApiGetEntityList<T>(ParaCredentials creds, ParaQuery query, ParaEnums.ParatureModule module, ParaEnums.ParatureEntity entity)
         {
             var rolesList = new ParaEntityList<T>();
-            var ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, module, entity, query.BuildQueryArguments());
+            var ar = ApiCallFactory.ObjectSecondLevelGetList(creds, module, entity, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
-                //...Customer/status is sending "entities" not "Entities"
+                //...Customer/status is sending "entities" not "Entities", which breaks the parser. Unwind and fix the XML
                 var xmlStr = ar.XmlReceived.OuterXml;
-                xmlStr = xmlStr.Replace("<entities", "<Entities");
-                xmlStr = xmlStr.Replace("entities>", "Entities>");
-                ar.XmlReceived = ParseXmlDoc(xmlStr);
+                if (xmlStr.Contains("<entities"))
+                {
+                    xmlStr = xmlStr.Replace("<entities", "<Entities");
+                    xmlStr = xmlStr.Replace("entities>", "Entities>");
+                    ar.XmlReceived = ParseXmlDoc(xmlStr);
+                }
 
                 rolesList = ParaEntityParser.FillList<T>(ar.XmlReceived);
             }
@@ -230,7 +236,7 @@ namespace ParatureSDK.ApiHandler
                         // Getting next page's data
                         query.PageNumber = query.PageNumber + 1;
 
-                        ar = ApiCallFactory.ObjectSecondLevelGetList(paraCredentials, module, entity, query.BuildQueryArguments());
+                        ar = ApiCallFactory.ObjectSecondLevelGetList(creds, module, entity, query.BuildQueryArguments());
 
                         var objectlist = ParaEntityParser.FillList<T>(ar.XmlReceived);
 
@@ -255,10 +261,10 @@ namespace ParatureSDK.ApiHandler
             return rolesList;
         }
 
-        internal static T FillDetails<T>(Int64 entityId, ParaCredentials paraCredentials, ParaEnums.ParatureEntity entityType) where T: ParaEntityBaseProperties, new()
+        internal static T ApiGetEntity<T>(ParaCredentials pc, ParaEnums.ParatureEntity entityType, long entityId) where T: ParaEntityBaseProperties, new()
         {
             var role = new T();
-            var ar = ApiCallFactory.ObjectGetDetail(paraCredentials, entityType, entityId);
+            var ar = ApiCallFactory.ObjectGetDetail(pc, entityType, entityId);
             if (ar.HasException == false)
             {
                 role = ParaEntityParser.EntityFill<T>(ar.XmlReceived);
@@ -268,6 +274,129 @@ namespace ParatureSDK.ApiHandler
                 role.Id = 0;
             }
             return role;
+        }
+
+        /// <summary>
+        /// Fills a main module's list object.
+        /// </summary>
+        internal static ParaEntityList<T> ApiGetEntityList<T>(ParaCredentials pc, ParaEnums.ParatureModule module, ParaEntityQuery query) where T : ParaEntity, new()
+        {
+            // Making a schema call and returning all custom fields to be included in the call.
+            if (query.IncludeAllCustomFields)
+            {
+                //TODO: Add back into the base class
+                //var objschem = Schema(pc);
+                //query.IncludeCustomField(objschem.CustomFields);
+            }
+            ApiCallResponse ar;
+            var entityList = new ParaEntityList<T>();
+
+            if (query.RetrieveAllRecords && query.OptimizePageSize)
+            {
+                var rslt = OptimizeObjectPageSize(entityList, query, pc, module);
+                ar = rslt.apiResponse;
+                query = rslt.Query as ParaEntityQuery;
+                entityList = rslt.objectList as ParaEntityList<T>;
+            }
+            else
+            {
+                ar = ApiCallFactory.ObjectGetList(pc, module, query.BuildQueryArguments());
+                if (ar.HasException == false)
+                {
+                    entityList = ParaEntityParser.FillList<T>(ar.XmlReceived);
+                }
+                entityList.ApiCallResponse = ar;
+            }
+
+            // Checking if the system needs to recursively call all of the data returned.
+            if (query != null && query.RetrieveAllRecords && !ar.HasException)
+            {
+                // A flag variable to check if we need to make more calls
+                if (query.OptimizeCalls)
+                {
+                    var callsRequired = (int)Math.Ceiling((double)(entityList.TotalItems / (double)entityList.PageSize));
+                    for (var i = 2; i <= callsRequired; i++)
+                    {
+                        query.PageNumber = i;
+                        //implement semaphore right here (in the thread pool instance to control the generation of threads
+                        var instance = new ThreadPool.ObjectList(pc, module, query.BuildQueryArguments());
+                        var t = new Thread(() => instance.Go(entityList));
+                        t.Start();
+                    }
+
+                    while (entityList.TotalItems > entityList.Data.Count)
+                    {
+                        Thread.Sleep(500);
+                    }
+
+                    entityList.ResultsReturned = entityList.Data.Count;
+                    entityList.PageNumber = callsRequired;
+                }
+                else
+                {
+                    var continueCalling = true;
+                    while (continueCalling)
+                    {
+                        if (entityList.TotalItems > entityList.Data.Count)
+                        {
+                            // We still need to pull data
+
+                            // Getting next page's data
+                            query.PageNumber = query.PageNumber + 1;
+
+                            ar = ApiCallFactory.ObjectGetList(pc, module, query.BuildQueryArguments());
+                            if (ar.HasException == false)
+                            {
+                                var objectlist = ParaEntityParser.FillList<T>(ar.XmlReceived);
+                                entityList.Data.AddRange(objectlist.Data);
+                                entityList.ResultsReturned = entityList.Data.Count;
+                                entityList.PageNumber = query.PageNumber;
+                            }
+                            else
+                            {
+                                // There is an error processing request
+                                entityList.ApiCallResponse = ar;
+                                continueCalling = false;
+                            }
+                        }
+                        else
+                        {
+                            // That is it, pulled all the items.
+                            continueCalling = false;
+                            entityList.ApiCallResponse = ar;
+                        }
+                    }
+                }
+            }
+
+            return entityList;
+        }
+
+        /// <summary>
+        /// Retrieve the details for a specific Parature module entity
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="pc"></param>
+        /// <param name="module"></param>
+        /// <param name="entityId"></param>
+        /// <returns></returns>
+        internal static T ApiGetEntity<T>(ParaCredentials pc, ParaEnums.ParatureModule module, long entityId) where T : ParaEntity, new()
+        {
+            var entity = new T();
+            var req = ApiCallFactory.ObjectGetDetail<T>(pc, module, entityId);
+            if (req.HasException == false)
+            {
+                entity = ParaEntityParser.EntityFill<T>(req.XmlReceived);
+                entity.FullyLoaded = true;
+            }
+            else
+            {
+                entity.FullyLoaded = false;
+                entity.Id = 0;
+            }
+            entity.ApiCallResponse = req;
+            entity.IsDirty = false;
+            return entity;
         }
 
         private static XmlDocument ParseXmlDoc(string xmlDoc)

@@ -181,7 +181,7 @@ namespace ParatureSDK.ApiHandler
 
             if (query.RetrieveAllRecords && query.OptimizePageSize)
             {
-                OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(accountsList, query, pc, requestdepth, ParaEnums.ParatureModule.Account);
+                OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(accountsList, query, pc, ParaEnums.ParatureModule.Account);
                 ar = rslt.apiResponse;
                 query = (AccountQuery)rslt.Query;
                 accountsList = ((ParaEntityList<ParaObjects.Account>)rslt.objectList);
@@ -329,7 +329,7 @@ namespace ParatureSDK.ApiHandler
             /// <returns></returns>
             public static ParaObjects.View GetDetails(Int64 id, ParaCredentials creds)
             {
-                var entity = ApiUtils.FillDetails<ParaObjects.View>(id, creds, _entityType);
+                var entity = ApiUtils.ApiGetEntity<ParaObjects.View>(creds, _entityType, id);
                 return entity;
             }
 
@@ -369,12 +369,12 @@ namespace ParatureSDK.ApiHandler
             /// <returns></returns>
             public static ParaEntityList<ParaObjects.View> GetList(ParaCredentials creds, ViewQuery query)
             {
-                return ApiUtils.FillList<ParaObjects.View>(creds, query, _entityType, _moduleType);
+                return ApiUtils.ApiGetEntityList<ParaObjects.View>(creds, query, _moduleType, _entityType);
             }
 
             public static ParaEntityList<ParaObjects.View> GetList(ParaCredentials creds)
             {
-                return ApiUtils.FillList<ParaObjects.View>(creds, new ViewQuery(), _entityType, _moduleType);
+                return ApiUtils.ApiGetEntityList<ParaObjects.View>(creds, new ViewQuery(), _moduleType, _entityType);
             }
         }
     }

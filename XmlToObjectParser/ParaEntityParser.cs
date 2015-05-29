@@ -42,7 +42,7 @@ namespace ParatureSDK.XmlToObjectParser
 
         /// <summary>
         /// Download module can have a config that changes the schema... 
-        /// This does the same as the generic FillList method, but overwrites the XML to account for the changing schema
+        /// This does the same as the generic ApiGetEntityList method, but overwrites the XML to account for the changing schema
         /// Specific node is "Folder" vs "Folders"
         /// </summary>
         /// <param name="xmlDoc"></param>
@@ -69,7 +69,7 @@ namespace ParatureSDK.XmlToObjectParser
             return list;
         }
 
-        static internal PagedData.PagedData ObjectFillList(XmlDocument xmlresp, Boolean minimalisticLoad, int requestdepth, ParaCredentials paraCredentials, ParaEnums.ParatureModule module)
+        static internal PagedData.PagedData ObjectFillList(XmlDocument xmlresp, ParaEnums.ParatureModule module)
         {
             switch (module)
             {

@@ -211,7 +211,7 @@ namespace ParatureSDK.ApiHandler
 
             if (Query.RetrieveAllRecords && Query.OptimizePageSize)
             {
-                OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(DownloadsList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Download);
+                OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(DownloadsList, Query, ParaCredentials, ParaEnums.ParatureModule.Download);
                 ar = rslt.apiResponse;
                 Query = (DownloadQuery)rslt.Query;
                 DownloadsList = ((ParaEntityList<ParaObjects.Download>)rslt.objectList);

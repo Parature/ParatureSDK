@@ -179,7 +179,7 @@ namespace ParatureSDK.ApiHandler
 
             if (query.RetrieveAllRecords && query.OptimizePageSize)
             {
-                var rslt = ApiUtils.OptimizeObjectPageSize(entityList, query, pc, requestdepth, ParaEnums.ParatureModule.Account);
+                var rslt = ApiUtils.OptimizeObjectPageSize(entityList, query, pc, ParaEnums.ParatureModule.Account);
                 ar = rslt.apiResponse;
                 query = (AccountQuery)rslt.Query;
                 entityList = ((ParaEntityList<T>)rslt.objectList);

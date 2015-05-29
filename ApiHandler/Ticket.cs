@@ -228,7 +228,7 @@ namespace ParatureSDK.ApiHandler
 
             if (query.RetrieveAllRecords && query.OptimizePageSize)
             {
-                var rslt = ApiUtils.OptimizeObjectPageSize(ticketsList, query, pc, requestdepth, ParaEnums.ParatureModule.Ticket);
+                var rslt = ApiUtils.OptimizeObjectPageSize(ticketsList, query, pc, ParaEnums.ParatureModule.Ticket);
                 ar = rslt.apiResponse;
                 query = (TicketQuery)rslt.Query;
                 ticketsList = ((ParaEntityList<ParaObjects.Ticket>)rslt.objectList);
@@ -388,7 +388,7 @@ namespace ParatureSDK.ApiHandler
             /// <returns></returns>
             public static ParaObjects.Status GetDetails(Int64 id, ParaCredentials creds)
             {
-                var status = ApiUtils.FillDetails<ParaObjects.Status>(id, creds, _entityType);
+                var status = ApiUtils.ApiGetEntity<ParaObjects.Status>(creds, _entityType, id);
                 return status;
             }
 
@@ -428,12 +428,12 @@ namespace ParatureSDK.ApiHandler
             /// <returns></returns>
             public static ParaEntityList<ParaObjects.Status> GetList(ParaCredentials creds, StatusQuery query)
             {
-                return ApiUtils.FillList<ParaObjects.Status>(creds, query, _entityType, _moduleType);
+                return ApiUtils.ApiGetEntityList<ParaObjects.Status>(creds, query, _moduleType, _entityType);
             }
 
             public static ParaEntityList<ParaObjects.Status> GetList(ParaCredentials creds)
             {
-                return ApiUtils.FillList<ParaObjects.Status>(creds, new StatusQuery(), _entityType, _moduleType);
+                return ApiUtils.ApiGetEntityList<ParaObjects.Status>(creds, new StatusQuery(), _moduleType, _entityType);
             }
         }
 
@@ -455,7 +455,7 @@ namespace ParatureSDK.ApiHandler
             /// <returns></returns>
             public static ParaObjects.View GetDetails(Int64 id, ParaCredentials creds)
             {
-                var entity = ApiUtils.FillDetails<ParaObjects.View>(id, creds, _entityType);
+                var entity = ApiUtils.ApiGetEntity<ParaObjects.View>(creds, _entityType, id);
                 return entity;
             }
 
@@ -495,12 +495,12 @@ namespace ParatureSDK.ApiHandler
             /// <returns></returns>
             public static ParaEntityList<ParaObjects.View> GetList(ParaCredentials creds, ViewQuery query)
             {
-                return ApiUtils.FillList<ParaObjects.View>(creds, query, _entityType, _moduleType);
+                return ApiUtils.ApiGetEntityList<ParaObjects.View>(creds, query, _moduleType, _entityType);
             }
 
             public static ParaEntityList<ParaObjects.View> GetList(ParaCredentials creds)
             {
-                return ApiUtils.FillList<ParaObjects.View>(creds, new ViewQuery(), _entityType, _moduleType);
+                return ApiUtils.ApiGetEntityList<ParaObjects.View>(creds, new ViewQuery(), _moduleType, _entityType);
             }
         }
     }

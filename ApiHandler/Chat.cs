@@ -83,7 +83,7 @@ namespace ParatureSDK.ApiHandler
 
             if (Query.RetrieveAllRecords && Query.OptimizePageSize)
             {
-                OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(ChatList, Query, ParaCredentials, requestdepth, ParaEnums.ParatureModule.Customer);
+                OptimizationResult rslt = ApiUtils.OptimizeObjectPageSize(ChatList, Query, ParaCredentials, ParaEnums.ParatureModule.Customer);
                 ar = rslt.apiResponse;
                 Query = (ChatQuery)rslt.Query;
                 ChatList = ((ParaEntityList<ParaObjects.Chat>)rslt.objectList);
