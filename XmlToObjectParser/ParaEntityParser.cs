@@ -12,6 +12,17 @@ namespace ParatureSDK.XmlToObjectParser
 {
     public class ParaEntityParser
     {
+        public static Download EntityFillDownload(XmlDocument xmlDoc)
+        {
+            var xDoc = new XmlDocument();
+            xDoc.LoadXml(xmlDoc.OuterXml);
+            var hasMultipleDownloadFolders = ApiHandler.Download.HasMultipleFoldersAndConvert(xDoc);
+            var dl = EntityFill<Download>(xDoc);
+            dl.MultipleFolders = hasMultipleDownloadFolders;
+
+            return dl;
+        }
+
         public static T EntityFill<T>(XmlDocument xmlDoc)
         {
             var serializer = new XmlSerializer(typeof(T));

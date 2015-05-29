@@ -5,11 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Xml;
 using Microsoft.VisualBasic;
 using ParatureSDK.Fields;
-using ParatureSDK.ParaHelper;
 using ParatureSDK.ParaObjects;
 using Attachment = System.Net.Mail.Attachment;
 

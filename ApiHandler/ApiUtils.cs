@@ -302,6 +302,20 @@ namespace ParatureSDK.ApiHandler
             return entityList;
         }
 
+
+        internal static ParaEntityList<ParaObjects.Download> ApiGetDownloadEntityList(ParaCredentials pc, ParaEnums.ParatureModule module)
+        {
+            var entityList = new ParaEntityList<ParaObjects.Download>();
+            var ar = ApiCallFactory.ObjectGetList(pc, module, new ArrayList());
+            if (ar.HasException == false)
+            {
+                entityList = ParaEntityParser.FillListDownload(ar.XmlReceived);
+            }
+            entityList.ApiCallResponse = ar;
+
+            return entityList;
+        }
+
         /// <summary>
         /// Fills a main module's list object.
         /// </summary>
@@ -449,6 +463,33 @@ namespace ParatureSDK.ApiHandler
             return entity;
         }
 
+        /// <summary>
+        /// Retrieve the details for a specific Parature module entity with custom query string arguments
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="pc"></param>
+        /// <param name="module"></param>
+        /// <param name="entityId"></param>
+        /// <returns></returns>
+        internal static ParaObjects.Download ApiGetDownloadEntity(ParaCredentials pc, ParaEnums.ParatureModule module, long entityId,
+            ArrayList arl)
+        {
+            var entity = new ParaObjects.Download();
+            var req = ApiCallFactory.ObjectGetDetail<ParaObjects.Download>(pc, module, entityId, arl);
+            if (req.HasException == false)
+            {
+                entity = ParaEntityParser.EntityFillDownload(req.XmlReceived);
+                entity.FullyLoaded = true;
+            }
+            else
+            {
+                entity.FullyLoaded = false;
+                entity.Id = 0;
+            }
+            entity.ApiCallResponse = req;
+            entity.IsDirty = false;
+            return entity;
+        }
 
         private static XmlDocument ParseXmlDoc(string xmlDoc)
         {
