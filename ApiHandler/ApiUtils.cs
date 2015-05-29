@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -276,18 +277,24 @@ namespace ParatureSDK.ApiHandler
             return role;
         }
 
+        internal static ParaEntityList<T> ApiGetEntityList<T>(ParaCredentials pc, ParaEnums.ParatureModule module)
+        {
+            var entityList = new ParaEntityList<T>();
+            var ar = ApiCallFactory.ObjectGetList(pc, module, new ArrayList());
+            if (ar.HasException == false)
+            {
+                entityList = ParaEntityParser.FillList<T>(ar.XmlReceived);
+            }
+            entityList.ApiCallResponse = ar;
+
+            return entityList;
+        }
+
         /// <summary>
         /// Fills a main module's list object.
         /// </summary>
         internal static ParaEntityList<T> ApiGetEntityList<T>(ParaCredentials pc, ParaEnums.ParatureModule module, ParaEntityQuery query) where T : ParaEntity, new()
         {
-            // Making a schema call and returning all custom fields to be included in the call.
-            if (query.IncludeAllCustomFields)
-            {
-                //TODO: Add back into the base class
-                //var objschem = Schema(pc);
-                //query.IncludeCustomField(objschem.CustomFields);
-            }
             ApiCallResponse ar;
             var entityList = new ParaEntityList<T>();
 
@@ -398,6 +405,34 @@ namespace ParatureSDK.ApiHandler
             entity.IsDirty = false;
             return entity;
         }
+
+        /// <summary>
+        /// Retrieve the details for a specific Parature module entity with custom query string arguments
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="pc"></param>
+        /// <param name="module"></param>
+        /// <param name="entityId"></param>
+        /// <returns></returns>
+        internal static T ApiGetEntity<T>(ParaCredentials pc, ParaEnums.ParatureModule module, long entityId, ArrayList arl) where T : ParaEntity, new()
+        {
+            var entity = new T();
+            var req = ApiCallFactory.ObjectGetDetail<T>(pc, module, entityId, arl);
+            if (req.HasException == false)
+            {
+                entity = ParaEntityParser.EntityFill<T>(req.XmlReceived);
+                entity.FullyLoaded = true;
+            }
+            else
+            {
+                entity.FullyLoaded = false;
+                entity.Id = 0;
+            }
+            entity.ApiCallResponse = req;
+            entity.IsDirty = false;
+            return entity;
+        }
+
 
         private static XmlDocument ParseXmlDoc(string xmlDoc)
         {

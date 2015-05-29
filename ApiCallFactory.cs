@@ -263,11 +263,32 @@ namespace ParatureSDK
         ///</param>
         public static ApiCallResponse ObjectGetDetail<T>(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid) where T: ParaEntity
         {
-            var entityName = typeof (T).Name;
-            var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityName, objectid, false);
+            return ObjectGetDetail<T>(paracredentials, module, objectid, new ArrayList());
+        }
+
+        /// <summary>
+        /// Use this method to get the details of an object that you plan to fill.
+        /// </summary>
+        /// <param name="paracredentials">
+        ///The credentials to be used for making the API call. 
+        ///Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
+        ///</param>
+        /// <param name="module">
+        ///The name of the module to create or update. Choose from the ParatureModule enum list. 
+        ///Value Type: <see cref="ParaEnums.ParatureModule" />   (Paraenums.ParatureModule)
+        ///</param>
+        /// <param name="objectid">
+        ///The id of the object to create or update. 
+        ///Value Type: <see cref="Int64" />   (System.int64)
+        ///</param>
+        public static ApiCallResponse ObjectGetDetail<T>(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid, ArrayList arguments) where T : ParaEntity
+        {
+            var entityName = typeof(T).Name;
+            var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityName, objectid, arguments);
 
             return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
+
 
         ///  <summary>
         ///  Use this method to get the details of an Entity that you plan to fill.

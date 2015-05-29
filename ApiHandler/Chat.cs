@@ -11,26 +11,9 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Chat module.
     /// </summary>
-    public static class Chat
+    public class Chat : FirstLevelApiHandler<ParaObjects.Chat>
     {
-        /// <summary>
-        /// Returns a Chat object with all the properties of a chat.
-        /// </summary>
-        /// <param name="chatid">
-        ///The chat number that you would like to get the details of. 
-        ///Value Type: <see cref="Int64" />   (System.Int64)
-        ///</param>
-        /// <param name="ParaCredentials">
-        /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
-        /// </param>
-        public static ParaObjects.Chat GetDetails(Int64 chatid, ParaCredentials ParaCredentials)
-        {
-            ParaObjects.Chat chat = new ParaObjects.Chat();
-            chat = FillDetails(chatid, ParaCredentials, false);
-
-            return chat;
-
-        }
+        private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Chat;
 
         /// <summary>
         /// Returns a Chat object with all the properties of a chat.
@@ -58,18 +41,15 @@ namespace ParatureSDK.ApiHandler
 
         }
 
-
         public static ParaEntityList<ParaObjects.Chat> GetList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ChatQuery Query)
         {
             return FillList(ParaCredentials, IncludeTranscripts, Query, ParaEnums.RequestDepth.Standard);
         }
 
-
         public static ParaEntityList<ParaObjects.Chat> GetList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, Boolean IncludeHistory)
         {
             return FillList(ParaCredentials, IncludeTranscripts, null, ParaEnums.RequestDepth.Standard);
         }
-
 
         private static ParaEntityList<ParaObjects.Chat> FillList(ParaCredentials ParaCredentials, Boolean IncludeTranscripts, ChatQuery Query, ParaEnums.RequestDepth RequestDepth)
         {
@@ -210,35 +190,6 @@ namespace ParatureSDK.ApiHandler
             }
             chat.ApiCallResponse = ar;
             chat.IsDirty = false;
-            return chat;
-        }
-            
-        public static ParaObjects.Chat Schema(ParaCredentials ParaCredentials)
-        {
-            ParaObjects.Chat chat = new ParaObjects.Chat();
-            ApiCallResponse ar = new ApiCallResponse();
-            ar = ApiCallFactory.ObjectGetSchema(ParaCredentials, ParaEnums.ParatureModule.Chat);
-
-            if (ar.HasException == false)
-            {
-                var purgedSchema = ApiUtils.RemoveStaticFieldsNodes(ar.XmlReceived);
-                chat = ParaEntityParser.EntityFill<ParaObjects.Chat>(purgedSchema);
-            }
-            chat.ApiCallResponse = ar;
-            return chat;
-        }
-
-        /// <summary>
-        /// Gets an empty object with the scheam (custom fields, if any).  This call will also try to create a dummy
-        /// record in order to determine if any of the custom fields have special validation rules (e.g. email, phone, url)
-        /// and set the "dataType" of the custom field accordingly.
-        /// </summary> 
-        public static ParaObjects.Chat SchemaWithCustomFieldTypes(ParaCredentials ParaCredentials)
-        {
-            ParaObjects.Chat chat = Schema(ParaCredentials);
-
-            chat = (ParaObjects.Chat)ApiCallFactory.ObjectCheckCustomFieldTypes(ParaCredentials, ParaEnums.ParatureModule.Chat, chat);
-
             return chat;
         }
 

@@ -80,6 +80,7 @@
     <Compile Include="ApiHandler\Customer.cs" />
     <Compile Include="ApiHandler\Download.cs" />
     <Compile Include="ApiHandler\Department.cs" />
+    <Compile Include="ApiHandler\FirstLevelApiEntity.cs" />
     <Compile Include="ApiHandler\Queue.cs" />
     <Compile Include="ApiHandler\Sla.cs" />
     <Compile Include="ApiHandler\Timezone.cs" />
