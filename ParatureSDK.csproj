@@ -82,6 +82,7 @@
     <Compile Include="ApiHandler\Department.cs" />
     <Compile Include="ApiHandler\FirstLevelApiEntity.cs" />
     <Compile Include="ApiHandler\Queue.cs" />
+    <Compile Include="ApiHandler\SecondLevelApiEntity.cs" />
     <Compile Include="ApiHandler\Sla.cs" />
     <Compile Include="ApiHandler\Timezone.cs" />
     <Compile Include="ApiHandler\Product.cs" />
