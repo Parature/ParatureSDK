@@ -11,7 +11,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Product module.
     /// </summary>
-    public class Product : FirstLevelApiHandler<ParaObjects.Product>
+    public class Product : FirstLevelApiHandler<ParaObjects.Product, ProductQuery>
     {
         private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Product;
 

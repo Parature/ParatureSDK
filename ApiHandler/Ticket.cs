@@ -13,7 +13,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Ticket module.
     /// </summary>
-    public class Ticket : FirstLevelApiHandler<ParaObjects.Ticket>
+    public class Ticket : FirstLevelApiHandler<ParaObjects.Ticket, TicketQuery>
     {
         private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Ticket;
 
@@ -72,13 +72,13 @@ namespace ParatureSDK.ApiHandler
             return ar;
         }
 
-        public class Status : SecondLevelApiEntity<ParaObjects.Status>
+        public class Status : SecondLevelApiEntity<ParaObjects.Status, StatusQuery>
         {
             private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.status;
             private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Ticket;
         }
 
-        public class View : SecondLevelApiEntity<ParaObjects.View>
+        public class View : SecondLevelApiEntity<ParaObjects.View, ViewQuery>
         {
             private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.view;
             private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Ticket;

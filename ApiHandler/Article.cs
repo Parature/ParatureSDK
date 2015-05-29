@@ -11,7 +11,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Knowledge Base module.
     /// </summary>
-    public class Article : FirstLevelApiHandler<ParaObjects.Article>
+    public class Article : FirstLevelApiHandler<ParaObjects.Article, ArticleQuery>
     {
         private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Article;
 

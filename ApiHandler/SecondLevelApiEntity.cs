@@ -10,7 +10,9 @@ using ParatureSDK.XmlToObjectParser;
 
 namespace ParatureSDK.ApiHandler
 {
-    public abstract class SecondLevelApiEntity<T> where T : ParaEntityBaseProperties, new()
+    public abstract class SecondLevelApiEntity<TEntity, TQuery> 
+        where TEntity : ParaEntityBaseProperties, new()
+        where TQuery : ParaQuery
     {
         public static ParaEnums.ParatureEntity _entityType;
         public static ParaEnums.ParatureModule _moduleType;
@@ -26,9 +28,9 @@ namespace ParatureSDK.ApiHandler
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
         /// <returns></returns>
-        public static T GetDetails(Int64 id, ParaCredentials creds)
+        public static TEntity GetDetails(Int64 id, ParaCredentials creds)
         {
-            var entity = ApiUtils.ApiGetEntity<T>(creds, _entityType, id);
+            var entity = ApiUtils.ApiGetEntity<TEntity>(creds, _entityType, id);
             return entity;
         }
 
@@ -38,9 +40,9 @@ namespace ParatureSDK.ApiHandler
         /// <param name="xml">
         /// The view XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static T GetDetails(XmlDocument xml)
+        public static TEntity GetDetails(XmlDocument xml)
         {
-            var entity = ParaEntityParser.EntityFill<T>(xml);
+            var entity = ParaEntityParser.EntityFill<TEntity>(xml);
 
             return entity;
         }
@@ -51,9 +53,9 @@ namespace ParatureSDK.ApiHandler
         /// <param name="listXml">
         /// The view List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static ParaEntityList<T> GetList(XmlDocument listXml)
+        public static ParaEntityList<TEntity> GetList(XmlDocument listXml)
         {
-            var list = ParaEntityParser.FillList<T>(listXml);
+            var list = ParaEntityParser.FillList<TEntity>(listXml);
 
             list.ApiCallResponse.XmlReceived = listXml;
 
@@ -66,14 +68,14 @@ namespace ParatureSDK.ApiHandler
         /// <param name="creds"></param>
         /// <param name="query"></param>
         /// <returns></returns>
-        public static ParaEntityList<T> GetList(ParaCredentials creds, ParaQuery query)
+        public static ParaEntityList<TEntity> GetList(ParaCredentials creds, TQuery query)
         {
-            return ApiUtils.ApiGetEntityList<T>(creds, query, _moduleType, _entityType);
+            return ApiUtils.ApiGetEntityList<TEntity>(creds, query, _moduleType, _entityType);
         }
 
-        public static ParaEntityList<T> GetList(ParaCredentials creds)
+        public static ParaEntityList<TEntity> GetList(ParaCredentials creds)
         {
-            return ApiUtils.ApiGetEntityList<T>(creds, new ViewQuery(), _moduleType, _entityType);
+            return ApiUtils.ApiGetEntityList<TEntity>(creds, new ViewQuery(), _moduleType, _entityType);
         }
     }
 }

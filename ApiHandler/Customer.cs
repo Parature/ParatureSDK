@@ -12,7 +12,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Customer module.
     /// </summary>
-    public class Customer : FirstLevelApiHandler<ParaObjects.Customer>
+    public class Customer : FirstLevelApiHandler<ParaObjects.Customer, CustomerQuery>
     {
         private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Customer;
 
@@ -59,13 +59,13 @@ namespace ParatureSDK.ApiHandler
             return ar;
         }
 
-        public class Role : SecondLevelApiEntity<ParaObjects.CustomerRole>
+        public class Role : SecondLevelApiEntity<ParaObjects.CustomerRole, RoleQuery>
         {
             private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.role;
             private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Customer;
         }
 
-        public class View : SecondLevelApiEntity<ParaObjects.View>
+        public class View : SecondLevelApiEntity<ParaObjects.View, ViewQuery>
         {
             private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.view;
             private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Customer;

@@ -11,7 +11,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Asset module.
     /// </summary>
-    public class Asset : FirstLevelApiHandler<ParaObjects.Asset>
+    public class Asset : FirstLevelApiHandler<ParaObjects.Asset, AssetQuery>
     {
         private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Asset;
 
