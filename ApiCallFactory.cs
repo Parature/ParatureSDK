@@ -495,7 +495,7 @@ namespace ParatureSDK
 
                             foreach (var cf in baseObject.CustomFields)
                             {
-                                if (cf.Id == long.Parse(id))
+                                if (cf.Id == Int64.Parse(id))
                                 {
                                     cf.FieldType = "usphone";
                                 }
@@ -508,7 +508,7 @@ namespace ParatureSDK
 
                             foreach (var cf in baseObject.CustomFields)
                             {
-                                if (cf.Id == long.Parse(id))
+                                if (cf.Id == Int64.Parse(id))
                                 {
                                     cf.FieldType = "email";
                                 }
@@ -521,7 +521,7 @@ namespace ParatureSDK
 
                             foreach (CustomField cf in baseObject.CustomFields)
                             {
-                                if (cf.Id == long.Parse(id))
+                                if (cf.Id == Int64.Parse(id))
                                 {
                                     cf.FieldType = "internationalphone";
                                 }
@@ -535,7 +535,7 @@ namespace ParatureSDK
                             {
                             foreach (CustomField cf in baseObject.CustomFields)
                             {
-                                if (cf.Id == long.Parse(id.Trim()))
+                                if (cf.Id == Int64.Parse(id.Trim()))
                                 {
                                     cf.FieldType = "url";
                                 }
@@ -631,7 +631,7 @@ namespace ParatureSDK
 
                             foreach (CustomField cf in baseObject.CustomFields)
                             {
-                                if (cf.Id == long.Parse(id))
+                                if (cf.Id == Int64.Parse(id))
                                 {
                                     cf.FieldType = "usdate";
                                 }
@@ -644,7 +644,7 @@ namespace ParatureSDK
 
                             foreach (CustomField cf in baseObject.CustomFields)
                             {
-                                if (cf.Id == long.Parse(id))
+                                if (cf.Id == Int64.Parse(id))
                                 {
                                     cf.FieldType = "email";
                                 }
@@ -657,7 +657,7 @@ namespace ParatureSDK
 
                             foreach (CustomField cf in baseObject.CustomFields)
                             {
-                                if (cf.Id == long.Parse(id))
+                                if (cf.Id == Int64.Parse(id))
                                 {
                                     cf.FieldType = "internationalphone";
                                 }
@@ -671,7 +671,7 @@ namespace ParatureSDK
                             {
                                 foreach (CustomField cf in baseObject.CustomFields)
                                 {
-                                    if (cf.Id == long.Parse(id.Trim()))
+                                    if (cf.Id == Int64.Parse(id.Trim()))
                                     {
                                         cf.FieldType = "url";
                                     }
@@ -734,7 +734,7 @@ namespace ParatureSDK
             var uriAddress = new Uri(apiCallUrl);
             var req = WebRequest.Create(uriAddress) as HttpWebRequest;
 
-            req.Method = ParaEnumProvider.ApiHttpPostProvider(httpMethod);
+            req.Method = ApiHttpPostProvider(httpMethod);
             ac.HttpCallMethod = req.Method;
             req.KeepAlive = false;
 
@@ -757,7 +757,7 @@ namespace ParatureSDK
             var uriAddress = new Uri(callurl);
             var req = WebRequest.Create(uriAddress) as HttpWebRequest;
 
-            req.Method = ParaEnumProvider.ApiHttpPostProvider(httpMethod);
+            req.Method = ApiHttpPostProvider(httpMethod);
             ac.HttpCallMethod = req.Method;
             req.KeepAlive = false;
             
@@ -803,12 +803,12 @@ namespace ParatureSDK
 
             const string boundary = "--ParaBoundary";
             const string lineBreak = "\r\n";
-            var contentDisposition = string.Format("Content-Disposition: {0}; name=\"{1}\"; filename=\"{1}\"", att.ContentType.MediaType, att.ContentType.Name);
+            var contentDisposition = String.Format("Content-Disposition: {0}; name=\"{1}\"; filename=\"{1}\"", att.ContentType.MediaType, att.ContentType.Name);
             var ac = new ApiCallResponse();
             var uriAddress = new Uri(callurl);
 
             var req = WebRequest.Create(uriAddress) as HttpWebRequest;
-            req.Method = ParaEnumProvider.ApiHttpPostProvider(httpMethod);
+            req.Method = ApiHttpPostProvider(httpMethod);
             req.KeepAlive = false;
             ac.HttpCallMethod = req.Method;
 
@@ -861,12 +861,12 @@ namespace ParatureSDK
 
             const string boundary = "--ParaBoundary";
             const string lineBreak = "\r\n";
-            string contentDisposition = string.Format("Content-Disposition: {0}; name=\"{1}\"; filename=\"{1}\"", contentType, fileName);
+            string contentDisposition = String.Format("Content-Disposition: {0}; name=\"{1}\"; filename=\"{1}\"", contentType, fileName);
             var ac = new ApiCallResponse();
             var uriAddress = new Uri(callurl);
 
             var req = WebRequest.Create(uriAddress) as HttpWebRequest;
-            req.Method = ParaEnumProvider.ApiHttpPostProvider(httpMethod);
+            req.Method = ApiHttpPostProvider(httpMethod);
             req.KeepAlive = false;
             ac.HttpCallMethod = req.Method;
 
@@ -988,12 +988,12 @@ namespace ParatureSDK
                 {}
                 ac.HasException = true;
 
-                if (string.IsNullOrEmpty(ac.ExceptionDetails) == true)
+                if (String.IsNullOrEmpty(ac.ExceptionDetails) == true)
                 {
                     ac.ExceptionDetails = ex.ToString();
                 }
 
-                if (string.IsNullOrEmpty(responseFromServer) == false)
+                if (String.IsNullOrEmpty(responseFromServer) == false)
                 {
                     ac.ExceptionDetails = "Response from server: " + responseFromServer;
                 }
@@ -1006,7 +1006,7 @@ namespace ParatureSDK
                     exresponseFromServer = exreader.ReadToEnd().ToString();
                     exreader.Close();
 
-                    if (string.IsNullOrEmpty(exresponseFromServer) == false)
+                    if (String.IsNullOrEmpty(exresponseFromServer) == false)
                     {
                         ac.ExceptionDetails = ac.ExceptionDetails + Environment.NewLine + "Exception response:" + exresponseFromServer;
                     }
@@ -1020,7 +1020,7 @@ namespace ParatureSDK
                     }
                 }
 
-                if (string.IsNullOrEmpty(exresponseFromServer) == false)
+                if (String.IsNullOrEmpty(exresponseFromServer) == false)
                 {
                     try
                     {
@@ -1031,7 +1031,7 @@ namespace ParatureSDK
                         {
                             if (mainnode.Attributes["code"].InnerText.ToLower() != "")
                             {
-                                ac.HttpResponseCode = int.Parse(mainnode.Attributes["code"].InnerText.ToString());
+                                ac.HttpResponseCode = Int32.Parse(mainnode.Attributes["code"].InnerText.ToString());
                             }
                             if (mainnode.Attributes["message"].InnerText.ToLower() != "")
                             {
@@ -1053,17 +1053,44 @@ namespace ParatureSDK
             {
                 // xml sent and xml received cleanup
                 // TEMP FIX
-                if (ac.XmlReceived != null && string.IsNullOrEmpty(ac.XmlReceived.InnerXml))
+                if (ac.XmlReceived != null && String.IsNullOrEmpty(ac.XmlReceived.InnerXml))
                 {
                     ac.XmlReceived = null;
                 }
-                if (ac.XmlSent != null && string.IsNullOrEmpty(ac.XmlSent.InnerXml))
+                if (ac.XmlSent != null && String.IsNullOrEmpty(ac.XmlSent.InnerXml))
                 {
                     ac.XmlSent = null;
                 }
             }
 
             return ac;
-        }   
+        }
+
+        /// <summary>
+        /// Returns the Http request method for an API call, requires an ApiCallHttpMethod enum.
+        /// </summary>
+        internal static String ApiHttpPostProvider(ParaEnums.ApiCallHttpMethod apiCallHttpMethod)
+        {
+            string httpPostMethod = "";
+            switch (apiCallHttpMethod)
+            {
+                case ParaEnums.ApiCallHttpMethod.Get:
+                    httpPostMethod = "GET";
+                    break;
+
+                case ParaEnums.ApiCallHttpMethod.Delete:
+                    httpPostMethod = "DELETE";
+                    break;
+
+                case ParaEnums.ApiCallHttpMethod.Post:
+                    httpPostMethod = "POST";
+                    break;
+
+                case ParaEnums.ApiCallHttpMethod.Update:
+                    httpPostMethod = "PUT";
+                    break;
+            }
+            return httpPostMethod;
+        }
     }
 }

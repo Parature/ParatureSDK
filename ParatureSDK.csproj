@@ -120,8 +120,6 @@
     <Compile Include="PagedData\PagedData.cs" />
     <Compile Include="ParaCredentials.cs" />
     <Compile Include="ParaEnums.cs" />
-    <Compile Include="ParaHelper\HelperMethods.cs" />
-    <Compile Include="ParaHelper\ParaEnumProvider.cs" />
     <Compile Include="ParaObjects\Account.cs" />
     <Compile Include="ParaObjects\Action.cs" />
     <Compile Include="ParaObjects\ActionBase.cs" />
@@ -181,7 +179,6 @@
     <Compile Include="XmlGenerator.cs" />
     <Compile Include="XmlApiSerializer.cs" />
     <Compile Include="XmlToObjectParser\ParaEntityParser.cs" />
-    <Compile Include="XmlToObjectParser\AttachmentParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

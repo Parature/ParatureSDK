@@ -22,11 +22,12 @@ namespace ParatureSDK.ApiHandler
         // Because it will be used once then reused, there should be several calls of each page size to ensure accuracy.
         // The optimizeObjectCalls method should also be built out to determine the best case number of 
         // calls depending on current server load.
-        public static OptimizationResult OptimizeObjectPageSize(PagedData.PagedData objectList, ParaQuery query, ParaCredentials paraCredentials, ParaEnums.ParatureModule module)
+        public static OptimizationResult OptimizeObjectPageSize(PagedData.PagedData objectList, ParaQuery query,
+            ParaCredentials paraCredentials, ParaEnums.ParatureModule module)
         {
             var rtn = new OptimizationResult
             {
-                Query = query, 
+                Query = query,
                 objectList = objectList
             };
 
@@ -40,9 +41,9 @@ namespace ParatureSDK.ApiHandler
             //  total records by the page size then rounded up. Currently we do this by stepping through a 
             //  fixed set of test calls, but this should be refactored to a more dynamic calculation.
             ApiCallResponse tempAr;
-            var testTimePerPage = 0.0;    //units are milliseconds
+            var testTimePerPage = 0.0; //units are milliseconds
             var callStopWatch = new Stopwatch();
-            var masterTimePerPage = 0.0;  //units are milliseconds
+            var masterTimePerPage = 0.0; //units are milliseconds
             var masterPagesRequired = 0.0;
 
             rtn.apiResponse = new ApiCallResponse();
@@ -65,7 +66,7 @@ namespace ParatureSDK.ApiHandler
 
                     ParaEntityParser.ObjectFillList(tempAr.XmlReceived, module);
 
-                    testTimePerPage = (int)(callStopWatch.ElapsedMilliseconds);
+                    testTimePerPage = (int) (callStopWatch.ElapsedMilliseconds);
 
                     if (i == (rtn.Query.OptimizePageSizeTestCalls - 1) && tempAr.HasException == false)
                     {
@@ -74,12 +75,13 @@ namespace ParatureSDK.ApiHandler
                         {
                             total = total + pageSizeSampleSet[j];
                         }
-                        rtn.Query.PageSize = (total / (pageSizeSampleSet.Count - 1));
+                        rtn.Query.PageSize = (total/(pageSizeSampleSet.Count - 1));
                         break;
                     }
                     else
-                    {   // ((5 * 500) == Golden Number
-                        pageSizeSampleSet.Add((int)((5 * 500) / (testTimePerPage / pageSizeSampleSet[i])));
+                    {
+                        // ((5 * 500) == Golden Number
+                        pageSizeSampleSet.Add((int) ((5*500)/(testTimePerPage/pageSizeSampleSet[i])));
                     }
                 }
 
@@ -89,7 +91,7 @@ namespace ParatureSDK.ApiHandler
             }
             else
             {
-                int[] pageSizeSampleSet = { 50, 100, 150, 200, 250, 300, 350, 400, 450, 500 };
+                int[] pageSizeSampleSet = {50, 100, 150, 200, 250, 300, 350, 400, 450, 500};
 
                 for (var i = 0; i < pageSizeSampleSet.Length; i++)
                 {
@@ -102,10 +104,12 @@ namespace ParatureSDK.ApiHandler
 
                     var tempObjectList = ParaEntityParser.ObjectFillList(tempAr.XmlReceived, module);
 
-                    testTimePerPage = (int)(callStopWatch.ElapsedMilliseconds);
-                    double testTimePagesRequired = (int)Math.Ceiling((double)tempObjectList.TotalItems / (double)pageSizeSampleSet[i]);
+                    testTimePerPage = (int) (callStopWatch.ElapsedMilliseconds);
+                    double testTimePagesRequired =
+                        (int) Math.Ceiling((double) tempObjectList.TotalItems/(double) pageSizeSampleSet[i]);
                     // if the improvment is less than 25 percent lets just take it
-                    if ((((masterPagesRequired * masterTimePerPage) / (testTimePagesRequired * testTimePerPage)) < 1.25) && i != 0 && tempAr.HasException == false)
+                    if ((((masterPagesRequired*masterTimePerPage)/(testTimePagesRequired*testTimePerPage)) < 1.25) &&
+                        i != 0 && tempAr.HasException == false)
                     {
                         rtn.Query.PageSize = pageSizeSampleSet[(i - 1)];
                         break;
@@ -126,18 +130,20 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Internal Method to run an Action, independently from the module.
         /// </summary>
-        public static ApiCallResponse ActionRun(Int64 objectId, Action action, ParaCredentials pc, ParaEnums.ParatureModule module)
+        public static ApiCallResponse ActionRun(Int64 objectId, Action action, ParaCredentials pc,
+            ParaEnums.ParatureModule module)
         {
             var doc = XmlGenerator.GenerateXml(action, module);
             var ar = ApiCallFactory.ObjectCreateUpdate(pc, module, doc, objectId);
             return ar;
         }
 
-        public static Attachment UploadFile(ParaEnums.ParatureModule module, ParaCredentials pc, System.Net.Mail.Attachment attachment)
+        public static Attachment UploadFile(ParaEnums.ParatureModule module, ParaCredentials pc,
+            System.Net.Mail.Attachment attachment)
         {
             var postUrlR = ApiCallFactory.FileUploadGetUrl(pc, module);
             var uploadUrlDoc = postUrlR.XmlReceived;
-            var postUrl = AttachmentParser.AttachmentGetUrlToPost(uploadUrlDoc);
+            var postUrl = AttachmentGetUrlToPost(uploadUrlDoc);
 
             var upresp = ApiCallFactory.FilePerformUpload(postUrl, attachment, pc.Instanceid, pc);
 
@@ -150,7 +156,8 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Internal method to handle the upload of a file to Parature.
         /// </summary>
-        public static Attachment UploadFile(ParaEnums.ParatureModule module, ParaCredentials pc, string text, string contentType, string fileName)
+        public static Attachment UploadFile(ParaEnums.ParatureModule module, ParaCredentials pc, string text,
+            string contentType, string fileName)
         {
             var encoding = new ASCIIEncoding();
             var bytes = encoding.GetBytes(text);
@@ -160,15 +167,18 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Internal method to handle the upload of a file to Parature.
         /// </summary>
-        public static Attachment UploadFile(ParaEnums.ParatureModule module, ParaCredentials pc, Byte[] attachment, String contentType, String fileName)
+        public static Attachment UploadFile(ParaEnums.ParatureModule module, ParaCredentials pc, Byte[] attachment,
+            String contentType, String fileName)
         {
             Attachment attach;
             var postUrl = "";
-            postUrl = AttachmentParser.AttachmentGetUrlToPost(ApiCallFactory.FileUploadGetUrl(pc, module).XmlReceived);
+            postUrl = AttachmentGetUrlToPost(ApiCallFactory.FileUploadGetUrl(pc, module).XmlReceived);
 
             if (String.IsNullOrEmpty(postUrl) == false)
             {
-                var attaDoc = ApiCallFactory.FilePerformUpload(postUrl, attachment, contentType, fileName, pc.Instanceid, pc).XmlReceived;
+                var attaDoc =
+                    ApiCallFactory.FilePerformUpload(postUrl, attachment, contentType, fileName, pc.Instanceid, pc)
+                        .XmlReceived;
                 attach = ParaEntityParser.EntityFill<Attachment>(attaDoc);
             }
             else
@@ -206,7 +216,8 @@ namespace ParatureSDK.ApiHandler
         /// <param name="module"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        internal static ParaEntityList<T> ApiGetEntityList<T>(ParaCredentials creds, ParaQuery query, ParaEnums.ParatureModule module, ParaEnums.ParatureEntity entity)
+        internal static ParaEntityList<T> ApiGetEntityList<T>(ParaCredentials creds, ParaQuery query,
+            ParaEnums.ParatureModule module, ParaEnums.ParatureEntity entity)
         {
             var rolesList = new ParaEntityList<T>();
             var ar = ApiCallFactory.ObjectSecondLevelGetList(creds, module, entity, query.BuildQueryArguments());
@@ -262,7 +273,8 @@ namespace ParatureSDK.ApiHandler
             return rolesList;
         }
 
-        internal static T ApiGetEntity<T>(ParaCredentials pc, ParaEnums.ParatureEntity entityType, long entityId) where T: ParaEntityBaseProperties, new()
+        internal static T ApiGetEntity<T>(ParaCredentials pc, ParaEnums.ParatureEntity entityType, long entityId)
+            where T : ParaEntityBaseProperties, new()
         {
             var role = new T();
             var ar = ApiCallFactory.ObjectGetDetail(pc, entityType, entityId);
@@ -293,7 +305,8 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Fills a main module's list object.
         /// </summary>
-        internal static ParaEntityList<T> ApiGetEntityList<T>(ParaCredentials pc, ParaEnums.ParatureModule module, ParaEntityQuery query) where T : ParaEntity, new()
+        internal static ParaEntityList<T> ApiGetEntityList<T>(ParaCredentials pc, ParaEnums.ParatureModule module,
+            ParaEntityQuery query) where T : ParaEntity, new()
         {
             ApiCallResponse ar;
             var entityList = new ParaEntityList<T>();
@@ -321,7 +334,8 @@ namespace ParatureSDK.ApiHandler
                 // A flag variable to check if we need to make more calls
                 if (query.OptimizeCalls)
                 {
-                    var callsRequired = (int)Math.Ceiling((double)(entityList.TotalItems / (double)entityList.PageSize));
+                    var callsRequired =
+                        (int) Math.Ceiling((double) (entityList.TotalItems/(double) entityList.PageSize));
                     for (var i = 2; i <= callsRequired; i++)
                     {
                         query.PageNumber = i;
@@ -387,7 +401,8 @@ namespace ParatureSDK.ApiHandler
         /// <param name="module"></param>
         /// <param name="entityId"></param>
         /// <returns></returns>
-        internal static T ApiGetEntity<T>(ParaCredentials pc, ParaEnums.ParatureModule module, long entityId) where T : ParaEntity, new()
+        internal static T ApiGetEntity<T>(ParaCredentials pc, ParaEnums.ParatureModule module, long entityId)
+            where T : ParaEntity, new()
         {
             var entity = new T();
             var req = ApiCallFactory.ObjectGetDetail<T>(pc, module, entityId);
@@ -414,7 +429,8 @@ namespace ParatureSDK.ApiHandler
         /// <param name="module"></param>
         /// <param name="entityId"></param>
         /// <returns></returns>
-        internal static T ApiGetEntity<T>(ParaCredentials pc, ParaEnums.ParatureModule module, long entityId, ArrayList arl) where T : ParaEntity, new()
+        internal static T ApiGetEntity<T>(ParaCredentials pc, ParaEnums.ParatureModule module, long entityId,
+            ArrayList arl) where T : ParaEntity, new()
         {
             var entity = new T();
             var req = ApiCallFactory.ObjectGetDetail<T>(pc, module, entityId, arl);
@@ -440,6 +456,18 @@ namespace ParatureSDK.ApiHandler
             xml.LoadXml(xmlDoc);
 
             return xml;
+        }
+
+        static internal string AttachmentGetUrlToPost(XmlDocument doc)
+        {
+            if (doc != null && doc.DocumentElement.HasAttribute("href"))
+            {
+                return doc.DocumentElement.Attributes["href"].InnerText;
+            }
+            else
+            {
+                throw new Exception(doc.OuterXml);
+            }
         }
     }
 }

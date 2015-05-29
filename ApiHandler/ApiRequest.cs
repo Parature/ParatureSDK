@@ -15,7 +15,7 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Create a Parature Account. Requires an Object and a credentials object. Will return the Newly Created accountId. Returns 0 if the entity creation fails.
         /// </summary>
-        public static ApiCallResponse Insert<T>(T entity, ParaCredentials paraCredentials) where T: ParaEntity
+        public static ApiCallResponse Insert<T>(T entity, ParaCredentials paraCredentials) where T : ParaEntity
         {
             var doc = XmlGenerator.GenerateXml(entity);
             var ar = ApiCallFactory.ObjectCreateUpdate<T>(paraCredentials, doc, 0);
@@ -26,9 +26,10 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Update a Parature Account. Requires an Object and a credentials object.  Will return the updated accountId. Returns 0 if the entity update operation fails.
         /// </summary>
-        public static ApiCallResponse Update<T>(T entity, ParaCredentials paraCredentials) where T: ParaEntity
+        public static ApiCallResponse Update<T>(T entity, ParaCredentials paraCredentials) where T : ParaEntity
         {
-            var ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, ParaEnums.ParatureModule.Account, XmlGenerator.GenerateXml(entity), entity.Id);
+            var ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, ParaEnums.ParatureModule.Account,
+                XmlGenerator.GenerateXml(entity), entity.Id);
             return ar;
         }
 
@@ -46,7 +47,8 @@ namespace ParatureSDK.ApiHandler
         /// For a simple entity request, please put 0. <br/>When Requesting an entity, there might be related objects linked to that Account: such as products, viewable accounts, etc. <br/>With a regular Account detail call, generally only the ID and names of the extra objects are loaded. 
         /// <example>For example, the call will return an Account.Product object, but only the Name and ID values will be filled. All of the other properties of the product object will be empty. If you select RequestDepth=1, then we will go one level deeper into our request and will therefore retrieve the product's detail for you. Products might have assets linked to them, so if you select RequestDepth=2, we will go to an even deeped level and return all the assets properties for that product, etc.<br/> Please make sure you only request the depth you need, as this might make your request slower. </example>
         /// </param>
-        public static T GetDetails<T>(Int64 id, ParaCredentials pc, ParaEnums.RequestDepth requestDepth) where T: ParaEntity
+        public static T GetDetails<T>(Int64 id, ParaCredentials pc, ParaEnums.RequestDepth requestDepth)
+            where T : ParaEntity
         {
             var entity = FillDetails<T>(id, pc);
             return entity;
@@ -58,7 +60,7 @@ namespace ParatureSDK.ApiHandler
         /// <param name="accountXml">
         /// The Account XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        public static T GetDetails<T>(XmlDocument accountXml) where T: ParaEntity
+        public static T GetDetails<T>(XmlDocument accountXml) where T : ParaEntity
         {
             var account = ParaEntityParser.EntityFill<T>(accountXml);
             account.FullyLoaded = true;
@@ -80,7 +82,7 @@ namespace ParatureSDK.ApiHandler
         /// <param name="pc">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
-        public static T GetDetails<T>(Int64 id, ParaCredentials pc) where T: ParaEntity
+        public static T GetDetails<T>(Int64 id, ParaCredentials pc) where T : ParaEntity
         {
             var entity = FillDetails<T>(id, pc);
 
@@ -91,7 +93,8 @@ namespace ParatureSDK.ApiHandler
         /// Provides you with the capability to list accounts, following criteria you would set
         /// by instantiating a ModuleQuery.AccountQuery object
         /// </summary>
-        public static ParaEntityList<T> GetList<T>(ParaCredentials pc, ParaEntityQuery query) where T: ParaEntity, new()
+        public static ParaEntityList<T> GetList<T>(ParaCredentials pc, ParaEntityQuery query)
+            where T : ParaEntity, new()
         {
             return FillList<T>(pc, query, ParaEnums.RequestDepth.Standard);
         }
@@ -118,7 +121,8 @@ namespace ParatureSDK.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>
-        public static ParaEntityList<T> GetList<T>(ParaCredentials pc, ParaEntityQuery query, ParaEnums.RequestDepth requestDepth) where T: ParaEntity, new()
+        public static ParaEntityList<T> GetList<T>(ParaCredentials pc, ParaEntityQuery query,
+            ParaEnums.RequestDepth requestDepth) where T : ParaEntity, new()
         {
             return FillList<T>(pc, query, requestDepth);
         }
@@ -129,14 +133,16 @@ namespace ParatureSDK.ApiHandler
         /// this might considerably slow your request, due to the high volume of API calls needed, in case you require more than 
         /// the standard field depth.
         /// </summary>  
-        public static ParaEntityList<T> GetList<T>(ParaCredentials pc, ParaEnums.RequestDepth requestDepth) where T: ParaEntity, new()
+        public static ParaEntityList<T> GetList<T>(ParaCredentials pc, ParaEnums.RequestDepth requestDepth)
+            where T : ParaEntity, new()
         {
             return FillList<T>(pc, null, requestDepth);
         }
+
         /// <summary>
         /// Will return the first 25 accounts returned by the APIs.
         /// </summary>            
-        public static ParaEntityList<T> GetList<T>(ParaCredentials pc) where T: ParaEntity, new()
+        public static ParaEntityList<T> GetList<T>(ParaCredentials pc) where T : ParaEntity, new()
         {
             return FillList<T>(pc, null, ParaEnums.RequestDepth.Standard);
         }
@@ -152,7 +158,7 @@ namespace ParatureSDK.ApiHandler
         ///  If purge is set to true, the entity will be permanently deleted. Otherwise, it will just be 
         ///  moved to the trash bin, so it will still be able to be restored from the service desk.
         /// </param>
-        public static ApiCallResponse Delete<T>(Int64 accountId, ParaCredentials pc, bool purge) where T: ParaEntity
+        public static ApiCallResponse Delete<T>(Int64 accountId, ParaCredentials pc, bool purge) where T : ParaEntity
         {
             return ApiCallFactory.ObjectDelete<T>(pc, accountId, purge);
         }
@@ -160,9 +166,10 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Fills an entity list object.
         /// </summary>
-        private static ParaEntityList<T> FillList<T>(ParaCredentials pc, ParaEntityQuery query, ParaEnums.RequestDepth requestDepth) where T: ParaEntity, new()
+        private static ParaEntityList<T> FillList<T>(ParaCredentials pc, ParaEntityQuery query,
+            ParaEnums.RequestDepth requestDepth) where T : ParaEntity, new()
         {
-            var requestdepth = (int)requestDepth;
+            var requestdepth = (int) requestDepth;
             if (query == null)
             {
                 query = new AccountQuery();
@@ -181,8 +188,8 @@ namespace ParatureSDK.ApiHandler
             {
                 var rslt = ApiUtils.OptimizeObjectPageSize(entityList, query, pc, ParaEnums.ParatureModule.Account);
                 ar = rslt.apiResponse;
-                query = (AccountQuery)rslt.Query;
-                entityList = ((ParaEntityList<T>)rslt.objectList);
+                query = (AccountQuery) rslt.Query;
+                entityList = ((ParaEntityList<T>) rslt.objectList);
             }
             else
             {
@@ -200,12 +207,14 @@ namespace ParatureSDK.ApiHandler
                 // A flag variable to check if we need to make more calls
                 if (query.OptimizeCalls)
                 {
-                    var callsRequired = (int)Math.Ceiling((double)(entityList.TotalItems / (double)entityList.PageSize));
+                    var callsRequired =
+                        (int) Math.Ceiling((double) (entityList.TotalItems/(double) entityList.PageSize));
                     for (var i = 2; i <= callsRequired; i++)
                     {
                         query.PageNumber = i;
                         //implement semaphore right here (in the thread pool instance to control the generation of threads
-                        var instance = new ThreadPool.ObjectList(pc, ParaEnums.ParatureModule.Account, query.BuildQueryArguments());
+                        var instance = new ThreadPool.ObjectList(pc, ParaEnums.ParatureModule.Account,
+                            query.BuildQueryArguments());
                         var t = new Thread(() => instance.Go<T>(entityList));
                         t.Start();
                     }
@@ -230,7 +239,8 @@ namespace ParatureSDK.ApiHandler
                             // Getting next page's data
                             query.PageNumber = query.PageNumber + 1;
 
-                            ar = ApiCallFactory.ObjectGetList(pc, ParaEnums.ParatureModule.Account, query.BuildQueryArguments());
+                            ar = ApiCallFactory.ObjectGetList(pc, ParaEnums.ParatureModule.Account,
+                                query.BuildQueryArguments());
                             if (ar.HasException == false)
                             {
                                 var objectlist = ParaEntityParser.FillList<T>(ar.XmlReceived);
@@ -258,7 +268,7 @@ namespace ParatureSDK.ApiHandler
             return entityList;
         }
 
-        private static T FillDetails<T>(Int64 accountid, ParaCredentials pc) where T: ParaEntity
+        private static T FillDetails<T>(Int64 accountid, ParaCredentials pc) where T : ParaEntity
         {
             T entity = default(T);
             var ar = ApiCallFactory.ObjectGetDetail<T>(pc, ParaEnums.ParatureModule.Account, accountid);
@@ -280,7 +290,7 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Gets an empty object with the scheam (custom fields, if any).
         /// </summary>            
-        public static T Schema<T>(ParaCredentials pc) where T: ParaEntity, new ()
+        public static T Schema<T>(ParaCredentials pc) where T : ParaEntity, new()
         {
             var account = new T();
             var ar = ApiCallFactory.ObjectGetSchema<T>(pc, ParaEnums.ParatureModule.Account);
@@ -299,13 +309,13 @@ namespace ParatureSDK.ApiHandler
         /// record in order to determine if any of the custom fields have special validation rules (e.g. email, phone, url)
         /// and set the "dataType" of the custom field accordingly.
         /// </summary> 
-        static public T SchemaWithCustomFieldTypes<T>(ParaCredentials pc) where T: ParaEntity, new()
+        public static T SchemaWithCustomFieldTypes<T>(ParaCredentials pc) where T : ParaEntity, new()
         {
             var entity = Schema<T>(pc);
 
             entity = ApiCallFactory.ObjectCheckCustomFieldTypes<T>(pc, entity);
 
             return entity;
-        }          
+        }
     }
 }

@@ -115,7 +115,7 @@ namespace ParatureSDK.ParaObjects
         /// <returns>Returns True if the custom field was modified, False if there was no need to modify the custom field.</returns>
         public bool CustomFieldReset(Int64 customFieldId)
         {
-            return DirtyStateManager(HelperMethods.CustomFieldReset(customFieldId, CustomFields));
+            return DirtyStateManager(CustomFieldReset(customFieldId, CustomFields));
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace ParatureSDK.ParaObjects
             foreach (var cf in CustomFields.Where(cf => cf.Id == cfId))
             {
                 fields.Add(cf);
-                DirtyStateManager(HelperMethods.CustomFieldReset(cfId, fields));
+                DirtyStateManager(CustomFieldReset(cfId, fields));
                 cf.FlagToDelete = true;
                 break;
             }
@@ -513,6 +513,31 @@ namespace ParatureSDK.ParaObjects
                 cf.Options.Add(newOption);
                 modified = true;
                 CustomFields.Add(cf);
+            }
+
+            return modified;
+        }
+
+        internal static bool CustomFieldReset(Int64 customFieldid, IEnumerable<CustomField> fields)
+        {
+            if (customFieldid <= 0 || fields == null) return false;
+            
+            var modified = false;
+            var matchingFields = fields.Where(cf => cf.Id == customFieldid);
+            
+            foreach (var cf in matchingFields)
+            {
+                if (cf.Options.Count > 0)
+                {
+                    var selectedFieldsTrue = cf.Options.Where(cfo => cfo.Selected);
+                    foreach (var cfo in selectedFieldsTrue)
+                    {
+                        cfo.Selected = false;
+                        modified = true;
+                    }
+                }
+
+                break;
             }
 
             return modified;
