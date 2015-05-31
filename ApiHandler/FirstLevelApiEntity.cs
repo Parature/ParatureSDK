@@ -10,13 +10,13 @@ using ParatureSDK.XmlToObjectParser;
 
 namespace ParatureSDK.ApiHandler
 {
-    public abstract class FirstLevelApiHandler<TEntity, TQuery> 
-        where TEntity: ParaEntity, new() 
-        where TQuery: ParaEntityQuery
+    public abstract class FirstLevelApiHandler<TEntity, TQuery>
+        where TEntity : ParaEntity, new()
+        where TQuery : ParaEntityQuery
     {
         internal static ParaEnums.ParatureModule _module()
         {
-            var type = typeof(TEntity);
+            var type = typeof (TEntity);
             var typeName = type.Name;
             ParaEnums.ParatureModule module;
             var success = Enum.TryParse(typeName, true, out module);
@@ -40,7 +40,8 @@ namespace ParatureSDK.ApiHandler
         /// </summary>
         public static ApiCallResponse Update(TEntity entity, ParaCredentials paraCredentials)
         {
-            var ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, _module(), XmlGenerator.GenerateXml(entity), entity.Id);
+            var ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, _module(), XmlGenerator.GenerateXml(entity),
+                entity.Id);
             return ar;
         }
 
@@ -146,11 +147,11 @@ namespace ParatureSDK.ApiHandler
         /// record in order to determine if any of the custom fields have special validation rules (e.g. email, phone, url)
         /// and set the "dataType" of the custom field accordingly.
         /// </summary> 
-        static public TEntity SchemaWithCustomFieldTypes(ParaCredentials pc)
+        public static TEntity SchemaWithCustomFieldTypes(ParaCredentials pc)
         {
             var entity = Schema(pc);
 
-            entity = (TEntity)ApiCallFactory.ObjectCheckCustomFieldTypes(pc, _module(), entity);
+            entity = (TEntity) ApiCallFactory.ObjectCheckCustomFieldTypes(pc, _module(), entity);
 
             return entity;
         }

@@ -80,6 +80,7 @@
     <Compile Include="ApiHandler\Download.cs" />
     <Compile Include="ApiHandler\Department.cs" />
     <Compile Include="ApiHandler\FirstLevelApiEntity.cs" />
+    <Compile Include="ApiHandler\FolderApiHandler.cs" />
     <Compile Include="ApiHandler\Queue.cs" />
     <Compile Include="ApiHandler\SecondLevelApiEntity.cs" />
     <Compile Include="ApiHandler\Sla.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="EntityQuery\CustomerStatusQuery.cs" />
     <Compile Include="EntityQuery\DepartmentQuery.cs" />
     <Compile Include="EntityQuery\DownloadFolderQuery.cs" />
+    <Compile Include="EntityQuery\FolderQuery.cs" />
     <Compile Include="EntityQuery\ProductFolderQuery.cs" />
     <Compile Include="EntityQuery\QueueQuery.cs" />
     <Compile Include="EntityQuery\RoleQuery.cs" />

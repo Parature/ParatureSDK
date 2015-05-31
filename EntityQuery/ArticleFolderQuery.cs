@@ -1,6 +1,6 @@
 namespace ParatureSDK.EntityQuery
 {
-    public class ArticleFolderQuery : ParaQuery
+    public class ArticleFolderQuery : FolderQuery
     {
         protected override void BuildModuleSpecificFilter()
         {}
@@ -9,10 +9,6 @@ namespace ParatureSDK.EntityQuery
         /// Contains all the static properties you will need when filtering by static fields.
         /// </summary>
         public static class ArticleFolderStaticFields
-        {
-            public readonly static string Name = "Name";
-            public readonly static string ParentFolder = "Parent_Folder_id_";
-            public readonly static string IsPrivate = "Is_Private";
-        }
+        {}
     }
 }

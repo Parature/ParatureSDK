@@ -60,22 +60,13 @@ namespace ParatureSDK.ApiHandler
         }
 
         public class Role : SecondLevelApiEntity<ParaObjects.CustomerRole, RoleQuery, ParaObjects.Customer>
-        {
-            private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.role;
-            private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Customer;
-        }
+        {}
 
         public class Status : SecondLevelApiEntity<ParaObjects.Status, StatusQuery, ParaObjects.Customer>
-        {
-            private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.status;
-            private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Customer;
-        }
+        {}
 
         public class View : SecondLevelApiEntity<ParaObjects.View, ViewQuery, ParaObjects.Customer>
-        {
-            private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.view;
-            private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Customer;
-        }
+        {}
 
     }
 }

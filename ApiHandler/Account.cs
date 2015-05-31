@@ -13,12 +13,8 @@ namespace ParatureSDK.ApiHandler
     /// </summary>
     public class Account : FirstLevelApiHandler<ParaObjects.Account, AccountQuery>
     {
-        private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Account;
-
         public class View : SecondLevelApiEntity<ParaObjects.View, ViewQuery, ParaObjects.Account>
         {
-            private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.view;
-            private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Account;
         }
     }
 }

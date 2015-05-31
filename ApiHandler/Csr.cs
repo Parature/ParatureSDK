@@ -13,21 +13,13 @@ namespace ParatureSDK.ApiHandler
     /// </summary>
     public class Csr : FirstLevelApiHandler<ParaObjects.Csr, CsrQuery>
     {
-        private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Csr;
-
         /// <summary>
         /// Contains all the methods needed to work with the Ticket statuses.
         /// </summary>
         public class Status : SecondLevelApiEntity<ParaObjects.Status, StatusQuery, ParaObjects.Csr>
-        {
-            private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.status;
-            private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Csr;
-        }
+        {}
 
         public class Role : SecondLevelApiEntity<ParaObjects.CsrRole, RoleQuery, ParaObjects.Csr>
-        {
-            private static ParaEnums.ParatureEntity _entityType = ParaEnums.ParatureEntity.role;
-            private static ParaEnums.ParatureModule _moduleType = ParaEnums.ParatureModule.Csr;
-        }
+        {}
     }
 }

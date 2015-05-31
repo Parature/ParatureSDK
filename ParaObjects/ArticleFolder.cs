@@ -2,11 +2,6 @@ namespace ParatureSDK.ParaObjects
 {
     public class ArticleFolder : Folder
     {
-
-        public ArticleFolder Parent_Folder;
-
-        public bool FullyLoaded = false;
-
         public ArticleFolder()
         {
         }
