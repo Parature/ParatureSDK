@@ -79,30 +79,5 @@ namespace ParatureSDK.XmlToObjectParser
 
             return list;
         }
-
-        static internal PagedData.PagedData ObjectFillList(XmlDocument xmlresp, ParaEnums.ParatureModule module)
-        {
-            switch (module)
-            {
-                case ParaEnums.ParatureModule.Ticket:
-                    return FillList<Ticket>(xmlresp);
-                case ParaEnums.ParatureModule.Account:
-                    return FillList<Account>(xmlresp);
-                case ParaEnums.ParatureModule.Customer:
-                    return FillList<Customer>(xmlresp);
-                case ParaEnums.ParatureModule.Download:
-                    return FillList<Download>(xmlresp);
-                case ParaEnums.ParatureModule.Article:
-                    return FillList<Article>(xmlresp);
-                case ParaEnums.ParatureModule.Product:
-                    return FillList<Product>(xmlresp);
-                case ParaEnums.ParatureModule.Asset:
-                    return FillList<Asset>(xmlresp);
-                case ParaEnums.ParatureModule.Chat:
-                    return FillList<Chat>(xmlresp);
-                default:
-                    throw new Exception("Unknown Module For the Object Fill list");
-            }
-        }
     }
 }

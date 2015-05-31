@@ -16,7 +16,6 @@ namespace ParatureSDK
             Desc
         }
 
-
         public enum TicketStatusType
         {
             All,
@@ -58,7 +57,6 @@ namespace ParatureSDK
             Equal
 
         }
-
 
         /// <summary>
         /// Use to specify if field contains or does not contain a value

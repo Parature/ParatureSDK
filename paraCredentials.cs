@@ -7,12 +7,6 @@ namespace ParatureSDK
     {
         #region Properties
         /// <summary>
-        /// Indicates whether to pre-validate an API call before it occues or not.
-        /// Will only check that required static fields are provided.
-        /// </summary>
-        public bool PrevalidateCalls { get; set; }
-
-        /// <summary>
         /// A valid security token for the CSR account to use to perform the API operations
         /// </summary>
         public string Token { get; set; }
@@ -53,15 +47,6 @@ namespace ParatureSDK
         /// <param name="departmentid">Department ID</param>
         /// <param name="enforceRequiredFields">Whether to enforce required custom fields or not</param>
         public ParaCredentials(string token, string serverfarmaddress, ParaEnums.ApiVersion apiversion, int instanceid, int departmentid, bool enforceRequiredFields)
-        {
-            PrevalidateCalls = false;
-            SetCredentials(token, serverfarmaddress, apiversion, instanceid, departmentid, enforceRequiredFields);
-        }
-
-        /// <summary>
-        /// Internal method to set required credential
-        /// </summary>
-        private void SetCredentials(string token, string serverfarmaddress, ParaEnums.ApiVersion apiversion, int instanceid, int departmentid, bool enforceRequiredFields)
         {
             Token = token;
             ServerfarmAddress = serverfarmaddress;

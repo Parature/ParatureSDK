@@ -176,7 +176,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThreadPool.cs" />
     <Compile Include="XmlGenerator.cs" />
-    <Compile Include="XmlApiSerializer.cs" />
     <Compile Include="XmlToObjectParser\ParaEntityParser.cs" />
   </ItemGroup>
   <ItemGroup>

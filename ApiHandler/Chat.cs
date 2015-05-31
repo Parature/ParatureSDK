@@ -60,22 +60,12 @@ namespace ParatureSDK.ApiHandler
             ApiCallResponse ar;
             var chatList = new ParaEntityList<ParaObjects.Chat>();
 
-            if (query.RetrieveAllRecords && query.OptimizePageSize)
+            ar = ApiCallFactory.ObjectGetList(creds, ParaEnums.ParatureModule.Chat, query.BuildQueryArguments());
+            if (ar.HasException == false)
             {
-                var rslt = ApiUtils.OptimizeObjectPageSize(chatList, query, creds, ParaEnums.ParatureModule.Chat);
-                ar = rslt.apiResponse;
-                query = (ChatQuery)rslt.Query;
-                chatList = ((ParaEntityList<ParaObjects.Chat>)rslt.objectList);
+                chatList = ParaEntityParser.FillList<ParaObjects.Chat>(ar.XmlReceived);
             }
-            else
-            {
-                ar = ApiCallFactory.ObjectGetList(creds, ParaEnums.ParatureModule.Chat, query.BuildQueryArguments());
-                if (ar.HasException == false)
-                {
-                    chatList = ParaEntityParser.FillList<ParaObjects.Chat>(ar.XmlReceived);
-                }
-                chatList.ApiCallResponse = ar;
-            }
+            chatList.ApiCallResponse = ar;
 
             // Checking if the system needs to recursively call all of the data returned.
             if (query.RetrieveAllRecords && !ar.HasException)
