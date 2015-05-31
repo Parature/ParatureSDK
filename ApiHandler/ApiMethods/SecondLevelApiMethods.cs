@@ -1,50 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
 using ParatureSDK.EntityQuery;
-using ParatureSDK.ModuleQuery;
 using ParatureSDK.ParaObjects;
 using ParatureSDK.XmlToObjectParser;
 
-namespace ParatureSDK.ApiHandler
+namespace ParatureSDK.ApiHandler.ApiMethods
 {
-    public abstract class SecondLevelApiEntity<TEntity, TQuery, TModule> 
+    public abstract class SecondLevelApiMethods<TEntity, TQuery, TModule> 
         where TEntity : ParaEntityBaseProperties, new()
         where TQuery : ParaQuery
         where TModule: ParaEntity
     {
-        internal static ParaEnums.ParatureEntity _entityType()
-        {
-            var type = typeof(TEntity);
-            var typeName = type.Name;
-            switch (typeName)
-            {
-                case "CustomerRole":
-                    typeName = "Role";
-                    break;
-                case "CsrRole":
-                    typeName = "Role";
-                    break;
-                default:
-                    break;
-            }
-            ParaEnums.ParatureEntity entity;
-            var success = Enum.TryParse(typeName, true, out entity);
-
-            return entity;
-        }
-        internal static ParaEnums.ParatureModule _moduleType()
-        {
-            var type = typeof(TModule);
-            var typeName = type.Name;
-            ParaEnums.ParatureModule module;
-            var success = Enum.TryParse(typeName, true, out module);
-
-            return module;
-        }
-
         /// <summary>
         /// Returns a view object with all of its properties filled.
         /// </summary>
@@ -58,7 +24,7 @@ namespace ParatureSDK.ApiHandler
         /// <returns></returns>
         public static TEntity GetDetails(Int64 id, ParaCredentials creds)
         {
-            var entity = ApiUtils.ApiGetEntity<TEntity>(creds, _entityType(), id);
+            var entity = ApiUtils.ApiGetEntity<TEntity>(creds, EnumTypeParser._entityType<TEntity>(), id);
             return entity;
         }
 
@@ -98,12 +64,12 @@ namespace ParatureSDK.ApiHandler
         /// <returns></returns>
         public static ParaEntityList<TEntity> GetList(ParaCredentials creds, TQuery query)
         {
-            return ApiUtils.ApiGetEntityList<TEntity>(creds, query, _moduleType(), _entityType());
+            return ApiUtils.ApiGetEntityList<TEntity>(creds, query, EnumTypeParser._module<TModule>(), EnumTypeParser._entityType<TEntity>());
         }
 
         public static ParaEntityList<TEntity> GetList(ParaCredentials creds)
         {
-            return ApiUtils.ApiGetEntityList<TEntity>(creds, new ViewQuery(), _moduleType(), _entityType());
+            return ApiUtils.ApiGetEntityList<TEntity>(creds, new ViewQuery(), EnumTypeParser._module<TModule>(), EnumTypeParser._entityType<TEntity>());
         }
     }
 }

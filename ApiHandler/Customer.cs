@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Threading;
 using System.Xml;
+using ParatureSDK.ApiHandler.ApiMethods;
 using ParatureSDK.EntityQuery;
 using ParatureSDK.ModuleQuery;
 using ParatureSDK.ParaObjects;
@@ -12,7 +13,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Customer module.
     /// </summary>
-    public class Customer : FirstLevelApiHandler<ParaObjects.Customer, CustomerQuery>
+    public class Customer : FirstLevelApiGetMethods<ParaObjects.Customer, CustomerQuery>
     {
         private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Customer;
 
@@ -59,13 +60,13 @@ namespace ParatureSDK.ApiHandler
             return ar;
         }
 
-        public class Role : SecondLevelApiEntity<ParaObjects.CustomerRole, RoleQuery, ParaObjects.Customer>
+        public class Role : SecondLevelApiMethods<ParaObjects.CustomerRole, RoleQuery, ParaObjects.Customer>
         {}
 
-        public class Status : SecondLevelApiEntity<ParaObjects.Status, StatusQuery, ParaObjects.Customer>
+        public class Status : SecondLevelApiMethods<ParaObjects.Status, StatusQuery, ParaObjects.Customer>
         {}
 
-        public class View : SecondLevelApiEntity<ParaObjects.View, ViewQuery, ParaObjects.Customer>
+        public class View : SecondLevelApiMethods<ParaObjects.View, ViewQuery, ParaObjects.Customer>
         {}
 
     }

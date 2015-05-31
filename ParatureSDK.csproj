@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="ApiCallFactory.cs" />
     <Compile Include="ApiHandler\Account.cs" />
+    <Compile Include="ApiHandler\ApiMethods\EnumTypeParser.cs" />
     <Compile Include="ApiHandler\Article.cs" />
     <Compile Include="ApiHandler\Asset.cs" />
     <Compile Include="ApiHandler\Chat.cs" />
@@ -79,10 +80,11 @@
     <Compile Include="ApiHandler\Customer.cs" />
     <Compile Include="ApiHandler\Download.cs" />
     <Compile Include="ApiHandler\Department.cs" />
-    <Compile Include="ApiHandler\FirstLevelApiEntity.cs" />
-    <Compile Include="ApiHandler\FolderApiHandler.cs" />
+    <Compile Include="ApiHandler\ApiMethods\FirstLevelApiGetMethods.cs" />
+    <Compile Include="ApiHandler\ApiMethods\FirstLevelApiModifyMethods.cs" />
+    <Compile Include="ApiHandler\ApiMethods\FolderApiMethods.cs" />
     <Compile Include="ApiHandler\Queue.cs" />
-    <Compile Include="ApiHandler\SecondLevelApiEntity.cs" />
+    <Compile Include="ApiHandler\ApiMethods\SecondLevelApiMethods.cs" />
     <Compile Include="ApiHandler\Sla.cs" />
     <Compile Include="ApiHandler\Timezone.cs" />
     <Compile Include="ApiHandler\Product.cs" />

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Threading;
 using System.Xml;
+using ParatureSDK.ApiHandler.ApiMethods;
 using ParatureSDK.EntityQuery;
 using ParatureSDK.ModuleQuery;
 using ParatureSDK.ParaObjects;
@@ -13,7 +14,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Ticket module.
     /// </summary>
-    public class Ticket : FirstLevelApiHandler<ParaObjects.Ticket, TicketQuery>
+    public class Ticket : FirstLevelApiGetMethods<ParaObjects.Ticket, TicketQuery>
     {
         private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Ticket;
 
@@ -72,10 +73,10 @@ namespace ParatureSDK.ApiHandler
             return ar;
         }
 
-        public class Status : SecondLevelApiEntity<ParaObjects.Status, StatusQuery, ParaObjects.Ticket>
+        public class Status : SecondLevelApiMethods<ParaObjects.Status, StatusQuery, ParaObjects.Ticket>
         {}
 
-        public class View : SecondLevelApiEntity<ParaObjects.View, ViewQuery, ParaObjects.Ticket>
+        public class View : SecondLevelApiMethods<ParaObjects.View, ViewQuery, ParaObjects.Ticket>
         {}
     }
 }

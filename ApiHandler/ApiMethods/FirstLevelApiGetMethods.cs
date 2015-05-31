@@ -1,50 +1,16 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
 using ParatureSDK.ModuleQuery;
 using ParatureSDK.ParaObjects;
 using ParatureSDK.XmlToObjectParser;
 
-namespace ParatureSDK.ApiHandler
+namespace ParatureSDK.ApiHandler.ApiMethods
 {
-    public abstract class FirstLevelApiHandler<TEntity, TQuery>
+    public abstract class FirstLevelApiGetMethods<TEntity, TQuery>
         where TEntity : ParaEntity, new()
         where TQuery : ParaEntityQuery
     {
-        internal static ParaEnums.ParatureModule _module()
-        {
-            var type = typeof (TEntity);
-            var typeName = type.Name;
-            ParaEnums.ParatureModule module;
-            var success = Enum.TryParse(typeName, true, out module);
-
-            return module;
-        }
-
-        /// <summary>
-        /// Create a Parature Account. Requires an Object and a credentials object. Will return the Newly Created accountId. Returns 0 if the entity creation fails.
-        /// </summary>
-        public static ApiCallResponse Insert(TEntity entity, ParaCredentials paraCredentials)
-        {
-            var doc = XmlGenerator.GenerateXml(entity);
-            var ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, _module(), doc, 0);
-            entity.Id = ar.Id;
-            return ar;
-        }
-
-        /// <summary>
-        /// Update a Parature Account. Requires an Object and a credentials object.  Will return the updated accountId. Returns 0 if the entity update operation fails.
-        /// </summary>
-        public static ApiCallResponse Update(TEntity entity, ParaCredentials paraCredentials)
-        {
-            var ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, _module(), XmlGenerator.GenerateXml(entity),
-                entity.Id);
-            return ar;
-        }
-
         /// <summary>
         /// Returns an entity object from an XML Document. No calls to the APIs are made when calling this method.
         /// </summary>
@@ -80,7 +46,8 @@ namespace ParatureSDK.ApiHandler
 
         public static TEntity GetDetails(Int64 entityId, ParaCredentials pc, ArrayList queryStringParams)
         {
-            var entity = ApiUtils.ApiGetEntity<TEntity>(pc, _module(), entityId, queryStringParams);
+            var entity = ApiUtils.ApiGetEntity<TEntity>(pc, EnumTypeParser._module<TEntity>(), entityId,
+                queryStringParams);
 
             return entity;
         }
@@ -90,7 +57,7 @@ namespace ParatureSDK.ApiHandler
         /// </summary>            
         public static ParaEntityList<TEntity> GetList(ParaCredentials pc)
         {
-            return ApiUtils.ApiGetEntityList<TEntity>(pc, _module());
+            return ApiUtils.ApiGetEntityList<TEntity>(pc, EnumTypeParser._module<TEntity>());
         }
 
         /// <summary>
@@ -106,7 +73,7 @@ namespace ParatureSDK.ApiHandler
                 query.IncludeCustomField(objschem.CustomFields);
             }
 
-            return ApiUtils.ApiGetEntityList<TEntity>(pc, _module(), query);
+            return ApiUtils.ApiGetEntityList<TEntity>(pc, EnumTypeParser._module<TEntity>(), query);
         }
 
         /// <summary>
@@ -130,7 +97,7 @@ namespace ParatureSDK.ApiHandler
         public static TEntity Schema(ParaCredentials pc)
         {
             var entity = new TEntity();
-            var ar = ApiCallFactory.ObjectGetSchema(pc, _module());
+            var ar = ApiCallFactory.ObjectGetSchema(pc, EnumTypeParser._module<TEntity>());
 
             if (ar.HasException == false)
             {
@@ -151,9 +118,31 @@ namespace ParatureSDK.ApiHandler
         {
             var entity = Schema(pc);
 
-            entity = (TEntity) ApiCallFactory.ObjectCheckCustomFieldTypes(pc, _module(), entity);
+            entity = (TEntity) ApiCallFactory.ObjectCheckCustomFieldTypes(pc, EnumTypeParser._module<TEntity>(), entity);
 
             return entity;
+        }
+
+        /// <summary>
+        /// Create a Parature Account. Requires an Object and a credentials object. Will return the Newly Created accountId. Returns 0 if the entity creation fails.
+        /// </summary>
+        public static ApiCallResponse Insert(TEntity entity, ParaCredentials paraCredentials)
+        {
+            var doc = XmlGenerator.GenerateXml(entity);
+            var ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, EnumTypeParser._module<TEntity>(), doc, 0);
+            entity.Id = ar.Id;
+            return ar;
+        }
+
+        /// <summary>
+        /// Update a Parature Account. Requires an Object and a credentials object.  Will return the updated accountId. Returns 0 if the entity update operation fails.
+        /// </summary>
+        public static ApiCallResponse Update(TEntity entity, ParaCredentials paraCredentials)
+        {
+            var ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, EnumTypeParser._module<TEntity>(),
+                XmlGenerator.GenerateXml(entity),
+                entity.Id);
+            return ar;
         }
 
         ///  <summary>
@@ -169,7 +158,7 @@ namespace ParatureSDK.ApiHandler
         /// </param>
         public static ApiCallResponse Delete(Int64 entityId, ParaCredentials pc, bool purge)
         {
-            return ApiCallFactory.ObjectDelete(pc, _module(), entityId, purge);
+            return ApiCallFactory.ObjectDelete(pc, EnumTypeParser._module<TEntity>(), entityId, purge);
         }
 
         ///  <summary>
@@ -181,7 +170,7 @@ namespace ParatureSDK.ApiHandler
         /// <param name="pc"></param>
         public static ApiCallResponse Delete(Int64 entityId, ParaCredentials pc)
         {
-            return ApiCallFactory.ObjectDelete(pc, _module(), entityId, false);
+            return ApiCallFactory.ObjectDelete(pc, EnumTypeParser._module<TEntity>(), entityId, false);
         }
     }
 }

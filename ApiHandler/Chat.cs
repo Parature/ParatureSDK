@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using ParatureSDK.ApiHandler.ApiMethods;
 using ParatureSDK.ModuleQuery;
 using ParatureSDK.ParaObjects;
 using ParatureSDK.XmlToObjectParser;
@@ -11,7 +12,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Chat module.
     /// </summary>
-    public class Chat : FirstLevelApiHandler<ParaObjects.Chat, ChatQuery>
+    public class Chat : FirstLevelApiGetMethods<ParaObjects.Chat, ChatQuery>
     {
         private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Chat;
 

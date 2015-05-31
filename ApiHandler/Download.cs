@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Threading;
 using System.Xml;
+using ParatureSDK.ApiHandler.ApiMethods;
 using ParatureSDK.EntityQuery;
 using ParatureSDK.ModuleQuery;
 using ParatureSDK.ParaObjects;
@@ -12,7 +13,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Download module.
     /// </summary>
-    public class Download : FirstLevelApiHandler<ParaObjects.Download, DownloadQuery>
+    public class Download : FirstLevelApiGetMethods<ParaObjects.Download, DownloadQuery>
     {
         private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Download;
 
@@ -143,7 +144,7 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Contains all the methods needed to work with the download module's folders.
         /// </summary>
-        public class DownloadFolder : FolderApiHandler<ParaObjects.DownloadFolder, DownloadFolderQuery>
+        public class DownloadFolder : FolderApiMethods<ParaObjects.DownloadFolder, DownloadFolderQuery>
         {}
     }
 }

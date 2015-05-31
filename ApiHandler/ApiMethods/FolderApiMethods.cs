@@ -1,29 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml;
 using ParatureSDK.EntityQuery;
-using ParatureSDK.ModuleQuery;
 using ParatureSDK.ParaObjects;
 using ParatureSDK.XmlToObjectParser;
 
-namespace ParatureSDK.ApiHandler
+namespace ParatureSDK.ApiHandler.ApiMethods
 {
-    public abstract class FolderApiHandler<TFolder, TQuery>
+    public abstract class FolderApiMethods<TFolder, TQuery>
         where TFolder : Folder, new()
         where TQuery : FolderQuery, new()
     {
-        internal static ParaEnums.ParatureEntity _entityType()
-        {
-            var type = typeof (TFolder);
-            var typeName = type.Name;
-            ParaEnums.ParatureEntity entity;
-            var success = Enum.TryParse(typeName, true, out entity);
-
-            return entity;
-        }
-
         /// <summary>
         /// Locates a folder with the name provided, will return the id if found. Otherwise, it will return 0.
         /// </summary>
@@ -89,7 +75,7 @@ namespace ParatureSDK.ApiHandler
         public static ApiCallResponse Insert(TFolder folder, ParaCredentials creds)
         {
             var doc = XmlGenerator.GenerateXml(folder);
-            var ar = ApiCallFactory.EntityCreateUpdate(creds, _entityType(), doc, 0);
+            var ar = ApiCallFactory.EntityCreateUpdate(creds, EnumTypeParser._entityType<TFolder>(), doc, 0);
             folder.Id = ar.Id;
             return ar;
         }
@@ -99,7 +85,7 @@ namespace ParatureSDK.ApiHandler
         /// </summary>
         public static ApiCallResponse Update(TFolder folder, ParaCredentials creds)
         {
-            var ar = ApiCallFactory.EntityCreateUpdate(creds, _entityType(), XmlGenerator.GenerateXml(folder), folder.Id);
+            var ar = ApiCallFactory.EntityCreateUpdate(creds, EnumTypeParser._entityType<TFolder>(), XmlGenerator.GenerateXml(folder), folder.Id);
 
             return ar;
         }
@@ -113,7 +99,7 @@ namespace ParatureSDK.ApiHandler
         /// </param>
         public static ApiCallResponse Delete(Int64 folderId, ParaCredentials creds)
         {
-            return ApiCallFactory.EntityDelete(creds, _entityType(), folderId);
+            return ApiCallFactory.EntityDelete(creds, EnumTypeParser._entityType<TFolder>(), folderId);
         }
 
         ///  <summary>
@@ -148,7 +134,7 @@ namespace ParatureSDK.ApiHandler
         private static ParaEntityList<TFolder> FillList(ParaCredentials creds, TQuery query)
         {
             var folderList = new ParaEntityList<TFolder>();
-            var ar = ApiCallFactory.ObjectGetList(creds, _entityType(), query.BuildQueryArguments());
+            var ar = ApiCallFactory.ObjectGetList(creds, EnumTypeParser._entityType<TFolder>(), query.BuildQueryArguments());
             if (ar.HasException == false)
             {
                 folderList = ParaEntityParser.FillList<TFolder>(ar.XmlReceived);
@@ -168,7 +154,7 @@ namespace ParatureSDK.ApiHandler
                         // Getting next page's data
                         query.PageNumber = query.PageNumber + 1;
 
-                        ar = ApiCallFactory.ObjectGetList(creds, _entityType(), query.BuildQueryArguments());
+                        ar = ApiCallFactory.ObjectGetList(creds, EnumTypeParser._entityType<TFolder>(), query.BuildQueryArguments());
 
                         var objectlist = ParaEntityParser.FillList<TFolder>(ar.XmlReceived);
 
@@ -196,7 +182,7 @@ namespace ParatureSDK.ApiHandler
         private static TFolder FillDetails(Int64 folderId, ParaCredentials creds)
         {
             var folder = new TFolder();
-            var ar = ApiCallFactory.ObjectGetDetail(creds, _entityType(), folderId);
+            var ar = ApiCallFactory.ObjectGetDetail(creds, EnumTypeParser._entityType<TFolder>(), folderId);
             if (ar.HasException == false)
             {
                 folder = ParaEntityParser.EntityFill<TFolder>(ar.XmlReceived);
