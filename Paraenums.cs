@@ -155,7 +155,11 @@ namespace ParatureSDK
             /// <summary>
             /// Chat Module
             /// </summary>
-            Chat=8
+            Chat=8,
+            Queue = 9,
+            Department = 10,
+            Timezone = 11,
+            Sla = 12
         }
 
         /// <summary>

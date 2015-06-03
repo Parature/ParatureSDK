@@ -2,25 +2,25 @@ using System;
 
 namespace ParatureSDK.ParaObjects
 {
-    public class Queue
+    public class Queue : ParaEntity
     {
         // Specific properties for this module
-
-        public int QueueId { get; set; }
-
         public string Name { get; set; }
 
         public Queue()
         {
             Name = "";
-            QueueId = 0;
         }
 
         public Queue(Queue queue)
         {
-            QueueId = queue.QueueId;
+            Id = queue.Id;
             Name = queue.Name;
         }
 
+        public override string GetReadableName()
+        {
+            return Name;
+        }
     }
 }

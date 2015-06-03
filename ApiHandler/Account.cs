@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Threading;
 using System.Xml;
 using ParatureSDK.ApiHandler.ApiMethods;
@@ -12,8 +13,10 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Account module.
     /// </summary>
-    public class Account : FirstLevelApiGetMethods<ParaObjects.Account, AccountQuery>
+    public class Account : FirstLevelApiMethods<ParaObjects.Account, AccountQuery>
     {
+        private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Account;
+
         public class View : SecondLevelApiMethods<ParaObjects.View, ViewQuery, ParaObjects.Account>
         {
         }

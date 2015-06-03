@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Threading;
 using System.Xml;
 using ParatureSDK.ApiHandler.ApiMethods;
@@ -12,7 +13,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Asset module.
     /// </summary>
-    public class Asset : FirstLevelApiGetMethods<ParaObjects.Asset, AssetQuery>
+    public class Asset : FirstLevelApiMethods<ParaObjects.Asset, AssetQuery>
     {
         private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Asset;
 

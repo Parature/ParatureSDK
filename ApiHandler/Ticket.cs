@@ -14,7 +14,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Ticket module.
     /// </summary>
-    public class Ticket : FirstLevelApiGetMethods<ParaObjects.Ticket, TicketQuery>
+    public class Ticket : FirstLevelApiMethods<ParaObjects.Ticket, TicketQuery>
     {
         private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Ticket;
 
@@ -32,7 +32,7 @@ namespace ParatureSDK.ApiHandler
         /// <param name="pc">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
-        public static ParaObjects.Ticket GetDetails(Int64 ticketNumber, bool includeHistory, ParaCredentials pc)
+        public static ParaObjects.Ticket GetDetails(Int64 ticketNumber, ParaCredentials pc, bool includeHistory)
         {
             var arl = new ArrayList();
             if (includeHistory)

@@ -12,7 +12,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Product module.
     /// </summary>
-    public class Product : FirstLevelApiGetMethods<ParaObjects.Product, ProductQuery>
+    public class Product : FirstLevelApiMethods<ParaObjects.Product, ProductQuery>
     {
         /// <summary>
         /// Contains all the methods needed to work with the download module's folders.

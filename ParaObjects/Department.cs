@@ -3,7 +3,7 @@ namespace ParatureSDK.ParaObjects
     /// <summary>
     /// A department's property.
     /// </summary>
-    public class Department : ParaEntityBaseProperties
+    public class Department : ParaEntity
     {
         public string Name { get; set; }
 
@@ -21,6 +21,11 @@ namespace ParatureSDK.ParaObjects
             Id = department.Id;
             Name = department.Name;
             Description = department.Description;
+        }
+
+        public override string GetReadableName()
+        {
+            return Name;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
 {
     internal class EnumTypeParser
     {
-        internal static ParaEnums.ParatureModule _module<TEntity>() where TEntity : ParaEntity
+        internal static ParaEnums.ParatureModule Module<TEntity>() where TEntity : ParaEntityBaseProperties
         {
             var type = typeof (TEntity);
             var typeName = type.Name;
@@ -18,7 +18,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
             return module;
         }
 
-        internal static ParaEnums.ParatureEntity _entityType<TEntity>() where TEntity : ParaEntityBaseProperties
+        internal static ParaEnums.ParatureEntity Entity<TEntity>() where TEntity : ParaEntityBaseProperties
         {
             var type = typeof (TEntity);
             var typeName = type.Name;

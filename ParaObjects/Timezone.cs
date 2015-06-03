@@ -3,10 +3,8 @@ using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects
 {
-    public class Timezone
+    public class Timezone : ParaEntity
     {
-        [XmlAttribute("id")]
-        public Int64 Id;
         public string Name;
         public string Abbreviation;
         public Timezone()
@@ -27,6 +25,11 @@ namespace ParatureSDK.ParaObjects
             Id = ID;
             this.Name = Name;
             this.Abbreviation = Abbreviation;
+        }
+
+        public override string GetReadableName()
+        {
+            return Name;
         }
     }
 }

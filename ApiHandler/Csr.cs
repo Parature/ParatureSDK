@@ -12,8 +12,10 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Csr module.
     /// </summary>
-    public class Csr : FirstLevelApiGetMethods<ParaObjects.Csr, CsrQuery>
+    public class Csr : FirstLevelApiMethods<ParaObjects.Csr, CsrQuery>
     {
+        private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Csr;
+
         /// <summary>
         /// Contains all the methods needed to work with the Ticket statuses.
         /// </summary>

@@ -1,10 +1,10 @@
+using ParatureSDK.ModuleQuery;
+
 namespace ParatureSDK.EntityQuery
 {
-    public class QueueQuery : ParaQuery
+    public class QueueQuery : ParaEntityQuery
     {
         protected override void BuildModuleSpecificFilter()
-        {
-
-        }
+        { }
     }
 }

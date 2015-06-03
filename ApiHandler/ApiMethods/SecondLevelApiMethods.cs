@@ -24,7 +24,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <returns></returns>
         public static TEntity GetDetails(Int64 id, ParaCredentials creds)
         {
-            var entity = ApiUtils.ApiGetEntity<TEntity>(creds, EnumTypeParser._entityType<TEntity>(), id);
+            var entity = ApiUtils.ApiGetEntity<TEntity>(creds, EnumTypeParser.Entity<TEntity>(), id);
             return entity;
         }
 
@@ -64,12 +64,12 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <returns></returns>
         public static ParaEntityList<TEntity> GetList(ParaCredentials creds, TQuery query)
         {
-            return ApiUtils.ApiGetEntityList<TEntity>(creds, query, EnumTypeParser._module<TModule>(), EnumTypeParser._entityType<TEntity>());
+            return ApiUtils.ApiGetEntityList<TEntity>(creds, query, EnumTypeParser.Module<TModule>(), EnumTypeParser.Entity<TEntity>());
         }
 
         public static ParaEntityList<TEntity> GetList(ParaCredentials creds)
         {
-            return ApiUtils.ApiGetEntityList<TEntity>(creds, new ViewQuery(), EnumTypeParser._module<TModule>(), EnumTypeParser._entityType<TEntity>());
+            return ApiUtils.ApiGetEntityList<TEntity>(creds, new ViewQuery(), EnumTypeParser.Module<TModule>(), EnumTypeParser.Entity<TEntity>());
         }
     }
 }

@@ -81,7 +81,7 @@
     <Compile Include="ApiHandler\Download.cs" />
     <Compile Include="ApiHandler\Department.cs" />
     <Compile Include="ApiHandler\ApiMethods\FirstLevelApiGetMethods.cs" />
-    <Compile Include="ApiHandler\ApiMethods\FirstLevelApiModifyMethods.cs" />
+    <Compile Include="ApiHandler\ApiMethods\FirstLevelMethods.cs" />
     <Compile Include="ApiHandler\ApiMethods\FolderApiMethods.cs" />
     <Compile Include="ApiHandler\Queue.cs" />
     <Compile Include="ApiHandler\ApiMethods\SecondLevelApiMethods.cs" />

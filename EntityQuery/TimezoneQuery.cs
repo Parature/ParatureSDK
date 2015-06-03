@@ -1,6 +1,8 @@
+using ParatureSDK.ModuleQuery;
+
 namespace ParatureSDK.EntityQuery
 {
-    public class TimezoneQuery : ParaQuery
+    public class TimezoneQuery : ParaEntityQuery
     {
         protected override void BuildModuleSpecificFilter()
         {

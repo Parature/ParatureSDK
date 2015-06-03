@@ -13,7 +13,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Download module.
     /// </summary>
-    public class Download : FirstLevelApiGetMethods<ParaObjects.Download, DownloadQuery>
+    public class Download : FirstLevelApiMethods<ParaObjects.Download, DownloadQuery>
     {
         private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Download;
 

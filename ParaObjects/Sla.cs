@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects
 {
-    public class Sla : ParaEntityBaseProperties
+    public class Sla : ParaEntity
     {
         public string Name = "";
 
@@ -15,6 +15,11 @@ namespace ParatureSDK.ParaObjects
         {
             Id = sla.Id;
             Name = sla.Name;
+        }
+
+        public override string GetReadableName()
+        {
+            return Name;
         }
     }
 }
