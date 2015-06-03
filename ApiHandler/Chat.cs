@@ -13,7 +13,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Chat module.
     /// </summary>
-    public class Chat : FirstLevelApiMethods<ParaObjects.Chat, ChatQuery>
+    public class Chat : FirstLevelApiGetMethods<ParaObjects.Chat, ChatQuery>
     {
         private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Chat;
 
