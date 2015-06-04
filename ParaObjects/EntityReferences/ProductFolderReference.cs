@@ -5,8 +5,12 @@ using System.Text;
 
 namespace ParatureSDK.ParaObjects.EntityReferences
 {
-    public class ProductFolderReference
+    public class ProductFolderReference : EntityReference<ProductFolder>
     {
-        public ProductFolder ProductFolder { get; set; }
+        public ProductFolder ProductFolder
+        {
+            get { return base.Entity; }
+            set { base.Entity = value; }
+        }
     }
 }

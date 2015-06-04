@@ -6,9 +6,13 @@ using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects.EntityReferences
 {
-    public class RoleReference
+    public class RoleReference : EntityReference<Role>
     {
         [XmlIgnore]
-        public Role Role { get; set; }
+        public Role Role
+        {
+            get { return base.Entity; }
+            set { base.Entity = value; }
+        }
     }
 }

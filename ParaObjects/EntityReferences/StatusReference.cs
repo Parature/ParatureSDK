@@ -5,8 +5,12 @@ using System.Text;
 
 namespace ParatureSDK.ParaObjects.EntityReferences
 {
-    public class StatusReference
+    public class StatusReference : EntityReference<Status>
     {
-        public Status Status { get; set; }
+        public Status Status
+        {
+            get { return base.Entity; }
+            set { base.Entity = value; }
+        }
     }
 }

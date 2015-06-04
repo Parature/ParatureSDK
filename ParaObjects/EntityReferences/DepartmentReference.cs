@@ -5,8 +5,12 @@ using System.Text;
 
 namespace ParatureSDK.ParaObjects.EntityReferences
 {
-    public class DepartmentReference
+    public class DepartmentReference : EntityReference<Department>
     {
-        public Department Department { get; set; }
+        public Department Department
+        {
+            get { return base.Entity; }
+            set { base.Entity = value; }
+        }
     }
 }

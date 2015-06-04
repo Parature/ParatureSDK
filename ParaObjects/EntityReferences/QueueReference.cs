@@ -5,8 +5,12 @@ using System.Text;
 
 namespace ParatureSDK.ParaObjects.EntityReferences
 {
-    public class QueueReference
+    public class QueueReference : EntityReference<Queue>
     {
-        public Queue Queue { get; set; }
+        public Queue Queue
+        {
+            get { return base.Entity; }
+            set { base.Entity = value; }
+        }
     }
 }
