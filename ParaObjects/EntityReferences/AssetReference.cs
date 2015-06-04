@@ -9,7 +9,7 @@ namespace ParatureSDK.ParaObjects.EntityReferences
     public class AssetReference: EntityReference<Asset>
     {
         [XmlElement("Asset")]
-        public Asset Entity
+        public Asset Asset
         {
             get { return base.Entity; }
             set { base.Entity = value; }

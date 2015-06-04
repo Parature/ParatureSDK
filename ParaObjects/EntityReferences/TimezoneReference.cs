@@ -5,8 +5,12 @@ using System.Text;
 
 namespace ParatureSDK.ParaObjects.EntityReferences
 {
-    public class TimezoneReference
+    public class TimezoneReference : EntityReference<Timezone>
     {
-        public Timezone Timezone { get; set; }
+        public Timezone Timezone
+        {
+            get { return base.Entity; }
+            set { base.Entity = value; }
+        }
     }
 }

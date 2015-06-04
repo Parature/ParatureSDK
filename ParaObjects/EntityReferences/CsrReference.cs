@@ -10,7 +10,7 @@ namespace ParatureSDK.ParaObjects.EntityReferences
     public class CsrReference : EntityReference<Csr>
     {
         [XmlElement("Csr")]
-        public Csr Entity
+        public Csr Csr
         {
             get { return base.Entity; }
             set { base.Entity = value; }

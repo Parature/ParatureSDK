@@ -9,7 +9,7 @@ namespace ParatureSDK.ParaObjects.EntityReferences
     public class CustomerReference : EntityReference<Customer>
     {
         [XmlElement("Customer")]
-        public Customer Entity
+        public Customer Customer
         {
             get { return base.Entity; }
             set { base.Entity = value; }
