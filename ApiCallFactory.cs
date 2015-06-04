@@ -26,7 +26,7 @@ namespace ParatureSDK
 
         public static ApiCallResponse ObjectCreateUpdate<T>(ParaCredentials paracredentials, XmlDocument fileToPost, Int64 objectid, ArrayList arguments)
         {
-            var entityType = typeof (T).ToString();
+            var entityType = typeof (T).Name;
             if (arguments == null)
             {
                 arguments = new ArrayList();
@@ -59,7 +59,7 @@ namespace ParatureSDK
 
         public static ApiCallResponse ObjectDelete<T>(ParaCredentials paracredentials, Int64 objectid, bool purge)
         {
-            var entityType = typeof (T).ToString();
+            var entityType = typeof (T).Name;
             string apiCallUrl;
 
             if (purge)
@@ -145,7 +145,7 @@ namespace ParatureSDK
         ///</param>
         public static ApiCallResponse ObjectGetList<T>(ParaCredentials paracredentials, ArrayList arguments)
         {
-            var entityType = typeof (T).ToString();
+            var entityType = typeof (T).Name;
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityType, 0, arguments);
             return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
@@ -163,7 +163,7 @@ namespace ParatureSDK
         /// </summary>
         public static ApiCallResponse ObjectGetSchema<T>(ParaCredentials paracredentials)
         {
-            var entityType = typeof (T).ToString();
+            var entityType = typeof (T).Name;
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityType, 0, true);
 
             return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
@@ -174,7 +174,7 @@ namespace ParatureSDK
         /// </summary>
         public static T ObjectCheckCustomFieldTypes<T>(ParaCredentials paracredentials, ParaEntity baseObject) where T: ParaEntity, new()
         {
-            var entityType = typeof (T).ToString();
+            var entityType = typeof (T).Name;
             paracredentials.EnforceRequiredFields = false;
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityType, 0, true);
 
