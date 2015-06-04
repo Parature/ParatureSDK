@@ -32,27 +32,27 @@ namespace ParatureSDK.ModuleQuery
         /// </summary>
         public static class AccountStaticFields
         {
-            public readonly static string Accountname = "Account_Name";
+            public readonly static string AccountName = "Account_Name";
 
             /// <summary>
             /// The criteria for this property can only be a SlaID
             /// </summary>
-            public readonly static string AccountSlaID = "sla_id_";
+            public readonly static string AccountSlaId = "sla_id_";
 
             /// <summary>
             /// The criteria for this property can only be a Id
             /// </summary>
-            public readonly static string DefaultCustomerRoleID = "Default_Customer_Role_id_";
+            public readonly static string DefaultCustomerRoleId = "Default_Customer_Role_id_";
 
             /// <summary>
             /// The criteria for this property can only be a CsrID
             /// </summary>
-            public readonly static string OwnedByCsrID = "Owned_By_id_";
+            public readonly static string OwnedByCsrId = "Owned_By_id_";
 
             /// <summary>
             /// The criteria for this property can only be a CsrID
             /// </summary>
-            public readonly static string ModifiedByCsrID = "Modified_By_id_";
+            public readonly static string ModifiedByCsrId = "Modified_By_id_";
 
 
             public readonly static string Date_Created = "Date_Created";

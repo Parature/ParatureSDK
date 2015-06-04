@@ -198,6 +198,29 @@ namespace ParatureSDK.ApiHandler
         internal static ParaEntityList<T> ApiGetEntityList<T>(ParaCredentials pc, ParaEntityQuery query)
             where T : ParaEntity, new()
         {
+            var entityList = new ParaEntityList<T>();
+
+            // Checking if the system needs to recursively call all of the data returned.
+            if (query.RetrieveAllRecords)
+            {
+                entityList = RetrieveAllEntities<T>(pc, query);
+            }
+            else
+            {
+                var ar = ApiCallFactory.ObjectGetList<T>(pc, query.BuildQueryArguments());
+                if (ar.HasException == false)
+                {
+                    entityList = ParaEntityParser.FillList<T>(ar.XmlReceived);
+                }
+                entityList.ApiCallResponse = ar;
+            }
+
+            return entityList;
+        }
+
+        private static ParaEntityList<T> RetrieveAllEntities<T>(ParaCredentials pc, ParaEntityQuery query) 
+            where T : ParaEntity, new()
+        {
             ApiCallResponse ar;
             var entityList = new ParaEntityList<T>();
 
@@ -208,65 +231,35 @@ namespace ParatureSDK.ApiHandler
             }
             entityList.ApiCallResponse = ar;
 
-            // Checking if the system needs to recursively call all of the data returned.
-            if (query.RetrieveAllRecords && !ar.HasException)
+            var continueCalling = true;
+            while (continueCalling)
             {
-                // A flag variable to check if we need to make more calls
-                if (query.OptimizeCalls)
+                if (entityList.TotalItems > entityList.Data.Count)
                 {
-                    var callsRequired =
-                        (int) Math.Ceiling((double) (entityList.TotalItems/(double) entityList.PageSize));
-                    for (var i = 2; i <= callsRequired; i++)
-                    {
-                        query.PageNumber = i;
-                        //implement semaphore right here (in the thread pool instance to control the generation of threads
-                        var instance = new ThreadPool.ObjectList(pc, query.BuildQueryArguments());
-                        var t = new Thread(() => instance.Go(entityList));
-                        t.Start();
-                    }
+                    // We still need to pull data
+                    // Getting next page's data
+                    query.PageNumber = query.PageNumber + 1;
 
-                    while (entityList.TotalItems > entityList.Data.Count)
+                    ar = ApiCallFactory.ObjectGetList<T>(pc, query.BuildQueryArguments());
+                    if (ar.HasException == false)
                     {
-                        Thread.Sleep(500);
+                        var objectlist = ParaEntityParser.FillList<T>(ar.XmlReceived);
+                        entityList.Data.AddRange(objectlist.Data);
+                        entityList.ResultsReturned = entityList.Data.Count;
+                        entityList.PageNumber = query.PageNumber;
                     }
-
-                    entityList.ResultsReturned = entityList.Data.Count;
-                    entityList.PageNumber = callsRequired;
+                    else
+                    {
+                        // There is an error processing request
+                        entityList.ApiCallResponse = ar;
+                        continueCalling = false;
+                    }
                 }
                 else
                 {
-                    var continueCalling = true;
-                    while (continueCalling)
-                    {
-                        if (entityList.TotalItems > entityList.Data.Count)
-                        {
-                            // We still need to pull data
-
-                            // Getting next page's data
-                            query.PageNumber = query.PageNumber + 1;
-
-                            ar = ApiCallFactory.ObjectGetList<T>(pc, query.BuildQueryArguments());
-                            if (ar.HasException == false)
-                            {
-                                var objectlist = ParaEntityParser.FillList<T>(ar.XmlReceived);
-                                entityList.Data.AddRange(objectlist.Data);
-                                entityList.ResultsReturned = entityList.Data.Count;
-                                entityList.PageNumber = query.PageNumber;
-                            }
-                            else
-                            {
-                                // There is an error processing request
-                                entityList.ApiCallResponse = ar;
-                                continueCalling = false;
-                            }
-                        }
-                        else
-                        {
-                            // That is it, pulled all the items.
-                            continueCalling = false;
-                            entityList.ApiCallResponse = ar;
-                        }
-                    }
+                    // That is it, pulled all the items.
+                    continueCalling = false;
+                    entityList.ApiCallResponse = ar;
                 }
             }
 

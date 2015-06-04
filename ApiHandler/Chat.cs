@@ -59,76 +59,74 @@ namespace ParatureSDK.ApiHandler
             {
                 query = new ChatQuery();
             }
-            ApiCallResponse ar;
             var chatList = new ParaEntityList<ParaObjects.Chat>();
 
-            ar = ApiCallFactory.ObjectGetList<ParaObjects.Chat>(creds, query.BuildQueryArguments());
+            // Checking if the system needs to recursively call all of the data returned.
+            if (query.RetrieveAllRecords)
+            {
+                chatList = RetrieveAllEntitites(creds, query);
+            }
+            else
+            {
+                var ar = ApiCallFactory.ObjectGetList<ParaObjects.Chat>(creds, query.BuildQueryArguments());
+                if (ar.HasException == false)
+                {
+                    chatList = ParaEntityParser.FillList<ParaObjects.Chat>(ar.XmlReceived);
+                }
+                chatList.ApiCallResponse = ar;
+            }
+
+            if (includeTranscripts)
+            {
+                //Fetch transcripts for each chat. Each request is another API call...
+                foreach (var chat in chatList)
+                {
+                    chat.Transcript = GetTranscript(chat.Id, creds);
+                }
+            }
+ 
+            return chatList;
+        }
+
+        private static ParaEntityList<ParaObjects.Chat> RetrieveAllEntitites(ParaCredentials creds, ChatQuery query)
+        {
+            var chatList = new ParaEntityList<ParaObjects.Chat>();
+            var ar = ApiCallFactory.ObjectGetList<ParaObjects.Chat>(creds, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
                 chatList = ParaEntityParser.FillList<ParaObjects.Chat>(ar.XmlReceived);
             }
             chatList.ApiCallResponse = ar;
 
-            // Checking if the system needs to recursively call all of the data returned.
-            if (query.RetrieveAllRecords && !ar.HasException)
+            bool continueCalling = true;
+            while (continueCalling)
             {
-                // A flag variable to check if we need to make more calls
-                if (query.OptimizeCalls)
+                if (chatList.TotalItems > chatList.Data.Count)
                 {
-                    System.Threading.Thread t;
-                    ThreadPool.ObjectList instance = null;
-                    int callsRequired = (int) Math.Ceiling((double) (chatList.TotalItems/(double) chatList.PageSize));
-                    for (int i = 2; i <= callsRequired; i++)
-                    {
-                        query.PageNumber = i;
-                        //implement semaphore right here (in the thread pool instance to control the generation of threads
-                        instance = new ThreadPool.ObjectList(creds,
-                            query.BuildQueryArguments());
-                        t = new System.Threading.Thread(delegate() { instance.Go(chatList, includeTranscripts); });
-                        t.Start();
-                    }
+                    // We still need to pull data
 
-                    while (chatList.TotalItems > chatList.Data.Count)
-                    {
-                        Thread.Sleep(500);
-                    }
+                    // Getting next page's data
+                    query.PageNumber = query.PageNumber + 1;
 
-                    chatList.ResultsReturned = chatList.Data.Count;
-                    chatList.PageNumber = callsRequired;
+                    ar = ApiCallFactory.ObjectGetList<ParaObjects.Chat>(creds, query.BuildQueryArguments());
+                    if (ar.HasException == false)
+                    {
+                        chatList.Data.AddRange(ParaEntityParser.FillList<ParaObjects.Chat>(ar.XmlReceived).Data);
+                        chatList.ResultsReturned = chatList.Data.Count;
+                        chatList.PageNumber = query.PageNumber;
+                    }
+                    else
+                    {
+                        continueCalling = false;
+                        chatList.ApiCallResponse = ar;
+                        break;
+                    }
                 }
                 else
                 {
-                    bool continueCalling = true;
-                    while (continueCalling)
-                    {
-                        if (chatList.TotalItems > chatList.Data.Count)
-                        {
-                            // We still need to pull data
-
-                            // Getting next page's data
-                            query.PageNumber = query.PageNumber + 1;
-
-                            ar = ApiCallFactory.ObjectGetList<ParaObjects.Chat>(creds, query.BuildQueryArguments());
-                            if (ar.HasException == false)
-                            {
-                                chatList.Data.AddRange(ParaEntityParser.FillList<ParaObjects.Chat>(ar.XmlReceived).Data);
-                                chatList.ResultsReturned = chatList.Data.Count;
-                                chatList.PageNumber = query.PageNumber;
-                            }
-                            else
-                            {
-                                continueCalling = false;
-                                chatList.ApiCallResponse = ar;
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            // That is it, pulled all the items.
-                            continueCalling = false;
-                            chatList.ApiCallResponse = ar;
-                        }
-                    }
+                    // That is it, pulled all the items.
+                    continueCalling = false;
+                    chatList.ApiCallResponse = ar;
                 }
             }
 
