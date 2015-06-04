@@ -16,8 +16,6 @@ namespace ParatureSDK.ApiHandler
     /// </summary>
     public class Ticket : FirstLevelApiMethods<ParaObjects.Ticket, TicketQuery>
     {
-        private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Ticket;
-
         /// <summary>
         /// Returns a Ticket object with all of its details.
         /// </summary>
@@ -46,12 +44,12 @@ namespace ParatureSDK.ApiHandler
 
         internal static Attachment AddAttachment(ParaCredentials pc, Byte[] attachment, string contentType, string fileName)
         {
-            return ApiUtils.UploadFile(_module, pc, attachment, contentType, fileName);
+            return ApiUtils.UploadFile<ParaObjects.Ticket>(pc, attachment, contentType, fileName);
         }
         
         internal static Attachment AddAttachment(ParaCredentials pc, string text, string contentType, string fileName)
         {
-            return ApiUtils.UploadFile(_module, pc, text, contentType, fileName);
+            return ApiUtils.UploadFile<ParaObjects.Ticket>(pc, text, contentType, fileName);
         }
 
         /// <summary>
@@ -69,7 +67,7 @@ namespace ParatureSDK.ApiHandler
         /// <returns></returns>
         public static ApiCallResponse ActionRun(Int64 ticketId, Action action, ParaCredentials pc)
         {
-            var ar = ApiUtils.ActionRun(ticketId, action, pc, _module);
+            var ar = ApiUtils.ActionRun<ParaObjects.Ticket>(ticketId, action, pc);
             return ar;
         }
 

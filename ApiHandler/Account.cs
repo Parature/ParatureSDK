@@ -15,8 +15,6 @@ namespace ParatureSDK.ApiHandler
     /// </summary>
     public class Account : FirstLevelApiMethods<ParaObjects.Account, AccountQuery>
     {
-        private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Account;
-
         public class View : SecondLevelApiMethods<ParaObjects.View, ViewQuery, ParaObjects.Account>
         {
         }

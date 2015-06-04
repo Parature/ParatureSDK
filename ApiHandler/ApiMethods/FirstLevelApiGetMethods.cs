@@ -46,7 +46,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
 
         public static TEntity GetDetails(Int64 entityId, ParaCredentials pc, ArrayList queryStringParams)
         {
-            var entity = ApiUtils.ApiGetEntity<TEntity>(pc, EnumTypeParser.Module<TEntity>(), entityId,
+            var entity = ApiUtils.ApiGetEntity<TEntity>(pc, entityId,
                 queryStringParams);
 
             return entity;
@@ -57,7 +57,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// </summary>            
         public static ParaEntityList<TEntity> GetList(ParaCredentials pc)
         {
-            return ApiUtils.ApiGetEntityList<TEntity>(pc, EnumTypeParser.Module<TEntity>());
+            return ApiUtils.ApiGetEntityList<TEntity>(pc);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
                 query.IncludeCustomField(objschem.CustomFields);
             }
 
-            return ApiUtils.ApiGetEntityList<TEntity>(pc, EnumTypeParser.Module<TEntity>(), query);
+            return ApiUtils.ApiGetEntityList<TEntity>(pc, query);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         public static TEntity Schema(ParaCredentials pc)
         {
             var entity = new TEntity();
-            var ar = ApiCallFactory.ObjectGetSchema(pc, EnumTypeParser.Module<TEntity>());
+            var ar = ApiCallFactory.ObjectGetSchema<TEntity>(pc);
 
             if (ar.HasException == false)
             {
@@ -118,7 +118,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         {
             var entity = Schema(pc);
 
-            entity = (TEntity)ApiCallFactory.ObjectCheckCustomFieldTypes(pc, EnumTypeParser.Module<TEntity>(), entity);
+            entity = ApiCallFactory.ObjectCheckCustomFieldTypes<TEntity>(pc, entity);
 
             return entity;
         }

@@ -15,8 +15,6 @@ namespace ParatureSDK.ApiHandler
     /// </summary>
     public class Download : FirstLevelApiMethods<ParaObjects.Download, DownloadQuery>
     {
-        private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Download;
-
         /// <summary>
         /// Returns an entity object from an XML Document. No calls to the APIs are made when calling this method.
         /// </summary>
@@ -52,7 +50,7 @@ namespace ParatureSDK.ApiHandler
 
         public static ParaObjects.Download GetDetails(Int64 entityId, ParaCredentials pc, ArrayList queryStringParams)
         {
-            var entity = ApiUtils.ApiGetDownloadEntity(pc, _module, entityId, queryStringParams);
+            var entity = ApiUtils.ApiGetDownloadEntity(pc, entityId, queryStringParams);
 
             return entity;
         }
@@ -62,7 +60,7 @@ namespace ParatureSDK.ApiHandler
         /// </summary>            
         public static ParaEntityList<ParaObjects.Download> GetList(ParaCredentials pc)
         {
-            return ApiUtils.ApiGetDownloadEntityList(pc, _module);
+            return ApiUtils.ApiGetDownloadEntityList(pc);
         }
 
         /// <summary>
@@ -78,7 +76,7 @@ namespace ParatureSDK.ApiHandler
                 query.IncludeCustomField(objschem.CustomFields);
             }
 
-            return ApiUtils.ApiGetEntityList<ParaObjects.Download>(pc, _module, query);
+            return ApiUtils.ApiGetEntityList<ParaObjects.Download>(pc, query);
         }
 
         /// <summary>
@@ -96,19 +94,19 @@ namespace ParatureSDK.ApiHandler
             return accountsList;
         }
 
-        internal static Attachment DownloadUploadFile(ParaCredentials ParaCredentials, string text, string contentType, string FileName)
+        internal static Attachment DownloadUploadFile(ParaCredentials creds, string text, string contentType, string fileName)
         {
-            return ApiUtils.UploadFile(ParaEnums.ParatureModule.Download, ParaCredentials, text, contentType, FileName);
+            return ApiUtils.UploadFile<ParaObjects.Download>(creds, text, contentType, fileName);
         }
 
-        internal static Attachment DownloadUploadFile(ParaCredentials ParaCredentials, Byte[] Attachment, string contentType, string FileName)
+        internal static Attachment DownloadUploadFile(ParaCredentials creds, Byte[] attachment, string contentType, string fileName)
         {
-            return ApiUtils.UploadFile(ParaEnums.ParatureModule.Download, ParaCredentials, Attachment, contentType, FileName);
+            return ApiUtils.UploadFile<ParaObjects.Download>(creds, attachment, contentType, fileName);
         }
 
-        internal static Attachment DownloadUploadFile(ParaCredentials ParaCredentials, System.Net.Mail.Attachment Attachment)
+        internal static Attachment DownloadUploadFile(ParaCredentials creds, System.Net.Mail.Attachment attachment)
         {
-            return ApiUtils.UploadFile(ParaEnums.ParatureModule.Download, ParaCredentials, Attachment);
+            return ApiUtils.UploadFile<ParaObjects.Download>(creds, attachment);
         }
 
         /// <summary>

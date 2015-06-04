@@ -15,8 +15,6 @@ namespace ParatureSDK.ApiHandler
     /// </summary>
     public class Article : FirstLevelApiMethods<ParaObjects.Article, ArticleQuery>
     {
-        private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Article;
-
         /// <summary>
         /// Contains all the methods needed to work with the download module's folders.
         /// </summary>

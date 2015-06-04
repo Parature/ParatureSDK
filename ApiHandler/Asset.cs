@@ -15,8 +15,6 @@ namespace ParatureSDK.ApiHandler
     /// </summary>
     public class Asset : FirstLevelApiMethods<ParaObjects.Asset, AssetQuery>
     {
-        private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Asset;
-
         /// <summary>
         /// Runs an Asset action.
         /// </summary>
@@ -32,7 +30,7 @@ namespace ParatureSDK.ApiHandler
         /// <returns></returns>
         public static ApiCallResponse ActionRun(Int64 assetId, Action action, ParaCredentials creds)
         {
-            var ar = ApiUtils.ActionRun(assetId, action, creds, _module);
+            var ar = ApiUtils.ActionRun<ParaObjects.Asset>(assetId, action, creds);
             return ar;
         }
     }

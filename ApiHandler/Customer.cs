@@ -15,8 +15,6 @@ namespace ParatureSDK.ApiHandler
     /// </summary>
     public class Customer : FirstLevelApiMethods<ParaObjects.Customer, CustomerQuery>
     {
-        private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Customer;
-
         public class Role : SecondLevelApiMethods<ParaObjects.CustomerRole, RoleQuery, ParaObjects.Customer>
         {}
 

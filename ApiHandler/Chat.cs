@@ -15,8 +15,6 @@ namespace ParatureSDK.ApiHandler
     /// </summary>
     public class Chat : FirstLevelApiGetMethods<ParaObjects.Chat, ChatQuery>
     {
-        private static ParaEnums.ParatureModule _module = ParaEnums.ParatureModule.Chat;
-
         /// <summary>
         /// Returns a Chat object with all the properties of a chat.
         /// </summary>
@@ -64,7 +62,7 @@ namespace ParatureSDK.ApiHandler
             ApiCallResponse ar;
             var chatList = new ParaEntityList<ParaObjects.Chat>();
 
-            ar = ApiCallFactory.ObjectGetList(creds, ParaEnums.ParatureModule.Chat, query.BuildQueryArguments());
+            ar = ApiCallFactory.ObjectGetList<ParaObjects.Chat>(creds, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
                 chatList = ParaEntityParser.FillList<ParaObjects.Chat>(ar.XmlReceived);
@@ -84,7 +82,7 @@ namespace ParatureSDK.ApiHandler
                     {
                         query.PageNumber = i;
                         //implement semaphore right here (in the thread pool instance to control the generation of threads
-                        instance = new ThreadPool.ObjectList(creds, ParaEnums.ParatureModule.Customer,
+                        instance = new ThreadPool.ObjectList(creds,
                             query.BuildQueryArguments());
                         t = new System.Threading.Thread(delegate() { instance.Go(chatList, includeTranscripts); });
                         t.Start();
@@ -110,8 +108,7 @@ namespace ParatureSDK.ApiHandler
                             // Getting next page's data
                             query.PageNumber = query.PageNumber + 1;
 
-                            ar = ApiCallFactory.ObjectGetList(creds, ParaEnums.ParatureModule.Customer,
-                                query.BuildQueryArguments());
+                            ar = ApiCallFactory.ObjectGetList<ParaObjects.Chat>(creds, query.BuildQueryArguments());
                             if (ar.HasException == false)
                             {
                                 chatList.Data.AddRange(ParaEntityParser.FillList<ParaObjects.Chat>(ar.XmlReceived).Data);
@@ -143,7 +140,7 @@ namespace ParatureSDK.ApiHandler
             //Because chat transcripts return a Chat object with just a list messages, we'll deserialize the transcript into a chat object
             var chat = new ParaObjects.Chat();
 
-            var ar = ApiCallFactory.ObjectGetDetail(paraCredentials, ParaEnums.ParatureEntity.ChatTranscript, chatid);
+            var ar = ApiCallFactory.ChatTranscriptGetDetail(paraCredentials, chatid);
             if (ar.HasException == false)
             {
                 chat = ParaEntityParser.EntityFill<ParaObjects.Chat>(ar.XmlReceived);

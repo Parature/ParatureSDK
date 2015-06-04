@@ -13,7 +13,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         public static ApiCallResponse Insert<TEntity>(TEntity entity, ParaCredentials paraCredentials) where TEntity : ParaEntity, new()
         {
             var doc = XmlGenerator.GenerateXml(entity);
-            var ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, EnumTypeParser.Module<TEntity>(), doc, 0);
+            var ar = ApiCallFactory.ObjectCreateUpdate<TEntity>(paraCredentials, doc, 0);
             entity.Id = ar.Id;
             return ar;
         }
@@ -23,9 +23,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// </summary>
         public static ApiCallResponse Update<TEntity>(TEntity entity, ParaCredentials paraCredentials) where TEntity : ParaEntity, new()
         {
-            var ar = ApiCallFactory.ObjectCreateUpdate(paraCredentials, EnumTypeParser.Module<TEntity>(),
-                XmlGenerator.GenerateXml(entity),
-                entity.Id);
+            var ar = ApiCallFactory.ObjectCreateUpdate<TEntity>(paraCredentials, XmlGenerator.GenerateXml(entity), entity.Id);
             return ar;
         }
 
@@ -42,7 +40,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// </param>
         public static ApiCallResponse Delete(Int64 entityId, ParaCredentials pc, bool purge)
         {
-            return ApiCallFactory.ObjectDelete(pc, EnumTypeParser.Module<TEntity>(), entityId, purge);
+            return ApiCallFactory.ObjectDelete<TEntity>(pc, entityId, purge);
         }
 
         ///  <summary>
@@ -54,7 +52,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <param name="pc"></param>
         public static ApiCallResponse Delete(Int64 entityId, ParaCredentials pc)
         {
-            return ApiCallFactory.ObjectDelete(pc, EnumTypeParser.Module<TEntity>(), entityId, false);
+            return ApiCallFactory.ObjectDelete<TEntity>(pc, entityId, false);
         }
     }
 }

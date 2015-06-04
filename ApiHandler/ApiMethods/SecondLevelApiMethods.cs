@@ -8,7 +8,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
 {
     public abstract class SecondLevelApiMethods<TEntity, TQuery, TModule> 
         where TEntity : ParaEntityBaseProperties, new()
-        where TQuery : ParaQuery
+        where TQuery : ParaQuery, new()
         where TModule: ParaEntity
     {
         /// <summary>
@@ -24,7 +24,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <returns></returns>
         public static TEntity GetDetails(Int64 id, ParaCredentials creds)
         {
-            var entity = ApiUtils.ApiGetEntity<TEntity>(creds, EnumTypeParser.Entity<TEntity>(), id);
+            var entity = ApiUtils.ApiGetEntity<TEntity>(creds, id);
             return entity;
         }
 
@@ -64,12 +64,12 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <returns></returns>
         public static ParaEntityList<TEntity> GetList(ParaCredentials creds, TQuery query)
         {
-            return ApiUtils.ApiGetEntityList<TEntity>(creds, query, EnumTypeParser.Module<TModule>(), EnumTypeParser.Entity<TEntity>());
+            return ApiUtils.ApiGetEntityList<TModule, TEntity>(creds, query);
         }
 
         public static ParaEntityList<TEntity> GetList(ParaCredentials creds)
         {
-            return ApiUtils.ApiGetEntityList<TEntity>(creds, new ViewQuery(), EnumTypeParser.Module<TModule>(), EnumTypeParser.Entity<TEntity>());
+            return ApiUtils.ApiGetEntityList<TModule, TEntity>(creds, new TQuery());
         }
     }
 }

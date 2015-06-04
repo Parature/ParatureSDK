@@ -19,22 +19,22 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Internal Method to run an Action, independently from the module.
         /// </summary>
-        public static ApiCallResponse ActionRun(Int64 objectId, Action action, ParaCredentials pc,
-            ParaEnums.ParatureModule module)
+        public static ApiCallResponse ActionRun<TEntity>(Int64 objectId, Action action, ParaCredentials pc)
+            where TEntity : ParaEntity
         {
-            var doc = XmlGenerator.GenerateXml(action, module);
-            var ar = ApiCallFactory.ObjectCreateUpdate(pc, module, doc, objectId);
+            var doc = XmlGenerator.GenerateActionXml<TEntity>(action);
+            var ar = ApiCallFactory.ObjectCreateUpdate<TEntity>(pc, doc, objectId);
             return ar;
         }
 
-        public static Attachment UploadFile(ParaEnums.ParatureModule module, ParaCredentials pc,
-            System.Net.Mail.Attachment attachment)
+        public static Attachment UploadFile<TEntity>(ParaCredentials pc, System.Net.Mail.Attachment attachment)
+            where TEntity : ParaEntity
         {
-            var postUrlR = ApiCallFactory.FileUploadGetUrl(pc, module);
+            var postUrlR = ApiCallFactory.FileUploadGetUrl<TEntity>(pc);
             var uploadUrlDoc = postUrlR.XmlReceived;
             var postUrl = AttachmentGetUrlToPost(uploadUrlDoc);
 
-            var upresp = ApiCallFactory.FilePerformUpload(postUrl, attachment, pc.Instanceid, pc);
+            var upresp = ApiCallFactory.FilePerformUpload(postUrl, attachment);
 
             var attaDoc = upresp.XmlReceived;
 
@@ -45,28 +45,28 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Internal method to handle the upload of a file to Parature.
         /// </summary>
-        public static Attachment UploadFile(ParaEnums.ParatureModule module, ParaCredentials pc, string text,
-            string contentType, string fileName)
+        public static Attachment UploadFile<TEntity>(ParaCredentials pc, string text,
+            string contentType, string fileName) where TEntity : ParaEntity
         {
             var encoding = new ASCIIEncoding();
             var bytes = encoding.GetBytes(text);
-            return UploadFile(module, pc, bytes, contentType, fileName);
+            return UploadFile<TEntity>(pc, bytes, contentType, fileName);
         }
 
         /// <summary>
         /// Internal method to handle the upload of a file to Parature.
         /// </summary>
-        public static Attachment UploadFile(ParaEnums.ParatureModule module, ParaCredentials pc, Byte[] attachment,
-            String contentType, String fileName)
+        public static Attachment UploadFile<TEntity>(ParaCredentials pc, Byte[] attachment,
+            String contentType, String fileName) where TEntity : ParaEntity
         {
             Attachment attach;
             var postUrl = "";
-            postUrl = AttachmentGetUrlToPost(ApiCallFactory.FileUploadGetUrl(pc, module).XmlReceived);
+            postUrl = AttachmentGetUrlToPost(ApiCallFactory.FileUploadGetUrl<TEntity>(pc).XmlReceived);
 
             if (String.IsNullOrEmpty(postUrl) == false)
             {
                 var attaDoc =
-                    ApiCallFactory.FilePerformUpload(postUrl, attachment, contentType, fileName, pc.Instanceid, pc)
+                    ApiCallFactory.FilePerformUpload(postUrl, attachment, contentType, fileName)
                         .XmlReceived;
                 attach = ParaEntityParser.EntityFill<Attachment>(attaDoc);
             }
@@ -105,11 +105,13 @@ namespace ParatureSDK.ApiHandler
         /// <param name="module"></param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        internal static ParaEntityList<T> ApiGetEntityList<T>(ParaCredentials creds, ParaQuery query,
-            ParaEnums.ParatureModule module, ParaEnums.ParatureEntity entity)
+        internal static ParaEntityList<TEntity> ApiGetEntityList<TModule, TEntity>(ParaCredentials creds,
+            ParaQuery query)
+            where TModule : ParaEntity
+            where TEntity : ParaEntityBaseProperties
         {
-            var rolesList = new ParaEntityList<T>();
-            var ar = ApiCallFactory.ObjectSecondLevelGetList(creds, module, entity, query.BuildQueryArguments());
+            var rolesList = new ParaEntityList<TEntity>();
+            var ar = ApiCallFactory.ObjectSecondLevelGetList<TModule, TEntity>(creds, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
                 //...Customer/status is sending "entities" not "Entities", which breaks the parser. Unwind and fix the XML
@@ -121,7 +123,7 @@ namespace ParatureSDK.ApiHandler
                     ar.XmlReceived = ParseXmlDoc(xmlStr);
                 }
 
-                rolesList = ParaEntityParser.FillList<T>(ar.XmlReceived);
+                rolesList = ParaEntityParser.FillList<TEntity>(ar.XmlReceived);
             }
             rolesList.ApiCallResponse = ar;
 
@@ -137,9 +139,10 @@ namespace ParatureSDK.ApiHandler
                         // Getting next page's data
                         query.PageNumber = query.PageNumber + 1;
 
-                        ar = ApiCallFactory.ObjectSecondLevelGetList(creds, module, entity, query.BuildQueryArguments());
+                        ar = ApiCallFactory.ObjectSecondLevelGetList<TModule, TEntity>(creds,
+                            query.BuildQueryArguments());
 
-                        var objectlist = ParaEntityParser.FillList<T>(ar.XmlReceived);
+                        var objectlist = ParaEntityParser.FillList<TEntity>(ar.XmlReceived);
 
                         if (objectlist.Data.Count == 0)
                         {
@@ -162,26 +165,10 @@ namespace ParatureSDK.ApiHandler
             return rolesList;
         }
 
-        internal static T ApiGetEntity<T>(ParaCredentials pc, ParaEnums.ParatureEntity entityType, long entityId)
-            where T : ParaEntityBaseProperties, new()
-        {
-            var role = new T();
-            var ar = ApiCallFactory.ObjectGetDetail(pc, entityType, entityId);
-            if (ar.HasException == false)
-            {
-                role = ParaEntityParser.EntityFill<T>(ar.XmlReceived);
-            }
-            else
-            {
-                role.Id = 0;
-            }
-            return role;
-        }
-
-        internal static ParaEntityList<T> ApiGetEntityList<T>(ParaCredentials pc, ParaEnums.ParatureModule module)
+        internal static ParaEntityList<T> ApiGetEntityList<T>(ParaCredentials pc)
         {
             var entityList = new ParaEntityList<T>();
-            var ar = ApiCallFactory.ObjectGetList(pc, module, new ArrayList());
+            var ar = ApiCallFactory.ObjectGetList<T>(pc, new ArrayList());
             if (ar.HasException == false)
             {
                 entityList = ParaEntityParser.FillList<T>(ar.XmlReceived);
@@ -192,10 +179,10 @@ namespace ParatureSDK.ApiHandler
         }
 
 
-        internal static ParaEntityList<ParaObjects.Download> ApiGetDownloadEntityList(ParaCredentials pc, ParaEnums.ParatureModule module)
+        internal static ParaEntityList<ParaObjects.Download> ApiGetDownloadEntityList(ParaCredentials pc)
         {
             var entityList = new ParaEntityList<ParaObjects.Download>();
-            var ar = ApiCallFactory.ObjectGetList(pc, module, new ArrayList());
+            var ar = ApiCallFactory.ObjectGetList<ParaObjects.Download>(pc, new ArrayList());
             if (ar.HasException == false)
             {
                 entityList = ParaEntityParser.FillListDownload(ar.XmlReceived);
@@ -208,13 +195,13 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Fills a main module's list object.
         /// </summary>
-        internal static ParaEntityList<T> ApiGetEntityList<T>(ParaCredentials pc, ParaEnums.ParatureModule module,
-            ParaEntityQuery query) where T : ParaEntity, new()
+        internal static ParaEntityList<T> ApiGetEntityList<T>(ParaCredentials pc, ParaEntityQuery query)
+            where T : ParaEntity, new()
         {
             ApiCallResponse ar;
             var entityList = new ParaEntityList<T>();
 
-            ar = ApiCallFactory.ObjectGetList(pc, module, query.BuildQueryArguments());
+            ar = ApiCallFactory.ObjectGetList<T>(pc, query.BuildQueryArguments());
             if (ar.HasException == false)
             {
                 entityList = ParaEntityParser.FillList<T>(ar.XmlReceived);
@@ -233,7 +220,7 @@ namespace ParatureSDK.ApiHandler
                     {
                         query.PageNumber = i;
                         //implement semaphore right here (in the thread pool instance to control the generation of threads
-                        var instance = new ThreadPool.ObjectList(pc, module, query.BuildQueryArguments());
+                        var instance = new ThreadPool.ObjectList(pc, query.BuildQueryArguments());
                         var t = new Thread(() => instance.Go(entityList));
                         t.Start();
                     }
@@ -258,7 +245,7 @@ namespace ParatureSDK.ApiHandler
                             // Getting next page's data
                             query.PageNumber = query.PageNumber + 1;
 
-                            ar = ApiCallFactory.ObjectGetList(pc, module, query.BuildQueryArguments());
+                            ar = ApiCallFactory.ObjectGetList<T>(pc, query.BuildQueryArguments());
                             if (ar.HasException == false)
                             {
                                 var objectlist = ParaEntityParser.FillList<T>(ar.XmlReceived);
@@ -291,14 +278,13 @@ namespace ParatureSDK.ApiHandler
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="pc"></param>
-        /// <param name="module"></param>
         /// <param name="entityId"></param>
         /// <returns></returns>
-        internal static T ApiGetEntity<T>(ParaCredentials pc, ParaEnums.ParatureModule module, long entityId)
-            where T : ParaEntity, new()
+        internal static T ApiGetEntity<T>(ParaCredentials pc, long entityId)
+            where T : ParaEntityBaseProperties, new()
         {
             var entity = new T();
-            var req = ApiCallFactory.ObjectGetDetail<T>(pc, module, entityId);
+            var req = ApiCallFactory.ObjectGetDetail<T>(pc, entityId);
             if (req.HasException == false)
             {
                 entity = ParaEntityParser.EntityFill<T>(req.XmlReceived);
@@ -319,14 +305,12 @@ namespace ParatureSDK.ApiHandler
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="pc"></param>
-        /// <param name="module"></param>
         /// <param name="entityId"></param>
         /// <returns></returns>
-        internal static T ApiGetEntity<T>(ParaCredentials pc, ParaEnums.ParatureModule module, long entityId,
-            ArrayList arl) where T : ParaEntity, new()
+        internal static T ApiGetEntity<T>(ParaCredentials pc, long entityId, ArrayList arl) where T : ParaEntity, new()
         {
             var entity = new T();
-            var req = ApiCallFactory.ObjectGetDetail<T>(pc, module, entityId, arl);
+            var req = ApiCallFactory.ObjectGetDetail<T>(pc, entityId, arl);
             if (req.HasException == false)
             {
                 entity = ParaEntityParser.EntityFill<T>(req.XmlReceived);
@@ -347,14 +331,13 @@ namespace ParatureSDK.ApiHandler
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="pc"></param>
-        /// <param name="module"></param>
         /// <param name="entityId"></param>
         /// <returns></returns>
-        internal static ParaObjects.Download ApiGetDownloadEntity(ParaCredentials pc, ParaEnums.ParatureModule module, long entityId,
+        internal static ParaObjects.Download ApiGetDownloadEntity(ParaCredentials pc, long entityId,
             ArrayList arl)
         {
             var entity = new ParaObjects.Download();
-            var req = ApiCallFactory.ObjectGetDetail<ParaObjects.Download>(pc, module, entityId, arl);
+            var req = ApiCallFactory.ObjectGetDetail<ParaObjects.Download>(pc, entityId, arl);
             if (req.HasException == false)
             {
                 entity = ParaEntityParser.EntityFillDownload(req.XmlReceived);
@@ -378,7 +361,7 @@ namespace ParatureSDK.ApiHandler
             return xml;
         }
 
-        static internal string AttachmentGetUrlToPost(XmlDocument doc)
+        internal static string AttachmentGetUrlToPost(XmlDocument doc)
         {
             if (doc != null && doc.DocumentElement.HasAttribute("href"))
             {

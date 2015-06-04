@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using ParatureSDK.ParaObjects;
 
 namespace ParatureSDK
 {
@@ -8,8 +9,7 @@ namespace ParatureSDK
         /// <summary>
         /// Build the API URL to call, Add a simple customString to be appended at the end of the call. Used for special instances, like requesting an upload URL.
         /// </summary>
-        internal static string ApiObjectCustomUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module,
-            string customstring)
+        internal static string ApiObjectCustomUrl<TEntity>(ParaCredentials paracredentials, string customstring)
         {
             if (string.IsNullOrEmpty(customstring))
             {
@@ -20,15 +20,16 @@ namespace ParatureSDK
                 customstring = "/" + customstring;
             }
 
-            string apiCallUrl = ApiBuildBasicUrl(paracredentials) + module + customstring + "?" +
+            string apiCallUrl = ApiBuildBasicUrl(paracredentials) + typeof(TEntity).Name + customstring + "?" +
                                 ApiToken(paracredentials);
             return apiCallUrl;
         }
 
-        internal static string ApiObjectCustomUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module,
-            ParaEnums.ParatureEntity entity, ArrayList arguments)
+        internal static string ApiObjectCustomUrl<TModule, TEntity>(ParaCredentials paracredentials, ArrayList arguments) 
+            where TModule: ParaEntity
+            where TEntity: ParaEntityBaseProperties
         {
-            var apiCallUrl = ApiBuildBasicUrl(paracredentials) + module + "/" + entity + "?" + ApiToken(paracredentials);
+            var apiCallUrl = ApiBuildBasicUrl(paracredentials) + typeof(TModule).Name + "/" + typeof(TEntity).Name.ToLower() + "?" + ApiToken(paracredentials);
             if (arguments.Count > 0)
             {
                 for (int i = 0; i <= arguments.Count - 1; i++)
@@ -65,78 +66,13 @@ namespace ParatureSDK
             return apiCallUrl;
         }
 
-        /// <summary>
-        /// Build the API URL to call. Since a simple read (without any further options) is the same as an update, as well as a delete, this method will generate that same link for these operations. Also, indicates whether you are requesting a schema a link, or an actual operation link
-        /// </summary>
-        internal static string ApiObjectUrl(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity,
-            Int64 objectId, bool isSchema)
+        internal static string ApiChatTranscriptUrl(ParaCredentials creds, Int64 chatId)
         {
-            string customstring;
-            string entityName = entity.ToString();
-            if (isSchema == true)
-            {
-                customstring = "/schema";
-            }
-            else
-            {
-                if (objectId == 0)
-                {
-                    customstring = "";
-                }
-                else
-                {
-                    if (entity != ParaEnums.ParatureEntity.ChatTranscript)
-                    {
-                        customstring = "/" + objectId;
-                    }
-                    else
-                    {
-                        entityName = "Chat";
-                        customstring = string.Format("/{0}/transcript", objectId);
-                    }
-                }
-            }
-            var apiCallUrl = ApiBuildBasicUrl(paracredentials) + entityName + customstring + "?" +
-                             ApiToken(paracredentials);
-            return apiCallUrl;
-        }
+            var entityName = "Chat";
+            var customstring = string.Format("/{0}/transcript", chatId);
 
-        /// <summary>
-        /// Build the API URL to call. Since a simple read (without any further options) is the same as an update, as well as a delete, this method will generate that same link for these operations. Also, indicates whether you are requesting a schema a link, or an actual operation link
-        /// </summary>
-        internal static string ApiObjectUrl(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity,
-            Int64 objectId, ArrayList arguments)
-        {
-            var apiCallUrl = ApiObjectUrl(paracredentials, entity, objectId, false);
-            if (arguments.Count > 0)
-            {
-                for (int i = 0; i <= arguments.Count - 1; i++)
-                {
-                    apiCallUrl = apiCallUrl + "&" + arguments[i];
-                }
-            }
-
-
-            return apiCallUrl;
-        }
-
-        /// <summary>
-        /// Build the API URL to call. Since a simple read (without any further options) is the same as an update, as well as a delete, this method will generate that same link for these operations. This methods accepts a list of extra arguments to pass to the API url through the query string.
-        /// </summary>
-        internal static string ApiObjectUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module,
-            Int64 objectId, ArrayList arguments)
-        {
-            var apiCallUrl = ApiObjectUrl(paracredentials, module.ToString(), objectId, false);
-            if (arguments != null)
-            {
-                if (arguments.Count > 0)
-                {
-                    for (var i = 0; i <= arguments.Count - 1; i++)
-                    {
-                        apiCallUrl = apiCallUrl + "&" + arguments[i];
-                    }
-                }
-            }
+            var apiCallUrl = ApiBuildBasicUrl(creds) + entityName + customstring + "?" +
+                             ApiToken(creds);
             return apiCallUrl;
         }
 

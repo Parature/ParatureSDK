@@ -18,87 +18,10 @@ namespace ParatureSDK
     /// </summary>    
     static internal class ApiCallFactory
     {
-        /// <summary>
-        /// This method will create/update an Object in Parature.
-        /// </summary>
-        /// <param name="paracredentials">
-        ///The credentials to be used for making the API call. 
-        ///Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
-        ///</param>
-        /// <param name="module">
-        ///The name of the module to create or update. Choose from the ParatureModule enum list. 
-        ///Value Type: <see cref="ParaEnums.ParatureModule" />   (ParatureModule)
-        ///</param>
-        /// <param name="objectid">
-        ///Provides the ID of the object being inserted or updated. 
-        ///Value Type: <see cref="Int64" />   (System.Int64)
-        ///</param>
-        /// <param name="fileToPost">
-        ///When creating or updating an object, you will need to pass the properly formatted XML document to be sent to the server.
-        ///Value Type: <see cref="String" />   (System.String)
-        ///</param>
-        public static ApiCallResponse ObjectCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureModule module, XmlDocument fileToPost, Int64 objectid)
-        {
-            // Calling the next method that manages the call.
-            return ObjectCreateUpdate(paracredentials, module, fileToPost, objectid, null);
-        }
-
         public static ApiCallResponse ObjectCreateUpdate<T>(ParaCredentials paracredentials, XmlDocument fileToPost, Int64 objectid)
         {
             // Calling the next method that manages the call.
             return ObjectCreateUpdate<T>(paracredentials, fileToPost, objectid, null);
-        }
-
-        ///  <summary>
-        ///  This method will create/update an Object in Parature.
-        ///  </summary>
-        ///  <param name="paracredentials">
-        /// The credentials to be used for making the API call. 
-        /// Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
-        /// </param>
-        ///  <param name="module">
-        /// The name of the module to create or update. Choose from the ParatureModule enum list. 
-        /// Value Type: <see cref="ParaEnums.ParatureModule" />   (ParatureModule)
-        /// </param>
-        ///  <param name="fileToPost">
-        /// When creating or updating an object, you will need to pass the properly formatted XML document to be sent to the server.
-        /// Value Type: <see cref="String" />   (System.String)
-        ///  </param>
-        ///  <param name="objectid">
-        /// Provides the ID of the object being inserted or updated. 
-        /// Value Type: <see cref="Int64" />   (System.Int64)
-        /// </param>
-        /// <param name="arguments"></param>
-        public static ApiCallResponse ObjectCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureModule module, XmlDocument fileToPost, Int64 objectid, ArrayList arguments)
-        {
-            if (arguments == null)
-            {
-                arguments = new ArrayList();
-            }
-            switch (module)
-            {
-                case ParaEnums.ParatureModule.Ticket:
-                case ParaEnums.ParatureModule.Account:
-                case ParaEnums.ParatureModule.Customer:
-                case ParaEnums.ParatureModule.Product:
-                case ParaEnums.ParatureModule.Asset:
-                    if (paracredentials.EnforceRequiredFields == false)
-                    {
-                        arguments.Add("_enforceRequiredFields_=" + paracredentials.EnforceRequiredFields.ToString().ToLower());
-                    }
-                    break;
-            }
-            // Getting the standard API URL to call.
-            var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, module, objectid, arguments);
-
-            // To set up the call method, we check if this is a create (the objectid=0 in that case)
-            // or an update (when we received an objectid>0)
-            var apicallhttpmethod = (objectid == 0) 
-                ? ParaEnums.ApiCallHttpMethod.Post 
-                : ParaEnums.ApiCallHttpMethod.Update;
-
-            // Calling the next method that manages the call.
-            return ApiMakeTheCall(apiCallUrl, apicallhttpmethod, fileToPost);
         }
 
         public static ApiCallResponse ObjectCreateUpdate<T>(ParaCredentials paracredentials, XmlDocument fileToPost, Int64 objectid, ArrayList arguments)
@@ -134,74 +57,6 @@ namespace ParatureSDK
             return ApiMakeTheCall(apiCallUrl, apicallhttpmethod, fileToPost);
         }
 
-        ///  <summary>
-        ///  This method will create/update an Object in Parature.
-        ///  </summary>
-        ///  <param name="paracredentials">
-        /// The credentials to be used for making the API call. 
-        /// Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
-        /// </param>
-        /// <param name="objectid">
-        /// Provides the ID of the object being inserted or updated. 
-        /// Value Type: <see cref="Int64" />   (System.Int64)
-        /// </param>
-        /// <param name="entity"></param>
-        /// <param name="fileToPost">
-        /// When creating or updating an object, you will need to pass the properly formatted XML document to be sent to the server.
-        /// Value Type: <see cref="String" />   (System.String)
-        /// </param>
-        public static ApiCallResponse EntityCreateUpdate(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, XmlDocument fileToPost, Int64 objectid)
-        {
-            // Getting the standard API URL to call.
-            var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entity, objectid, false);
-
-            // To set up the call method, we check if this is a create (the objectid=0 in that case)
-            // or an update (when we received an objectid>0)
-            var apicallhttpmethod = (objectid == 0) 
-                ? ParaEnums.ApiCallHttpMethod.Post 
-                : ParaEnums.ApiCallHttpMethod.Update;
-
-            // Calling the next method that manages the call.
-            return ApiMakeTheCall(apiCallUrl, apicallhttpmethod, fileToPost);
-        }
-
-        /// <summary>
-        /// Use this method to delete the object passed to it.
-        /// </summary>
-        /// <param name="paracredentials">
-        ///The credentials to be used for making the API call. 
-        ///Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
-        ///</param>
-        /// <param name="module">
-        ///The name of the module to create or update. Choose from the ParatureModule enum list. 
-        ///Value Type: <see cref="ParaEnums.ParatureModule" />   (Paraenums.ParatureModule)
-        ///</param>
-        /// <param name="objectid">
-        ///The id of the object to create or update. 
-        ///Value Type: <see cref="Int64" />   (System.int64)
-        ///</param>
-        /// <param name="purge">
-        ///Indicates whether this a Purge (permanent deletion), or just a deletion (move to trash bin). Indicate TRUE for a purge, FALSE for a delete
-        ///Value Type: <see cref="bool" />   (System.bool)
-        ///</param>
-        public static ApiCallResponse ObjectDelete(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid, bool purge)
-        {
-            string apiCallUrl;
-
-            if (purge)
-            {
-                var arguments = new ArrayList {"_purge_=true"};
-                apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, module, objectid, arguments);
-            }
-            else
-            {
-                apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, module.ToString(), objectid, false);
-            }
-
-
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete);
-        }
-
         public static ApiCallResponse ObjectDelete<T>(ParaCredentials paracredentials, Int64 objectid, bool purge)
         {
             var entityType = typeof (T).ToString();
@@ -221,72 +76,40 @@ namespace ParatureSDK
             return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete);
         }
 
-        /// <summary>
-        /// Use this method to delete the entity passed to it.
-        /// </summary>
-        /// <param name="paracredentials">
-        ///The credentials to be used for making the API call. 
-        ///Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
-        ///</param>
-        /// <param name="entity">
-        ///The name of the entity to delete. Choose from the ParatureEntity enum list. 
-        ///Value Type: <see cref="ParaEnums.ParatureEntity" />   (Paraenums.ParatureEntity)
+        ///  <summary>
+        ///  Use this method to get the details of an object that you plan to fill.
+        ///  </summary>
+        ///  <param name="paracredentials">
+        /// The credentials to be used for making the API call. 
+        /// Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
         /// </param>
-        /// <param name="entityid">
-        ///The id of the entity to delete. 
-        ///Value Type: <see cref="Int64" />   (System.int64)
+        /// <param name="objectid">
+        /// The id of the object to create or update. 
+        /// Value Type: <see cref="Int64" />   (System.int64)
         /// </param>
-        public static ApiCallResponse EntityDelete(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, Int64 entityid)
+        public static ApiCallResponse ObjectGetDetail<T>(ParaCredentials paracredentials, Int64 objectid) where T: ParaEntityBaseProperties
         {
-            var arguments = new ArrayList {"_purge_=true"};
-            var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entity, entityid, arguments);
-
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete);
+            return ObjectGetDetail<T>(paracredentials, objectid, new ArrayList());
         }
 
-        /// <summary>
-        /// Use this method to get the details of an object that you plan to fill.
-        /// </summary>
-        /// <param name="paracredentials">
-        ///The credentials to be used for making the API call. 
-        ///Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
-        ///</param>
-        /// <param name="module">
-        ///The name of the module to create or update. Choose from the ParatureModule enum list. 
-        ///Value Type: <see cref="ParaEnums.ParatureModule" />   (Paraenums.ParatureModule)
-        ///</param>
+        ///  <summary>
+        ///  Use this method to get the details of an object that you plan to fill.
+        ///  </summary>
+        ///  <param name="paracredentials">
+        /// The credentials to be used for making the API call. 
+        /// Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
+        /// </param>
         /// <param name="objectid">
-        ///The id of the object to create or update. 
-        ///Value Type: <see cref="Int64" />   (System.int64)
-        ///</param>
-        public static ApiCallResponse ObjectGetDetail<T>(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid) where T: ParaEntity
-        {
-            return ObjectGetDetail<T>(paracredentials, module, objectid, new ArrayList());
-        }
-
-        /// <summary>
-        /// Use this method to get the details of an object that you plan to fill.
-        /// </summary>
-        /// <param name="paracredentials">
-        ///The credentials to be used for making the API call. 
-        ///Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
-        ///</param>
-        /// <param name="module">
-        ///The name of the module to create or update. Choose from the ParatureModule enum list. 
-        ///Value Type: <see cref="ParaEnums.ParatureModule" />   (Paraenums.ParatureModule)
-        ///</param>
-        /// <param name="objectid">
-        ///The id of the object to create or update. 
-        ///Value Type: <see cref="Int64" />   (System.int64)
-        ///</param>
-        public static ApiCallResponse ObjectGetDetail<T>(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid, ArrayList arguments) where T : ParaEntity
+        /// The id of the object to create or update. 
+        /// Value Type: <see cref="Int64" />   (System.int64)
+        /// </param>
+        public static ApiCallResponse ObjectGetDetail<T>(ParaCredentials paracredentials, Int64 objectid, ArrayList arguments) where T : ParaEntityBaseProperties
         {
             var entityName = typeof(T).Name;
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityName, objectid, arguments);
 
             return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
-
 
         ///  <summary>
         ///  Use this method to get the details of an Entity that you plan to fill.
@@ -295,65 +118,14 @@ namespace ParatureSDK
         /// The credentials to be used for making the API call. 
         /// Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
         /// </param>
-        ///  <param name="module">
-        /// The name of the entity to create or update. Choose from the ParatureEntity enum list. 
-        /// Value Type: <see cref="ParaEnums.ParatureEntity" />   (Paraenums.ParatureEntity)
-        /// </param>
-        /// <param name="entity"></param>
         /// <param name="objectid">
         /// The id of the object to create or update. 
         /// Value Type: <see cref="Int64" />   (System.int64)
         /// </param>
-        public static ApiCallResponse ObjectGetDetail(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, Int64 objectid)
+        public static ApiCallResponse ChatTranscriptGetDetail(ParaCredentials paracredentials, Int64 objectid)
         {
-            var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entity, objectid, false);
+            var apiCallUrl = ApiUrlBuilder.ApiChatTranscriptUrl(paracredentials, objectid);
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
-        }
-
-        /// <summary>
-        /// Use this method to get the details of an object that you plan to fill.
-        /// </summary>
-        /// <param name="paracredentials">
-        ///The credentials to be used for making the API call. 
-        ///Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
-        ///</param>
-        /// <param name="module">
-        ///The name of the module to create or update. Choose from the ParatureModule enum list. 
-        ///Value Type: <see cref="ParaEnums.ParatureModule" />   (ParatureModule)
-        ///</param>
-        /// <param name="objectid">
-        ///The id of the object to create or update. 
-        ///Value Type: <see cref="Int64" />   (System.int64)
-        ///</param>
-        /// <param name="arguments">
-        ///The list of extra optional arguments you need to include in the call. For example, for a ticket, we might want to get the action history.
-        ///Value Type: <see cref="ArrayList" />   (System.String[])
-        ///</param>
-        public static ApiCallResponse ObjectGetDetail(ParaCredentials paracredentials, ParaEnums.ParatureModule module, Int64 objectid, ArrayList arguments)
-        {
-            var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, module, objectid, arguments);
-
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
-        }
-
-        /// <summary>
-        /// Use this method to get a list of objects that you plan to fill.
-        /// </summary>
-        /// <param name="paracredentials">
-        ///The credentials to be used for making the API call. 
-        ///Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
-        ///</param>
-        /// <param name="module">
-        ///The name of the module to create or update. Choose from the ParatureModule enum list. 
-        ///</param>
-        /// <param name="arguments">
-        ///The list of extra optional arguments you need to include in the call. For example, any fields filtering, any custom fields to include, etc.
-        ///Value Type: <see cref="ArrayList" />   
-        ///</param>
-        public static ApiCallResponse ObjectGetList(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ArrayList arguments)
-        {
-            var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, module, 0, arguments);
             return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
 
@@ -378,185 +150,23 @@ namespace ParatureSDK
             return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
 
-        /// <summary>
-        /// Use this method to get a list of objects that you plan to fill.
-        /// </summary>
-        /// <param name="paracredentials">
-        ///The credentials to be used for making the API call. 
-        ///Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
-        ///</param>
-        /// <param name="entity">
-        ///The name of the entity to list. Choose from the ParatureEntity enum list. 
-        ///</param>      
-        public static ApiCallResponse ObjectGetList(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity, ArrayList arguments)
+        public static ApiCallResponse ObjectSecondLevelGetList<TModule, TEntity>(ParaCredentials paracredentials, ArrayList arguments)
+            where TModule: ParaEntity
+            where TEntity: ParaEntityBaseProperties
         {
-            var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entity, 0, arguments);
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
-        }
-
-
-        public static ApiCallResponse ObjectSecondLevelGetList(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ParaEnums.ParatureEntity entity, ArrayList arguments)
-        {
-            var apiCallUrl = ApiUrlBuilder.ApiObjectCustomUrl(paracredentials, module, entity, arguments);
+            var apiCallUrl = ApiUrlBuilder.ApiObjectCustomUrl<TModule, TEntity>(paracredentials, arguments);
             return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
         }
 
         /// <summary>
         /// Use this method to get the Schema XML of an object.
         /// </summary>
-        public static ApiCallResponse ObjectGetSchema(ParaCredentials paracredentials, ParaEnums.ParatureModule module)
-        {
-            var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, module.ToString(), 0, true);
-
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
-        }
-
-        /// <summary>
-        /// Use this method to get the Schema XML of an object.
-        /// </summary>
-        public static ApiCallResponse ObjectGetSchema<T>(ParaCredentials paracredentials, ParaEnums.ParatureModule module)
+        public static ApiCallResponse ObjectGetSchema<T>(ParaCredentials paracredentials)
         {
             var entityType = typeof (T).ToString();
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityType, 0, true);
 
             return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
-        }
-
-        /// <summary>
-        /// Use this method to determine if any custom fields have custom validation
-        /// </summary>
-        public static ParaEntity ObjectCheckCustomFieldTypes(ParaCredentials paracredentials, ParaEnums.ParatureModule module, ParaEntity baseObject)
-        {
-            string ApiCallUrl;
-            paracredentials.EnforceRequiredFields = false;
-            ApiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, module.ToString(), 0, true);
-
-            if (baseObject.CustomFields != null)
-            {
-                foreach (CustomField cf in baseObject.CustomFields)
-                {
-                    if (cf.FieldType == "string")
-                    {
-                        cf.Value = "a";
-                    }
-                }
-            }
-
-            var doc = new XmlDocument();
-            switch (module)
-            {
-                case ParaEnums.ParatureModule.Account:
-                    doc = XmlGenerator.GenerateXml((Account)baseObject);
-                    break;
-                case ParaEnums.ParatureModule.Customer:
-                    doc = XmlGenerator.GenerateXml((Customer)baseObject);
-                    break;
-                case ParaEnums.ParatureModule.Product:
-                    doc = XmlGenerator.GenerateXml((Product)baseObject);
-                    break;
-                case ParaEnums.ParatureModule.Asset:
-                    doc = XmlGenerator.GenerateXml((Asset)baseObject);
-                    break;
-                case ParaEnums.ParatureModule.Ticket:
-                    doc = XmlGenerator.GenerateXml((Ticket)baseObject);
-                    break;
-                default:
-                    break;
-            }
-
-            ApiCallResponse ar = ApiMakeTheCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Post, doc);
-
-            if (ar.HasException)
-            {
-                string errors = ar.ExceptionDetails;
-
-                string[] errorLines = errors.Split(';');
-
-                foreach (string line in errorLines)
-                {
-
-                    //added below line, since the validation message is changed for the API call
-                    string tempLine = line.Contains("Short Name") ? line.Remove(line.IndexOf(", Short Name"), line.IndexOf("]") - line.IndexOf(", Short Name")) : line;
-
-                    tempLine = tempLine.ToLower().Trim();
-
-
-                    string id = null;
-
-                    if (tempLine.StartsWith("invalid field validation message"))
-                    {
-
-                        if (line.ToLower().Contains("us phone number"))
-                        {
-                            Match m = Regex.Match(line, @"Invalid Field Validation Message : (.+?) is not a valid US phone number");
-                            id = m.Groups[1].Value.Trim();
-
-                            foreach (var cf in baseObject.CustomFields)
-                            {
-                                if (cf.Id == Int64.Parse(id))
-                                {
-                                    cf.FieldType = "usphone";
-                                }
-                            }
-                        }
-                        else if (tempLine.Contains("email address"))
-                        {
-                            Match m = Regex.Match(line, @"Invalid Field Validation Message : The Email Address '(.+?)' is not valid.");
-                            id = m.Groups[1].Value.Trim();
-
-                            foreach (var cf in baseObject.CustomFields)
-                            {
-                                if (cf.Id == Int64.Parse(id))
-                                {
-                                    cf.FieldType = "email";
-                                }
-                            }
-                        }
-                        else if (tempLine.Contains("international phone number"))
-                        {
-                            Match m = Regex.Match(line, @"Invalid Field Validation Message : (.+?) is not a valid international phone number");
-                            id = m.Groups[1].Value.Trim();
-
-                            foreach (CustomField cf in baseObject.CustomFields)
-                            {
-                                if (cf.Id == Int64.Parse(id))
-                                {
-                                    cf.FieldType = "internationalphone";
-                                }
-                            }
-                        }
-                        else if (tempLine.Contains("url"))
-                        {
-                            Match m = Regex.Match(line, @"Invalid Field Validation Message : (.+?) is an invalid URL.");
-                            id = m.Groups[1].Value.Trim();
-                            if (Information.IsNumeric(id.Trim()))
-                            {
-                            foreach (CustomField cf in baseObject.CustomFields)
-                            {
-                                if (cf.Id == Int64.Parse(id.Trim()))
-                                {
-                                    cf.FieldType = "url";
-                                }
-                            }
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // The call was successfull, deleting the item
-                ApiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, module.ToString(), ar.Id, false);
-                ar = ApiMakeTheCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Delete);
-
-                // purging the item
-                ArrayList arguments = new ArrayList();
-                arguments.Add("_purge_=true");
-                ApiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, module, ar.Id, arguments);
-                ar = ApiMakeTheCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Delete);
-            }
-
-            return baseObject;
         }
 
         /// <summary>
@@ -695,33 +305,18 @@ namespace ParatureSDK
             return baseObject as T;
         }
 
-        /// <summary>
-        /// Use this method to get the Schema XML of an object.
-        /// </summary>
-        /// <param name="paracredentials"></param>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        public static ApiCallResponse EntityGetSchema(ParaCredentials paracredentials, ParaEnums.ParatureEntity entity)
+        public static ApiCallResponse FileUploadGetUrl<TEntity>(ParaCredentials paracredentials) where TEntity: ParaEntity
         {
-            string ApiCallUrl;
-
-            ApiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entity, 0, true);
-
-            return ApiMakeTheCall(ApiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
-        }
-
-        public static ApiCallResponse FileUploadGetUrl(ParaCredentials paracredentials, ParaEnums.ParatureModule module)
-        {
-            var resp = ApiMakeTheCall(ApiUrlBuilder.ApiObjectCustomUrl(paracredentials, module, "upload"), ParaEnums.ApiCallHttpMethod.Get);
+            var resp = ApiMakeTheCall(ApiUrlBuilder.ApiObjectCustomUrl<TEntity>(paracredentials, "upload"), ParaEnums.ApiCallHttpMethod.Get);
             return resp;
         }
 
-        public static ApiCallResponse FilePerformUpload(string postUrl, Attachment attachment, int accountId, ParaCredentials paraCredentials)
+        public static ApiCallResponse FilePerformUpload(string postUrl, Attachment attachment)
         {
             return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment);
         }
 
-        public static ApiCallResponse FilePerformUpload(string postUrl, Byte[] attachment, string contentType, string fileName, int accountId, ParaCredentials paraCredentials)
+        public static ApiCallResponse FilePerformUpload(string postUrl, Byte[] attachment, string contentType, string fileName)
         {
             return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment, contentType, fileName);
         }
