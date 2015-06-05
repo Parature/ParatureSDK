@@ -27,6 +27,13 @@ namespace ParatureSDK.ApiHandler
             return ar;
         }
 
+        /// <summary>
+        /// Internal method to attach a file for the Parature entity
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="pc"></param>
+        /// <param name="attachment"></param>
+        /// <returns></returns>
         public static Attachment UploadFile<TEntity>(ParaCredentials pc, System.Net.Mail.Attachment attachment)
             where TEntity : ParaEntity
         {

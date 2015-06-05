@@ -40,12 +40,28 @@ namespace ParatureSDK.ApiHandler
             return ticket;
         }
 
+        /// <summary>
+        /// Retrieve the list of chat entities, indicating whether to retrieve transcripts as well.
+        /// Retrieving transcripts is an extra API request for each chat, and subsequently will take more time.
+        /// </summary>
+        /// <param name="creds">Parature credentials and department information</param>
+        /// <param name="includeTranscripts">Boolean to indicate whether to iteratively retrieve transcripts or not.</param>
+        /// <param name="query">Query string parameters object</param>
+        /// <returns>List of Chat Entities</returns>
         public static ParaEntityList<ParaObjects.Chat> GetList(ParaCredentials creds, Boolean includeTranscripts,
             ChatQuery query)
         {
             return FillList(creds, includeTranscripts, query);
         }
 
+        /// <summary>
+        /// Retrieve the list of chat entities, indicating whether to retrieve transcripts as well.
+        /// Retrieving transcripts is an extra API request for each chat, and subsequently will take more time.
+        /// </summary>
+        /// <param name="creds">Parature credentials and department information</param>
+        /// <param name="includeTranscripts">Boolean to indicate whether to iteratively retrieve transcripts or not.</param>
+        /// <param name="includeHistory">Boolean to indicate whether to include the history of each chat.</param>
+        /// <returns>List of Chat Entities</returns>
         public static ParaEntityList<ParaObjects.Chat> GetList(ParaCredentials creds, Boolean includeTranscripts,
             Boolean includeHistory)
         {
@@ -84,7 +100,7 @@ namespace ParatureSDK.ApiHandler
                     chat.Transcript = GetTranscript(chat.Id, creds);
                 }
             }
- 
+
             return chatList;
         }
 
@@ -165,6 +181,5 @@ namespace ParatureSDK.ApiHandler
             var chat = FillTranscriptDetails(chatId, paraCredentials);
             return chat.Transcript;
         }
-
     }
 }

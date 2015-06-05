@@ -20,6 +20,9 @@ namespace ParatureSDK.ApiHandler
         public class Status : SecondLevelApiMethods<ParaObjects.Status, StatusQuery, ParaObjects.Csr>
         {}
 
+        /// <summary>
+        /// Contains all the methods for retrieving Csr Roles.
+        /// </summary>
         public class Role : SecondLevelApiMethods<ParaObjects.CsrRole, RoleQuery, ParaObjects.Csr>
         {}
     }

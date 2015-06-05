@@ -15,6 +15,9 @@ namespace ParatureSDK.ApiHandler
     /// </summary>
     public class Account : FirstLevelApiMethods<ParaObjects.Account, AccountQuery>
     {
+        /// <summary>
+        /// Methods for retrieving views related to an account
+        /// </summary>
         public class View : SecondLevelApiMethods<ParaObjects.View, ViewQuery, ParaObjects.Account>
         {
         }

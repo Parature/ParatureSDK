@@ -48,6 +48,13 @@ namespace ParatureSDK.ApiHandler
             return GetDetails(entityId, pc, new ArrayList());
         }
 
+        /// <summary>
+        /// Retrieve a single entity
+        /// </summary>
+        /// <param name="entityId">Id of the entity</param>
+        /// <param name="pc">Api credentials</param>
+        /// <param name="queryStringParams">ArrayList of query string parameters</param>
+        /// <returns>The download object</returns>
         public static ParaObjects.Download GetDetails(Int64 entityId, ParaCredentials pc, ArrayList queryStringParams)
         {
             var entity = ApiUtils.ApiGetDownloadEntity(pc, entityId, queryStringParams);

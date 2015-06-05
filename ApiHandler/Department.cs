@@ -7,6 +7,9 @@ using ParatureSDK.XmlToObjectParser;
 
 namespace ParatureSDK.ApiHandler
 {
+    /// <summary>
+    /// Methods for retrieving the department entities
+    /// </summary>
     public class Department : FirstLevelApiGetMethods<ParaObjects.Department, DepartmentQuery>
     {}
 }
