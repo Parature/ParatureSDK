@@ -212,7 +212,7 @@ namespace ParatureSDK.ParaObjects
             Modified_By = account.Modified_By;
             Owned_By = account.Owned_By;
             Sla = account.Sla;
-            Viewable_Account = new List<Account>(account.Viewable_Account);
+            Shown_Accounts = new List<Account>(account.Shown_Accounts);
             Default_Customer_Role = account.Default_Customer_Role;
         }
 
