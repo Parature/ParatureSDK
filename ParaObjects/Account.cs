@@ -176,20 +176,20 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The list of all the other Viewable accounts, only available to certain configs.
         /// </summary>
-        public List<Account> Viewable_Account
+        public List<Account> Shown_Accounts
         {
             get
             {
-                return GetFieldValue<List<Account>>("Viewable_Account");
+                return GetFieldValue<List<Account>>("Shown_Accounts");
             }
             set
             {
-                var field = StaticFields.FirstOrDefault(f => f.Name == "Viewable_Account");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Shown_Accounts");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
-                        Name = "Viewable_Account",
+                        Name = "Shown_Accounts",
                         FieldType = "entitymultiple",
                         DataType = "entity"
                     };
