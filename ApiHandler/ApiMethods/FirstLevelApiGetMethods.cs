@@ -108,19 +108,5 @@ namespace ParatureSDK.ApiHandler.ApiMethods
             entity.ApiCallResponse = ar;
             return entity;
         }
-
-        /// <summary>
-        /// Gets an empty object with the scheam (custom fields, if any).  This call will also try to create a dummy
-        /// record in order to determine if any of the custom fields have special validation rules (e.g. email, phone, url)
-        /// and set the "dataType" of the custom field accordingly.
-        /// </summary> 
-        public static TEntity SchemaWithCustomFieldTypes(ParaCredentials pc)
-        {
-            var entity = Schema(pc);
-
-            entity = ApiCallFactory.ObjectCheckCustomFieldTypes<TEntity>(pc, entity);
-
-            return entity;
-        }
     }
 }

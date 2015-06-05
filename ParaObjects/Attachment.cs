@@ -16,6 +16,7 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// The name of the attachment.
         /// </summary>
+        [XmlElement("Name")]
         public string Name;
 
         /// <summary>
