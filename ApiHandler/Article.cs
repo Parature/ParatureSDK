@@ -16,7 +16,7 @@ namespace ParatureSDK.ApiHandler
     public class Article : FirstLevelApiMethods<ParaObjects.Article, ArticleQuery>
     {
         /// <summary>
-        /// Contains all the methods needed to work with the download module's folders.
+        /// Contains all the methods needed to work with the article module's folders.
         /// </summary>
         public class ArticleFolder : FolderApiMethods<ParaObjects.ArticleFolder, ArticleFolderQuery> {}
     }

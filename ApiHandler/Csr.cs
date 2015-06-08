@@ -15,7 +15,7 @@ namespace ParatureSDK.ApiHandler
     public class Csr : FirstLevelApiMethods<ParaObjects.Csr, CsrQuery>
     {
         /// <summary>
-        /// Contains all the methods needed to work with the Ticket statuses.
+        /// Contains all the methods needed to work with the Csr statuses.
         /// </summary>
         public class Status : SecondLevelApiMethods<ParaObjects.Status, StatusQuery, ParaObjects.Csr>
         {}
