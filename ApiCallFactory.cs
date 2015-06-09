@@ -198,6 +198,9 @@ namespace ParatureSDK
             //2 minutes request timeout
             req.Timeout = 120 * 1000;
 
+            //Provide a way for the user to configure the connection -> proxy, timeout, etc
+            ApiRequestSettings.GlobalPreRequest(req);
+
             ac.XmlSent = null;
 
             ac.HasException = false;
