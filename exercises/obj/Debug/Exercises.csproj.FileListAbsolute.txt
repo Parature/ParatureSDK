@@ -1,0 +1,15 @@
+C:\Users\adhong\Desktop\Parature_API_Exercises\bin\Debug\Exercises.exe.config
+C:\Users\adhong\Desktop\Parature_API_Exercises\bin\Debug\Exercises.exe
+C:\Users\adhong\Desktop\Parature_API_Exercises\bin\Debug\Exercises.pdb
+C:\Users\adhong\Desktop\Parature_API_Exercises\bin\Debug\ParaConnect.dll
+C:\Users\adhong\Desktop\Parature_API_Exercises\bin\Debug\ParaConnect.xml
+C:\Users\adhong\Desktop\Parature_API_Exercises\obj\Debug\Exercises.csprojResolveAssemblyReference.cache
+C:\Users\adhong\Desktop\Parature_API_Exercises\obj\Debug\Exercises.exe
+C:\Users\adhong\Desktop\Parature_API_Exercises\obj\Debug\Exercises.pdb
+C:\Repos\ParatureSDK-Exercises\bin\Debug\Exercises.exe.config
+C:\Repos\ParatureSDK-Exercises\obj\Debug\Exercises.exe
+C:\Repos\ParatureSDK-Exercises\obj\Debug\Exercises.pdb
+C:\Repos\ParatureSDK-Exercises\obj\Debug\Exercises.csprojResolveAssemblyReference.cache
+C:\Repos\ParatureSDK-Exercises\bin\Debug\Exercises.exe
+C:\Repos\ParatureSDK-Exercises\bin\Debug\Exercises.pdb
+C:\Repos\ParatureSDK-Exercises\bin\Debug\ParatureAPI.dll
