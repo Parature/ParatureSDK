@@ -25,7 +25,7 @@ namespace Exercises
         {
             var folderQuery = new ParatureSDK.EntityQuery.ArticleFolderQuery();
             folderQuery.RetrieveAllRecords = true;
-            folderQuery.AddStaticFieldFilter(ParatureSDK.EntityQuery.ArticleFolderQuery.ArticleFolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, parentID.ToString());
+            folderQuery.AddStaticFieldFilter(ParatureSDK.EntityQuery.ArticleFolderQuery.FolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, parentID.ToString());
 
             var folders = ParatureSDK.ApiHandler.Article.ArticleFolder.GetList(CredentialProvider.Creds, folderQuery);
 
@@ -34,9 +34,9 @@ namespace Exercises
 
         public static ParaEntityList<ArticleFolder> getFoldersByParentID(string folderName)
         {
-            var folderQuery = new ParatureSDK.EntityQuery.ArticleFolderQuery();
+            var folderQuery = new ArticleFolderQuery();
             folderQuery.RetrieveAllRecords = true;
-            folderQuery.AddStaticFieldFilter(ParatureSDK.EntityQuery.ArticleFolderQuery.ArticleFolderStaticFields.Name, ParaEnums.QueryCriteria.Equal, folderName);
+            folderQuery.AddStaticFieldFilter(ArticleFolderQuery.FolderStaticFields.Name, ParaEnums.QueryCriteria.Equal, folderName);
 
             var folders = ParatureSDK.ApiHandler.Article.ArticleFolder.GetList(CredentialProvider.Creds, folderQuery);
 

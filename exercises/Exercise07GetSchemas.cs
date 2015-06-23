@@ -30,9 +30,14 @@ namespace Exercises
             return article;
         }
 
+        /// <summary>
+        /// Get an empty ArticleFolder
+        /// </summary>
+        /// <returns></returns>
         public static ArticleFolder ArticleFolderSchema()
         {
-            var articleFoler = ParatureSDK.ApiHandler.Article.ArticleFolder.Schema(CredentialProvider.Creds);
+            //There is an API call to retrieve an article folder schema, but there aren't any custom fields so we are not providing a method fo schema retrieval
+            var articleFoler = new ArticleFolder();
 
             return articleFoler;
         }

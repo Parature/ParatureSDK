@@ -37,7 +37,7 @@ namespace Exercises
             accountQuery.RetrieveAllRecords = true;
             
             //There is a difference between static fields and custom fields
-            accountQuery.AddStaticFieldFilter(ParatureSDK.ModuleQuery.AccountQuery.AccountStaticFields.Accountname, ParatureSDK.ParaEnums.QueryCriteria.Equal, accountName);
+            accountQuery.AddStaticFieldFilter(ParatureSDK.ModuleQuery.AccountQuery.AccountStaticFields.AccountName, ParatureSDK.ParaEnums.QueryCriteria.Equal, accountName);
 
             var accounts = ParatureSDK.ApiHandler.Account.GetList(CredentialProvider.Creds, accountQuery);
 

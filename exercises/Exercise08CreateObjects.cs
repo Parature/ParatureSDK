@@ -53,7 +53,7 @@ namespace Exercises
 
         public static ArticleFolder CreateKBFolder(string name, bool isPrivate, long parentFolderID)
         {
-            var emptyFolder = ParatureSDK.ApiHandler.Article.ArticleFolder.Schema(CredentialProvider.Creds);
+            var emptyFolder = Exercise07GetSchemas.ArticleFolderSchema();
             emptyFolder.Name = name;
             emptyFolder.Parent_Folder = new ArticleFolder { Id = parentFolderID };
             emptyFolder.Is_Private = isPrivate;
