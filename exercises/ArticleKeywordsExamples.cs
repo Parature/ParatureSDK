@@ -44,5 +44,15 @@ namespace Exercises
 
             return article.Keywords.Split(',').ToList();
         }
+
+        //Example Setting Keywords
+        public static void AddingKeywordsExample(ParaCredentials creds)
+        {
+            var keywords = new List<string>();
+            keywords.Add("one");
+            keywords.Add("two");
+
+            AddKeywords(10, keywords, creds);
+        }
     }
 }
