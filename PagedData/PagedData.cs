@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Web.UI;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -59,10 +61,16 @@ namespace ParatureSDK.PagedData
             ApiCallResponse = new ApiCallResponse(pagedData.ApiCallResponse);
         }
 
-
+        /// <summary>
+        /// Callback after Deserialization to set attributes from XML that don't get handled due to IEnumerable interface implemenation on ParaEntityList
+        /// </summary>
+        /// <param name="xml">The XML received</param>
         public void OnXmlDeserialization(XDocument xml)
         {
-            throw new System.NotImplementedException();
+            TotalItems = int.Parse(xml.Root.Attribute("total").Value);
+            ResultsReturned = int.Parse(xml.Root.Attribute("results").Value);
+            PageNumber = int.Parse(xml.Root.Attribute("total").Value);
+            PageSize = int.Parse(xml.Root.Attribute("page-size").Value);
         }
     }
 }
