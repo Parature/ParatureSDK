@@ -25,9 +25,9 @@ namespace ParatureSDK.XmlToObjectParser
 
         public static T EntityFill<T>(XmlDocument xmlDoc)
         {
-            var serializer = new XmlSerializer(typeof(T));
+            var serializer = new ParaXmlSerializer(typeof(T));
             var xml = XDocument.Parse(xmlDoc.OuterXml);
-            var entity = (T)serializer.Deserialize(xml.CreateReader());
+            var entity = (T)serializer.Deserialize(xml);
 
             return entity;
         }

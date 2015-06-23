@@ -1,13 +1,18 @@
+using System;
 using System.Collections;
+using System.Runtime.Serialization;
+using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using ParatureSDK.ParaObjects;
+using ParatureSDK.XmlToObjectParser;
 
 namespace ParatureSDK.PagedData
 {
     /// <summary>
     /// Designed to provide properties for paged results.
     /// </summary>
-    public abstract class PagedData
+    public abstract class PagedData : ParaXmlSerializer.IXmlDeserializationCallback
     {
         /// <summary>
         /// Total number of items that matched your request
@@ -52,6 +57,12 @@ namespace ParatureSDK.PagedData
             PageSize = pagedData.PageSize;
             PageNumber = pagedData.PageNumber;
             ApiCallResponse = new ApiCallResponse(pagedData.ApiCallResponse);
+        }
+
+
+        public void OnXmlDeserialization(XDocument xml)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
