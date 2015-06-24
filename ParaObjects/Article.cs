@@ -429,7 +429,7 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Permissions",
-                        FieldType = "dropdown",
+                        FieldType = "entitymultiple",
                         DataType = "entity"
                     };
                     StaticFields.Add(field);
