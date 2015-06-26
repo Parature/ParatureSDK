@@ -1,13 +1,12 @@
 using System;
+using System.Xml;
 
 namespace ParatureSDK.ParaObjects
 {
-    public class Eula
+    public class Eula : ParaEntityBaseProperties
     {
-        // Specific properties for this module
-        public string ShortTitle = "";
-        public Int64 Id = 0;
-
+        public string ShortTitle { get; set; }
+        
         public Eula()
         {
         }

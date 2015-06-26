@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms.VisualStyles;
 using System.Xml.Serialization;
 using ParatureSDK.Fields;
+using ParatureSDK.ParaObjects.EntityReferences;
 
 namespace ParatureSDK.ParaObjects
 {
@@ -29,7 +31,7 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Attachment",
-                        FieldType = "entity",
+                        FieldType = "ignore",
                         DataType = "entity"
                     };
                     StaticFields.Add(field);
@@ -548,11 +550,11 @@ namespace ParatureSDK.ParaObjects
         /// Certain configuration use the End User License Agreement (EULA). this controls what Eula would 
         /// be associated with this download.
         /// </summary>
-        public Eula Eula
+        public EulaReference Eula
         {
             get
             {
-                return GetFieldValue<Eula>("Eula");
+                return GetFieldValue<EulaReference>("Eula");
             }
             set
             {
@@ -746,7 +748,8 @@ namespace ParatureSDK.ParaObjects
             Published = download.Published;
             Title = download.Title;
             Visible = download.Visible;
-            Eula = new Eula(download.Eula);
+            Eula = new EulaReference();
+            Eula.Eula = download.Eula.Eula;
             File_Hits = download.File_Hits;
             File_Size = download.File_Size;
         }

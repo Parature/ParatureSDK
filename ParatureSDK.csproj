@@ -153,6 +153,7 @@
     <Compile Include="ParaObjects\EntityReferences\ProductFolderReference.cs" />
     <Compile Include="ParaObjects\EntityReferences\ProductReference.cs" />
     <Compile Include="ParaObjects\EntityReferences\QueueReference.cs" />
+    <Compile Include="ParaObjects\EntityReferences\EulaReference.cs" />
     <Compile Include="ParaObjects\EntityReferences\RoleReference.cs" />
     <Compile Include="ParaObjects\EntityReferences\SlaReference.cs" />
     <Compile Include="ParaObjects\EntityReferences\StatusReference.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="ParaObjects\Status.cs" />
     <Compile Include="ParaObjects\Ticket.cs" />
     <Compile Include="ParaObjects\Timezone.cs" />
+    <Compile Include="ParaObjects\UploadResult.cs" />
     <Compile Include="ParaObjects\View.cs" />
     <Compile Include="ParaQuery.cs" />
     <Compile Include="ModuleQuery\ParaEntityQuery.cs" />

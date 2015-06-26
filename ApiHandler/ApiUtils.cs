@@ -72,10 +72,23 @@ namespace ParatureSDK.ApiHandler
 
             if (String.IsNullOrEmpty(postUrl) == false)
             {
-                var attaDoc =
+                var uploadResponse =
                     ApiCallFactory.FilePerformUpload(postUrl, attachment, contentType, fileName)
                         .XmlReceived;
-                attach = ParaEntityParser.EntityFill<Attachment>(attaDoc);
+
+                attach = new Attachment();
+
+                var uploadResult = ParaEntityParser.EntityFill<UploadResult>(uploadResponse);
+
+                if (!string.IsNullOrEmpty(uploadResult.Error))
+                {
+                    //There was an error uploading
+                    attach.HasException = true;
+                    attach.Error = uploadResult.Error;
+                } else {
+                    attach.Name = uploadResult.Result.File.FileName;
+                    attach.Guid = uploadResult.Result.File.Guid;
+                }   
             }
             else
             {
