@@ -380,16 +380,16 @@ namespace ParatureSDK.ParaObjects
         {
             get
             {
-                return GetFieldValue<string>("Extension");
+                return GetFieldValue<string>("Ext");
             }
             set
             {
-                var field = StaticFields.FirstOrDefault(f => f.Name == "Extension");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Ext");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
-                        Name = "Extension",
+                        Name = "Ext",
                         FieldType = "text",
                         DataType = "string"
                     };
