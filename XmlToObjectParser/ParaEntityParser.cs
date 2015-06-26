@@ -74,7 +74,17 @@ namespace ParatureSDK.XmlToObjectParser
                 dl.MultipleFolders = hasMultipleDownloadFolders;
 
                 list.Data.Add(dl);
+            }
 
+            using (var nodeReader = new XmlNodeReader(xmlDoc))
+            {
+                //We need to manually parse total and results for PagedData object
+                nodeReader.MoveToContent();
+                var xml = XDocument.Load(nodeReader);
+                list.TotalItems = int.Parse(xml.Root.Attribute("total").Value);
+                list.ResultsReturned = int.Parse(xml.Root.Attribute("results").Value);
+                list.PageNumber = int.Parse(xml.Root.Attribute("total").Value);
+                list.PageSize = int.Parse(xml.Root.Attribute("page-size").Value);
             }
 
             return list;
