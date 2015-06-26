@@ -291,7 +291,7 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Products",
-                        FieldType = "entity",
+                        FieldType = "entitymultiple",
                         DataType = "entity"
                     };
                     StaticFields.Add(field);
