@@ -476,16 +476,16 @@ namespace ParatureSDK.ParaObjects
         {
             get
             {
-                return GetFieldValue<bool>("Is_Portal_Search_Pinned ");
+                return GetFieldValue<bool>("Is_Portal_Search_Pinned");
             }
             set
             {
-                var field = StaticFields.FirstOrDefault(f => f.Name == "Is_Portal_Search_Pinned ");
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Is_Portal_Search_Pinned");
                 if (field == null)
                 {
                     field = new StaticField()
                     {
-                        Name = "Is_Portal_Search_Pinned ",
+                        Name = "Is_Portal_Search_Pinned",
                         FieldType = "checkbox",
                         DataType = "boolean"
                     };
