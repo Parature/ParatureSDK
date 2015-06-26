@@ -154,7 +154,7 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "MultipleFolders",
-                        FieldType = "checkbox",
+                        FieldType = "ignore",
                         DataType = "boolean"
                     };
                     StaticFields.Add(field);
