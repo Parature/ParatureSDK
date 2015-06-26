@@ -83,7 +83,7 @@ namespace ParatureSDK.ApiHandler
                 query.IncludeCustomField(objschem.CustomFields);
             }
 
-            return ApiUtils.ApiGetEntityList<ParaObjects.Download>(pc, query);
+            return ApiUtils.ApiGetDownloadEntityList(pc, query);
         }
 
         /// <summary>

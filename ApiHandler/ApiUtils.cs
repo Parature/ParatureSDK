@@ -212,6 +212,29 @@ namespace ParatureSDK.ApiHandler
             return entityList;
         }
 
+        internal static ParaEntityList<ParaObjects.Download> ApiGetDownloadEntityList(ParaCredentials pc, DownloadQuery query)
+        {
+
+            var entityList = new ParaEntityList<ParaObjects.Download>();
+
+            // Checking if the system needs to recursively call all of the data returned.
+            if (query.RetrieveAllRecords)
+            {
+                entityList = RetrieveAllDownloadEntities(pc, query);
+            }
+            else
+            {
+                var ar = ApiCallFactory.ObjectGetList<ParaObjects.Download>(pc, new ArrayList());
+                if (ar.HasException == false)
+                {
+                    entityList = ParaEntityParser.FillListDownload(ar.XmlReceived);
+                }
+                entityList.ApiCallResponse = ar;
+            }
+
+            return entityList;
+        }
+
         /// <summary>
         /// Fills a main module's list object.
         /// </summary>
@@ -236,6 +259,53 @@ namespace ParatureSDK.ApiHandler
             }
 
             return entityList;
+        }
+
+        private static ParaEntityList<ParaObjects.Download> RetrieveAllDownloadEntities(ParaCredentials pc, DownloadQuery query)
+        {
+            ApiCallResponse ar;
+            var downloadList = new ParaEntityList<ParaObjects.Download>();
+
+            ar = ApiCallFactory.ObjectGetList<ParaObjects.Download>(pc, query.BuildQueryArguments());
+            if (ar.HasException == false)
+            {
+                downloadList = ParaEntityParser.FillListDownload(ar.XmlReceived);
+            }
+            downloadList.ApiCallResponse = ar;
+
+            var continueCalling = true;
+            while (continueCalling)
+            {
+                if (downloadList.TotalItems > downloadList.Data.Count)
+                {
+                    // We still need to pull data
+                    // Getting next page's data
+                    query.PageNumber = query.PageNumber + 1;
+
+                    ar = ApiCallFactory.ObjectGetList<ParaObjects.Download>(pc, query.BuildQueryArguments());
+                    if (ar.HasException == false)
+                    {
+                        var objectlist = ParaEntityParser.FillListDownload(ar.XmlReceived);
+                        downloadList.Data.AddRange(objectlist.Data);
+                        downloadList.ResultsReturned = downloadList.Data.Count;
+                        downloadList.PageNumber = query.PageNumber;
+                    }
+                    else
+                    {
+                        // There is an error processing request
+                        downloadList.ApiCallResponse = ar;
+                        continueCalling = false;
+                    }
+                }
+                else
+                {
+                    // That is it, pulled all the items.
+                    continueCalling = false;
+                    downloadList.ApiCallResponse = ar;
+                }
+            }
+
+            return downloadList;
         }
 
         private static ParaEntityList<T> RetrieveAllEntities<T>(ParaCredentials pc, ParaEntityQuery query) 
