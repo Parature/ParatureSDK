@@ -30,6 +30,19 @@ namespace ParatureSDK
         {
             Csr,
             Customer,
+            Rule,
+            System
+        }
+
+        /// <summary>
+        /// The Type of the performer that ran the action history, it is whether a CSR or a Customer.
+        /// </summary>
+        public enum ActionHistoryTargetType
+        {
+            Csr,
+            Customer,
+            Queue,
+            Download,
             System
         }
 

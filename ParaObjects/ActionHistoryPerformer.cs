@@ -13,11 +13,11 @@ namespace ParatureSDK.ParaObjects
 
         // Will be loaded with the CSR id and name, only if it was a CSR that performed the action.
         [XmlElement("Csr")]
-        public Csr CsrPerformer = new Csr();
+        public Csr CsrPerformer;
 
         // Will be loaded with the Customer id and name, only if it was a Customer that performed the action.
         [XmlElement("Customer")]
-        public Customer CustomerPerformer = new Customer();
+        public Customer CustomerPerformer;
 
         public ActionHistoryPerformer()
         {
@@ -37,6 +37,8 @@ namespace ParatureSDK.ParaObjects
                     return CsrPerformer.Full_Name;
                 case ParaEnums.ActionHistoryPerformerType.Customer:
                     return CustomerPerformer.Full_Name;
+                case ParaEnums.ActionHistoryPerformerType.Rule:
+                    return "Rule";
                 case ParaEnums.ActionHistoryPerformerType.System:
                     return "System";
                 default:

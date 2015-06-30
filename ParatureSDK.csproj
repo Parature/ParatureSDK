@@ -135,6 +135,7 @@
     <Compile Include="ParaObjects\Asset.cs" />
     <Compile Include="ParaObjects\Attachment.cs" />
     <Compile Include="ParaObjects\Chat.cs" />
+    <Compile Include="ParaObjects\ChatHistoryDownload.cs" />
     <Compile Include="ParaObjects\Csr.cs" />
     <Compile Include="ParaObjects\CsrRole.cs" />
     <Compile Include="ParaObjects\Customer.cs" />

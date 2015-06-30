@@ -405,8 +405,57 @@ namespace ParatureSDK.ParaObjects
             }
         }
         [XmlElement("Message")]
-        public List<ChatMessage> Transcript { get; set; }
-        
+        public List<ChatMessage> Transcript
+        {
+            get
+            {
+                return GetFieldValue<List<ChatMessage>>("Transcript");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Transcript");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        IgnoreSerializeXml = true,
+                        Name = "Transcript"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+        /// <summary>
+        /// The actions that ran on this chat. This is only populated if you requested the chat action history.
+        /// </summary>
+        [XmlArray("ActionHistory")]
+        [XmlArrayItem("History")]
+        public List<ActionHistory> ActionHistory
+        {
+            get
+            {
+                return GetFieldValue<List<ActionHistory>>("ActionHistory");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "ActionHistory");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        IgnoreSerializeXml = true,
+                        Name = "ActionHistory"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+
         public Chat()
             : base()
         {

@@ -48,6 +48,7 @@ namespace ParatureSDK.ParaObjects
         public List<Attachment> History_Attachments = new List<Attachment>();
         public ActionHistoryPerformer Action_Performer = new ActionHistoryPerformer();
         public ActionHistoryTarget Action_Target = new ActionHistoryTarget();
+        public bool? To_Deflection;
 
         public ActionHistory()
         {

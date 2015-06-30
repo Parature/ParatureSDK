@@ -9,36 +9,49 @@ namespace ParatureSDK.ParaObjects
     public class ActionHistoryTarget
     {
         [XmlAttribute("target-type")]
-        public ParaEnums.ActionHistoryPerformerType ActionHistoryTargetType = ParaEnums.ActionHistoryPerformerType.System;
+        public ParaEnums.ActionHistoryTargetType ActionHistoryTargetType = ParaEnums.ActionHistoryTargetType.System;
 
         // Will be loaded with the CSR id and name, only if it was a CSR that performed the action.
         [XmlElement("Csr")]
-        public Csr CsrTarget = new Csr();
+        public Csr CsrTarget;
 
         // Will be loaded with the Customer id and name, only if it was a Customer that performed the action.
         [XmlElement("Customer")]
-        public Customer CustomerTarget = new Customer();
+        public Customer CustomerTarget;
+
+        // Will be loaded with the Queue id and name, only if it was performed on a Queue
+        [XmlElement("Queue")]
+        public Queue QueueTarget;
+
+        // Will be loaded with the Queue id and name, only if it was performed on a Queue
+        [XmlElement("Download")]
+        public ChatHistoryDownload DownloadTarget;
 
         public ActionHistoryTarget()
         {
         }
 
-        public ActionHistoryTarget(ActionHistoryTarget actionHistoryperformer)
+        public ActionHistoryTarget(ActionHistoryTarget actionHistoryTarget)
         {
-            ActionHistoryTargetType = actionHistoryperformer.ActionHistoryTargetType;
-            CsrTarget = actionHistoryperformer.CsrTarget;
-            CustomerTarget = actionHistoryperformer.CustomerTarget;
+            ActionHistoryTargetType = actionHistoryTarget.ActionHistoryTargetType;
+            CsrTarget = actionHistoryTarget.CsrTarget;
+            CustomerTarget = actionHistoryTarget.CustomerTarget;
+            QueueTarget = actionHistoryTarget.QueueTarget;
         }
 
         public string GetDisplayName()
         {
             switch (ActionHistoryTargetType)
             {
-                case ParaEnums.ActionHistoryPerformerType.Csr:
+                case ParaEnums.ActionHistoryTargetType.Csr:
                     return CsrTarget.Full_Name;
-                case ParaEnums.ActionHistoryPerformerType.Customer:
+                case ParaEnums.ActionHistoryTargetType.Customer:
                     return CustomerTarget.Full_Name;
-                case ParaEnums.ActionHistoryPerformerType.System:
+                case ParaEnums.ActionHistoryTargetType.Queue:
+                    return QueueTarget.Name;
+                case ParaEnums.ActionHistoryTargetType.Download:
+                    return DownloadTarget.Name;
+                case ParaEnums.ActionHistoryTargetType.System:
                     return "System";
                 default:
                     return "";
