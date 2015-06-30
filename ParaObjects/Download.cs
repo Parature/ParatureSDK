@@ -31,7 +31,7 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Attachment",
-                        FieldType = "ignore",
+                        IgnoreSerializeXml = true,
                         DataType = "entity"
                     };
                     StaticFields.Add(field);
@@ -156,7 +156,7 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "MultipleFolders",
-                        FieldType = "ignore",
+                        IgnoreSerializeXml = true,
                         DataType = "boolean"
                     };
                     StaticFields.Add(field);

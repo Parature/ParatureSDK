@@ -848,7 +848,7 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Ticket_Children",
-                        FieldType = "entity",
+                        FieldType = "entitymultiple",
                         DataType = "entity"
                     };
                     StaticFields.Add(field);
@@ -875,7 +875,7 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Related_Chats",
-                        FieldType = "entity",
+                        FieldType = "entitymultiple",
                         DataType = "entity"
                     };
                     StaticFields.Add(field);
@@ -899,11 +899,13 @@ namespace ParatureSDK.ParaObjects
                 var field = StaticFields.FirstOrDefault(f => f.Name == "Ticket_Attachments");
                 if (field == null)
                 {
+                    //the FieldType and DataType are NOT from the actual APIs. 
+                    //They are a representation purely added for the SDK
                     field = new StaticField()
                     {
                         Name = "Ticket_Attachments",
                         FieldType = "entitymultiple",
-                        DataType = "entity"
+                        DataType = "attachment"
                     };
                     StaticFields.Add(field);
                 }
@@ -929,6 +931,7 @@ namespace ParatureSDK.ParaObjects
                 {
                     field = new StaticField()
                     {
+                        IgnoreSerializeXml = true,
                         Name = "Actions"
                     };
                     StaticFields.Add(field);
@@ -956,6 +959,7 @@ namespace ParatureSDK.ParaObjects
                 {
                     field = new StaticField()
                     {
+                        IgnoreSerializeXml = true,
                         Name = "ActionHistory"
                     };
                     StaticFields.Add(field);
