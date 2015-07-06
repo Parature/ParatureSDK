@@ -27,6 +27,39 @@ namespace ParatureSDK.ParaObjects
 
         public List<Attachment> Action_Attachments = new List<Attachment>();
 
+        ///  <summary>
+        ///  Uploads an attachment for ticket action 
+        ///  The attachment will also be added to the current Ticket's attachments collection.
+        ///  </summary>
+        ///  <param name="attachment">
+        ///  The binary Byte array of the attachment you would like to add. 
+        /// </param>
+        /// <param name="fileName"></param>
+        public void AddAttachment(ParaCredentials creds, Byte[] attachment, string contentType, string fileName)
+        {
+            Action_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, attachment, contentType, fileName));
+        }
+
+        /// <summary>
+        /// Uploads a text based file for ticket actions. You need to pass a string, and the mime type of a text based file (html, text, etc...).            
+        /// </summary>
+        /// <param name="text">
+        /// The content of the text based file. 
+        ///</param>           
+        /// <param name="creds">
+        /// The parature credentials class for the APIs.
+        /// </param>            
+        /// <param name="contentType">
+        /// The type of content being uploaded, you have to make sure this is the right text.
+        /// </param>
+        /// <param name="fileName">
+        /// The name you woule like the attachment to have.
+        ///</param>
+        public void AddAttachment(ParaCredentials creds, string text, string contentType, string fileName)
+        {
+            Action_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, text, contentType, fileName));
+        }
+
         /// <summary>
         /// This property will only be considered when 
         /// the action if of type Assign to Queue.

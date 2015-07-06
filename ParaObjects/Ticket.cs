@@ -921,6 +921,7 @@ namespace ParatureSDK.ParaObjects
         /// 
         /// Going to add this as an internal property which needs to be explicitly called by the user before we decide to delete attachments
         /// </summary>
+        [XmlIgnore]
         internal bool? AllowDeleteAllAttachments
         {
             get
@@ -952,7 +953,6 @@ namespace ParatureSDK.ParaObjects
         /// The list, if any exists, of all the available actions that can be run agains this ticket.
         /// Only the id and the name of the action
         /// </summary>
-        [XmlIgnore]
         public List<Action> Actions
         {
             get
