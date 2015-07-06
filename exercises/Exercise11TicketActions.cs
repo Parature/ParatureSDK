@@ -25,6 +25,7 @@ namespace Exercises
 
         /// <summary>
         /// Run an action on a ticket.
+        /// If you need to add an attachment, run the AttachmentToAction method first!
         /// </summary>
         /// <param name="ticketId">Id of the ticket</param>
         /// <param name="action">Action object, which should be one of the Actions retrieved in GetAvailableTicketActions.</param>
@@ -33,6 +34,17 @@ namespace Exercises
         {
             var actionResponse = ApiHandler.Ticket.ActionRun(ticketId, action, CredentialProvider.Creds);
             return actionResponse;
+        }
+
+        /// <summary>
+        /// Before running an action, attachments need to be uploaded to the server and a GUID retrieved
+        /// This requires an API call first, and must occur before the action is run
+        /// The GUID returned is temporary, and will expire after a while
+        /// </summary>
+        /// <param name="action"></param>
+        public static void AddAttachmentToAction(Action action)
+        {
+            action.AddAttachment(CredentialProvider.Creds, "Contents of the file", "text/plain", "attachment1.txt");
         }
     }
 }
