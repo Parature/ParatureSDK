@@ -60,6 +60,7 @@
     <Compile Include="Exercise08CreateObjects.cs" />
     <Compile Include="Exercise09UpdateObjects.cs" />
     <Compile Include="Exercise11TicketActions.cs" />
+    <Compile Include="Exercise12TicketAttachments.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

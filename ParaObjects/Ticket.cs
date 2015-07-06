@@ -915,9 +915,44 @@ namespace ParatureSDK.ParaObjects
         }
 
         /// <summary>
+        /// Internal property. We don't want to allow the user to accidentally delete attachments.
+        /// A situation could occur where the developer tries to update tickets but instantiates the Tickets instead of retrieving
+        /// This could theoretically allow the developer to delete tickets in rare scenarios.
+        /// 
+        /// Going to add this as an internal property which needs to be explicitly called by the user before we decide to delete attachments
+        /// </summary>
+        internal bool? AllowDeleteAllAttachments
+        {
+            get
+            {
+                return GetFieldValue<bool?>("AllowDeleteAllAttachments");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "AllowDeleteAllAttachments");
+                if (field == null)
+                {
+                    //the FieldType and DataType are NOT from the actual APIs. 
+                    //They are a representation purely added for the SDK
+                    field = new StaticField()
+                    {
+                        Name = "AllowDeleteAllAttachments",
+                        IgnoreSerializeXml = true,
+                        FieldType = "checkbox",
+                        DataType = "boolean"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        /// <summary>
         /// The list, if any exists, of all the available actions that can be run agains this ticket.
         /// Only the id and the name of the action
         /// </summary>
+        [XmlIgnore]
         public List<Action> Actions
         {
             get
@@ -1084,16 +1119,34 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// If you have an attachment and would like to delete, just pass the id here.
         /// </summary>
-        public void AttachmentsDelete(string AttachmentGuid)
+        public bool AttachmentsDelete(string attachmentGuid)
         {
-            foreach (Attachment at in Ticket_Attachments)
+            if (Ticket_Attachments == null)
             {
-                if (at.Guid == AttachmentGuid)
-                {
-                    Ticket_Attachments.Remove(at);
-                }
+                return false;
             }
 
+            var matchingAtt = Ticket_Attachments.FirstOrDefault(at => at.Guid == attachmentGuid);
+            if (matchingAtt != null)
+            {
+                Ticket_Attachments.Remove(matchingAtt);
+                if (Ticket_Attachments.Any() == false)
+                {
+                    AllowDeleteAllAttachments = true;
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Use this method to explicitly delete all attachments.
+        /// </summary>
+        public void DeleteAllAttachments()
+        {
+            AllowDeleteAllAttachments = true;
+            Ticket_Attachments = new List<Attachment>();
         }
 
         public Ticket()
