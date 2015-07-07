@@ -267,8 +267,6 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }   
         }
-
-        ////////////////////////////////////////// COULD NOT LOCATE IT FOR NOW //////////////
         /// <summary>
         /// User accepted terms of use.
         /// Certain configs have the terms of use feature activated. This property should be taken into account
@@ -294,11 +292,9 @@ namespace ParatureSDK.ParaObjects
                     StaticFields.Add(field);
                 }
 
-                field.Value = value.ToString();
+                field.Value = value;
             }
         }
-        /////////////////////////////////////////////////////////////////////////////////////
-
         /// <summary>
         /// Password is only used when creating a new customer. This property is not filled when retrieving the customer details. It must be empty when updating a customer object.
         /// </summary>
@@ -325,7 +321,6 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-
         /// <summary>
         /// Password confirm is only used when creating a new customer. This property is not filled when retrieving the customer details. It must be empty when updating a customer object.
         /// </summary>
@@ -352,8 +347,6 @@ namespace ParatureSDK.ParaObjects
                 field.Value = value;
             }
         }
-
-
         public StatusReference Status
         {
             get
