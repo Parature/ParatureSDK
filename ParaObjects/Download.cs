@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms.VisualStyles;
 using System.Xml.Serialization;
 using ParatureSDK.Fields;
 using ParatureSDK.ParaObjects.EntityReferences;
