@@ -84,7 +84,7 @@ namespace ParatureSDK.ParaObjects
         /// <param name="fieldId">Custom Field Id</param>
         /// <typeparam name="T">Type of the value</typeparam>
         /// <exception cref="InvalidCastException">Thrown if the type provided is incorrect</exception>
-        public string GetFieldValue(int fieldId)
+        public string GetFieldValue(Int64 fieldId)
         {
             var field = this[fieldId];
             if (field != null)
