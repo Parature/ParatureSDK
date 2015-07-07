@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Xml;
-using ParatureSDK.ModuleQuery;
 using ParatureSDK.ParaObjects;
+using ParatureSDK.Query.ModuleQuery;
 using ParatureSDK.XmlToObjectParser;
 
 namespace ParatureSDK.ApiHandler.ApiMethods

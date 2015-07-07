@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ParatureSDK.EntityQuery
+﻿namespace ParatureSDK.Query.EntityQuery
 {
     public class FolderQuery: ParaQuery
     {

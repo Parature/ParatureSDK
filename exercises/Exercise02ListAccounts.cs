@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ParatureSDK;
 using ParatureSDK.ParaObjects;
+using ParatureSDK.Query.ModuleQuery;
 
 namespace Exercises
 {
@@ -14,7 +15,7 @@ namespace Exercises
         public static ParaEntityList<ParatureSDK.ParaObjects.Account> getAllAccounts()
         {
             //Query object is a query string builder
-            var accountQuery = new ParatureSDK.ModuleQuery.AccountQuery();
+            var accountQuery = new AccountQuery();
             accountQuery.RetrieveAllRecords = true; //Retrieve all records will maximize page size and make necessary additional calls to retrieve all pages
 
             var accounts = ParatureSDK.ApiHandler.Account.GetList(CredentialProvider.Creds, accountQuery);
@@ -33,11 +34,11 @@ namespace Exercises
 
         public static ParaEntityList<ParatureSDK.ParaObjects.Account> searchAccountsByName(string accountName)
         {
-            var accountQuery = new ParatureSDK.ModuleQuery.AccountQuery();
+            var accountQuery = new AccountQuery();
             accountQuery.RetrieveAllRecords = true;
             
             //There is a difference between static fields and custom fields
-            accountQuery.AddStaticFieldFilter(ParatureSDK.ModuleQuery.AccountQuery.AccountStaticFields.AccountName, ParatureSDK.ParaEnums.QueryCriteria.Equal, accountName);
+            accountQuery.AddStaticFieldFilter(AccountQuery.AccountStaticFields.AccountName, ParatureSDK.ParaEnums.QueryCriteria.Equal, accountName);
 
             var accounts = ParatureSDK.ApiHandler.Account.GetList(CredentialProvider.Creds, accountQuery);
 
@@ -46,7 +47,7 @@ namespace Exercises
 
         public static ParaEntityList<ParatureSDK.ParaObjects.Account> searchAccountsByField(long fieldID, string fieldValue)
         {
-            var accountQuery = new ParatureSDK.ModuleQuery.AccountQuery();
+            var accountQuery = new AccountQuery();
             accountQuery.RetrieveAllRecords = true;
             accountQuery.AddCustomFieldFilter(fieldID, ParatureSDK.ParaEnums.QueryCriteria.Equal, fieldValue);
             
@@ -59,7 +60,7 @@ namespace Exercises
         public static ParaEntityList<ParatureSDK.ParaObjects.Account> searchAccountsByField(long fieldID, long fieldValue)
         {
             //field value would be option ID
-            var accountQuery = new ParatureSDK.ModuleQuery.AccountQuery();
+            var accountQuery = new AccountQuery();
             accountQuery.RetrieveAllRecords = true;
             accountQuery.AddCustomFieldFilter(fieldID, ParaEnums.QueryCriteria.Equal, fieldValue);
 
@@ -71,7 +72,7 @@ namespace Exercises
         public static ParaEntityList<ParatureSDK.ParaObjects.Account> getAccountsByView(long viewID)
         {
             //field value would be option ID
-            var accountQuery = new ParatureSDK.ModuleQuery.AccountQuery();
+            var accountQuery = new AccountQuery();
             accountQuery.RetrieveAllRecords = true;
             accountQuery.View = viewID;
 

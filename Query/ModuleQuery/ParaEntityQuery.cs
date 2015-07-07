@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ParatureSDK.Fields;
 
-namespace ParatureSDK.ModuleQuery
+namespace ParatureSDK.Query.ModuleQuery
 {
     public abstract class ParaEntityQuery : ParaQuery
     {

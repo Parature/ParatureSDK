@@ -1,4 +1,4 @@
-namespace ParatureSDK.EntityQuery
+namespace ParatureSDK.Query.EntityQuery
 {
     public class ViewQuery : ParaQuery
     {

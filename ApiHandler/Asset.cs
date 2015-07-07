@@ -3,8 +3,8 @@ using System.Collections;
 using System.Threading;
 using System.Xml;
 using ParatureSDK.ApiHandler.ApiMethods;
-using ParatureSDK.ModuleQuery;
 using ParatureSDK.ParaObjects;
+using ParatureSDK.Query.ModuleQuery;
 using ParatureSDK.XmlToObjectParser;
 using Action = ParatureSDK.ParaObjects.Action;
 

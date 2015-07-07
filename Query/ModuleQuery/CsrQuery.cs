@@ -1,4 +1,4 @@
-namespace ParatureSDK.ModuleQuery
+namespace ParatureSDK.Query.ModuleQuery
 {
     public class CsrQuery : ParaEntityQuery
     {

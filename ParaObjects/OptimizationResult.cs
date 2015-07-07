@@ -1,3 +1,5 @@
+using ParatureSDK.Query;
+
 namespace ParatureSDK.ParaObjects
 {
     public class OptimizationResult

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ParatureSDK;
 using ParatureSDK.ParaObjects;
+using ParatureSDK.Query.ModuleQuery;
 
 namespace Exercises
 {
@@ -11,7 +12,7 @@ namespace Exercises
     {
         public static int getArticleCount()
         {
-            var articleQuery = new ParatureSDK.ModuleQuery.ArticleQuery();
+            var articleQuery = new ArticleQuery();
             articleQuery.RetrieveAllRecords = true;
             articleQuery.TotalOnly = true;
 
@@ -22,7 +23,7 @@ namespace Exercises
 
         public static ParaEntityList<Article> getArticles()
         {
-            var articleQuery = new ParatureSDK.ModuleQuery.ArticleQuery();
+            var articleQuery = new ArticleQuery();
             articleQuery.RetrieveAllRecords = true;
 
             var articles = ParatureSDK.ApiHandler.Article.GetList(CredentialProvider.Creds, articleQuery);
@@ -32,8 +33,8 @@ namespace Exercises
 
         public static ParaEntityList<Article> getPublishedArticles()
         {
-            var articleQuery = new ParatureSDK.ModuleQuery.ArticleQuery();
-            articleQuery.AddStaticFieldFilter(ParatureSDK.ModuleQuery.ArticleQuery.ArticleStaticFields.Published, ParaEnums.QueryCriteria.Equal, true);
+            var articleQuery = new ArticleQuery();
+            articleQuery.AddStaticFieldFilter(ArticleQuery.ArticleStaticFields.Published, ParaEnums.QueryCriteria.Equal, true);
             articleQuery.RetrieveAllRecords = true;
 
             var articles = ParatureSDK.ApiHandler.Article.GetList(CredentialProvider.Creds, articleQuery);
@@ -43,8 +44,8 @@ namespace Exercises
 
         public static ParaEntityList<Article> getArticlesByFolder(long folderID)
         {
-            var articleQuery = new ParatureSDK.ModuleQuery.ArticleQuery();
-            articleQuery.AddStaticFieldFilter(ParatureSDK.ModuleQuery.ArticleQuery.ArticleStaticFields.Folders, ParaEnums.QueryCriteria.Equal, folderID.ToString());
+            var articleQuery = new ArticleQuery();
+            articleQuery.AddStaticFieldFilter(ArticleQuery.ArticleStaticFields.Folders, ParaEnums.QueryCriteria.Equal, folderID.ToString());
             articleQuery.RetrieveAllRecords = true;
 
             var articles = ParatureSDK.ApiHandler.Article.GetList(CredentialProvider.Creds, articleQuery);

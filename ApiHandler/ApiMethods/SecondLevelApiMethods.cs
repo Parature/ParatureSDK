@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml;
-using ParatureSDK.EntityQuery;
 using ParatureSDK.ParaObjects;
+using ParatureSDK.Query;
 using ParatureSDK.XmlToObjectParser;
 
 namespace ParatureSDK.ApiHandler.ApiMethods

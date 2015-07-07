@@ -7,8 +7,9 @@ using System.Text;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
-using ParatureSDK.ModuleQuery;
 using ParatureSDK.ParaObjects;
+using ParatureSDK.Query;
+using ParatureSDK.Query.ModuleQuery;
 using ParatureSDK.XmlToObjectParser;
 using Action = ParatureSDK.ParaObjects.Action;
 

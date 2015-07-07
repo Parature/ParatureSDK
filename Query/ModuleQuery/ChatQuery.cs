@@ -1,4 +1,4 @@
-namespace ParatureSDK.ModuleQuery
+namespace ParatureSDK.Query.ModuleQuery
 {
     /// <summary>
     /// Instantiate this class to build all the properties needed to get a list of Chats.

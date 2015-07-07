@@ -1,6 +1,6 @@
-using ParatureSDK.ModuleQuery;
+using ParatureSDK.Query.ModuleQuery;
 
-namespace ParatureSDK.EntityQuery
+namespace ParatureSDK.Query.EntityQuery
 {
     public class QueueQuery : ParaEntityQuery
     {

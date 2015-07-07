@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Xml;
 using ParatureSDK.ApiHandler.ApiMethods;
-using ParatureSDK.ModuleQuery;
 using ParatureSDK.ParaObjects;
+using ParatureSDK.Query.ModuleQuery;
 using ParatureSDK.XmlToObjectParser;
 
 namespace ParatureSDK.ApiHandler

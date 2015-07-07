@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ParatureSDK;
 using ParatureSDK.ParaObjects;
-using ParatureSDK.EntityQuery;
+using ParatureSDK.Query.EntityQuery;
 
 namespace Exercises
 {
@@ -12,7 +12,7 @@ namespace Exercises
     {
         public static ParaEntityList<ArticleFolder> getPrivateFolders()
         {
-            var folderQuery = new ParatureSDK.EntityQuery.ArticleFolderQuery();
+            var folderQuery = new ArticleFolderQuery();
             folderQuery.RetrieveAllRecords = true;
             folderQuery.AddCustomFilter("Is_Private=true");
 
@@ -23,9 +23,9 @@ namespace Exercises
 
         public static ParaEntityList<ArticleFolder> getFoldersByParentID(long parentID)
         {
-            var folderQuery = new ParatureSDK.EntityQuery.ArticleFolderQuery();
+            var folderQuery = new ArticleFolderQuery();
             folderQuery.RetrieveAllRecords = true;
-            folderQuery.AddStaticFieldFilter(ParatureSDK.EntityQuery.ArticleFolderQuery.FolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, parentID.ToString());
+            folderQuery.AddStaticFieldFilter(ArticleFolderQuery.FolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, parentID.ToString());
 
             var folders = ParatureSDK.ApiHandler.Article.ArticleFolder.GetList(CredentialProvider.Creds, folderQuery);
 

@@ -1,6 +1,6 @@
 ﻿using System;
-using ParatureSDK.ModuleQuery;
 using ParatureSDK.ParaObjects;
+using ParatureSDK.Query.ModuleQuery;
 
 namespace ParatureSDK.ApiHandler.ApiMethods
 {

@@ -1,6 +1,6 @@
-namespace ParatureSDK.EntityQuery
+namespace ParatureSDK.Query.EntityQuery
 {
-    public class ArticleFolderQuery : FolderQuery
+    public class DownloadFolderQuery : FolderQuery
     {
         protected override void BuildModuleSpecificFilter()
         {}
@@ -8,7 +8,7 @@ namespace ParatureSDK.EntityQuery
         /// <summary>
         /// Contains all the static properties you will need when filtering by static fields.
         /// </summary>
-        public static class ArticleFolderStaticFields
+        public static class DownloadFolderStaticFields
         {}
     }
 }

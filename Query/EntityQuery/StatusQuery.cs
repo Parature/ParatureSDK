@@ -1,6 +1,6 @@
-namespace ParatureSDK.EntityQuery
+namespace ParatureSDK.Query.EntityQuery
 {
-    public class RoleQuery : ParaQuery
+    public class StatusQuery : ParaQuery
     {
         protected override void BuildModuleSpecificFilter()
         {

@@ -1,6 +1,6 @@
-namespace ParatureSDK.EntityQuery
+namespace ParatureSDK.Query.EntityQuery
 {
-    public class CustomerStatusQuery : ParaQuery
+    public class CsrStatusQuery : ParaQuery
     {
         protected override void BuildModuleSpecificFilter()
         {
