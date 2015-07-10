@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="ArticleKeywordsExamples.cs" />
     <Compile Include="ChatTranscriptExample.cs" />
+    <Compile Include="DownloadExamples.cs" />
     <Compile Include="Exercise01Credentials.cs" />
     <Compile Include="Exercise10DeleteObjects.cs" />
     <Compile Include="Exercise02ListAccounts.cs" />
