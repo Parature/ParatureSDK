@@ -1,8 +1,3 @@
-using System;
-using System.Collections;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using ParatureSDK.ParaObjects;
@@ -66,10 +61,25 @@ namespace ParatureSDK.PagedData
         /// <param name="xml">The XML received</param>
         public void OnXmlDeserialization(XDocument xml)
         {
-            TotalItems = int.Parse(xml.Root.Attribute("total").Value);
-            ResultsReturned = int.Parse(xml.Root.Attribute("results").Value);
-            PageNumber = int.Parse(xml.Root.Attribute("total").Value);
-            PageSize = int.Parse(xml.Root.Attribute("page-size").Value);
+            if (xml.Root.Attribute("total") != null)
+            {
+                int.TryParse(xml.Root.Attribute("total").Value, out TotalItems);
+            }
+
+            if( xml.Root.Attribute("results") != null )
+            {
+                int.TryParse(xml.Root.Attribute("results").Value, out ResultsReturned);
+            }
+
+            if ( xml.Root.Attribute("page") != null )
+            {
+                int.TryParse(xml.Root.Attribute("page").Value, out PageNumber);
+            }
+
+            if (xml.Root.Attribute("page-size") != null)
+            {
+                int.TryParse(xml.Root.Attribute("page-size").Value, out PageSize);    
+            }
         }
     }
 }
