@@ -81,10 +81,18 @@ namespace ParatureSDK.XmlToObjectParser
                 //We need to manually parse total and results for PagedData object
                 nodeReader.MoveToContent();
                 var xml = XDocument.Load(nodeReader);
-                list.TotalItems = int.Parse(xml.Root.Attribute("total").Value);
-                list.ResultsReturned = int.Parse(xml.Root.Attribute("results").Value);
-                list.PageNumber = int.Parse(xml.Root.Attribute("total").Value);
-                list.PageSize = int.Parse(xml.Root.Attribute("page-size").Value);
+
+                var totalAttr = xml.Root.Attribute("total");
+                list.TotalItems = totalAttr != null ? int.Parse(totalAttr.Value) : 0;
+
+                var resultsAttr = xml.Root.Attribute("results");
+                list.ResultsReturned = resultsAttr != null ? int.Parse(resultsAttr.Value) : 0;
+
+                var pageAttr = xml.Root.Attribute("page");
+                list.PageNumber = pageAttr != null ? int.Parse(pageAttr.Value) : 0;
+
+                var pageSizeAttr = xml.Root.Attribute("page-size");
+                list.PageSize = pageSizeAttr != null ? int.Parse(pageSizeAttr.Value) : 0;
             }
 
             return list;

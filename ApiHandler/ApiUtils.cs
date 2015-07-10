@@ -225,7 +225,7 @@ namespace ParatureSDK.ApiHandler
             }
             else
             {
-                var ar = ApiCallFactory.ObjectGetList<ParaObjects.Download>(pc, new ArrayList());
+                var ar = ApiCallFactory.ObjectGetList<ParaObjects.Download>(pc, query.BuildQueryArguments());
                 if (ar.HasException == false)
                 {
                     entityList = ParaEntityParser.FillListDownload(ar.XmlReceived);
