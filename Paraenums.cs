@@ -16,6 +16,16 @@ namespace ParatureSDK
             Desc
         }
 
+        /// <summary>
+        /// Default retrieval via the API is only for Active entities, and not those trashed
+        /// </summary>
+        public enum StatusType
+        {
+            All,
+            Active,
+            Trash
+        }
+
         public enum TicketStatusType
         {
             All,
