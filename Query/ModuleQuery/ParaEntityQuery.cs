@@ -206,7 +206,11 @@ namespace ParatureSDK.Query.ModuleQuery
             _QueryFilters = new ArrayList();
             BuildCustomFieldQueryArguments();
             BuildParaQueryArguments();
-
+            if (this.GetActiveOrTrashed != null)
+            {
+                _QueryFilters.Add("_status_=" + this.GetActiveOrTrashed.ToString().ToLower());
+            }
+ 
             return _QueryFilters;
         }
 
