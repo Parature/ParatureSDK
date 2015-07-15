@@ -67,11 +67,13 @@ namespace ParatureSDK
             /// </summary>
             Like,
             /// <summary>
-            /// Can be used for dates, as well as numeric values. Equivalent to a ">" sign.
+            /// Can be used for dates, as well as numeric values. 
+            /// Equivalent to a "&gt;" sign for numeric values and "&gt;=" for dates.
             /// </summary>
             MoreThan,
             /// <summary>
             /// Can be used for dates, as well as numeric values.
+            /// Equivalent to a "&lt;" sign for numeric values and "&lt;=" for dates.
             /// </summary>
             LessThan,
             /// <summary>
