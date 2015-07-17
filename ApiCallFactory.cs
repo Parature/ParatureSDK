@@ -24,9 +24,20 @@ namespace ParatureSDK
             return ObjectCreateUpdate<T>(paracredentials, fileToPost, objectid, null);
         }
 
-        public static ApiCallResponse ObjectCreateUpdate<T>(ParaCredentials paracredentials, XmlDocument fileToPost, Int64 objectid, ArrayList arguments)
+        internal static ApiCallResponse ObjectCreateUpdate(ParaCredentials paracredentials, string entityType,
+            XmlDocument fileToPost, Int64 objectid)
         {
-            var entityType = typeof (T).Name;
+            return ObjectCreateUpdate(paracredentials, entityType, fileToPost, objectid, null);
+        }
+
+        public static ApiCallResponse ObjectCreateUpdate<T>(ParaCredentials paracredentials, XmlDocument fileToPost,
+            Int64 objectid, ArrayList arguments)
+        {
+            return ObjectCreateUpdate(paracredentials, typeof (T).Name, fileToPost, objectid, arguments);
+        }
+
+        internal static ApiCallResponse ObjectCreateUpdate(ParaCredentials paracredentials, string entityType, XmlDocument fileToPost, Int64 objectid, ArrayList arguments)
+        {
             if (arguments == null)
             {
                 arguments = new ArrayList();
@@ -59,7 +70,12 @@ namespace ParatureSDK
 
         public static ApiCallResponse ObjectDelete<T>(ParaCredentials paracredentials, Int64 objectid, bool purge)
         {
-            var entityType = typeof (T).Name;
+            return ObjectDelete(paracredentials, typeof (T).ToString(), objectid, purge);
+        }
+
+        internal static ApiCallResponse ObjectDelete(ParaCredentials paracredentials, string entityType, Int64 objectid,
+            bool purge)
+        {
             string apiCallUrl;
 
             if (purge)
@@ -71,7 +87,6 @@ namespace ParatureSDK
             {
                 apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityType, objectid, false);
             }
-
 
             return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete);
         }
