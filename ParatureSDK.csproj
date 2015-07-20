@@ -89,6 +89,7 @@
     <Compile Include="ApiHandler\Ticket.cs" />
     <Compile Include="ApiRequestSettings.cs" />
     <Compile Include="ApiUrlBuilder.cs" />
+    <Compile Include="ParaObjects\IMutableEntity.cs" />
     <Compile Include="ParaService.cs" />
     <Compile Include="Query\EntityQuery\ArticleFolderQuery.cs" />
     <Compile Include="Query\EntityQuery\CsrStatusQuery.cs" />

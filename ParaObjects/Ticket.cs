@@ -10,7 +10,7 @@ namespace ParatureSDK.ParaObjects
     /// <summary>
     /// Holds all the properties of the Ticket module.
     /// </summary>
-    public class Ticket : ParaEntity
+    public class Ticket : ParaEntity, IMutableEntity
     {
         /// <summary>
         /// The full ticket number, including the account number. Usually in the format 

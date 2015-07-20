@@ -6,7 +6,7 @@ using ParatureSDK.ParaObjects.EntityReferences;
 
 namespace ParatureSDK.ParaObjects
 {
-    public class Product : ParaEntity
+    public class Product : ParaEntity, IMutableEntity
     {
         public string Currency
         {

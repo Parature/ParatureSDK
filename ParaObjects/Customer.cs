@@ -9,7 +9,7 @@ namespace ParatureSDK.ParaObjects
     /// <summary>
     /// Holds all the properties of the Customer module.
     /// </summary>
-    public class Customer : ParaEntity
+    public class Customer : ParaEntity, IMutableEntity
     {
         public AccountReference Account
         {

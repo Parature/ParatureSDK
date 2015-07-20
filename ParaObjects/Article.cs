@@ -9,7 +9,7 @@ namespace ParatureSDK.ParaObjects
     /// <summary>
     /// Holds all the properties of the Knowledge Base module.
     /// </summary>
-    public class Article : ParaEntity
+    public class Article : ParaEntity, IMutableEntity
     {
         public DateTime Date_Created
         {

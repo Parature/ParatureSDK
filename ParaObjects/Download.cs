@@ -10,7 +10,7 @@ namespace ParatureSDK.ParaObjects
     /// <summary>
     /// Holds all the properties of the Download module.
     /// </summary>
-    public class Download : ParaEntity
+    public class Download : ParaEntity, IMutableEntity
     {
         // Specific properties for this module
         /// <summary>
