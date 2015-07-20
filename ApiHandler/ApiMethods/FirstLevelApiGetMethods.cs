@@ -64,6 +64,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// Provides you with the capability to list accounts, following criteria you would set
         /// by instantiating a ModuleQuery.AccountQuery object
         /// </summary>
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.")]
         public static ParaEntityList<TEntity> GetList(ParaCredentials pc, TQuery query)
         {
             // Making a schema call and returning all custom fields to be included in the call.

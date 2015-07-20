@@ -54,6 +54,18 @@ namespace ParatureSDK
             return list;
         }
 
+        public ParaEntityList<TEntity> GetList<TEntity>(ParaEntityQuery query)
+            where TEntity : ParaEntity, new()
+        {
+            if (query.IncludeAllCustomFields)
+            {
+                var objschem = Create<TEntity>();
+                query.IncludeCustomField(objschem.CustomFields);
+            }
+
+            return ApiUtils.ApiGetEntityList<TEntity>(Credentials, query);
+        }
+
         /// <summary>
         /// Get the List of views from within your Parature license
         /// </summary>
