@@ -19,6 +19,8 @@ namespace ParatureSDK.Query.ModuleQuery
             IncludeAllCustomFields = false;
         }
 
+        internal abstract Type QueryTargetType { get; }
+
         /// <summary>
         /// Adds a custom field based filter to the query. Use this method for Custom Fields that are date based. 
         /// </summary>

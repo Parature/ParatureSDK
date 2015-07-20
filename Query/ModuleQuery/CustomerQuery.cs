@@ -1,3 +1,6 @@
+using ParatureSDK.ParaObjects;
+using System;
+
 namespace ParatureSDK.Query.ModuleQuery
 {
     /// <summary>
@@ -10,6 +13,14 @@ namespace ParatureSDK.Query.ModuleQuery
         public CustomerQuery()
         {
             View = 0;
+        }
+
+        internal override Type QueryTargetType
+        {
+            get
+            {
+                return typeof(Customer);
+            }
         }
 
         /// <summary>

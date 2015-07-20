@@ -9,6 +9,7 @@ using ParatureSDK.ApiHandler;
 using ParatureSDK.ParaObjects;
 using ParatureSDK.Query.ModuleQuery;
 using ParatureSDK.XmlToObjectParser;
+using System.Collections;
 
 namespace ParatureSDK
 {
@@ -40,6 +41,19 @@ namespace ParatureSDK
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="entityId"></param>
+        /// <param name="pc"></param>
+        /// <param name="queryString"></param>
+        /// <returns></returns>
+        public TEntity GetDetails<TEntity>(long entityId, ArrayList queryString) where TEntity : ParaEntity, new()
+        {
+            return ApiUtils.ApiGetEntity<TEntity>(Credentials, entityId, queryString);
+        }
+
+        /// <summary>
         /// Returns an view list object from a XML Document. No calls to the APIs are made when calling this method.
         /// </summary>
         /// <typeparam name="TEntity">The entity type to return</typeparam>
@@ -57,6 +71,11 @@ namespace ParatureSDK
         public ParaEntityList<TEntity> GetList<TEntity>(ParaEntityQuery query)
             where TEntity : ParaEntity, new()
         {
+            if (!(query.QueryTargetType is TEntity))
+            {
+                throw new ArgumentException("Inavlid query type for the requested entity result type", "query");
+            }
+
             if (query.IncludeAllCustomFields)
             {
                 var objschem = Create<TEntity>();
@@ -77,6 +96,11 @@ namespace ParatureSDK
             where TEntity : ParaEntityBaseProperties, new()
             where TModule : ParaEntity
         {
+            if (!(query.QueryTargetType is TEntity))
+            {
+                throw new ArgumentException("Inavlid query type for the requested entity result type", "query");
+            }
+
             return ApiUtils.ApiGetEntityList<TModule, TEntity>(Credentials, query);
         }
 
@@ -105,9 +129,33 @@ namespace ParatureSDK
         /// </summary>
         /// <param name="entity">The entity to save</param>
         /// <returns></returns>
-        public ApiCallResponse Save(ParaEntity entity)
+        public ApiCallResponse Insert(IMutableEntity entity)
         {
-            return ApiCallFactory.ObjectCreateUpdate(Credentials, entity.GetType().Name, XmlGenerator.GenerateXml(entity), entity.Id);
+            var pe = entity as ParaEntity;
+
+            if (pe == null)
+            {
+                throw new ArgumentException("You can only call this function on a ParaEntity-derived object.", "entity");
+            }
+
+            return ApiCallFactory.ObjectCreateUpdate(Credentials, pe.GetType().Name, XmlGenerator.GenerateXml(pe), pe.Id);
+        }
+
+        /// <summary>
+        /// Adds or updates the entity on the server.
+        /// </summary>
+        /// <param name="entity">The entity to save</param>
+        /// <returns></returns>
+        public ApiCallResponse Update(IMutableEntity entity)
+        {
+            var pe = entity as ParaEntity;
+
+            if (pe == null)
+            {
+                throw new ArgumentException("You can only call this function on a ParaEntity-derived object.", "entity");
+            }
+
+            return ApiCallFactory.ObjectCreateUpdate(Credentials, pe.GetType().Name, XmlGenerator.GenerateXml(pe), pe.Id);
         }
 
         /// <summary>
@@ -115,9 +163,15 @@ namespace ParatureSDK
         /// </summary>
         /// <param name="entity">The entity to delete</param>
         /// <returns></returns>
-        public ApiCallResponse Delete(ParaEntity entity)
+        public ApiCallResponse Delete(IMutableEntity entity)
         {
-            return ApiCallFactory.ObjectDelete(Credentials, entity.GetType().ToString(), entity.Id, false);
+            var pe = entity as ParaEntity;
+
+            if (pe == null)
+            {
+                throw new ArgumentException("You can only call this function on a ParaEntity-derived object.", "entity");
+            }
+            return ApiCallFactory.ObjectDelete(Credentials, pe.GetType().ToString(), pe.Id, false);
         }
     }
 }

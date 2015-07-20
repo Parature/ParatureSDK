@@ -1,7 +1,18 @@
+using ParatureSDK.ParaObjects;
+using System;
+
 namespace ParatureSDK.Query.ModuleQuery
 {
     public class CsrQuery : ParaEntityQuery
     {
+        internal override Type QueryTargetType
+        {
+            get
+            {
+                return typeof(Csr);
+            }
+        }
+
         protected override void BuildModuleSpecificFilter()
         { }
 

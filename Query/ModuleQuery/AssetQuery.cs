@@ -1,3 +1,6 @@
+using ParatureSDK.ParaObjects;
+using System;
+
 namespace ParatureSDK.Query.ModuleQuery
 {
     /// <summary>
@@ -7,6 +10,14 @@ namespace ParatureSDK.Query.ModuleQuery
     /// </summary>
     public class AssetQuery : ParaEntityQuery
     {
+        internal override Type QueryTargetType
+        {
+            get
+            {
+                return typeof(Asset);
+            }
+        }
+
         protected override void BuildModuleSpecificFilter()
         { }
     }

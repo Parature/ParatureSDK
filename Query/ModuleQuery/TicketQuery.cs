@@ -1,3 +1,6 @@
+using ParatureSDK.ParaObjects;
+using System;
+
 namespace ParatureSDK.Query.ModuleQuery
 {
     /// <summary>
@@ -9,6 +12,14 @@ namespace ParatureSDK.Query.ModuleQuery
     {
         // Status Type to filter tickets by.
         private ParaEnums.TicketStatusType _statusType = ParaEnums.TicketStatusType.All;
+
+        internal override Type QueryTargetType
+        {
+            get
+            {
+                return typeof(Ticket);
+            }
+        }
 
         /// <summary>
         /// If there is any need to limit the ticket returned to a certain status type. Default is 
