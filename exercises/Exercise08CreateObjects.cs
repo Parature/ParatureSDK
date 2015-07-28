@@ -24,7 +24,7 @@ namespace Exercises
             //emptyAccount.CustomFieldSetSelectedFieldOption(fieldID, optionid) //Dropdown, Radio, Multiple Dropdown
 
             // The new version of Insert sets the server-provided Id field on the passed-in entity.
-            var accountCreateResponse = parature.Insert(newAccount);
+            parature.Insert(newAccount);
 
             return newAccount;
         }
@@ -45,7 +45,7 @@ namespace Exercises
             newCustomer.Status = new StatusReference{ Status = new Status() { Id = 2 }};
 
             // The new version of Insert sets the server-provided Id field on the passed-in entity.
-            var customerCreateResponse = parature.Insert(newCustomer);
+            parature.Insert(newCustomer);
 
             return newCustomer;
         }
@@ -53,15 +53,14 @@ namespace Exercises
         public static ArticleFolder CreateKBFolder(string name, bool isPrivate, long parentFolderID)
         {
             var parature = new ParaService(CredentialProvider.Creds);
-            var newFolder = Exercise07GetSchemas.ArticleFolderSchema();
+            var newFolder = parature.Create<ArticleFolder>();
             newFolder.Name = name;
             newFolder.Parent_Folder = new ArticleFolder { Id = parentFolderID };
             newFolder.Is_Private = isPrivate;
 
-            var createResponse = parature.Insert(newFolder);
 
             // The new version of Insert sets the server-provided Id field on the passed-in entity.
-            newFolder.Id = createResponse.Id;
+            parature.Insert(newFolder);
 
             return newFolder;
         }
@@ -69,23 +68,22 @@ namespace Exercises
         public static Article CreateArticle(string title, string content, bool published, List<long> folders)
         {
             var parature = new ParaService(CredentialProvider.Creds);
-            var emptyArticle = ParatureSDK.ApiHandler.Article.Schema(CredentialProvider.Creds);
-            emptyArticle.Question = title;
-            emptyArticle.Answer = content;
-            emptyArticle.Published = published;
-            emptyArticle.Folders = new List<ArticleFolder>();
+            var newArticle = parature.Create<Article>();
+            newArticle.Question = title;
+            newArticle.Answer = content;
+            newArticle.Published = published;
+            newArticle.Folders = new List<ArticleFolder>();
 
             foreach (var folderID in folders)
             {
                 //Only need the IDs
-                emptyArticle.Folders.Add(new ArticleFolder { Id = folderID });
+                newArticle.Folders.Add(new ArticleFolder { Id = folderID });
             }
 
-            var createResponse = ParatureSDK.ApiHandler.Article.Insert(emptyArticle, CredentialProvider.Creds);
+            // The new version of Insert sets the server-provided Id field on the passed-in entity.
+            parature.Insert(newArticle);
 
-            emptyArticle.Id = createResponse.Id;
-
-            return emptyArticle;
+            return newArticle;
         }
 
     }
