@@ -16,9 +16,8 @@ namespace Exercises
             folderQuery.RetrieveAllRecords = true;
             folderQuery.AddCustomFilter("Is_Private=true");
 
-            var folders = ParatureSDK.ApiHandler.Article.ArticleFolder.GetList(CredentialProvider.Creds, folderQuery);
-
-            return folders;
+            var parature = new ParaService(CredentialProvider.Creds);
+            return parature.GetList<ArticleFolder>(folderQuery);
         }
 
         public static ParaEntityList<ArticleFolder> getFoldersByParentID(long parentID)
@@ -27,9 +26,8 @@ namespace Exercises
             folderQuery.RetrieveAllRecords = true;
             folderQuery.AddStaticFieldFilter(ArticleFolderQuery.FolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, parentID.ToString());
 
-            var folders = ParatureSDK.ApiHandler.Article.ArticleFolder.GetList(CredentialProvider.Creds, folderQuery);
-
-            return folders;
+            var parature = new ParaService(CredentialProvider.Creds);
+            return parature.GetList<ArticleFolder>(folderQuery);
         }
 
         public static ParaEntityList<ArticleFolder> getFoldersByParentID(string folderName)
@@ -38,9 +36,8 @@ namespace Exercises
             folderQuery.RetrieveAllRecords = true;
             folderQuery.AddStaticFieldFilter(ArticleFolderQuery.FolderStaticFields.Name, ParaEnums.QueryCriteria.Equal, folderName);
 
-            var folders = ParatureSDK.ApiHandler.Article.ArticleFolder.GetList(CredentialProvider.Creds, folderQuery);
-
-            return folders;
+            var parature = new ParaService(CredentialProvider.Creds);
+            return parature.GetList<ArticleFolder>(folderQuery);
         }
     }
 }

@@ -10,6 +10,8 @@ using ParatureSDK.ParaObjects;
 using ParatureSDK.Query.ModuleQuery;
 using ParatureSDK.XmlToObjectParser;
 using System.Collections;
+using ParatureSDK.Query;
+using ParatureSDK.Query.EntityQuery;
 
 namespace ParatureSDK
 {
@@ -85,6 +87,55 @@ namespace ParatureSDK
             return ApiUtils.ApiGetEntityList<TEntity>(Credentials, query);
         }
 
+        public ParaEntityList<TFolder> GetList<TFolder>(FolderQuery query)
+            where TFolder : Folder, new()
+        {
+            var folderList = new ParaEntityList<TFolder>();
+            var ar = ApiCallFactory.ObjectGetList<TFolder>(Credentials, query.BuildQueryArguments());
+            if (ar.HasException == false)
+            {
+                folderList = ParaEntityParser.FillList<TFolder>(ar.XmlReceived);
+            }
+            folderList.ApiCallResponse = ar;
+
+            // Checking if the system needs to recursively call all of the data returned.
+            if (query.RetrieveAllRecords)
+            {
+                bool continueCalling = true;
+                while (continueCalling)
+                {
+                    if (folderList.TotalItems > folderList.Data.Count)
+                    {
+                        // We still need to pull data
+
+                        // Getting next page's data
+                        query.PageNumber = query.PageNumber + 1;
+
+                        ar = ApiCallFactory.ObjectGetList<TFolder>(Credentials, query.BuildQueryArguments());
+
+                        var objectlist = ParaEntityParser.FillList<TFolder>(ar.XmlReceived);
+
+                        if (objectlist.Data.Count == 0)
+                        {
+                            continueCalling = false;
+                        }
+
+                        folderList.Data.AddRange(objectlist.Data);
+                        folderList.ResultsReturned = folderList.Data.Count;
+                        folderList.PageNumber = query.PageNumber;
+                    }
+                    else
+                    {
+                        // That is it, pulled all the items.
+                        continueCalling = false;
+                        folderList.ApiCallResponse = ar;
+                    }
+                }
+            }
+
+            return folderList;
+        }
+
         /// <summary>
         /// Get the List of views from within your Parature license
         /// </summary>
@@ -105,7 +156,7 @@ namespace ParatureSDK
         }
 
         /// <summary>
-        /// Create a new entity object. This object is not saved to the server until you call Insert on it.
+        /// Create a new entity object. This object is not saved to the server until you call Insert with it.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
