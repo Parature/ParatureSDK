@@ -1,7 +1,18 @@
-﻿namespace ParatureSDK.Query.EntityQuery
+﻿using ParatureSDK.ParaObjects;
+using System;
+
+namespace ParatureSDK.Query.EntityQuery
 {
     public class FolderQuery: ParaQuery
     {
+        internal override Type QueryTargetType
+        {
+            get
+            {
+                return typeof(Folder);
+            }
+        }
+
         protected override void BuildModuleSpecificFilter()
         {
         }

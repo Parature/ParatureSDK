@@ -19,7 +19,8 @@ namespace Exercises
             //Use a custom filter if correct enums aren't available
             customerQuery.AddCustomFilter(String.Format("Date_Created_max_={0}/{1}/{2}", date.Month, date.Day, date.Year));
 
-            var customers = ParatureSDK.ApiHandler.Customer.GetList(CredentialProvider.Creds, customerQuery);
+            var parature = new ParaService(CredentialProvider.Creds);
+            var customers = parature.GetList<Customer>(customerQuery);
 
             return customers;
         }
@@ -30,7 +31,8 @@ namespace Exercises
             customerQuery.RetrieveAllRecords = true;
             customerQuery.AddStaticFieldFilter(CustomerQuery.CustomerStaticFields.CustomerEmail, ParaEnums.QueryCriteria.Equal, email);
 
-            var customers = ParatureSDK.ApiHandler.Customer.GetList(CredentialProvider.Creds, customerQuery);
+            var parature = new ParaService(CredentialProvider.Creds);
+            var customers = parature.GetList<Customer>(customerQuery);
 
             return customers;
         }
@@ -41,7 +43,8 @@ namespace Exercises
             customerQuery.RetrieveAllRecords = true;
             customerQuery.AddStaticFieldFilter(CustomerQuery.CustomerStaticFields.Status, ParaEnums.QueryCriteria.Equal, statusID.ToString());
 
-            var customers = ParatureSDK.ApiHandler.Customer.GetList(CredentialProvider.Creds, customerQuery);
+            var parature = new ParaService(CredentialProvider.Creds);
+            var customers = parature.GetList<Customer>(customerQuery);
 
             return customers;
         }
@@ -52,7 +55,8 @@ namespace Exercises
             customerQuery.RetrieveAllRecords = true;
             customerQuery.AddSortOrder(CustomerQuery.CustomerStaticFields.LastName, ParaEnums.QuerySortBy.Asc);
 
-            var customers = ParatureSDK.ApiHandler.Customer.GetList(CredentialProvider.Creds, customerQuery);
+            var parature = new ParaService(CredentialProvider.Creds);
+            var customers = parature.GetList<Customer>(customerQuery);
 
             return customers;
         }
