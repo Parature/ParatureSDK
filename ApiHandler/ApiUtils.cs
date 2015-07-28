@@ -391,7 +391,7 @@ namespace ParatureSDK.ApiHandler
         /// <param name="pc"></param>
         /// <param name="entityId"></param>
         /// <returns></returns>
-        internal static T ApiGetEntity<T>(ParaCredentials pc, long entityId, ArrayList arl) where T : ParaEntity, new()
+        internal static T ApiGetEntity<T>(ParaCredentials pc, long entityId, ArrayList arl) where T : ParaEntityBaseProperties, new()
         {
             var entity = new T();
             var req = ApiCallFactory.ObjectGetDetail<T>(pc, entityId, arl);

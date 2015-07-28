@@ -42,6 +42,13 @@ namespace ParatureSDK
             return ApiUtils.ApiGetEntity<TEntity>(Credentials, id);
         }
 
+        public TEntity GetDetails<TEntity>(long entityId)
+             where TEntity : ParaEntityBaseProperties, new()
+        {
+            
+            return GetDetails<TEntity>(entityId, new ArrayList());
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -50,8 +57,13 @@ namespace ParatureSDK
         /// <param name="pc"></param>
         /// <param name="queryString"></param>
         /// <returns></returns>
-        public TEntity GetDetails<TEntity>(long entityId, ArrayList queryString) where TEntity : ParaEntity, new()
+        public TEntity GetDetails<TEntity>(long entityId, ArrayList queryString)
+            where TEntity : ParaEntityBaseProperties, new()
         {
+            if (typeof(TEntity) == typeof(Folder))
+            {
+
+            }
             return ApiUtils.ApiGetEntity<TEntity>(Credentials, entityId, queryString);
         }
 
@@ -63,14 +75,13 @@ namespace ParatureSDK
         /// Value Type: <see cref="Int64" />   (System.Int64)
         /// </param>
         /// 
-        public TFolder GetDetails<TFolder>(long folderId)
-            where TFolder : Folder, new()
+        public Folder GetDetails(long folderId)
         {
-            var folder = new TFolder();
-            var ar = ApiCallFactory.ObjectGetDetail<TFolder>(Credentials, folderId);
+            var folder = new Folder();
+            var ar = ApiCallFactory.ObjectGetDetail<Folder>(Credentials, folderId);
             if (ar.HasException == false)
             {
-                folder = ParaEntityParser.EntityFill<TFolder>(ar.XmlReceived);
+                folder = ParaEntityParser.EntityFill<Folder>(ar.XmlReceived);
                 folder.FullyLoaded = true;
             }
             else
@@ -80,6 +91,18 @@ namespace ParatureSDK
             }
 
             folder.ApiCallResponse = ar;
+            return folder;
+        }
+
+        public static TFolder GetDetails<TFolder>(XmlDocument xml)
+            where TFolder : Folder, new()
+        {
+            var folder = ParaEntityParser.EntityFill<TFolder>(xml);
+            folder.FullyLoaded = true;
+
+            folder.ApiCallResponse.XmlReceived = xml;
+            folder.ApiCallResponse.Id = folder.Id;
+
             return folder;
         }
 

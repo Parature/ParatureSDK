@@ -112,6 +112,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         ///  <param name="creds">
         ///  The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         ///  </param>
+        [Obsolete("To be removed in favor of ParaService.GetDetails in next major revision.")]
         public static TFolder GetDetails(Int64 folderId, ParaCredentials creds)
         {
             var folder = FillDetails(folderId, creds);
@@ -123,6 +124,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// Provides you with the capability to list Downloads, following criteria you would set
         /// by instantiating a ModuleQuery.DownloadQuery object
         /// </summary>
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.")]
         public static ParaEntityList<TFolder> GetList(ParaCredentials creds, TQuery query)
         {
             return FillList(creds, query);
@@ -198,6 +200,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
             return folder;
         }
 
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.")]
         public static ParaEntityList<TFolder> GetList(ParaCredentials creds)
         {
             var eq = new TQuery() {RetrieveAllRecords = true};
@@ -210,6 +213,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <param name="xml">
         /// The DownloadFolder XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
+        [Obsolete("To be removed in favor of ParaService.GetDetails in next major revision.")]
         public static TFolder GetDetails(XmlDocument xml)
         {
             var folder = ParaEntityParser.EntityFill<TFolder>(xml);

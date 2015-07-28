@@ -11,6 +11,9 @@ namespace Exercises
     {
         public static Customer getCustomer(long customerID)
         {
+            var parature = new ParaService(CredentialProvider.Creds);
+            return parature.GetDetails<Customer>(customerID);
+
             var customer = ParatureSDK.ApiHandler.Customer.GetDetails(customerID, CredentialProvider.Creds);
 
             return customer;
