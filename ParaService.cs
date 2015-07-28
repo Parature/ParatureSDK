@@ -55,6 +55,34 @@ namespace ParatureSDK
             return ApiUtils.ApiGetEntity<TEntity>(Credentials, entityId, queryString);
         }
 
+        ///  <summary>
+        ///  Returns a Download object with all the properties of a customer.
+        ///  </summary>
+        ///  <param name="folderId">
+        /// The Download number that you would like to get the details of. 
+        /// Value Type: <see cref="Int64" />   (System.Int64)
+        /// </param>
+        /// 
+        public TFolder GetDetails<TFolder>(long folderId)
+            where TFolder : Folder, new()
+        {
+            var folder = new TFolder();
+            var ar = ApiCallFactory.ObjectGetDetail<TFolder>(Credentials, folderId);
+            if (ar.HasException == false)
+            {
+                folder = ParaEntityParser.EntityFill<TFolder>(ar.XmlReceived);
+                folder.FullyLoaded = true;
+            }
+            else
+            {
+                folder.FullyLoaded = false;
+                folder.Id = 0;
+            }
+
+            folder.ApiCallResponse = ar;
+            return folder;
+        }
+
         /// <summary>
         /// Returns an view list object from a XML Document. No calls to the APIs are made when calling this method.
         /// </summary>
@@ -134,6 +162,13 @@ namespace ParatureSDK
             }
 
             return folderList;
+        }
+
+        public ParaEntityList<TFolder> GetList<TFolder>()
+             where TFolder : Folder, new()
+        {
+            var eq = new FolderQuery() { RetrieveAllRecords = true };
+            return GetList<TFolder>(eq);
         }
 
         /// <summary>
