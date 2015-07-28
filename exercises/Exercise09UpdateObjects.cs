@@ -14,7 +14,8 @@ namespace Exercises
 
             bool isSuccess;
 
-            var updateResponse = ParatureSDK.ApiHandler.Customer.Update(modifiedCustomer, CredentialProvider.Creds);
+            var parature = new ParaService(CredentialProvider.Creds);
+            var updateResponse = parature.Update(modifiedCustomer);
 
             isSuccess = !updateResponse.HasException;
 
@@ -25,7 +26,8 @@ namespace Exercises
         {
             bool isSuccess;
 
-            var updateResponse = ParatureSDK.ApiHandler.Account.Update(modifiedAccount, CredentialProvider.Creds);
+            var parature = new ParaService(CredentialProvider.Creds);
+            var updateResponse = parature.Update(modifiedAccount);
 
             isSuccess = !updateResponse.HasException;
 
