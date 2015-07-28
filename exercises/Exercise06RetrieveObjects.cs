@@ -13,24 +13,18 @@ namespace Exercises
         {
             var parature = new ParaService(CredentialProvider.Creds);
             return parature.GetDetails<Customer>(customerID);
-
-            var customer = ParatureSDK.ApiHandler.Customer.GetDetails(customerID, CredentialProvider.Creds);
-
-            return customer;
         }
 
         public static Account getAccount(long accountID)
         {
-            var account = ParatureSDK.ApiHandler.Account.GetDetails(accountID, CredentialProvider.Creds);
-
-            return account;
+            var parature = new ParaService(CredentialProvider.Creds);
+            return parature.GetDetails<Account>(accountID);
         }
 
         public static Article getArticle(long articleID)
         {
-            var article = ParatureSDK.ApiHandler.Article.GetDetails(articleID, CredentialProvider.Creds);
-
-            return article;
+            var parature = new ParaService(CredentialProvider.Creds);
+            return parature.GetDetails<Article>(articleID);
         }
 
     }
