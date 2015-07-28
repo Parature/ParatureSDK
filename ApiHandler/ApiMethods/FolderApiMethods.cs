@@ -20,6 +20,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// Whether or not this methods needs to ignore case when looking for the folder name or not.
         /// </param>
         /// <returns></returns>
+        [Obsolete("To be removed in favor of ParaService.GetIdByName in next major revision.")]
         public static Int64 GetIdByName(string folderName, bool ignoreCase, ParaCredentials creds)
         {
             Int64 id = 0;
@@ -49,6 +50,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// The parent folder under which to look for a folder by name.
         /// </param>
         /// <returns></returns>
+        [Obsolete("To be removed in favor of ParaService.GetIdByName in next major revision.")]
         public static Int64 GetIdByName(string folderName, bool ignoreCase, ParaCredentials creds,
             Int64 parentFolderId)
         {
@@ -72,6 +74,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <summary>
         /// Creates a Parature Download Folder. Requires an Object and a credentials object. Will return the Newly Created Downloadid. Returns 0 if the Customer creation fails.
         /// </summary>
+        [Obsolete("To be removed in favor of ParaService.Insert in next major revision.")]
         public static ApiCallResponse Insert(TFolder folder, ParaCredentials creds)
         {
             var doc = XmlGenerator.GenerateXml(folder);
@@ -83,6 +86,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <summary>
         /// Updates a Parature Download. Requires an Object and a credentials object.  Will return the updated Downloadid. Returns 0 if the Customer update operation fails.
         /// </summary>
+        [Obsolete("To be removed in favor of ParaService.Update in next major revision.")]
         public static ApiCallResponse Update(TFolder folder, ParaCredentials creds)
         {
             var ar = ApiCallFactory.ObjectCreateUpdate<TFolder>(creds, XmlGenerator.GenerateXml(folder), folder.Id);
@@ -97,6 +101,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <param name="articleFolder">
         /// The id of the Article Folder to delete
         /// </param>
+        [Obsolete("To be removed in favor of ParaService.Delete in next major revision.")]
         public static ApiCallResponse Delete(Int64 folderId, ParaCredentials creds)
         {
             return ApiCallFactory.ObjectDelete<TFolder>(creds, folderId, true);
@@ -231,6 +236,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <param name="listXml">
         /// The DownloadFolder List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.")]
         public static ParaEntityList<TFolder> GetList(XmlDocument listXml)
         {
             var downloadFoldersList = ParaEntityParser.FillList<TFolder>(listXml);

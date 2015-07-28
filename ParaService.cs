@@ -214,11 +214,53 @@ namespace ParatureSDK
         }
 
         /// <summary>
+        /// Locates a folder with the name provided, will return the id if found. Otherwise, it will return 0.
+        /// </summary>
+        /// <param name="folderName">
+        /// The name of the folder you are looking for.
+        /// </param>                
+        /// <param name="ignoreCase">
+        /// Whether or not this methods needs to ignore case when looking for the folder name or not.
+        /// </param>
+        /// <returns></returns>
+        public long GetIdByName(string folderName, bool ignoreCase)
+        {
+            var query = new FolderQuery { PageSize = 500 };
+            var folder = GetList<Folder>(query).FirstOrDefault(f => String.Compare(f.Name, folderName, ignoreCase) == 0);
+
+            return folder == null ? 0 : folder.Id;
+        }
+
+        /// <summary>
+        /// Locates a folder with the name provided and which has the parent folder of your choice, will return the id if found. Otherwise, it will return 0.
+        /// </summary>
+        /// <param name="folderName">
+        /// The name of the folder you are looking for.
+        /// </param>                
+        /// <param name="ignoreCase">
+        /// Whether or not this methods needs to ignore case when looking for the folder name or not.
+        /// </param>
+        /// <param name="parentFolderId">
+        /// The parent folder under which to look for a folder by name.
+        /// </param>
+        /// <returns></returns>
+        public long GetIdByName(string folderName, bool ignoreCase, long parentFolderId)
+        {
+            var fQuery = new FolderQuery();
+            fQuery.AddStaticFieldFilter(FolderQuery.FolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal,
+                parentFolderId.ToString());
+            fQuery.PageSize = 500;
+            var folder = GetList<Folder>(fQuery).FirstOrDefault(f => String.Compare(f.Name, folderName, ignoreCase) == 0);
+
+            return folder == null ? 0 : folder.Id;
+        }
+
+        /// <summary>
         /// Create a new entity object. This object is not saved to the server until you call Insert with it.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
-        public TEntity Create<TEntity>() where TEntity : ParaEntity, new()
+        public TEntity Create<TEntity>() where TEntity : ParaEntityBaseProperties, new()
         {
             var entity = new TEntity();
             var ar = ApiCallFactory.ObjectGetSchema<TEntity>(Credentials);
@@ -241,13 +283,30 @@ namespace ParatureSDK
         public ApiCallResponse Insert(IMutableEntity entity)
         {
             var pe = entity as ParaEntity;
+            Folder folder = null;
+            ApiCallResponse reply = null;
 
             if (pe == null)
             {
-                throw new ArgumentException("You can only call this function on a ParaEntity-derived object.", "entity");
+                folder = entity as Folder;
+                if (folder == null)
+                {
+                    throw new ArgumentException("You can only call this function on a Folder-derived or ParaEntity-derived object.", "entity");
+                }
+                else
+                {
+                    var doc = XmlGenerator.GenerateXml(folder);
+                    reply = ApiCallFactory.ObjectCreateUpdate<Folder>(Credentials, doc, 0);
+                    folder.Id = reply.Id;
+                }
+            }
+            else
+            {
+                reply = ApiCallFactory.ObjectCreateUpdate(Credentials, pe.GetType().Name, XmlGenerator.GenerateXml(pe), pe.Id);
+                pe.Id = reply.Id;
             }
 
-            return ApiCallFactory.ObjectCreateUpdate(Credentials, pe.GetType().Name, XmlGenerator.GenerateXml(pe), pe.Id);
+            return reply;
         }
 
         /// <summary>
@@ -258,13 +317,28 @@ namespace ParatureSDK
         public ApiCallResponse Update(IMutableEntity entity)
         {
             var pe = entity as ParaEntity;
+            Folder folder = null;
+            ApiCallResponse reply = null;
 
             if (pe == null)
             {
-                throw new ArgumentException("You can only call this function on a ParaEntity-derived object.", "entity");
+                folder = entity as Folder;
+                if (folder == null)
+                {
+                    throw new ArgumentException("You can only call this function on a Folder-derived or ParaEntity-derived object.", "entity");
+                }
+                else
+                {
+                    var doc = XmlGenerator.GenerateXml(folder);
+                    reply = ApiCallFactory.ObjectCreateUpdate<Folder>(Credentials, doc, folder.Id);
+                }
+            }
+            else
+            {
+                reply = ApiCallFactory.ObjectCreateUpdate(Credentials, pe.GetType().Name, XmlGenerator.GenerateXml(pe), pe.Id);
             }
 
-            return ApiCallFactory.ObjectCreateUpdate(Credentials, pe.GetType().Name, XmlGenerator.GenerateXml(pe), pe.Id);
+            return reply;
         }
 
         /// <summary>
@@ -275,12 +349,27 @@ namespace ParatureSDK
         public ApiCallResponse Delete(IMutableEntity entity)
         {
             var pe = entity as ParaEntity;
+            Folder folder = null;
+            ApiCallResponse reply = null;
 
             if (pe == null)
             {
-                throw new ArgumentException("You can only call this function on a ParaEntity-derived object.", "entity");
+                folder = entity as Folder;
+                if (folder == null)
+                {
+                    throw new ArgumentException("You can only call this function on a Folder-derived or ParaEntity-derived object.", "entity");
+                }
+                else
+                {
+                    reply = ApiCallFactory.ObjectDelete<Folder>(Credentials, folder.Id, true);
+                }
             }
-            return ApiCallFactory.ObjectDelete(Credentials, pe.GetType().ToString(), pe.Id, false);
+            else
+            {
+                reply = ApiCallFactory.ObjectCreateUpdate(Credentials, pe.GetType().Name, XmlGenerator.GenerateXml(pe), pe.Id);
+            }
+
+            return reply;
         }
     }
 }

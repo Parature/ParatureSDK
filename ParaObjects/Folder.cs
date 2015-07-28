@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace ParatureSDK.ParaObjects
 {
-    public class Folder : ParaEntityBaseProperties
+    public class Folder : ParaEntityBaseProperties, IMutableEntity
     {
         public string Name = "";
         public string Description = "";

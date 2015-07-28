@@ -10,7 +10,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <summary>
         /// Create a Parature Account. Requires an Object and a credentials object. Will return the Newly Created accountId. Returns 0 if the entity creation fails.
         /// </summary>
-        [Obsolete("To be removed in favor of ParaService.Save in next major revision.")]
+        [Obsolete("To be removed in favor of ParaService.Insert in next major revision.")]
         public static ApiCallResponse Insert<TEntity>(TEntity entity, ParaCredentials paraCredentials) where TEntity : ParaEntity, new()
         {
             return Upsert(entity, paraCredentials);
@@ -19,7 +19,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <summary>
         /// Update a Parature Account. Requires an Object and a credentials object.  Will return the updated accountId. Returns 0 if the entity update operation fails.
         /// </summary>
-        [Obsolete("To be removed in favor of ParaService.Save in next major revision.")]
+        [Obsolete("To be removed in favor of ParaService.Update in next major revision.")]
         public static ApiCallResponse Update<TEntity>(TEntity entity, ParaCredentials paraCredentials) where TEntity : ParaEntity, new()
         {
             return Upsert(entity, paraCredentials);
