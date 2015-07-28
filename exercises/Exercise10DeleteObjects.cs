@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ParatureSDK;
+using ParatureSDK.ParaObjects;
 
 namespace Exercises
 {
@@ -12,7 +13,8 @@ namespace Exercises
         {
             bool isSuccess;
 
-            var trashResponse = ParatureSDK.ApiHandler.Customer.Delete(customerID, CredentialProvider.Creds, false);
+            var parature = new ParaService(CredentialProvider.Creds);
+            var trashResponse = parature.Delete<Customer>(customerID, false);
 
             isSuccess = !trashResponse.HasException;
 
@@ -23,7 +25,8 @@ namespace Exercises
         {
             bool isSuccess;
 
-            var purgeResponse = ParatureSDK.ApiHandler.Customer.Delete(customerID, CredentialProvider.Creds, true);
+            var parature = new ParaService(CredentialProvider.Creds);
+            var purgeResponse = parature.Delete<Customer>(customerID, true);
 
             isSuccess = !purgeResponse.HasException;
 

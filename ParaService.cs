@@ -371,5 +371,17 @@ namespace ParatureSDK
 
             return reply;
         }
+
+        /// <summary>
+        /// Deletes the entity from the server.
+        /// </summary>
+        /// <param name="entity">The entity to delete</param>
+        /// <param name="purge">To delete the entity permanently or not (to the trash instead)</param>
+        /// <returns></returns>
+        public ApiCallResponse Delete<TEntity>(long id, bool purge)
+            where TEntity : ParaEntityBaseProperties, new()
+        {
+            return ApiCallFactory.ObjectDelete<TEntity>(Credentials, id, purge);
+        }
     }
 }
