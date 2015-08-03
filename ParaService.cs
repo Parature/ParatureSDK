@@ -60,11 +60,26 @@ namespace ParatureSDK
         public TEntity GetDetails<TEntity>(long entityId, ArrayList queryString)
             where TEntity : ParaEntityBaseProperties, new()
         {
-            if (typeof(TEntity) == typeof(Folder))
+            if (typeof(TEntity) != typeof(Folder))
             {
-
+                return ApiUtils.ApiGetEntity<TEntity>(Credentials, entityId, queryString);
             }
-            return ApiUtils.ApiGetEntity<TEntity>(Credentials, entityId, queryString);
+
+            var folder = new TEntity();
+            var ar = ApiCallFactory.ObjectGetDetail<TEntity>(Credentials, entityId);
+            if (ar.HasException == false)
+            {
+                folder = ParaEntityParser.EntityFill<TEntity>(ar.XmlReceived);
+                folder.FullyLoaded = true;
+            }
+            else
+            {
+                folder.FullyLoaded = false;
+                folder.Id = 0;
+            }
+
+            folder.ApiCallResponse = ar;
+            return folder;
         }
 
         ///  <summary>
