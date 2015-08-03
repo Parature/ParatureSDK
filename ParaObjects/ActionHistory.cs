@@ -40,8 +40,8 @@ namespace ParatureSDK.ParaObjects
         /// The date this action took place.
         /// </summary>
         public DateTime Action_Date;
-        public ArrayList Cc_Csr = new ArrayList();
-        public ArrayList Cc_Customer = new ArrayList();
+        public string Cc_Csr;
+        public string Cc_Customer;
         /// <summary>
         /// The list, if any exists, of all the Attachments of this action history item.
         /// </summary>
@@ -66,8 +66,8 @@ namespace ParatureSDK.ParaObjects
             Action_Date = actionHistory.Action_Date;
             History_Attachments = new List<Attachment>(actionHistory.History_Attachments);
             Action_Performer = new ActionHistoryPerformer(actionHistory.Action_Performer);
-            Cc_Csr = new ArrayList(actionHistory.Cc_Csr);
-            Cc_Customer = new ArrayList(actionHistory.Cc_Customer);
+            Cc_Csr = actionHistory.Cc_Csr;
+            Cc_Customer = actionHistory.Cc_Customer;
         }
     }
 }
