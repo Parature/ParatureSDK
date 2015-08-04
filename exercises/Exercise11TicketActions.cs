@@ -5,6 +5,7 @@ using System.Text;
 using ParatureSDK.ParaObjects;
 using ApiHandler = ParatureSDK.ApiHandler;
 using Action = ParatureSDK.ParaObjects.Action;
+using ParatureSDK;
 
 namespace Exercises
 {

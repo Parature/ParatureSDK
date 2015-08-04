@@ -29,11 +29,13 @@ namespace ParatureSDK.Query.ModuleQuery
         /// The criteria you would like to apply to this custom field
         /// </param>
         /// <param name="value">
-        /// The Date you would like to base your filter off.
+        /// The Date you would like to base your filter off, converted to UTC.
+        /// NOTE: Custom fields are days, and do not include a time component. Data will look like: yyyy-MM-ddT00:00:00
+        /// The APIs do respect filtering relative to the full date/time provided, so if you want to use equals, zero the time component.
         /// </param>        
         public void AddCustomFieldFilter(Int64 customFieldId, ParaEnums.QueryCriteria criteria, DateTime value)
         {
-            QueryFilterAdd("FID" + customFieldId, criteria, value.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            QueryFilterAdd("FID" + customFieldId, criteria, value.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"));
         }
 
         /// <summary>

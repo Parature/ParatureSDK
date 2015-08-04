@@ -445,7 +445,7 @@ namespace ParatureSDK.ParaObjects
         {
             get
             {
-                return GetFieldValue<Int64>("Initial_Resolution_Target_Duration");
+                return GetFieldValue<Int64?>("Initial_Resolution_Target_Duration");
             }
             set
             {
@@ -469,7 +469,7 @@ namespace ParatureSDK.ParaObjects
         {
             get
             {
-                return GetFieldValue<DateTime>("Initial_Resolution_Date");
+                return GetFieldValue<DateTime?>("Initial_Resolution_Date");
             }
             set
             {
@@ -493,7 +493,7 @@ namespace ParatureSDK.ParaObjects
         {
             get
             {
-                return GetFieldValue<Int64>("Initial_Response_Target_Duration");
+                return GetFieldValue<Int64?>("Initial_Response_Target_Duration");
             }
             set
             {
@@ -517,7 +517,7 @@ namespace ParatureSDK.ParaObjects
         {
             get
             {
-                return GetFieldValue<Int64>("Initial_Resolution_Duration_Bh");
+                return GetFieldValue<Int64?>("Initial_Resolution_Duration_Bh");
             }
             set
             {
@@ -541,7 +541,7 @@ namespace ParatureSDK.ParaObjects
         {
             get
             {
-                return GetFieldValue<Int64>("Initial_Response_Duration_Bh");
+                return GetFieldValue<Int64?>("Initial_Response_Duration_Bh");
             }
             set
             {
@@ -565,7 +565,7 @@ namespace ParatureSDK.ParaObjects
         {
             get
             {
-                return GetFieldValue<DateTime>("Resolution_Violation_Date_Bh");
+                return GetFieldValue<DateTime?>("Resolution_Violation_Date_Bh");
             }
             set
             {
@@ -589,7 +589,7 @@ namespace ParatureSDK.ParaObjects
         {
             get
             {
-                return GetFieldValue<DateTime>("Response_Violation_Date_Bh");
+                return GetFieldValue<DateTime?>("Response_Violation_Date_Bh");
             }
             set
             {
@@ -661,7 +661,7 @@ namespace ParatureSDK.ParaObjects
         {
             get
             {
-                return GetFieldValue<Int64>("Warning_Time");
+                return GetFieldValue<Int64?>("Warning_Time");
             }
             set
             {
@@ -685,7 +685,7 @@ namespace ParatureSDK.ParaObjects
         {
             get
             {
-                return GetFieldValue<Int64>("Last_Resolution_Duration_Bh");
+                return GetFieldValue<Int64?>("Last_Resolution_Duration_Bh");
             }
             set
             {

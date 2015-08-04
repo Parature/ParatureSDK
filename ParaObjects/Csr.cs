@@ -283,7 +283,7 @@ namespace ParatureSDK.ParaObjects
                     field = new StaticField()
                     {
                         Name = "Role",
-                        FieldType = "entity",
+                        FieldType = "entitymultiple",
                         DataType = "entity"
                     };
                     StaticFields.Add(field);

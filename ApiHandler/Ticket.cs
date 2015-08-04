@@ -14,7 +14,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Ticket module.
     /// </summary>
-    public class Ticket : FirstLevelApiMethods<ParaObjects.Ticket, TicketQuery>
+    public class Ticket : FirstLevelApiMethods<ParaObjects.Ticket, TicketQuery>, IMutableEntity
     {
         /// <summary>
         /// Returns a Ticket object with all of its details.
