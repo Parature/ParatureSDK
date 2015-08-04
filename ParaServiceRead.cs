@@ -226,20 +226,20 @@ namespace ParatureSDK
         /// <summary>
         /// Get the List of views from within your Parature license
         /// </summary>
-        /// <typeparam name="TModule"></typeparam>
+        /// <typeparam name="TParentEntity"></typeparam>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="query"></param>
         /// <returns></returns>
-        public ParaEntityList<TEntity> GetList<TModule,TEntity>(ParaEntityQuery query)
+        public ParaEntityList<TEntity> GetList<TParentEntity,TEntity>(ParaEntityQuery query)
             where TEntity : ParaEntityBaseProperties, new()
-            where TModule : ParaEntity
+            where TParentEntity : ParaEntity
         {
             if (!(query.QueryTargetType is TEntity))
             {
                 throw new ArgumentException("Inavlid query type for the requested entity result type", "query");
             }
 
-            return ApiUtils.ApiGetEntityList<TModule, TEntity>(Credentials, query);
+            return ApiUtils.ApiGetEntityList<TParentEntity, TEntity>(Credentials, query);
         }
 
         /// <summary>
