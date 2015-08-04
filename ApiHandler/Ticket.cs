@@ -14,7 +14,7 @@ namespace ParatureSDK.ApiHandler
     /// <summary>
     /// Contains all the methods that allow you to interact with the Parature Ticket module.
     /// </summary>
-    public class Ticket : FirstLevelApiMethods<ParaObjects.Ticket, TicketQuery>, IMutableEntity, IHistoricalEntity
+    public class Ticket : FirstLevelApiMethods<ParaObjects.Ticket, TicketQuery>, IMutableEntity
     {
         /// <summary>
         /// Returns a Ticket object with all of its details.
@@ -65,6 +65,7 @@ namespace ParatureSDK.ApiHandler
         /// Your credentials object.
         /// </param>
         /// <returns></returns>
+        [Obsolete("To be removed in favor of ParaService.RunActionOn in next major revision.")]
         public static ApiCallResponse ActionRun(Int64 ticketId, Action action, ParaCredentials pc)
         {
             var ar = ApiUtils.ActionRun<ParaObjects.Ticket>(ticketId, action, pc);

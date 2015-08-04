@@ -34,8 +34,8 @@ namespace Exercises
         /// <returns></returns>
         public static ApiCallResponse RunAction(long ticketId, Action action)
         {
-            var actionResponse = ApiHandler.Ticket.ActionRun(ticketId, action, CredentialProvider.Creds);
-            return actionResponse;
+            var parature = new ParaService(CredentialProvider.Creds);
+            return parature.RunActionOn<Ticket>(ticketId, action);
         }
 
         /// <summary>

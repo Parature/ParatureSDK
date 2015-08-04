@@ -139,5 +139,12 @@ namespace ParatureSDK
         {
             return ApiCallFactory.ObjectDelete<TEntity>(Credentials, id, purge);
         }
+
+        public ApiCallResponse RunActionOn<TEntity>(long entityId, ParaObjects.Action action)
+            where TEntity : ParaEntity, IActionRunner, new()
+        {
+            var ar = ApiUtils.ActionRun<TEntity>(entityId, action, Credentials);
+            return ar;
+        }
     }
 }

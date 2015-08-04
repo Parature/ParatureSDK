@@ -17,6 +17,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <param name="xml">
         /// The entity XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
+        [Obsolete("To be removed in favor of ParaService.GetDetails in next major revision.")]
         public static TEntity GetDetails(XmlDocument xml)
         {
             var entity = ParaEntityParser.EntityFill<TEntity>(xml);
@@ -39,11 +40,13 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <param name="pc">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
+        [Obsolete("To be removed in favor of ParaService.GetDetails in next major revision.")]
         public static TEntity GetDetails(Int64 entityId, ParaCredentials pc)
         {
             return GetDetails(entityId, pc, new ArrayList());
         }
 
+        [Obsolete("To be removed in favor of ParaService.GetDetails in next major revision.")]
         public static TEntity GetDetails(Int64 entityId, ParaCredentials pc, ArrayList queryStringParams)
         {
             var entity = ApiUtils.ApiGetEntity<TEntity>(pc, entityId,
@@ -55,6 +58,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <summary>
         /// Will return the first 25 accounts returned by the APIs.
         /// </summary>            
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.")]
         public static ParaEntityList<TEntity> GetList(ParaCredentials pc)
         {
             return ApiUtils.ApiGetEntityList<TEntity>(pc);

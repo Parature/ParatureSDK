@@ -7,7 +7,7 @@ using ParatureSDK.ParaObjects.EntityReferences;
 
 namespace ParatureSDK.ParaObjects
 {
-    public class Asset : ParaEntity, IMutableEntity
+    public class Asset : ParaEntity, IMutableEntity, IActionRunner
     {
         /// <summary>
         /// The account that owns the asset, if any.
