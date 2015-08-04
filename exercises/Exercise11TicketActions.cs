@@ -19,7 +19,8 @@ namespace Exercises
         /// <returns></returns>
         public static List<Action> GetAvailableTicketActions(long ticketId)
         {
-            var ticketResponse = ApiHandler.Ticket.GetDetails(ticketId, CredentialProvider.Creds, false);
+            var parature = new ParaService(CredentialProvider.Creds);
+            var ticketResponse = parature.GetDetails<Ticket>(ticketId);
             
             return ticketResponse.Actions;
         }
