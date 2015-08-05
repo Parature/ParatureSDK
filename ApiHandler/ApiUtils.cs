@@ -20,7 +20,7 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Internal Method to run an Action, independently from the module.
         /// </summary>
-        public static ApiCallResponse ActionRun<TEntity>(Int64 objectId, Action action, ParaCredentials pc)
+        internal static ApiCallResponse ActionRun<TEntity>(Int64 objectId, Action action, ParaCredentials pc)
             where TEntity : ParaEntity
         {
             var doc = XmlGenerator.GenerateActionXml<TEntity>(action);
@@ -35,7 +35,7 @@ namespace ParatureSDK.ApiHandler
         /// <param name="pc"></param>
         /// <param name="attachment"></param>
         /// <returns></returns>
-        public static Attachment UploadFile<TEntity>(ParaCredentials pc, System.Net.Mail.Attachment attachment)
+        internal static Attachment UploadFile<TEntity>(ParaCredentials pc, System.Net.Mail.Attachment attachment)
             where TEntity : ParaEntity
         {
             var postUrlR = ApiCallFactory.FileUploadGetUrl<TEntity>(pc);
@@ -53,7 +53,7 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Internal method to handle the upload of a file to Parature.
         /// </summary>
-        public static Attachment UploadFile<TEntity>(ParaCredentials pc, string text,
+        internal static Attachment UploadFile<TEntity>(ParaCredentials pc, string text,
             string contentType, string fileName) where TEntity : ParaEntity
         {
             var encoding = new ASCIIEncoding();
@@ -64,7 +64,7 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Internal method to handle the upload of a file to Parature.
         /// </summary>
-        public static Attachment UploadFile<TEntity>(ParaCredentials pc, Byte[] attachment,
+        internal static Attachment UploadFile<TEntity>(ParaCredentials pc, Byte[] attachment,
             String contentType, String fileName) where TEntity : ParaEntity
         {
             Attachment attach;
@@ -103,7 +103,7 @@ namespace ParatureSDK.ApiHandler
         /// </summary>
         /// <param name="xmlReceived"></param>
         /// <returns></returns>
-        public static XmlDocument RemoveStaticFieldsNodes(XmlDocument xmlReceived)
+        internal static XmlDocument RemoveStaticFieldsNodes(XmlDocument xmlReceived)
         {
             var xmlPurged = XDocument.Parse(xmlReceived.OuterXml);
             xmlPurged.Root.Elements()
