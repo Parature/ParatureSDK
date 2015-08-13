@@ -131,8 +131,8 @@ namespace ParatureSDK
         /// <summary>
         /// Deletes the entity from the server.
         /// </summary>
-        /// <param name="entity">The entity to delete</param>
         /// <param name="purge">To delete the entity permanently or not (to the trash instead)</param>
+        /// <param name="id">todo: describe id parameter on Delete</param>
         /// <returns></returns>
         public ApiCallResponse Delete<TEntity>(long id, bool purge)
             where TEntity : ParaEntityBaseProperties, new()

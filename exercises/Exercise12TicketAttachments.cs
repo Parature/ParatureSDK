@@ -5,6 +5,7 @@ using System.Text;
 using ParatureSDK.ParaObjects;
 using Action = ParatureSDK.ParaObjects.Action;
 using ApiHandler = ParatureSDK.ApiHandler;
+using ParatureSDK;
 
 namespace Exercises
 {
@@ -17,13 +18,14 @@ namespace Exercises
         /// <returns>List of ticket attachments</returns>
         public static List<Attachment> GetTicketAttachments(long ticketId)
         {
-            var ticketResponse = ParatureSDK.ApiHandler.Ticket.GetDetails(ticketId, CredentialProvider.Creds, false);
-
-            return ticketResponse.Ticket_Attachments;
+            var parature = new ParaService(CredentialProvider.Creds);
+            return parature.GetDetails<Ticket>(ticketId).Ticket_Attachments;
         }
 
         public static void AddAttachment(Ticket ticket, string fileName, string fileContents)
         {
+            var parature = new ParaService(CredentialProvider.Creds);
+
             ticket.AttachmentsAdd(CredentialProvider.Creds, fileContents, "text/plain", fileName);
             var response = ApiHandler.Ticket.Update(ticket, CredentialProvider.Creds);
         }
