@@ -11,6 +11,11 @@ namespace Exercises
 {
     class Exercise12TicketAttachments
     {
+        public Exercise12TicketAttachments()
+        {
+            ParaService.Credentials = CredentialProvider.Creds;
+        }
+
         /// <summary>
         /// Retrieve the attachments on a ticket
         /// </summary>
@@ -18,14 +23,11 @@ namespace Exercises
         /// <returns>List of ticket attachments</returns>
         public static List<Attachment> GetTicketAttachments(long ticketId)
         {
-            ParaService.Credentials = CredentialProvider.Creds;
             return ParaService.GetDetails<Ticket>(ticketId).Ticket_Attachments;
         }
 
         public static void AddAttachment(Ticket ticket, string fileName, string fileContents)
         {
-            ParaService.Credentials = CredentialProvider.Creds;
-
             ticket.AttachmentsAdd(fileContents, "text/plain", fileName);
             var response = ParaService.Update(ticket);
         }
@@ -49,7 +51,6 @@ namespace Exercises
                 }
 
                 //remove the attachments on the server
-                ParaService.Credentials = CredentialProvider.Creds;
                 var response = ParaService.Update(ticket);
             }
         }
@@ -61,7 +62,6 @@ namespace Exercises
         public static void DeleteAllAttachmentsBulk(Ticket ticket)
         {
             ticket.DeleteAllAttachments();
-            ParaService.Credentials = CredentialProvider.Creds;
 
             var response = ParaService.Update(ticket);
         }

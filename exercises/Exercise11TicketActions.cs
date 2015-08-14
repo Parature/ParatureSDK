@@ -11,6 +11,11 @@ namespace Exercises
 {
     class Exercise11TicketActions
     {
+        public Exercise11TicketActions()
+        {
+            ParaService.Credentials = CredentialProvider.Creds;
+        }
+
         /// <summary>
         /// The actions that can be performed on a ticket depend on the current State.
         /// Retrieve the ticket to get a list of Actions available. This ensures no invalid transition is requested.
@@ -19,7 +24,6 @@ namespace Exercises
         /// <returns></returns>
         public static List<Action> GetAvailableTicketActions(long ticketId)
         {
-            ParaService.Credentials = CredentialProvider.Creds;
             var ticketResponse = ParaService.GetDetails<Ticket>(ticketId);
             
             return ticketResponse.Actions;
@@ -34,7 +38,6 @@ namespace Exercises
         /// <returns></returns>
         public static ApiCallResponse RunAction(long ticketId, Action action)
         {
-            ParaService.Credentials = CredentialProvider.Creds;
             return ParaService.RunActionOn<Ticket>(ticketId, action);
         }
 

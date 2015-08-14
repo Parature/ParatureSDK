@@ -9,11 +9,15 @@ namespace Exercises
 {
     class Exercise10DeleteObjects
     {
+        public Exercise10DeleteObjects()
+        {
+            ParaService.Credentials = CredentialProvider.Creds;
+        }
+
         public static bool TrashCustomer(long customerID)
         {
             bool isSuccess;
 
-            ParaService.Credentials = CredentialProvider.Creds;
             var trashResponse = ParaService.Delete<Customer>(customerID, false);
 
             isSuccess = !trashResponse.HasException;

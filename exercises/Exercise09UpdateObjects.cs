@@ -9,12 +9,16 @@ namespace Exercises
 {
     class Exercise09UpdateObjects
     {
+        public Exercise09UpdateObjects()
+        {
+            ParaService.Credentials = CredentialProvider.Creds;
+        }
+
         public static bool UpdateCustomer(Customer modifiedCustomer) {
             //Customer object would be modifed before calling this method
 
             bool isSuccess;
 
-            ParaService.Credentials = CredentialProvider.Creds;
             var updateResponse = ParaService.Update(modifiedCustomer);
 
             isSuccess = !updateResponse.HasException;
@@ -26,7 +30,6 @@ namespace Exercises
         {
             bool isSuccess;
 
-            ParaService.Credentials = CredentialProvider.Creds;
             var updateResponse = ParaService.Update(modifiedAccount);
 
             isSuccess = !updateResponse.HasException;

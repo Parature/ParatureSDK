@@ -10,13 +10,17 @@ namespace Exercises
 {
     class Exercise05ListArticles
     {
+        public Exercise05ListArticles()
+        {
+            ParaService.Credentials = CredentialProvider.Creds;
+        }
+
         public static int getArticleCount()
         {
             var articleQuery = new ArticleQuery();
             articleQuery.RetrieveAllRecords = true;
             articleQuery.TotalOnly = true;
 
-            ParaService.Credentials = CredentialProvider.Creds;
             return ParaService.GetList<Article>(articleQuery).TotalItems;
         }
 
@@ -25,7 +29,6 @@ namespace Exercises
             var articleQuery = new ArticleQuery();
             articleQuery.RetrieveAllRecords = true;
 
-            ParaService.Credentials = CredentialProvider.Creds;
             return ParaService.GetList<Article>(articleQuery);
         }
 
@@ -35,7 +38,6 @@ namespace Exercises
             articleQuery.AddStaticFieldFilter(ArticleQuery.ArticleStaticFields.Published, ParaEnums.QueryCriteria.Equal, true);
             articleQuery.RetrieveAllRecords = true;
 
-            ParaService.Credentials = CredentialProvider.Creds;
             return ParaService.GetList<Article>(articleQuery);
         }
 
@@ -45,7 +47,6 @@ namespace Exercises
             articleQuery.AddStaticFieldFilter(ArticleQuery.ArticleStaticFields.Folders, ParaEnums.QueryCriteria.Equal, folderID.ToString());
             articleQuery.RetrieveAllRecords = true;
 
-            ParaService.Credentials = CredentialProvider.Creds;
             return ParaService.GetList<Article>(articleQuery);
         }
     }

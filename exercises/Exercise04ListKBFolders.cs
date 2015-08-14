@@ -10,13 +10,17 @@ namespace Exercises
 {
     class Exercise04ListKBFolders
     {
+        public Exercise04ListKBFolders()
+        {
+            ParaService.Credentials = CredentialProvider.Creds;
+        }
+
         public static ParaEntityList<ArticleFolder> getPrivateFolders()
         {
             var folderQuery = new ArticleFolderQuery();
             folderQuery.RetrieveAllRecords = true;
             folderQuery.AddCustomFilter("Is_Private=true");
 
-            ParaService.Credentials = CredentialProvider.Creds;
             return ParaService.GetList<ArticleFolder>(folderQuery);
         }
 
@@ -26,7 +30,6 @@ namespace Exercises
             folderQuery.RetrieveAllRecords = true;
             folderQuery.AddStaticFieldFilter(ArticleFolderQuery.FolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal, parentID.ToString());
 
-            ParaService.Credentials = CredentialProvider.Creds;
             return ParaService.GetList<ArticleFolder>(folderQuery);
         }
 
@@ -36,7 +39,6 @@ namespace Exercises
             folderQuery.RetrieveAllRecords = true;
             folderQuery.AddStaticFieldFilter(ArticleFolderQuery.FolderStaticFields.Name, ParaEnums.QueryCriteria.Equal, folderName);
 
-            ParaService.Credentials = CredentialProvider.Creds;
             return ParaService.GetList<ArticleFolder>(folderQuery);
         }
     }

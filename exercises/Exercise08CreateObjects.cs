@@ -10,9 +10,13 @@ namespace Exercises
 {
     class Exercise08CreateObjects
     {
-        public static Account CreateAccount(string accountName)
+        public Exercise08CreateObjects()
         {
             ParaService.Credentials = CredentialProvider.Creds;
+        }
+
+        public static Account CreateAccount(string accountName)
+        {
             var newAccount = ParaService.Create<Account>();
 
             newAccount.Account_Name = accountName;
@@ -31,7 +35,6 @@ namespace Exercises
 
         public static Customer CreateCustomer(string firstname, string lastname, string email, string password, long accountID)
         {
-            ParaService.Credentials = CredentialProvider.Creds;
             var newCustomer = ParaService.Create<Customer>();
             newCustomer.First_Name = firstname;
             newCustomer.Last_Name = lastname;
@@ -52,7 +55,6 @@ namespace Exercises
 
         public static ArticleFolder CreateKBFolder(string name, bool isPrivate, long parentFolderID)
         {
-            ParaService.Credentials = CredentialProvider.Creds;
             var newFolder = ParaService.Create<ArticleFolder>();
             newFolder.Name = name;
             newFolder.Parent_Folder = new ArticleFolder { Id = parentFolderID };
@@ -67,7 +69,6 @@ namespace Exercises
 
         public static Article CreateArticle(string title, string content, bool published, List<long> folders)
         {
-            ParaService.Credentials = CredentialProvider.Creds;
             var newArticle = ParaService.Create<Article>();
             newArticle.Question = title;
             newArticle.Answer = content;
@@ -85,6 +86,5 @@ namespace Exercises
 
             return newArticle;
         }
-
     }
 }
