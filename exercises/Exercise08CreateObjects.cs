@@ -12,8 +12,8 @@ namespace Exercises
     {
         public static Account CreateAccount(string accountName)
         {
-            var parature = new ParaService(CredentialProvider.Creds);
-            var newAccount = parature.Create<Account>();
+            ParaService.Credentials = CredentialProvider.Creds;
+            var newAccount = ParaService.Create<Account>();
 
             newAccount.Account_Name = accountName;
             newAccount.Sla = new SlaReference { Sla = new Sla { Id = 1 }}; //Default SLA
@@ -24,15 +24,15 @@ namespace Exercises
             //emptyAccount.CustomFieldSetSelectedFieldOption(fieldID, optionid) //Dropdown, Radio, Multiple Dropdown
 
             // The new version of Insert sets the server-provided Id field on the passed-in entity.
-            parature.Insert(newAccount);
+            ParaService.Insert(newAccount);
 
             return newAccount;
         }
 
         public static Customer CreateCustomer(string firstname, string lastname, string email, string password, long accountID)
         {
-            var parature = new ParaService(CredentialProvider.Creds);
-            var newCustomer = parature.Create<Customer>();
+            ParaService.Credentials = CredentialProvider.Creds;
+            var newCustomer = ParaService.Create<Customer>();
             newCustomer.First_Name = firstname;
             newCustomer.Last_Name = lastname;
             newCustomer.Sla = new SlaReference {Sla = new Sla {Id = 1}};
@@ -45,30 +45,30 @@ namespace Exercises
             newCustomer.Status = new StatusReference{ Status = new Status() { Id = 2 }};
 
             // The new version of Insert sets the server-provided Id field on the passed-in entity.
-            parature.Insert(newCustomer);
+            ParaService.Insert(newCustomer);
 
             return newCustomer;
         }
 
         public static ArticleFolder CreateKBFolder(string name, bool isPrivate, long parentFolderID)
         {
-            var parature = new ParaService(CredentialProvider.Creds);
-            var newFolder = parature.Create<ArticleFolder>();
+            ParaService.Credentials = CredentialProvider.Creds;
+            var newFolder = ParaService.Create<ArticleFolder>();
             newFolder.Name = name;
             newFolder.Parent_Folder = new ArticleFolder { Id = parentFolderID };
             newFolder.Is_Private = isPrivate;
 
 
             // The new version of Insert sets the server-provided Id field on the passed-in entity.
-            parature.Insert(newFolder);
+            ParaService.Insert(newFolder);
 
             return newFolder;
         }
 
         public static Article CreateArticle(string title, string content, bool published, List<long> folders)
         {
-            var parature = new ParaService(CredentialProvider.Creds);
-            var newArticle = parature.Create<Article>();
+            ParaService.Credentials = CredentialProvider.Creds;
+            var newArticle = ParaService.Create<Article>();
             newArticle.Question = title;
             newArticle.Answer = content;
             newArticle.Published = published;
@@ -81,7 +81,7 @@ namespace Exercises
             }
 
             // The new version of Insert sets the server-provided Id field on the passed-in entity.
-            parature.Insert(newArticle);
+            ParaService.Insert(newArticle);
 
             return newArticle;
         }

@@ -19,8 +19,8 @@ namespace Exercises
             //Use a custom filter if correct enums aren't available
             customerQuery.AddCustomFilter(String.Format("Date_Created_max_={0}/{1}/{2}", date.Month, date.Day, date.Year));
 
-            var parature = new ParaService(CredentialProvider.Creds);
-            var customers = parature.GetList<Customer>(customerQuery);
+            ParaService.Credentials = CredentialProvider.Creds;
+            var customers = ParaService.GetList<Customer>(customerQuery);
 
             return customers;
         }
@@ -31,8 +31,8 @@ namespace Exercises
             customerQuery.RetrieveAllRecords = true;
             customerQuery.AddStaticFieldFilter(CustomerQuery.CustomerStaticFields.CustomerEmail, ParaEnums.QueryCriteria.Equal, email);
 
-            var parature = new ParaService(CredentialProvider.Creds);
-            var customers = parature.GetList<Customer>(customerQuery);
+            ParaService.Credentials = CredentialProvider.Creds;
+            var customers = ParaService.GetList<Customer>(customerQuery);
 
             return customers;
         }
@@ -43,8 +43,8 @@ namespace Exercises
             customerQuery.RetrieveAllRecords = true;
             customerQuery.AddStaticFieldFilter(CustomerQuery.CustomerStaticFields.Status, ParaEnums.QueryCriteria.Equal, statusID.ToString());
 
-            var parature = new ParaService(CredentialProvider.Creds);
-            var customers = parature.GetList<Customer>(customerQuery);
+            ParaService.Credentials = CredentialProvider.Creds;
+            var customers = ParaService.GetList<Customer>(customerQuery);
 
             return customers;
         }
@@ -55,8 +55,8 @@ namespace Exercises
             customerQuery.RetrieveAllRecords = true;
             customerQuery.AddSortOrder(CustomerQuery.CustomerStaticFields.LastName, ParaEnums.QuerySortBy.Asc);
 
-            var parature = new ParaService(CredentialProvider.Creds);
-            var customers = parature.GetList<Customer>(customerQuery);
+            ParaService.Credentials = CredentialProvider.Creds;
+            var customers = ParaService.GetList<Customer>(customerQuery);
 
             return customers;
         }

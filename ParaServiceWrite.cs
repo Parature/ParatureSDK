@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace ParatureSDK
 {
-    public partial class ParaService
+    public static partial class ParaService
     {
         /// <summary>
         /// Create a new entity object. This object is not saved to the server until you call Insert with it.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
-        public TEntity Create<TEntity>() where TEntity : ParaEntityBaseProperties, new()
+        public static TEntity Create<TEntity>() where TEntity : ParaEntityBaseProperties, new()
         {
             var entity = new TEntity();
             var ar = ApiCallFactory.ObjectGetSchema<TEntity>(Credentials);
@@ -36,7 +36,7 @@ namespace ParatureSDK
         /// </summary>
         /// <param name="entity">The entity to save</param>
         /// <returns></returns>
-        public ApiCallResponse Insert(IMutableEntity entity)
+        public static ApiCallResponse Insert(IMutableEntity entity)
         {
             var pe = entity as ParaEntity;
             Folder folder = null;
@@ -70,7 +70,7 @@ namespace ParatureSDK
         /// </summary>
         /// <param name="entity">The entity to save</param>
         /// <returns></returns>
-        public ApiCallResponse Update(IMutableEntity entity)
+        public static ApiCallResponse Update(IMutableEntity entity)
         {
             var pe = entity as ParaEntity;
             Folder folder = null;
@@ -102,7 +102,7 @@ namespace ParatureSDK
         /// </summary>
         /// <param name="entity">The entity to delete</param>
         /// <returns></returns>
-        public ApiCallResponse Delete(IMutableEntity entity)
+        public static ApiCallResponse Delete(IMutableEntity entity)
         {
             var pe = entity as ParaEntity;
             Folder folder = null;
@@ -134,13 +134,13 @@ namespace ParatureSDK
         /// <param name="purge">To delete the entity permanently or not (to the trash instead)</param>
         /// <param name="id">todo: describe id parameter on Delete</param>
         /// <returns></returns>
-        public ApiCallResponse Delete<TEntity>(long id, bool purge)
+        public static ApiCallResponse Delete<TEntity>(long id, bool purge)
             where TEntity : ParaEntityBaseProperties, new()
         {
             return ApiCallFactory.ObjectDelete<TEntity>(Credentials, id, purge);
         }
 
-        public ApiCallResponse RunActionOn<TEntity>(long entityId, ParaObjects.Action action)
+        public static ApiCallResponse RunActionOn<TEntity>(long entityId, ParaObjects.Action action)
             where TEntity : ParaEntity, IActionRunner, new()
         {
             return ApiUtils.ActionRun<TEntity>(entityId, action, Credentials);

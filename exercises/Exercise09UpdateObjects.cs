@@ -14,8 +14,8 @@ namespace Exercises
 
             bool isSuccess;
 
-            var parature = new ParaService(CredentialProvider.Creds);
-            var updateResponse = parature.Update(modifiedCustomer);
+            ParaService.Credentials = CredentialProvider.Creds;
+            var updateResponse = ParaService.Update(modifiedCustomer);
 
             isSuccess = !updateResponse.HasException;
 
@@ -26,8 +26,8 @@ namespace Exercises
         {
             bool isSuccess;
 
-            var parature = new ParaService(CredentialProvider.Creds);
-            var updateResponse = parature.Update(modifiedAccount);
+            ParaService.Credentials = CredentialProvider.Creds;
+            var updateResponse = ParaService.Update(modifiedAccount);
 
             isSuccess = !updateResponse.HasException;
 

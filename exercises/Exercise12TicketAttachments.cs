@@ -18,16 +18,16 @@ namespace Exercises
         /// <returns>List of ticket attachments</returns>
         public static List<Attachment> GetTicketAttachments(long ticketId)
         {
-            var parature = new ParaService(CredentialProvider.Creds);
-            return parature.GetDetails<Ticket>(ticketId).Ticket_Attachments;
+            ParaService.Credentials = CredentialProvider.Creds;
+            return ParaService.GetDetails<Ticket>(ticketId).Ticket_Attachments;
         }
 
         public static void AddAttachment(Ticket ticket, string fileName, string fileContents)
         {
-            var parature = new ParaService(CredentialProvider.Creds);
+            ParaService.Credentials = CredentialProvider.Creds;
 
             ticket.AttachmentsAdd(CredentialProvider.Creds, fileContents, "text/plain", fileName);
-            var response = parature.Update(ticket);
+            var response = ParaService.Update(ticket);
         }
 
         /// <summary>

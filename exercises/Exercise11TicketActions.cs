@@ -19,8 +19,8 @@ namespace Exercises
         /// <returns></returns>
         public static List<Action> GetAvailableTicketActions(long ticketId)
         {
-            var parature = new ParaService(CredentialProvider.Creds);
-            var ticketResponse = parature.GetDetails<Ticket>(ticketId);
+            ParaService.Credentials = CredentialProvider.Creds;
+            var ticketResponse = ParaService.GetDetails<Ticket>(ticketId);
             
             return ticketResponse.Actions;
         }
@@ -34,8 +34,8 @@ namespace Exercises
         /// <returns></returns>
         public static ApiCallResponse RunAction(long ticketId, Action action)
         {
-            var parature = new ParaService(CredentialProvider.Creds);
-            return parature.RunActionOn<Ticket>(ticketId, action);
+            ParaService.Credentials = CredentialProvider.Creds;
+            return ParaService.RunActionOn<Ticket>(ticketId, action);
         }
 
         /// <summary>

@@ -11,20 +11,20 @@ namespace Exercises
     {
         public static Customer getCustomer(long customerID)
         {
-            var parature = new ParaService(CredentialProvider.Creds);
-            return parature.GetDetails<Customer>(customerID);
+            ParaService.Credentials = CredentialProvider.Creds;
+            return ParaService.GetDetails<Customer>(customerID);
         }
 
         public static Account getAccount(long accountID)
         {
-            var parature = new ParaService(CredentialProvider.Creds);
-            return parature.GetDetails<Account>(accountID);
+            ParaService.Credentials = CredentialProvider.Creds;
+            return ParaService.GetDetails<Account>(accountID);
         }
 
         public static Article getArticle(long articleID)
         {
-            var parature = new ParaService(CredentialProvider.Creds);
-            return parature.GetDetails<Article>(articleID);
+            ParaService.Credentials = CredentialProvider.Creds;
+            return ParaService.GetDetails<Article>(articleID);
         }
 
     }

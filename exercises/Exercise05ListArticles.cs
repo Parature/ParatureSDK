@@ -16,8 +16,8 @@ namespace Exercises
             articleQuery.RetrieveAllRecords = true;
             articleQuery.TotalOnly = true;
 
-            var parature = new ParaService(CredentialProvider.Creds);
-            return parature.GetList<Article>(articleQuery).TotalItems;
+            ParaService.Credentials = CredentialProvider.Creds;
+            return ParaService.GetList<Article>(articleQuery).TotalItems;
         }
 
         public static ParaEntityList<Article> getArticles()
@@ -25,8 +25,8 @@ namespace Exercises
             var articleQuery = new ArticleQuery();
             articleQuery.RetrieveAllRecords = true;
 
-            var parature = new ParaService(CredentialProvider.Creds);
-            return parature.GetList<Article>(articleQuery);
+            ParaService.Credentials = CredentialProvider.Creds;
+            return ParaService.GetList<Article>(articleQuery);
         }
 
         public static ParaEntityList<Article> getPublishedArticles()
@@ -35,8 +35,8 @@ namespace Exercises
             articleQuery.AddStaticFieldFilter(ArticleQuery.ArticleStaticFields.Published, ParaEnums.QueryCriteria.Equal, true);
             articleQuery.RetrieveAllRecords = true;
 
-            var parature = new ParaService(CredentialProvider.Creds);
-            return parature.GetList<Article>(articleQuery);
+            ParaService.Credentials = CredentialProvider.Creds;
+            return ParaService.GetList<Article>(articleQuery);
         }
 
         public static ParaEntityList<Article> getArticlesByFolder(long folderID)
@@ -45,8 +45,8 @@ namespace Exercises
             articleQuery.AddStaticFieldFilter(ArticleQuery.ArticleStaticFields.Folders, ParaEnums.QueryCriteria.Equal, folderID.ToString());
             articleQuery.RetrieveAllRecords = true;
 
-            var parature = new ParaService(CredentialProvider.Creds);
-            return parature.GetList<Article>(articleQuery);
+            ParaService.Credentials = CredentialProvider.Creds;
+            return ParaService.GetList<Article>(articleQuery);
         }
     }
 }
