@@ -27,7 +27,7 @@ namespace Exercises
             var parature = new ParaService(CredentialProvider.Creds);
 
             ticket.AttachmentsAdd(CredentialProvider.Creds, fileContents, "text/plain", fileName);
-            var response = ApiHandler.Ticket.Update(ticket, CredentialProvider.Creds);
+            var response = parature.Update(ticket);
         }
 
         /// <summary>
