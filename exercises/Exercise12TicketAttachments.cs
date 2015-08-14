@@ -26,7 +26,7 @@ namespace Exercises
         {
             ParaService.Credentials = CredentialProvider.Creds;
 
-            ticket.AttachmentsAdd(CredentialProvider.Creds, fileContents, "text/plain", fileName);
+            ticket.AttachmentsAdd(fileContents, "text/plain", fileName);
             var response = ParaService.Update(ticket);
         }
 
@@ -49,7 +49,8 @@ namespace Exercises
                 }
 
                 //remove the attachments on the server
-                var response = ApiHandler.Ticket.Update(ticket, CredentialProvider.Creds);
+                ParaService.Credentials = CredentialProvider.Creds;
+                var response = ParaService.Update(ticket);
             }
         }
 
@@ -60,7 +61,9 @@ namespace Exercises
         public static void DeleteAllAttachmentsBulk(Ticket ticket)
         {
             ticket.DeleteAllAttachments();
-            var response = ApiHandler.Ticket.Update(ticket, CredentialProvider.Creds);
+            ParaService.Credentials = CredentialProvider.Creds;
+
+            var response = ParaService.Update(ticket);
         }
     }
 }

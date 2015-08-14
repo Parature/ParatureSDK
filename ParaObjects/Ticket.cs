@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using ParatureSDK.Fields;
 using ParatureSDK.ParaObjects.EntityReferences;
+using System.Text;
 
 namespace ParatureSDK.ParaObjects
 {
@@ -1060,9 +1061,23 @@ namespace ParatureSDK.ParaObjects
         ///  The binary Byte array of the attachment you would like to add. 
         /// </param>
         /// <param name="fileName"></param>
+        [Obsolete("To be removed in favor of Ticket.AttachmentsAdd(byte[], string, string) in the next major revision.")]
         public void AttachmentsAdd(ParaCredentials creds, Byte[] attachment, string contentType, string fileName)
         {
             Ticket_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, attachment, contentType, fileName));
+        }
+
+        ///  <summary>
+        ///  Uploads an attachment to the current ticket. 
+        ///  The attachment will also be added to the current Ticket's attachments collection.
+        ///  </summary>
+        ///  <param name="attachment">
+        ///  The binary Byte array of the attachment you would like to add. 
+        /// </param>
+        /// <param name="fileName"></param>
+        public void AttachmentsAdd(Byte[] attachment, string contentType, string fileName)
+        {
+            Ticket_Attachments.Add(ParaService.UploadFile<Ticket>(attachment, contentType, fileName));
         }
 
         /// <summary>
@@ -1080,8 +1095,53 @@ namespace ParatureSDK.ParaObjects
         /// <param name="fileName">
         /// The name you woule like the attachment to have.
         ///</param>
+        [Obsolete("To be removed in favor of Ticket.AttachmentsAdd(string, string, string) in the next major revision.")]
         public void AttachmentsAdd(ParaCredentials creds, string text, string contentType, string fileName)
         {
+            Ticket_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, text, contentType, fileName));
+        }
+
+        /// <summary>
+        /// Uploads a text based file to the current ticket. You need to pass a string, and the mime type of a text based file (html, text, etc...).            
+        /// </summary>
+        /// <param name="text">
+        /// The content of the text based file. 
+        ///</param>           
+        /// <param name="creds">
+        /// The parature credentials class for the APIs.
+        /// </param>            
+        /// <param name="contentType">
+        /// The type of content being uploaded, you have to make sure this is the right text.
+        /// </param>
+        /// <param name="fileName">
+        /// The name you woule like the attachment to have.
+        ///</param>
+        public void AttachmentsAdd(string text, string contentType, string fileName)
+        {
+            var encoding = new ASCIIEncoding();
+            var bytes = encoding.GetBytes(text);
+            Ticket_Attachments.Add(ParaService.UploadFile<Ticket>(bytes, contentType, fileName));
+        }
+
+        /// <summary>
+        /// Updates the current Ticket attachment with a text based file. You need to pass a string, and the mime type of a text based file (html, text, etc...).            
+        /// </summary>
+        /// <param name="text">
+        /// The content of the text based file. 
+        ///</param>           
+        /// <param name="creds">
+        /// The parature credentials class for the APIs.
+        /// </param>            
+        /// <param name="contentType">
+        /// The type of content being uploaded, you have to make sure this is the right text.
+        /// </param>
+        /// <param name="fileName">
+        /// The name you woule like the attachment to have.
+        ///</param>
+        [Obsolete("To be removed in favor of Ticket.AttachmentsAdd(string, string, string) in the next major revision.")]
+        public void AttachmentsUpdate(ParaCredentials creds, string text, string attachmentGuid, string contentType, string fileName)
+        {
+            AttachmentsDelete(attachmentGuid);
             Ticket_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, text, contentType, fileName));
         }
 
@@ -1100,20 +1160,32 @@ namespace ParatureSDK.ParaObjects
         /// <param name="fileName">
         /// The name you woule like the attachment to have.
         ///</param>
-        public void AttachmentsUpdate(ParaCredentials creds, string text, string attachmentGuid, string contentType, string fileName)
+        public void AttachmentsUpdate(string text, string attachmentGuid, string contentType, string fileName)
         {
-            AttachmentsDelete(attachmentGuid);
-            Ticket_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, text, contentType, fileName));
+            var encoding = new ASCIIEncoding();
+            var bytes = encoding.GetBytes(text);
+            AttachmentsUpdate(bytes, attachmentGuid, contentType, fileName);
         }
 
         /// <summary>
         /// If you have an attachment and would like to replace the file, use this method. It will actually delete 
         /// the existing attachment, and then add a new one to replace it.
         /// </summary>
+        [Obsolete("To be removed in favor of Ticket.AttachmentsAdd(string, string, string) in the next major revision.")]
         public void AttachmentsUpdate(ParaCredentials creds, Byte[] attachment, string attachmentGuid, string contentType, string fileName)
         {
             AttachmentsDelete(attachmentGuid);
             Ticket_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, attachment, contentType, fileName));
+        }
+
+        /// <summary>
+        /// If you have an attachment and would like to replace the file, use this method. It will actually delete 
+        /// the existing attachment, and then add a new one to replace it.
+        /// </summary>
+        public void AttachmentsUpdate(Byte[] attachment, string attachmentGuid, string contentType, string fileName)
+        {
+            AttachmentsDelete(attachmentGuid);
+            Ticket_Attachments.Add(ParaService.UploadFile<Ticket>(attachment, contentType, fileName));
         }
 
         /// <summary>
