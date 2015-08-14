@@ -1095,7 +1095,7 @@ namespace ParatureSDK.ParaObjects
         /// <param name="fileName">
         /// The name you woule like the attachment to have.
         ///</param>
-        [Obsolete("To be removed in favor of Ticket.AttachmentsAdd(string, string, string) in the next major revision.")]
+        [Obsolete("To be removed in favor of Ticket.AddAttachment(string, string, string) in the next major revision.")]
         public void AttachmentsAdd(ParaCredentials creds, string text, string contentType, string fileName)
         {
             Ticket_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, text, contentType, fileName));
@@ -1116,7 +1116,7 @@ namespace ParatureSDK.ParaObjects
         /// <param name="fileName">
         /// The name you woule like the attachment to have.
         ///</param>
-        public void AttachmentsAdd(string text, string contentType, string fileName)
+        public void AddAttachment(string text, string contentType, string fileName)
         {
             var encoding = new ASCIIEncoding();
             var bytes = encoding.GetBytes(text);
@@ -1138,7 +1138,7 @@ namespace ParatureSDK.ParaObjects
         /// <param name="fileName">
         /// The name you woule like the attachment to have.
         ///</param>
-        [Obsolete("To be removed in favor of Ticket.AttachmentsAdd(string, string, string) in the next major revision.")]
+        [Obsolete("To be removed in favor of Ticket.UpdateAttachment(string, string, string) in the next major revision.")]
         public void AttachmentsUpdate(ParaCredentials creds, string text, string attachmentGuid, string contentType, string fileName)
         {
             AttachmentsDelete(attachmentGuid);
@@ -1160,18 +1160,18 @@ namespace ParatureSDK.ParaObjects
         /// <param name="fileName">
         /// The name you woule like the attachment to have.
         ///</param>
-        public void AttachmentsUpdate(string text, string attachmentGuid, string contentType, string fileName)
+        public void UpdateAttachment(string text, string attachmentGuid, string contentType, string fileName)
         {
             var encoding = new ASCIIEncoding();
             var bytes = encoding.GetBytes(text);
-            AttachmentsUpdate(bytes, attachmentGuid, contentType, fileName);
+            UpdateAttachment(bytes, attachmentGuid, contentType, fileName);
         }
 
         /// <summary>
         /// If you have an attachment and would like to replace the file, use this method. It will actually delete 
         /// the existing attachment, and then add a new one to replace it.
         /// </summary>
-        [Obsolete("To be removed in favor of Ticket.AttachmentsAdd(string, string, string) in the next major revision.")]
+        [Obsolete("To be removed in favor of Ticket.UpdateAttachment(byte[], string, string) in the next major revision.")]
         public void AttachmentsUpdate(ParaCredentials creds, Byte[] attachment, string attachmentGuid, string contentType, string fileName)
         {
             AttachmentsDelete(attachmentGuid);
@@ -1182,7 +1182,7 @@ namespace ParatureSDK.ParaObjects
         /// If you have an attachment and would like to replace the file, use this method. It will actually delete 
         /// the existing attachment, and then add a new one to replace it.
         /// </summary>
-        public void AttachmentsUpdate(Byte[] attachment, string attachmentGuid, string contentType, string fileName)
+        public void UpdateAttachment(Byte[] attachment, string attachmentGuid, string contentType, string fileName)
         {
             AttachmentsDelete(attachmentGuid);
             Ticket_Attachments.Add(ParaService.UploadFile<Ticket>(attachment, contentType, fileName));
@@ -1191,7 +1191,16 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// If you have an attachment and would like to delete, just pass the id here.
         /// </summary>
+        [Obsolete("To be removed in favor of Ticket.DeleteAttachment in the next major revision.")]
         public bool AttachmentsDelete(string attachmentGuid)
+        {
+            return DeleteAttachment(attachmentGuid);
+        }
+
+        /// <summary>
+        /// If you have an attachment and would like to delete, just pass the id here.
+        /// </summary>
+        public bool DeleteAttachment(string attachmentGuid)
         {
             if (Ticket_Attachments == null)
             {

@@ -49,7 +49,7 @@ namespace Exercises
         /// <param name="action"></param>
         public static void AddAttachmentToAction(Action action)
         {
-            action.AddAttachment(CredentialProvider.Creds, "Contents of the file", "text/plain", "attachment1.txt");
+            action.AddAttachment("Contents of the file", "text/plain", "attachment1.txt");
         }
     }
 }

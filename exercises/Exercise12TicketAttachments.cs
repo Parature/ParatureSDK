@@ -28,7 +28,7 @@ namespace Exercises
 
         public static void AddAttachment(Ticket ticket, string fileName, string fileContents)
         {
-            ticket.AttachmentsAdd(fileContents, "text/plain", fileName);
+            ticket.AddAttachment(fileContents, "text/plain", fileName);
             var response = ParaService.Update(ticket);
         }
 
