@@ -49,7 +49,7 @@ namespace Exercises
                     //You can modify the list directly to delete attachments, 
                     //  but deleting the last attachment is equivalent to deleting all attachments.
                     //  We add a check to prevent this from happening accidentally
-                    ticket.AttachmentsDelete(guid);
+                    ticket.DeleteAttachment(guid);
                 }
 
                 //remove the attachments on the server
