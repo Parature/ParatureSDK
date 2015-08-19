@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ParatureSDK;
-using ParatureSDK.ApiHandler;
+using ParatureSDK.ParaObjects;
 
 namespace Exercises
 {
     public static class ArticleKeywordsExamples
     {
+        public static ParaService Service { get; set; }
+
+        static ArticleKeywordsExamples()
+        {
+            Service = new ParaService(CredentialProvider.Creds);
+        }
+
         /// <summary>
         /// Add keywords to an article that we're assuming does not already have articles
         /// </summary>
@@ -19,13 +26,13 @@ namespace Exercises
         public static bool AddKeywords(long articleId, List<string> keywords, ParaCredentials creds)
         {
             //Get the article
-            var article = ParatureSDK.ApiHandler.Article.GetDetails(articleId, creds);
+            var article = Service.GetDetails<Article>(articleId);
 
             //Set the keywords
             article.Keywords = String.Join(",", keywords);
 
             //Perform the update
-            var response = ParatureSDK.ApiHandler.Article.Update(article, creds);
+            var response = Service.Update(article);
 
             //Verify response
             return !response.HasException;
@@ -40,7 +47,7 @@ namespace Exercises
         public static List<string> GetKeywords(long articleId, ParaCredentials creds)
         {
             //Get the article
-            var article = ParatureSDK.ApiHandler.Article.GetDetails(articleId, creds);
+            var article = Service.GetDetails<Article>(articleId);
 
             return article.Keywords.Split(',').ToList();
         }
