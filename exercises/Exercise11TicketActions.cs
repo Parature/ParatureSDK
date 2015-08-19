@@ -11,9 +11,11 @@ namespace Exercises
 {
     class Exercise11TicketActions
     {
+        static ParaService Service { get; set; }
+
         public Exercise11TicketActions()
         {
-            ParaService.Credentials = CredentialProvider.Creds;
+            Service = new ParaService(CredentialProvider.Creds);
         }
 
         /// <summary>
@@ -24,7 +26,7 @@ namespace Exercises
         /// <returns></returns>
         public static List<Action> GetAvailableTicketActions(long ticketId)
         {
-            var ticketResponse = ParaService.GetDetails<Ticket>(ticketId);
+            var ticketResponse = Service.GetDetails<Ticket>(ticketId);
             
             return ticketResponse.Actions;
         }
@@ -38,7 +40,7 @@ namespace Exercises
         /// <returns></returns>
         public static ApiCallResponse RunAction(long ticketId, Action action)
         {
-            return ParaService.RunActionOn<Ticket>(ticketId, action);
+            return Service.RunActionOn<Ticket>(ticketId, action);
         }
 
         /// <summary>
@@ -49,7 +51,7 @@ namespace Exercises
         /// <param name="action"></param>
         public static void AddAttachmentToAction(Action action)
         {
-            action.AddAttachment("Contents of the file", "text/plain", "attachment1.txt");
+            action.AddAttachment(Service, "Contents of the file", "text/plain", "attachment1.txt");
         }
     }
 }

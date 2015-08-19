@@ -9,9 +9,11 @@ namespace Exercises
 {
     class Exercise09UpdateObjects
     {
+        static ParaService Service { get; set; }
+
         public Exercise09UpdateObjects()
         {
-            ParaService.Credentials = CredentialProvider.Creds;
+            Service = new ParaService(CredentialProvider.Creds);
         }
 
         public static bool UpdateCustomer(Customer modifiedCustomer) {
@@ -19,7 +21,7 @@ namespace Exercises
 
             bool isSuccess;
 
-            var updateResponse = ParaService.Update(modifiedCustomer);
+            var updateResponse = Service.Update(modifiedCustomer);
 
             isSuccess = !updateResponse.HasException;
 
@@ -30,7 +32,7 @@ namespace Exercises
         {
             bool isSuccess;
 
-            var updateResponse = ParaService.Update(modifiedAccount);
+            var updateResponse = Service.Update(modifiedAccount);
 
             isSuccess = !updateResponse.HasException;
 

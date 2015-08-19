@@ -10,14 +10,16 @@ namespace Exercises
 {
     class Exercise08CreateObjects
     {
+        static ParaService Service { get; set; }
+
         public Exercise08CreateObjects()
         {
-            ParaService.Credentials = CredentialProvider.Creds;
+            Service = new ParaService(CredentialProvider.Creds);
         }
 
         public static Account CreateAccount(string accountName)
         {
-            var newAccount = ParaService.Create<Account>();
+            var newAccount = Service.Create<Account>();
 
             newAccount.Account_Name = accountName;
             newAccount.Sla = new SlaReference { Sla = new Sla { Id = 1 }}; //Default SLA
@@ -28,14 +30,14 @@ namespace Exercises
             //emptyAccount.CustomFieldSetSelectedFieldOption(fieldID, optionid) //Dropdown, Radio, Multiple Dropdown
 
             // The new version of Insert sets the server-provided Id field on the passed-in entity.
-            ParaService.Insert(newAccount);
+            Service.Insert(newAccount);
 
             return newAccount;
         }
 
         public static Customer CreateCustomer(string firstname, string lastname, string email, string password, long accountID)
         {
-            var newCustomer = ParaService.Create<Customer>();
+            var newCustomer = Service.Create<Customer>();
             newCustomer.First_Name = firstname;
             newCustomer.Last_Name = lastname;
             newCustomer.Sla = new SlaReference {Sla = new Sla {Id = 1}};
@@ -48,28 +50,28 @@ namespace Exercises
             newCustomer.Status = new StatusReference{ Status = new Status() { Id = 2 }};
 
             // The new version of Insert sets the server-provided Id field on the passed-in entity.
-            ParaService.Insert(newCustomer);
+            Service.Insert(newCustomer);
 
             return newCustomer;
         }
 
         public static ArticleFolder CreateKBFolder(string name, bool isPrivate, long parentFolderID)
         {
-            var newFolder = ParaService.Create<ArticleFolder>();
+            var newFolder = Service.Create<ArticleFolder>();
             newFolder.Name = name;
             newFolder.Parent_Folder = new ArticleFolder { Id = parentFolderID };
             newFolder.Is_Private = isPrivate;
 
 
             // The new version of Insert sets the server-provided Id field on the passed-in entity.
-            ParaService.Insert(newFolder);
+            Service.Insert(newFolder);
 
             return newFolder;
         }
 
         public static Article CreateArticle(string title, string content, bool published, List<long> folders)
         {
-            var newArticle = ParaService.Create<Article>();
+            var newArticle = Service.Create<Article>();
             newArticle.Question = title;
             newArticle.Answer = content;
             newArticle.Published = published;
@@ -82,7 +84,7 @@ namespace Exercises
             }
 
             // The new version of Insert sets the server-provided Id field on the passed-in entity.
-            ParaService.Insert(newArticle);
+            Service.Insert(newArticle);
 
             return newArticle;
         }

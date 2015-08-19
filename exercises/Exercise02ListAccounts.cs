@@ -11,6 +11,13 @@ namespace Exercises
 {
     class Exercise02ListAccounts
     {
+        static ParaService Service { get; set; }
+
+        public Exercise02ListAccounts()
+        {
+            Service = new ParaService(CredentialProvider.Creds);
+        }
+
         //List all of the accounts
         public static ParaEntityList<ParatureSDK.ParaObjects.Account> getAllAccounts()
         {
@@ -18,8 +25,7 @@ namespace Exercises
             var accountQuery = new AccountQuery();
             accountQuery.RetrieveAllRecords = true; //Retrieve all records will maximize page size and make necessary additional calls to retrieve all pages
 
-            ParaService.Credentials = CredentialProvider.Creds;
-            var accounts = ParaService.GetList<Account>(accountQuery);
+            var accounts = Service.GetList<Account>(accountQuery);
 
             var apiResponse = accounts.ApiCallResponse; //API response is provided with object
 
@@ -41,8 +47,8 @@ namespace Exercises
             //There is a difference between static fields and custom fields
             accountQuery.AddStaticFieldFilter(AccountQuery.AccountStaticFields.AccountName, ParaEnums.QueryCriteria.Equal, accountName);
 
-            ParaService.Credentials = CredentialProvider.Creds;
-            var accounts = ParaService.GetList<Account>(accountQuery);
+            Service = new ParaService(CredentialProvider.Creds);
+            var accounts = Service.GetList<Account>(accountQuery);
 
             return accounts;
         }
@@ -53,8 +59,8 @@ namespace Exercises
             accountQuery.RetrieveAllRecords = true;
             accountQuery.AddCustomFieldFilter(fieldID, ParaEnums.QueryCriteria.Equal, fieldValue);
 
-            ParaService.Credentials = CredentialProvider.Creds;
-            var accounts = ParaService.GetList<Account>(accountQuery);
+            Service = new ParaService(CredentialProvider.Creds);
+            var accounts = Service.GetList<Account>(accountQuery);
 
             return accounts;
         }
@@ -67,8 +73,8 @@ namespace Exercises
             accountQuery.RetrieveAllRecords = true;
             accountQuery.AddCustomFieldFilter(fieldID, ParaEnums.QueryCriteria.Equal, fieldValue);
 
-            ParaService.Credentials = CredentialProvider.Creds;
-            var accounts = ParaService.GetList<Account>(accountQuery);
+            Service = new ParaService(CredentialProvider.Creds);
+            var accounts = Service.GetList<Account>(accountQuery);
 
             return accounts;
         }
@@ -80,8 +86,8 @@ namespace Exercises
             accountQuery.RetrieveAllRecords = true;
             accountQuery.View = viewID;
 
-            ParaService.Credentials = CredentialProvider.Creds;
-            var accounts = ParaService.GetList<Account>(accountQuery);
+            Service = new ParaService(CredentialProvider.Creds);
+            var accounts = Service.GetList<Account>(accountQuery);
 
             return accounts;
         }

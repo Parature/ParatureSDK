@@ -9,24 +9,26 @@ namespace Exercises
 {
     class Exercise07GetSchemas
     {
+        static ParaService Service { get; set; }
+
         Exercise07GetSchemas()
         {
-            ParaService.Credentials = CredentialProvider.Creds;
+            Service = new ParaService(CredentialProvider.Creds);
         }
 
         public static Customer CustomerSchema()
         {
-            return ParaService.Create<Customer>();
+            return Service.Create<Customer>();
         }
 
         public static Account AccountSchema()
         {
-            return ParaService.Create<Account>();
+            return Service.Create<Account>();
         }
 
         public static Article ArticleSchema()
         {
-            return ParaService.Create<Article>();
+            return Service.Create<Article>();
         }
 
         /// <summary>
@@ -38,7 +40,7 @@ namespace Exercises
             //There is an API call to retrieve an article folder schema, 
             //but there aren't any custom fields so we are not providing a 
             //method fo schema retrieval
-            return ParaService.Create<ArticleFolder>();
+            return Service.Create<ArticleFolder>();
         }
 
     }

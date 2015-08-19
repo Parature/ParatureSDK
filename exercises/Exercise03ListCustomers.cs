@@ -10,9 +10,11 @@ namespace Exercises
 {
     class Exercise03ListCustomers
     {
+        static ParaService Service { get; set; }
+
         public Exercise03ListCustomers()
         {
-            ParaService.Credentials = CredentialProvider.Creds;
+            Service = new ParaService(CredentialProvider.Creds);
         }
 
         //Customers by account and date
@@ -24,7 +26,7 @@ namespace Exercises
             //Use a custom filter if correct enums aren't available
             customerQuery.AddCustomFilter(String.Format("Date_Created_max_={0}/{1}/{2}", date.Month, date.Day, date.Year));
 
-            var customers = ParaService.GetList<Customer>(customerQuery);
+            var customers = Service.GetList<Customer>(customerQuery);
 
             return customers;
         }
@@ -35,7 +37,7 @@ namespace Exercises
             customerQuery.RetrieveAllRecords = true;
             customerQuery.AddStaticFieldFilter(CustomerQuery.CustomerStaticFields.CustomerEmail, ParaEnums.QueryCriteria.Equal, email);
 
-            var customers = ParaService.GetList<Customer>(customerQuery);
+            var customers = Service.GetList<Customer>(customerQuery);
 
             return customers;
         }
@@ -46,7 +48,7 @@ namespace Exercises
             customerQuery.RetrieveAllRecords = true;
             customerQuery.AddStaticFieldFilter(CustomerQuery.CustomerStaticFields.Status, ParaEnums.QueryCriteria.Equal, statusID.ToString());
 
-            var customers = ParaService.GetList<Customer>(customerQuery);
+            var customers = Service.GetList<Customer>(customerQuery);
 
             return customers;
         }
@@ -57,7 +59,7 @@ namespace Exercises
             customerQuery.RetrieveAllRecords = true;
             customerQuery.AddSortOrder(CustomerQuery.CustomerStaticFields.LastName, ParaEnums.QuerySortBy.Asc);
 
-            var customers = ParaService.GetList<Customer>(customerQuery);
+            var customers = Service.GetList<Customer>(customerQuery);
 
             return customers;
         }

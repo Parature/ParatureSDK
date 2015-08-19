@@ -15,9 +15,19 @@ using ParatureSDK.Query.EntityQuery;
 
 namespace ParatureSDK
 {
-    public static partial class ParaService
+    public partial class ParaService
     {
-        public static ParaCredentials Credentials = null;
+        public readonly ParaCredentials Credentials;
+
+        public ParaService(ParaCredentials credentials)
+        {
+            if (credentials == null)
+            {
+                throw new ArgumentNullException("credentials");
+            }
+
+            Credentials = credentials;
+        }
 
         /// <summary>
         /// Returns a view object with all of its properties filled.
@@ -27,25 +37,25 @@ namespace ParatureSDK
         /// Value Type: <see cref="long" />   (System.Int64)
         ///</param>
         /// <returns></returns>
-        public static TEntity Get<TEntity>(long id) where TEntity : ParaEntity, new()
+        public TEntity Get<TEntity>(long id) where TEntity : ParaEntity, new()
         {
             return ApiUtils.ApiGetEntity<TEntity>(Credentials, id);
         }
 
-        public static TEntity GetDetails<TEntity>(long entityId)
+        public TEntity GetDetails<TEntity>(long entityId)
              where TEntity : ParaEntityBaseProperties, new()
         {
             
             return GetDetails<TEntity>(entityId, new ArrayList());
         }
 
-        public static TEntity GetDetailsWithHistory<TEntity>(long entityId)
+        public TEntity GetDetailsWithHistory<TEntity>(long entityId)
             where TEntity : ParaEntityBaseProperties, IHistoricalEntity, new()
         {
             return GetDetailsWithHistory<TEntity>(entityId, new ArrayList());
         }
 
-        private static TEntity GetDetailsWithHistory<TEntity>(long entityId, ArrayList queryString)
+        private TEntity GetDetailsWithHistory<TEntity>(long entityId, ArrayList queryString)
             where TEntity : ParaEntityBaseProperties, IHistoricalEntity, new()
         {
             queryString.Add("_history_=true");
@@ -61,7 +71,7 @@ namespace ParatureSDK
         /// <param name="pc"></param>
         /// <param name="queryString"></param>
         /// <returns></returns>
-        public static TEntity GetDetails<TEntity>(long entityId, ArrayList queryString)
+        public TEntity GetDetails<TEntity>(long entityId, ArrayList queryString)
             where TEntity : ParaEntityBaseProperties, new()
         {
             if (typeof(TEntity) != typeof(Folder))
@@ -94,7 +104,7 @@ namespace ParatureSDK
         /// Value Type: <see cref="Int64" />   (System.Int64)
         /// </param>
         /// 
-        public static Folder GetDetails(long folderId)
+        public Folder GetDetails(long folderId)
         {
             var folder = new Folder();
             var ar = ApiCallFactory.ObjectGetDetail<Folder>(Credentials, folderId);
@@ -113,7 +123,7 @@ namespace ParatureSDK
             return folder;
         }
 
-        public static TFolder GetDetails<TFolder>(XmlDocument xml)
+        public TFolder GetDetails<TFolder>(XmlDocument xml)
             where TFolder : Folder, new()
         {
             var folder = ParaEntityParser.EntityFill<TFolder>(xml);
@@ -131,7 +141,7 @@ namespace ParatureSDK
         /// <typeparam name="TEntity">The entity type to return</typeparam>
         /// <param name="xml">The view List XML; it should follow the exact template of the XML returned by the Parature APIs.</param>
         /// <returns></returns>
-        public static ParaEntityList<TEntity> GetList<TEntity>(XmlDocument xml) where TEntity : ParaEntityBaseProperties, new()
+        public ParaEntityList<TEntity> GetList<TEntity>(XmlDocument xml) where TEntity : ParaEntityBaseProperties, new()
         {
             var list = ParaEntityParser.FillList<TEntity>(xml);
 
@@ -140,7 +150,7 @@ namespace ParatureSDK
             return list;
         }
 
-        public static ParaEntityList<TEntity> GetList<TEntity>(ParaEntityQuery query)
+        public ParaEntityList<TEntity> GetList<TEntity>(ParaEntityQuery query)
             where TEntity : ParaEntity, new()
         {
             if (!(query.QueryTargetType is TEntity))
@@ -157,7 +167,7 @@ namespace ParatureSDK
             return ApiUtils.ApiGetEntityList<TEntity>(Credentials, query);
         }
 
-        public static ParaEntityList<TFolder> GetList<TFolder>(FolderQuery query)
+        public ParaEntityList<TFolder> GetList<TFolder>(FolderQuery query)
             where TFolder : Folder, new()
         {
             var folderList = new ParaEntityList<TFolder>();
@@ -206,7 +216,7 @@ namespace ParatureSDK
             return folderList;
         }
 
-        public static ParaEntityList<TFolder> GetList<TFolder>()
+        public ParaEntityList<TFolder> GetList<TFolder>()
              where TFolder : Folder, new()
         {
             var eq = new FolderQuery() { RetrieveAllRecords = true };
@@ -220,7 +230,7 @@ namespace ParatureSDK
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="query"></param>
         /// <returns></returns>
-        public static ParaEntityList<TEntity> GetList<TParentEntity,TEntity>(ParaEntityQuery query)
+        public ParaEntityList<TEntity> GetList<TParentEntity,TEntity>(ParaEntityQuery query)
             where TEntity : ParaEntityBaseProperties, new()
             where TParentEntity : ParaEntity
         {
@@ -242,7 +252,7 @@ namespace ParatureSDK
         /// Whether or not this methods needs to ignore case when looking for the folder name or not.
         /// </param>
         /// <returns></returns>
-        public static long GetIdByName(string folderName, bool ignoreCase)
+        public long GetIdByName(string folderName, bool ignoreCase)
         {
             var query = new FolderQuery { PageSize = 500 };
             var folder = GetList<Folder>(query).FirstOrDefault(f => String.Compare(f.Name, folderName, ignoreCase) == 0);
@@ -263,7 +273,7 @@ namespace ParatureSDK
         /// The parent folder under which to look for a folder by name.
         /// </param>
         /// <returns></returns>
-        public static long GetIdByName(string folderName, bool ignoreCase, long parentFolderId)
+        public long GetIdByName(string folderName, bool ignoreCase, long parentFolderId)
         {
             var fQuery = new FolderQuery();
             fQuery.AddStaticFieldFilter(FolderQuery.FolderStaticFields.ParentFolder, ParaEnums.QueryCriteria.Equal,

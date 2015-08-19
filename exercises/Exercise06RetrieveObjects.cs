@@ -9,24 +9,26 @@ namespace Exercises
 {
     class Exercise06RetrieveObjects
     {
+        static ParaService Service { get; set; }
+
         public Exercise06RetrieveObjects()
         {
-            ParaService.Credentials = CredentialProvider.Creds;
+            Service = new ParaService(CredentialProvider.Creds);
         }
 
         public static Customer getCustomer(long customerID)
         {
-            return ParaService.GetDetails<Customer>(customerID);
+            return Service.GetDetails<Customer>(customerID);
         }
 
         public static Account getAccount(long accountID)
         {
-           return ParaService.GetDetails<Account>(accountID);
+           return Service.GetDetails<Account>(accountID);
         }
 
         public static Article getArticle(long articleID)
         {
-            return ParaService.GetDetails<Article>(articleID);
+            return Service.GetDetails<Article>(articleID);
         }
 
     }

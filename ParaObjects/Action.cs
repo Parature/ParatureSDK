@@ -36,7 +36,7 @@ namespace ParatureSDK.ParaObjects
         ///  The binary Byte array of the attachment you would like to add. 
         /// </param>
         /// <param name="fileName"></param>
-        [Obsolete("To be removed in favor of Action.AttachmentsAdd(byte[], string, string) in the next major revision.")]
+        [Obsolete("To be removed in favor of Action.AddAttachment(ParaService, byte[], string, string) in the next major revision.")]
         public void AddAttachment(ParaCredentials creds, Byte[] attachment, string contentType, string fileName)
         {
             Action_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, attachment, contentType, fileName));
@@ -50,9 +50,9 @@ namespace ParatureSDK.ParaObjects
         ///  The binary Byte array of the attachment you would like to add. 
         /// </param>
         /// <param name="fileName"></param>
-        public void AddAttachment(Byte[] attachment, string contentType, string fileName)
+        public void AddAttachment(ParaService service, Byte[] attachment, string contentType, string fileName)
         {
-            Action_Attachments.Add(ParaService.UploadFile<Ticket>(attachment, contentType, fileName));
+            Action_Attachments.Add(service.UploadFile<Ticket>(attachment, contentType, fileName));
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace ParatureSDK.ParaObjects
         /// <param name="fileName">
         /// The name you woule like the attachment to have.
         ///</param>
-        [Obsolete("To be removed in favor of Action.AttachmentsAdd(byte[], string, string) in the next major revision.")]
+        [Obsolete("To be removed in favor of Action.AddAttachment(ParaService, byte[], string, string) in the next major revision.")]
         public void AddAttachment(ParaCredentials creds, string text, string contentType, string fileName)
         {
             Action_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, text, contentType, fileName));
@@ -91,11 +91,11 @@ namespace ParatureSDK.ParaObjects
         /// <param name="fileName">
         /// The name you woule like the attachment to have.
         ///</param>
-        public void AddAttachment(string text, string contentType, string fileName)
+        public void AddAttachment(ParaService service, string text, string contentType, string fileName)
         {
             var encoding = new ASCIIEncoding();
             var bytes = encoding.GetBytes(text);
-            AddAttachment(bytes, contentType, fileName);
+            AddAttachment(service, bytes, contentType, fileName);
         }
 
         /// <summary>

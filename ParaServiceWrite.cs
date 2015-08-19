@@ -10,14 +10,14 @@ using System.Xml;
 
 namespace ParatureSDK
 {
-    public static partial class ParaService
+    public partial class ParaService
     {
         /// <summary>
         /// Create a new entity object. This object is not saved to the server until you call Insert with it.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
-        public static TEntity Create<TEntity>() where TEntity : ParaEntityBaseProperties, new()
+        public TEntity Create<TEntity>() where TEntity : ParaEntityBaseProperties, new()
         {
             var entity = new TEntity();
             var ar = ApiCallFactory.ObjectGetSchema<TEntity>(Credentials);
@@ -37,7 +37,7 @@ namespace ParatureSDK
         /// </summary>
         /// <param name="entity">The entity to save</param>
         /// <returns></returns>
-        public static ApiCallResponse Insert(IMutableEntity entity)
+        public ApiCallResponse Insert(IMutableEntity entity)
         {
             var pe = entity as ParaEntity;
             Folder folder = null;
@@ -71,7 +71,7 @@ namespace ParatureSDK
         /// </summary>
         /// <param name="entity">The entity to save</param>
         /// <returns></returns>
-        public static ApiCallResponse Update(IMutableEntity entity)
+        public ApiCallResponse Update(IMutableEntity entity)
         {
             var pe = entity as ParaEntity;
             Folder folder = null;
@@ -103,7 +103,7 @@ namespace ParatureSDK
         /// </summary>
         /// <param name="entity">The entity to delete</param>
         /// <returns></returns>
-        public static ApiCallResponse Delete(IMutableEntity entity)
+        public ApiCallResponse Delete(IMutableEntity entity)
         {
             var pe = entity as ParaEntity;
             Folder folder = null;
@@ -135,13 +135,13 @@ namespace ParatureSDK
         /// <param name="purge">To delete the entity permanently or not (to the trash instead)</param>
         /// <param name="id">todo: describe id parameter on Delete</param>
         /// <returns></returns>
-        public static ApiCallResponse Delete<TEntity>(long id, bool purge)
+        public ApiCallResponse Delete<TEntity>(long id, bool purge)
             where TEntity : ParaEntityBaseProperties, new()
         {
             return ApiCallFactory.ObjectDelete<TEntity>(Credentials, id, purge);
         }
 
-        public static ApiCallResponse RunActionOn<TEntity>(long entityId, ParaObjects.Action action)
+        public ApiCallResponse RunActionOn<TEntity>(long entityId, ParaObjects.Action action)
             where TEntity : ParaEntity, IActionRunner, new()
         {
             return ApiUtils.ActionRun<TEntity>(entityId, action, Credentials);
@@ -155,7 +155,7 @@ namespace ParatureSDK
         /// <param name="pc"></param>
         /// <param name="attachment"></param>
         /// <returns></returns>
-        internal static Attachment UploadFile<TEntity>(System.Net.Mail.Attachment attachment)
+        internal Attachment UploadFile<TEntity>(System.Net.Mail.Attachment attachment)
             where TEntity : ParaEntity
         {
             var postUrlR = ApiCallFactory.FileUploadGetUrl<TEntity>(Credentials);
@@ -173,7 +173,7 @@ namespace ParatureSDK
         /// <summary>
         /// Internal method to handle the upload of a file to Parature.
         /// </summary>
-        internal static Attachment UploadFile<TEntity>(Byte[] attachment, String contentType, String fileName)
+        internal Attachment UploadFile<TEntity>(Byte[] attachment, String contentType, String fileName)
             where TEntity : ParaEntity
         {
             Attachment attach;

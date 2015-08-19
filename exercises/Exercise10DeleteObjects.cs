@@ -9,16 +9,18 @@ namespace Exercises
 {
     class Exercise10DeleteObjects
     {
+        static ParaService Service { get; set; }
+
         public Exercise10DeleteObjects()
         {
-            ParaService.Credentials = CredentialProvider.Creds;
+            Service = new ParaService(CredentialProvider.Creds);
         }
 
         public static bool TrashCustomer(long customerID)
         {
             bool isSuccess;
 
-            var trashResponse = ParaService.Delete<Customer>(customerID, false);
+            var trashResponse = Service.Delete<Customer>(customerID, false);
 
             isSuccess = !trashResponse.HasException;
 
@@ -29,8 +31,8 @@ namespace Exercises
         {
             bool isSuccess;
 
-            ParaService.Credentials = CredentialProvider.Creds;
-            var purgeResponse = ParaService.Delete<Customer>(customerID, true);
+            Service = new ParaService(CredentialProvider.Creds);
+            var purgeResponse = Service.Delete<Customer>(customerID, true);
 
             isSuccess = !purgeResponse.HasException;
 
