@@ -82,6 +82,7 @@
     <Compile Include="ApiHandler\ApiMethods\FolderApiMethods.cs" />
     <Compile Include="ApiHandler\Queue.cs" />
     <Compile Include="ApiHandler\ApiMethods\SecondLevelApiMethods.cs" />
+    <Compile Include="ApiHandler\PortalAlias.cs" />
     <Compile Include="ApiHandler\Sla.cs" />
     <Compile Include="ApiHandler\Timezone.cs" />
     <Compile Include="ApiHandler\Product.cs" />
@@ -94,6 +95,8 @@
     <Compile Include="ParaObjects\IHistoricalEntity.cs" />
     <Compile Include="ParaServiceRead.cs" />
     <Compile Include="ParaServiceWrite.cs" />
+    <Compile Include="ParaObjects\EntityReferences\PortalAliasReference.cs" />
+    <Compile Include="ParaObjects\PortalAlias.cs" />
     <Compile Include="Query\EntityQuery\ArticleFolderQuery.cs" />
     <Compile Include="Query\EntityQuery\CsrStatusQuery.cs" />
     <Compile Include="Query\EntityQuery\CustomerStatusQuery.cs" />
@@ -103,6 +106,7 @@
     <Compile Include="Query\EntityQuery\ProductFolderQuery.cs" />
     <Compile Include="Query\EntityQuery\QueueQuery.cs" />
     <Compile Include="Query\EntityQuery\RoleQuery.cs" />
+    <Compile Include="Query\EntityQuery\PortalAliasQuery.cs" />
     <Compile Include="Query\EntityQuery\SlaQuery.cs" />
     <Compile Include="Query\EntityQuery\StatusQuery.cs" />
     <Compile Include="Query\EntityQuery\TicketStatusQuery.cs" />
