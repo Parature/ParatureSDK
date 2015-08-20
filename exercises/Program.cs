@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ParatureSDK;
 
 namespace Exercises
 {
@@ -9,7 +10,6 @@ namespace Exercises
     {
         static void Main(string[] args)
         {
-            var credentials = new ParatureSDK.ParaCredentials()
         }
     }
 }
