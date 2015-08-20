@@ -28,6 +28,7 @@ namespace ParatureSDK.ApiHandler
         /// <param name="includeHistory">
         /// Whether to include the chat history (action history) for this particular chat
         /// </param>
+        [Obsolete("To be removed in favor of ParaService.GetDetails and ParaService.GetDetailsWithHistory in next major revision.")]
         public static ParaObjects.Chat GetDetails(Int64 chatid, ParaCredentials creds, Boolean includeHistory)
         {
             var arl = new ArrayList();
@@ -48,6 +49,7 @@ namespace ParatureSDK.ApiHandler
         /// <param name="includeTranscripts">Boolean to indicate whether to iteratively retrieve transcripts or not.</param>
         /// <param name="query">Query string parameters object</param>
         /// <returns>List of Chat Entities</returns>
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.")]
         public static ParaEntityList<ParaObjects.Chat> GetList(ParaCredentials creds, Boolean includeTranscripts,
             ChatQuery query)
         {
@@ -62,6 +64,7 @@ namespace ParatureSDK.ApiHandler
         /// <param name="includeTranscripts">Boolean to indicate whether to iteratively retrieve transcripts or not.</param>
         /// <param name="includeHistory">Boolean to indicate whether to include the history of each chat.</param>
         /// <returns>List of Chat Entities</returns>
+        [Obsolete("To be removed in favor of ParaService.GetDetails and ParaService.GetDetailsWithHistory in next major revision.")]
         public static ParaEntityList<ParaObjects.Chat> GetList(ParaCredentials creds, Boolean includeTranscripts,
             Boolean includeHistory)
         {
@@ -176,6 +179,7 @@ namespace ParatureSDK.ApiHandler
         /// <param name="chatId"></param>
         /// <param name="paraCredentials"></param>
         /// <returns>A list of chat messages</returns>
+        [Obsolete("To be removed in favor of ParaService.GetChatTranscript in next major revision.")]
         public static List<ChatMessage> GetTranscript(Int64 chatId, ParaCredentials paraCredentials)
         {
             var chat = FillTranscriptDetails(chatId, paraCredentials);

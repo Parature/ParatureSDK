@@ -243,6 +243,25 @@ namespace ParatureSDK
         }
 
         /// <summary>
+        /// Retrieve the transcript for a particualr chat
+        /// </summary>
+        /// <param name="chatId"></param>
+        /// <param name="paraCredentials"></param>
+        /// <returns>A list of chat messages</returns>
+        public List<ChatMessage> GetChatTranscript(long chatId)
+        {
+            var ar = ApiCallFactory.ChatTranscriptGetDetail(Credentials, chatId);
+            if (ar.HasException == false)
+            {
+               return ParaEntityParser.EntityFill<ParaObjects.Chat>(ar.XmlReceived).Transcript;
+            }
+            else
+            {
+                throw new Exception(ar.ExceptionDetails);
+            }
+        }
+
+        /// <summary>
         /// Locates a folder with the name provided, will return the id if found. Otherwise, it will return 0.
         /// </summary>
         /// <param name="folderName">

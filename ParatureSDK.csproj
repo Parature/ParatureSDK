@@ -90,7 +90,6 @@
     <Compile Include="ApiRequestSettings.cs" />
     <Compile Include="ApiUrlBuilder.cs" />
     <Compile Include="ParaObjects\IActionRunner.cs" />
-    <Compile Include="ParaObjects\IAttachableEntity.cs" />
     <Compile Include="ParaObjects\IMutableEntity.cs" />
     <Compile Include="ParaObjects\IHistoricalEntity.cs" />
     <Compile Include="ParaServiceRead.cs" />
