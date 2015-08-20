@@ -11,16 +11,15 @@ using ParatureSDK.ParaObjects;
 using ParatureSDK.Query;
 using ParatureSDK.Query.ModuleQuery;
 using ParatureSDK.XmlToObjectParser;
-using Action = ParatureSDK.ParaObjects.Action;
 
-namespace ParatureSDK.ApiHandler
+namespace ParatureSDK
 {
     internal static class ApiUtils
     {
         /// <summary>
         /// Internal Method to run an Action, independently from the module.
         /// </summary>
-        internal static ApiCallResponse ActionRun<TEntity>(Int64 objectId, Action action, ParaCredentials pc)
+        internal static ApiCallResponse ActionRun<TEntity>(Int64 objectId, ParaObjects.Action action, ParaCredentials pc)
             where TEntity : ParaEntity
         {
             var doc = XmlGenerator.GenerateActionXml<TEntity>(action);

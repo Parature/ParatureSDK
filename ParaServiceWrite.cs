@@ -1,5 +1,4 @@
-﻿using ParatureSDK.ApiHandler;
-using ParatureSDK.ParaObjects;
+﻿using ParatureSDK.ParaObjects;
 using ParatureSDK.XmlToObjectParser;
 using System;
 using System.Collections.Generic;

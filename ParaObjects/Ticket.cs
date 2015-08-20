@@ -1088,7 +1088,7 @@ namespace ParatureSDK.ParaObjects
         ///  The binary Byte array of the attachment you would like to add. 
         /// </param>
         /// <param name="fileName"></param>
-        [Obsolete("To be removed in favor of Ticket.AttachmentsAdd(ParaService, byte[], string, string) in the next major revision.")]
+        [Obsolete("To be removed in favor of Ticket.AddAttachment(ParaService, byte[], string, string) in the next major revision.")]
         public void AttachmentsAdd(ParaCredentials creds, Byte[] attachment, string contentType, string fileName)
         {
             Ticket_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, attachment, contentType, fileName));
@@ -1102,7 +1102,7 @@ namespace ParatureSDK.ParaObjects
         ///  The binary Byte array of the attachment you would like to add. 
         /// </param>
         /// <param name="fileName"></param>
-        public void AttachmentsAdd(ParaService service, Byte[] attachment, string contentType, string fileName)
+        public void AddAttachment(ParaService service, Byte[] attachment, string contentType, string fileName)
         {
             Ticket_Attachments.Add(service.UploadFile<Ticket>(attachment, contentType, fileName));
         }

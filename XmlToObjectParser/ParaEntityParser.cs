@@ -16,7 +16,7 @@ namespace ParatureSDK.XmlToObjectParser
         {
             var xDoc = new XmlDocument();
             xDoc.LoadXml(xmlDoc.OuterXml);
-            var hasMultipleDownloadFolders = ApiHandler.Download.HasMultipleFoldersAndConvert(xDoc);
+            var hasMultipleDownloadFolders = HasMultipleFoldersAndConvert(xDoc);
             var dl = EntityFill<Download>(xDoc);
             dl.MultipleFolders = hasMultipleDownloadFolders;
 
@@ -69,7 +69,7 @@ namespace ParatureSDK.XmlToObjectParser
             {
                 var xDoc = new XmlDocument();
                 xDoc.LoadXml(xn.OuterXml);
-                var hasMultipleDownloadFolders = ApiHandler.Download.HasMultipleFoldersAndConvert(xDoc);
+                var hasMultipleDownloadFolders = HasMultipleFoldersAndConvert(xDoc);
                 var dl = EntityFill<Download>(xDoc);
                 dl.MultipleFolders = hasMultipleDownloadFolders;
 
@@ -96,6 +96,36 @@ namespace ParatureSDK.XmlToObjectParser
             }
 
             return list;
+        }
+
+        /// <summary>
+        /// Modify the XML so it can be parsed, and check to see if it supports multiple folders
+        /// </summary>
+        /// <param name="xmlReceived"></param>
+        /// <returns></returns>
+        internal static bool HasMultipleFoldersAndConvert(XmlDocument xmlReceived)
+        {
+            var foldersNode = xmlReceived.SelectSingleNode("/Download/Folders");
+            bool hasMultipleFolders;
+            if (foldersNode != null)
+            {
+                hasMultipleFolders = true;
+            }
+            else
+            {
+                var singleFolderNode = xmlReceived.SelectSingleNode("/Download/Folder");
+                if (singleFolderNode != null && singleFolderNode.OwnerDocument != null && singleFolderNode.ParentNode != null)
+                {
+                    //replace the <Folder> with <Folders> for our parser
+                    var dlFolders = singleFolderNode.InnerXml;
+                    var doc = new XmlDocument();
+                    doc.LoadXml(string.Format("<Folders>{0}</Folders>", dlFolders));
+                    var newNode = singleFolderNode.OwnerDocument.ImportNode(doc.DocumentElement, true);
+                    singleFolderNode.ParentNode.ReplaceChild(newNode, singleFolderNode);
+                }
+                hasMultipleFolders = false;
+            }
+            return hasMultipleFolders;
         }
     }
 }

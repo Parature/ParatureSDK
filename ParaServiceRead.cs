@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using ParatureSDK.ApiHandler;
 using ParatureSDK.ParaObjects;
 using ParatureSDK.Query.ModuleQuery;
 using ParatureSDK.XmlToObjectParser;
