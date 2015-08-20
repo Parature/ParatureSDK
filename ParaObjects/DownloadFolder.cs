@@ -3,7 +3,7 @@ namespace ParatureSDK.ParaObjects
     /// <summary>
     /// Used only for the downloads module folders.
     /// </summary>
-    public class DownloadFolder : Folder
+    public class DownloadFolder : Folder, IMutableEntity
     {
         public string Date_Updated = "";
 

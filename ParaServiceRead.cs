@@ -155,7 +155,7 @@ namespace ParatureSDK
         {
             if (!(query.QueryTargetType is TEntity))
             {
-                throw new ArgumentException("Inavlid query type for the requested entity result type", "query");
+                throw new ArgumentException("Invalid query type for the requested entity result type", "query");
             }
 
             if (query.IncludeAllCustomFields)

@@ -21,6 +21,7 @@ namespace ParatureSDK.ApiHandler
         /// <param name="xml">
         /// The entity XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
+        [Obsolete("To be removed in favor of ParaService.GetDetails in next major revision.")]
         public static ParaObjects.Download GetDetails(XmlDocument xml)
         {
             var entity = ParaEntityParser.EntityFillDownload(xml);
@@ -43,6 +44,7 @@ namespace ParatureSDK.ApiHandler
         /// <param name="pc">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
+        [Obsolete("To be removed in favor of ParaService.GetDetails in next major revision.")]
         public static ParaObjects.Download GetDetails(Int64 entityId, ParaCredentials pc)
         {
             return GetDetails(entityId, pc, new ArrayList());
@@ -55,6 +57,7 @@ namespace ParatureSDK.ApiHandler
         /// <param name="pc">Api credentials</param>
         /// <param name="queryStringParams">ArrayList of query string parameters</param>
         /// <returns>The download object</returns>
+        [Obsolete("To be removed in favor of ParaService.GetDetails in next major revision.")]
         public static ParaObjects.Download GetDetails(Int64 entityId, ParaCredentials pc, ArrayList queryStringParams)
         {
             var entity = ApiUtils.ApiGetDownloadEntity(pc, entityId, queryStringParams);
@@ -65,6 +68,7 @@ namespace ParatureSDK.ApiHandler
         /// <summary>
         /// Will return the first 25 accounts returned by the APIs.
         /// </summary>            
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.")]
         public static ParaEntityList<ParaObjects.Download> GetList(ParaCredentials pc)
         {
             return ApiUtils.ApiGetDownloadEntityList(pc);
@@ -74,6 +78,7 @@ namespace ParatureSDK.ApiHandler
         /// Provides you with the capability to list accounts, following criteria you would set
         /// by instantiating a ModuleQuery.AccountQuery object
         /// </summary>
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.")]
         public static ParaEntityList<ParaObjects.Download> GetList(ParaCredentials pc, DownloadQuery query)
         {
             // Making a schema call and returning all custom fields to be included in the call.
@@ -92,6 +97,7 @@ namespace ParatureSDK.ApiHandler
         /// <param name="listXml">
         /// The Account List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.")]
         public static ParaEntityList<ParaObjects.Download> GetList(XmlDocument listXml)
         {
             var accountsList = ParaEntityParser.FillListDownload(listXml);
