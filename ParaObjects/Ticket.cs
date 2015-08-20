@@ -805,6 +805,33 @@ namespace ParatureSDK.ParaObjects
         }
 
         /// <summary>
+        /// The Portal Alias that the ticket was submitted under
+        /// </summary>
+        public PortalAliasReference Ticket_Portal_Alias
+        {
+            get
+            {
+                return GetFieldValue<PortalAliasReference>("Ticket_Portal_Alias");
+            }
+            set
+            {
+                var field = StaticFields.FirstOrDefault(f => f.Name == "Ticket_Portal_Alias");
+                if (field == null)
+                {
+                    field = new StaticField()
+                    {
+                        Name = "Ticket_Portal_Alias",
+                        FieldType = "entity",
+                        DataType = "entity"
+                    };
+                    StaticFields.Add(field);
+                }
+
+                field.Value = value;
+            }
+        }
+
+        /// <summary>
         /// Parent Ticket of this ticket. Only filled whenever there is a parent ticket. Also, only the ticket id will be filled. Please make sure
         /// </summary>
         public TicketReference Ticket_Parent

@@ -87,6 +87,8 @@
     <Compile Include="ApiHandler\Ticket.cs" />
     <Compile Include="ApiRequestSettings.cs" />
     <Compile Include="ApiUrlBuilder.cs" />
+    <Compile Include="ParaObjects\EntityReferences\PortalAliasReference.cs" />
+    <Compile Include="ParaObjects\PortalAlias.cs" />
     <Compile Include="Query\EntityQuery\ArticleFolderQuery.cs" />
     <Compile Include="Query\EntityQuery\CsrStatusQuery.cs" />
     <Compile Include="Query\EntityQuery\CustomerStatusQuery.cs" />
