@@ -9,7 +9,7 @@ namespace Exercises
     {
         static void Main(string[] args)
         {
-            
+            var credentials = new ParatureSDK.ParaCredentials()
         }
     }
 }
