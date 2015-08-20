@@ -13,7 +13,10 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         [Obsolete("To be removed in favor of ParaService.Insert in next major revision.")]
         public static ApiCallResponse Insert<TEntity>(TEntity entity, ParaCredentials paraCredentials) where TEntity : ParaEntity, new()
         {
-            return Upsert(entity, paraCredentials);
+            var doc = XmlGenerator.GenerateXml(entity);
+            var ar = ApiCallFactory.ObjectCreateUpdate<TEntity>(paraCredentials, doc, 0);
+            entity.Id = ar.Id;
+            return ar;
         }
 
         /// <summary>
@@ -22,13 +25,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         [Obsolete("To be removed in favor of ParaService.Update in next major revision.")]
         public static ApiCallResponse Update<TEntity>(TEntity entity, ParaCredentials paraCredentials) where TEntity : ParaEntity, new()
         {
-            return Upsert(entity, paraCredentials);
-        }
-
-        static ApiCallResponse Upsert<TEntity>(TEntity entity, ParaCredentials creds) where TEntity : ParaEntity, new()
-        {
-            var ar = ApiCallFactory.ObjectCreateUpdate<TEntity>(creds, XmlGenerator.GenerateXml(entity), entity.Id);
-            entity.Id = ar.Id;
+            var ar = ApiCallFactory.ObjectCreateUpdate<TEntity>(paraCredentials, XmlGenerator.GenerateXml(entity), entity.Id);
             return ar;
         }
 

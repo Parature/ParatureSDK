@@ -230,7 +230,7 @@ namespace ParatureSDK
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="query"></param>
         /// <returns></returns>
-        public ParaEntityList<TEntity> GetList<TParentEntity,TEntity>(ParaEntityQuery query)
+        public ParaEntityList<TEntity> GetList<TParentEntity,TEntity>(ParaQuery query)
             where TEntity : ParaEntityBaseProperties, new()
             where TParentEntity : ParaEntity
         {

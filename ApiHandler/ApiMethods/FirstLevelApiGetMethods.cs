@@ -87,6 +87,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <param name="listXml">
         /// The List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.")]
         public static ParaEntityList<TEntity> GetList(XmlDocument listXml)
         {
             var entityList = ParaEntityParser.FillList<TEntity>(listXml);
@@ -99,6 +100,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <summary>
         /// Gets an empty object with the scheam (custom fields, if any).
         /// </summary>            
+        [Obsolete("To be removed in favor of ParaService.Create in next major revision.")]
         public static TEntity Schema(ParaCredentials pc)
         {
             var entity = new TEntity();
