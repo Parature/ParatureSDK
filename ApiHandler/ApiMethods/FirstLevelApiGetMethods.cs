@@ -53,7 +53,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         }
 
         /// <summary>
-        /// Will return the first 25 accounts returned by the APIs.
+        /// Will return the first 25 objects returned by the APIs.
         /// </summary>            
         public static ParaEntityList<TEntity> GetList(ParaCredentials pc)
         {
@@ -61,8 +61,8 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         }
 
         /// <summary>
-        /// Provides you with the capability to list accounts, following criteria you would set
-        /// by instantiating a ModuleQuery.AccountQuery object
+        /// Provides you with the capability to list objects, following criteria you would set
+        /// by instantiating a ModuleQuery.*Query object
         /// </summary>
         public static ParaEntityList<TEntity> GetList(ParaCredentials pc, TQuery query)
         {
@@ -77,10 +77,10 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         }
 
         /// <summary>
-        /// Returns an accounts list object from an XML Document. No calls to the APIs are made when calling this method.
+        /// Returns an object list from an XML Document. No calls to the APIs are made when calling this method.
         /// </summary>
         /// <param name="listXml">
-        /// The Account List XML, is should follow the exact template of the XML returned by the Parature APIs.
+        /// The List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
         public static ParaEntityList<TEntity> GetList(XmlDocument listXml)
         {
