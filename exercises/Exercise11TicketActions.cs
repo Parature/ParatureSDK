@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ParatureSDK.ParaObjects;
-using ApiHandler = ParatureSDK.ApiHandler;
 using Action = ParatureSDK.ParaObjects.Action;
 using ParatureSDK;
 
