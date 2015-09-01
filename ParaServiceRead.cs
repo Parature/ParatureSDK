@@ -152,7 +152,7 @@ namespace ParatureSDK
         public ParaEntityList<TEntity> GetList<TEntity>(ParaEntityQuery query)
             where TEntity : ParaEntity, new()
         {
-            if (!(query.QueryTargetType is TEntity))
+            if (!(query.QueryTargetType == typeof(TEntity)))
             {
                 throw new ArgumentException("Invalid query type for the requested entity result type", "query");
             }
@@ -233,7 +233,7 @@ namespace ParatureSDK
             where TEntity : ParaEntityBaseProperties, new()
             where TParentEntity : ParaEntity
         {
-            if (!(query.QueryTargetType is TEntity))
+            if (!(query.QueryTargetType == typeof(TEntity)))
             {
                 throw new ArgumentException("Inavlid query type for the requested entity result type", "query");
             }
