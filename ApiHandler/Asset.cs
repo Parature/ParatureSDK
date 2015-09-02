@@ -28,7 +28,7 @@ namespace ParatureSDK.ApiHandler
         /// Your credentials object.
         /// </param>
         /// <returns></returns>
-        [Obsolete("To be removed in favor of ParaService.RunActionOn in next major revision.")]
+        [Obsolete("To be removed in favor of ParaService.RunActionOn in next major revision.", true)]
         public static ApiCallResponse ActionRun(Int64 assetId, Action action, ParaCredentials creds)
         {
             var ar = ApiUtils.ActionRun<ParaObjects.Asset>(assetId, action, creds);
