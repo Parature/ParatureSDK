@@ -2,20 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using ParatureSDK;
-using ParatureSDK.ApiHandler;
 using ParatureSDK.Query.EntityQuery;
 using ParatureSDK.Query.ModuleQuery;
+using ParatureSDK.ParaObjects;
 
 namespace Exercises
 {
-    class DownloadExamples
+    static class DownloadExamples
     {
+        static ParaService Service { get; set; }
+
+        static DownloadExamples()
+        {
+            Service = new ParaService(CredentialProvider.Creds);
+        }
+
         public static List<ParatureSDK.ParaObjects.DownloadFolder> getAllDownloadFolders(ParaCredentials creds)
         {
             var dfQuery = new DownloadFolderQuery();
             dfQuery.RetrieveAllRecords = true;
 
-            var folders = ParatureSDK.ApiHandler.Download.DownloadFolder.GetList(creds, dfQuery);
+            var folders = Service.GetList<DownloadFolder>(dfQuery);
 
             if (folders.ApiCallResponse.HasException)
             {
@@ -31,7 +38,7 @@ namespace Exercises
             downloadQuery.RetrieveAllRecords = true;
             downloadQuery.AddStaticFieldFilter(DownloadQuery.DownloadStaticFields.Folder, ParaEnums.QueryCriteria.Equal, folderID.ToString());
 
-            var downloads = ParatureSDK.ApiHandler.Download.GetList(creds, downloadQuery);
+            var downloads = Service.GetList<Download>(downloadQuery);
 
             if (downloads.ApiCallResponse.HasException)
             {
@@ -47,7 +54,7 @@ namespace Exercises
             downloadQuery.TotalOnly = true;
             downloadQuery.AddStaticFieldFilter(DownloadQuery.DownloadStaticFields.Folder, ParaEnums.QueryCriteria.Equal, folderID.ToString());
 
-            var downloads = ParatureSDK.ApiHandler.Download.GetList(creds, downloadQuery);
+            var downloads = Service.GetList<Download>(downloadQuery);
 
             if (downloads.ApiCallResponse.HasException)
             {

@@ -9,25 +9,26 @@ namespace Exercises
 {
     class Exercise07GetSchemas
     {
+        static ParaService Service { get; set; }
+
+        Exercise07GetSchemas()
+        {
+            Service = new ParaService(CredentialProvider.Creds);
+        }
+
         public static Customer CustomerSchema()
         {
-            var customer = ParatureSDK.ApiHandler.Customer.Schema(CredentialProvider.Creds);
-
-            return customer;
+            return Service.Create<Customer>();
         }
 
         public static Account AccountSchema()
         {
-            var account = ParatureSDK.ApiHandler.Account.Schema(CredentialProvider.Creds);
-
-            return account;
+            return Service.Create<Account>();
         }
 
         public static Article ArticleSchema()
         {
-            var article = ParatureSDK.ApiHandler.Article.Schema(CredentialProvider.Creds);
-
-            return article;
+            return Service.Create<Article>();
         }
 
         /// <summary>
@@ -36,10 +37,10 @@ namespace Exercises
         /// <returns></returns>
         public static ArticleFolder ArticleFolderSchema()
         {
-            //There is an API call to retrieve an article folder schema, but there aren't any custom fields so we are not providing a method fo schema retrieval
-            var articleFoler = new ArticleFolder();
-
-            return articleFoler;
+            //There is an API call to retrieve an article folder schema, 
+            //but there aren't any custom fields so we are not providing a 
+            //method fo schema retrieval
+            return Service.Create<ArticleFolder>();
         }
 
     }

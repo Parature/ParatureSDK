@@ -3,16 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ParatureSDK;
+using ParatureSDK.ParaObjects;
 
 namespace Exercises
 {
     class Exercise10DeleteObjects
     {
+        static ParaService Service { get; set; }
+
+        public Exercise10DeleteObjects()
+        {
+            Service = new ParaService(CredentialProvider.Creds);
+        }
+
         public static bool TrashCustomer(long customerID)
         {
             bool isSuccess;
 
-            var trashResponse = ParatureSDK.ApiHandler.Customer.Delete(customerID, CredentialProvider.Creds, false);
+            var trashResponse = Service.Delete<Customer>(customerID, false);
 
             isSuccess = !trashResponse.HasException;
 
@@ -23,7 +31,8 @@ namespace Exercises
         {
             bool isSuccess;
 
-            var purgeResponse = ParatureSDK.ApiHandler.Customer.Delete(customerID, CredentialProvider.Creds, true);
+            Service = new ParaService(CredentialProvider.Creds);
+            var purgeResponse = Service.Delete<Customer>(customerID, true);
 
             isSuccess = !purgeResponse.HasException;
 

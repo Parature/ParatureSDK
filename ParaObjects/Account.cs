@@ -10,7 +10,7 @@ namespace ParatureSDK.ParaObjects
     /// <summary>
     /// Holds all the properties of the Account module.
     /// </summary>
-    public class Account : ParaEntity
+    public class Account : ParaEntity, IMutableEntity
     {
         public string Account_Name
         {

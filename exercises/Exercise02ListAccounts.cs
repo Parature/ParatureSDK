@@ -11,6 +11,13 @@ namespace Exercises
 {
     class Exercise02ListAccounts
     {
+        static ParaService Service { get; set; }
+
+        public Exercise02ListAccounts()
+        {
+            Service = new ParaService(CredentialProvider.Creds);
+        }
+
         //List all of the accounts
         public static ParaEntityList<ParatureSDK.ParaObjects.Account> getAllAccounts()
         {
@@ -18,7 +25,7 @@ namespace Exercises
             var accountQuery = new AccountQuery();
             accountQuery.RetrieveAllRecords = true; //Retrieve all records will maximize page size and make necessary additional calls to retrieve all pages
 
-            var accounts = ParatureSDK.ApiHandler.Account.GetList(CredentialProvider.Creds, accountQuery);
+            var accounts = Service.GetList<Account>(accountQuery);
 
             var apiResponse = accounts.ApiCallResponse; //API response is provided with object
 
@@ -32,39 +39,42 @@ namespace Exercises
             return accounts;
         }
 
-        public static ParaEntityList<ParatureSDK.ParaObjects.Account> searchAccountsByName(string accountName)
+        public static ParaEntityList<Account> searchAccountsByName(string accountName)
         {
             var accountQuery = new AccountQuery();
             accountQuery.RetrieveAllRecords = true;
             
             //There is a difference between static fields and custom fields
-            accountQuery.AddStaticFieldFilter(AccountQuery.AccountStaticFields.AccountName, ParatureSDK.ParaEnums.QueryCriteria.Equal, accountName);
+            accountQuery.AddStaticFieldFilter(AccountQuery.AccountStaticFields.AccountName, ParaEnums.QueryCriteria.Equal, accountName);
 
-            var accounts = ParatureSDK.ApiHandler.Account.GetList(CredentialProvider.Creds, accountQuery);
+            Service = new ParaService(CredentialProvider.Creds);
+            var accounts = Service.GetList<Account>(accountQuery);
 
             return accounts;
         }
 
-        public static ParaEntityList<ParatureSDK.ParaObjects.Account> searchAccountsByField(long fieldID, string fieldValue)
+        public static ParaEntityList<Account> searchAccountsByField(long fieldID, string fieldValue)
         {
             var accountQuery = new AccountQuery();
             accountQuery.RetrieveAllRecords = true;
-            accountQuery.AddCustomFieldFilter(fieldID, ParatureSDK.ParaEnums.QueryCriteria.Equal, fieldValue);
-            
-            var accounts = ParatureSDK.ApiHandler.Account.GetList(CredentialProvider.Creds, accountQuery);
+            accountQuery.AddCustomFieldFilter(fieldID, ParaEnums.QueryCriteria.Equal, fieldValue);
+
+            Service = new ParaService(CredentialProvider.Creds);
+            var accounts = Service.GetList<Account>(accountQuery);
 
             return accounts;
         }
 
         //Overload for an option field
-        public static ParaEntityList<ParatureSDK.ParaObjects.Account> searchAccountsByField(long fieldID, long fieldValue)
+        public static ParaEntityList<Account> searchAccountsByField(long fieldID, long fieldValue)
         {
             //field value would be option ID
             var accountQuery = new AccountQuery();
             accountQuery.RetrieveAllRecords = true;
             accountQuery.AddCustomFieldFilter(fieldID, ParaEnums.QueryCriteria.Equal, fieldValue);
 
-            var accounts = ParatureSDK.ApiHandler.Account.GetList(CredentialProvider.Creds, accountQuery);
+            Service = new ParaService(CredentialProvider.Creds);
+            var accounts = Service.GetList<Account>(accountQuery);
 
             return accounts;
         }
@@ -76,7 +86,8 @@ namespace Exercises
             accountQuery.RetrieveAllRecords = true;
             accountQuery.View = viewID;
 
-            var accounts = ParatureSDK.ApiHandler.Account.GetList(CredentialProvider.Creds, accountQuery);
+            Service = new ParaService(CredentialProvider.Creds);
+            var accounts = Service.GetList<Account>(accountQuery);
 
             return accounts;
         }

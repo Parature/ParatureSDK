@@ -4,30 +4,47 @@ using System.Linq;
 using System.Text;
 using ParatureSDK;
 using ParatureSDK.ParaObjects;
+using ParatureSDK.Query.EntityQuery;
 
 namespace Exercises
 {
     class Exercise06RetrieveObjects
     {
+        static ParaService Service { get; set; }
+
+        public Exercise06RetrieveObjects()
+        {
+            Service = new ParaService(CredentialProvider.Creds);
+        }
+
         public static Customer getCustomer(long customerID)
         {
-            var customer = ParatureSDK.ApiHandler.Customer.GetDetails(customerID, CredentialProvider.Creds);
-
-            return customer;
+            return Service.GetDetails<Customer>(customerID);
         }
 
         public static Account getAccount(long accountID)
         {
-            var account = ParatureSDK.ApiHandler.Account.GetDetails(accountID, CredentialProvider.Creds);
+           return Service.GetDetails<Account>(accountID);
+        }
 
-            return account;
+        public static View GetAccountView(long viewId)
+        {
+            return Service.GetDetails<View>(viewId);
+        }
+
+        public static ParaEntityList<View> GetAccountViewList(long accountId)
+        {
+            var viewQuery = new ViewQuery()
+            {
+                RetrieveAllRecords = true
+            };
+
+            return Service.GetList<Account, View>(viewQuery);
         }
 
         public static Article getArticle(long articleID)
         {
-            var article = ParatureSDK.ApiHandler.Article.GetDetails(articleID, CredentialProvider.Creds);
-
-            return article;
+            return Service.GetDetails<Article>(articleID);
         }
 
     }

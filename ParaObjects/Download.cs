@@ -4,13 +4,14 @@ using System.Linq;
 using System.Xml.Serialization;
 using ParatureSDK.Fields;
 using ParatureSDK.ParaObjects.EntityReferences;
+using System.Text;
 
 namespace ParatureSDK.ParaObjects
 {
     /// <summary>
     /// Holds all the properties of the Download module.
     /// </summary>
-    public class Download : ParaEntity
+    public class Download : ParaEntity, IMutableEntity
     {
         // Specific properties for this module
         /// <summary>
@@ -633,12 +634,25 @@ namespace ParatureSDK.ParaObjects
         /// <param name="EmailAttachment">
         /// The email attachment to upload.
         /// </param>
+        [Obsolete("To be removed in favor of Download.AddAttachment(ParaService, System.Net.Mail.Attachment) in the next major revision.")]
         public void AttachmentsAdd(ParaCredentials paracredentials, System.Net.Mail.Attachment EmailAttachment)
         {
             Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, EmailAttachment);
             Guid = Attachment.Guid;
         }
-            
+
+        /// <summary>
+        /// Uploads a file to the Parature system, from a standard System.Net.Mail.Attachment object, in case you use this from an email.
+        /// </summary>            
+        /// <param name="EmailAttachment">
+        /// The email attachment to upload.
+        /// </param>
+        public void AddAttachment(ParaService service, System.Net.Mail.Attachment EmailAttachment)
+        {
+            Attachment = service.UploadFile<Download>(EmailAttachment);
+            Guid = Attachment.Guid;
+        }
+
         /// <summary>
         /// Uploads the file to the current Download. 
         /// The file will also be added to the current Downloads's Guid.
@@ -655,9 +669,32 @@ namespace ParatureSDK.ParaObjects
         /// <param name="FileName">
         /// 
         ///</param>
+        [Obsolete("To be removed in favor of Download.AddAttachment(ParaService, byte[], string, string) in the next major revision.")]
         public void AttachmentsAdd(ParaCredentials paracredentials, Byte[] Attachment, string contentType, string FileName)
         {
             this.Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, Attachment, contentType, FileName);
+            Guid = this.Attachment.Guid;
+        }
+
+        /// <summary>
+        /// Uploads the file to the current Download. 
+        /// The file will also be added to the current Downloads's Guid.
+        /// </summary>
+        /// <param name="Attachment">
+        /// The binary Byte array of the file you would like to upload. 
+        ///</param>           
+        /// <param name="paracredentials">
+        /// The parature credentials class for the APIs.
+        /// </param>            
+        /// <param name="contentType">
+        /// The type of content being uploaded, you have to make sure this is the right text.
+        /// </param>
+        /// <param name="FileName">
+        /// 
+        ///</param>
+        public void AddAttachment(ParaService service, Byte[] attachment, string contentType, string fileName)
+        {
+            this.Attachment = service.UploadFile<Download>(attachment, contentType, fileName);
             Guid = this.Attachment.Guid;
         }
 
@@ -676,9 +713,33 @@ namespace ParatureSDK.ParaObjects
         /// <param name="FileName">
         /// The name you woule like the attachment to have.
         ///</param>
+        [Obsolete("To be removed in favor of Download.AddAttachment(ParaService, string, string, string) in the next major revision.")]
         public void AttachmentsAdd(ParaCredentials paracredentials, string text, string contentType, string FileName)
         {
             Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, text, contentType, FileName);
+            Guid = Attachment.Guid;
+        }
+
+        /// <summary>
+        /// Uploads a text based file to the current Download. You need to pass a string, and the mime type of a text based file (html, text, etc...).            
+        /// </summary>
+        /// <param name="text">
+        /// The content of the text based file. 
+        ///</param>           
+        /// <param name="paracredentials">
+        /// The parature credentials class for the APIs.
+        /// </param>            
+        /// <param name="contentType">
+        /// The type of content being uploaded, you have to make sure this is the right text.
+        /// </param>
+        /// <param name="FileName">
+        /// The name you woule like the attachment to have.
+        ///</param>
+        public void AddAttachment(ParaService service, string text, string contentType, string fileName)
+        {
+            var encoding = new ASCIIEncoding();
+            var bytes = encoding.GetBytes(text);
+            Attachment = service.UploadFile<Download>(bytes, contentType, fileName);
             Guid = Attachment.Guid;
         }
 
@@ -697,6 +758,7 @@ namespace ParatureSDK.ParaObjects
         /// <param name="FileName">
         /// The name you woule like the attachment to have.
         ///</param>
+        [Obsolete("To be removed in favor of Download.UpdateAttachment(ParaService, string, string, string) in the next major revision.")]
         public void AttachmentsUpdate(ParaCredentials paracredentials, string text, string contentType, string FileName)
         {
             Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, text, contentType, FileName);
@@ -704,16 +766,51 @@ namespace ParatureSDK.ParaObjects
             Name = FileName;
         }
 
+        /// <summary>
+        /// Updates the current download attachment with a text based file. You need to pass a string, and the mime type of a text based file (html, text, etc...).            
+        /// </summary>
+        /// <param name="text">
+        /// The content of the text based file. 
+        ///</param>           
+        /// <param name="paracredentials">
+        /// The parature credentials class for the APIs.
+        /// </param>            
+        /// <param name="contentType">
+        /// The type of content being uploaded, you have to make sure this is the right text.
+        /// </param>
+        /// <param name="FileName">
+        /// The name you woule like the attachment to have.
+        ///</param>
+        public void UpdateAttachment(ParaService service, string text, string contentType, string fileName)
+        {
+            var encoding = new ASCIIEncoding();
+            var bytes = encoding.GetBytes(text);
+            Attachment = service.UploadFile<Download>(bytes, contentType, fileName);
+            Guid = Attachment.Guid;
+            Name = fileName;
+        }
 
         /// <summary>
         /// If you have a download file and would like to replace the file, use this method. It will actually delete 
         /// the existing attachment, and then add a new one to replace it.
         /// </summary>
+        [Obsolete("To be removed in favor of Download.UpdateAttachment(ParaService, byte[], string, string) in the next major revision.")]
         public void AttachmentsUpdate(ParaCredentials paracredentials, Byte[] Attachment, string contentType, string FileName)
         {
             this.Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, Attachment, contentType, FileName);
             Guid = this.Attachment.Guid;
             Name = FileName;
+        }
+
+        /// <summary>
+        /// If you have a download file and would like to replace the file, use this method. It will actually delete 
+        /// the existing attachment, and then add a new one to replace it.
+        /// </summary>
+        public void UpdateAttachment(ParaService service, byte[] attachment, string contentType, string fileName)
+        {
+            this.Attachment = service.UploadFile<Download>(attachment, contentType, fileName);
+            Guid = this.Attachment.Guid;
+            Name = fileName;
         }
 
         public Download()

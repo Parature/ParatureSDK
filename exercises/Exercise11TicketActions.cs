@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ParatureSDK.ParaObjects;
-using ApiHandler = ParatureSDK.ApiHandler;
 using Action = ParatureSDK.ParaObjects.Action;
+using ParatureSDK;
 
 namespace Exercises
 {
     class Exercise11TicketActions
     {
+        static ParaService Service { get; set; }
+
+        public Exercise11TicketActions()
+        {
+            Service = new ParaService(CredentialProvider.Creds);
+        }
+
         /// <summary>
         /// The actions that can be performed on a ticket depend on the current State.
         /// Retrieve the ticket to get a list of Actions available. This ensures no invalid transition is requested.
@@ -18,7 +25,7 @@ namespace Exercises
         /// <returns></returns>
         public static List<Action> GetAvailableTicketActions(long ticketId)
         {
-            var ticketResponse = ApiHandler.Ticket.GetDetails(ticketId, CredentialProvider.Creds, false);
+            var ticketResponse = Service.GetDetails<Ticket>(ticketId);
             
             return ticketResponse.Actions;
         }
@@ -32,8 +39,7 @@ namespace Exercises
         /// <returns></returns>
         public static ApiCallResponse RunAction(long ticketId, Action action)
         {
-            var actionResponse = ApiHandler.Ticket.ActionRun(ticketId, action, CredentialProvider.Creds);
-            return actionResponse;
+            return Service.RunActionOn<Ticket>(ticketId, action);
         }
 
         /// <summary>
@@ -44,7 +50,7 @@ namespace Exercises
         /// <param name="action"></param>
         public static void AddAttachmentToAction(Action action)
         {
-            action.AddAttachment(CredentialProvider.Creds, "Contents of the file", "text/plain", "attachment1.txt");
+            action.AddAttachment(Service, "Contents of the file", "text/plain", "attachment1.txt");
         }
     }
 }

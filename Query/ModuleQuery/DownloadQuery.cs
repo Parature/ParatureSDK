@@ -1,3 +1,6 @@
+using ParatureSDK.ParaObjects;
+using System;
+
 namespace ParatureSDK.Query.ModuleQuery
 {
     /// <summary>
@@ -9,6 +12,14 @@ namespace ParatureSDK.Query.ModuleQuery
     {
         protected override void BuildModuleSpecificFilter()
         {}
+
+        internal override Type QueryTargetType
+        {
+            get
+            {
+                return typeof(Download);
+            }
+        }
 
         /// <summary>
         /// Contains all the static properties you will need when filtering by static fields.

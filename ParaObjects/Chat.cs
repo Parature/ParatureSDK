@@ -11,7 +11,7 @@ namespace ParatureSDK.ParaObjects
     /// <summary>
     /// Holds all the properties of the Chat module.
     /// </summary>
-    public class Chat : ParaEntity
+    public class Chat : ParaEntity, IHistoricalEntity
     {
         public string Chat_Number
         {

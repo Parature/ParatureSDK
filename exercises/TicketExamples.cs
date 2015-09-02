@@ -5,21 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 using ParatureSDK;
 using ParatureSDK.Query.ModuleQuery;
+using ParatureSDK.ParaObjects;
 
 namespace Exercises
 {
-    class TicketExamples
+    static class TicketExamples
     {
+        static ParaService Service { get; set; }
+
+        static TicketExamples()
+        {
+            Service = new ParaService(CredentialProvider.Creds);
+        }
+
         /// <summary>
         /// Retrieve all tickets from a department of Parature minus archived and deleted tickets.
         /// </summary>
         /// <param name="creds"></param>
         /// <returns></returns>
-        public static List<ParatureSDK.ParaObjects.Ticket> GetAllTickets(ParaCredentials creds)
+        public static List<Ticket> GetAllTickets(ParaCredentials creds)
         {
             var tq = new TicketQuery();
             tq.RetrieveAllRecords = true;
-            var tickets = ParatureSDK.ApiHandler.Ticket.GetList(creds, tq);
+            var tickets = Service.GetList<Ticket>(tq);
 
             if (tickets.ApiCallResponse.HasException)
             {
@@ -41,7 +49,7 @@ namespace Exercises
             //Add an account filter: https://support.parature.com/public/doc/api.html#ticket-list
             tq.AddStaticFieldFilter(TicketQuery.TicketStaticFields.Account, ParaEnums.QueryCriteria.Equal, accountId.ToString());
             tq.RetrieveAllRecords = true;
-            var tickets = ParatureSDK.ApiHandler.Ticket.GetList(creds, tq);
+            var tickets = Service.GetList<Ticket>(tq);
 
             if (tickets.ApiCallResponse.HasException)
             {

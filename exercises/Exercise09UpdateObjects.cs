@@ -9,12 +9,19 @@ namespace Exercises
 {
     class Exercise09UpdateObjects
     {
+        static ParaService Service { get; set; }
+
+        public Exercise09UpdateObjects()
+        {
+            Service = new ParaService(CredentialProvider.Creds);
+        }
+
         public static bool UpdateCustomer(Customer modifiedCustomer) {
             //Customer object would be modifed before calling this method
 
             bool isSuccess;
 
-            var updateResponse = ParatureSDK.ApiHandler.Customer.Update(modifiedCustomer, CredentialProvider.Creds);
+            var updateResponse = Service.Update(modifiedCustomer);
 
             isSuccess = !updateResponse.HasException;
 
@@ -25,7 +32,7 @@ namespace Exercises
         {
             bool isSuccess;
 
-            var updateResponse = ParatureSDK.ApiHandler.Account.Update(modifiedAccount, CredentialProvider.Creds);
+            var updateResponse = Service.Update(modifiedAccount);
 
             isSuccess = !updateResponse.HasException;
 

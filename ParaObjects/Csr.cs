@@ -7,7 +7,7 @@ using ParatureSDK.ParaObjects.EntityReferences;
 
 namespace ParatureSDK.ParaObjects
 {
-    public class Csr : ParaEntity
+    public class Csr : ParaEntity, IMutableEntity
     {
         public string Full_Name
         {

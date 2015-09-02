@@ -10,14 +10,28 @@ namespace Exercises
 {
     public static class ChatTranscriptExample
     {
-        public static ParaEntityList<Chat> GetChats(DateTime dateFilter, ParaCredentials creds)
+        static ParaService Service { get; set; }
+
+        static ChatTranscriptExample()
+        {
+            Service = new ParaService(CredentialProvider.Creds);
+        }
+
+        public static ParaEntityList<Chat> GetChats(DateTime dateFilter, bool retrieveTranscripts)
         {
             var chatQuery = new ChatQuery();
             chatQuery.RetrieveAllRecords = true;
             chatQuery.AddStaticFieldFilter(ChatQuery.ChatStaticFields.Date_Ended, ParaEnums.QueryCriteria.MoreThan, dateFilter);
 
-            //Chat transcripts can be auto retrieved by setting the 2nd parameter to true
-            var chats = ParatureSDK.ApiHandler.Chat.GetList(creds, false, chatQuery);
+            var chats = Service.GetList<Chat>(chatQuery);
+
+            if (retrieveTranscripts)
+            {
+                foreach (var chat in chats)
+                {
+                    chat.Transcript = Service.GetChatTranscript(chat.Id);
+                }
+            }
 
             //Best practice is to check for an API exception
             if(chats.ApiCallResponse.HasException)
@@ -26,11 +40,11 @@ namespace Exercises
             return chats;
         }
 
-        public static void ProcessTranscripts(ParaEntityList<Chat> chats, ParaCredentials creds)
+        public static void ProcessTranscripts(ParaEntityList<Chat> chats)
         {
             foreach (var chat in chats)
             {
-                var transcripts = ParatureSDK.ApiHandler.Chat.GetTranscript(chat.Id, creds);
+                var transcripts = Service.GetChatTranscript(chat.Id);
                 if (transcripts != null) foreach (var message in transcripts)
                 {
                     //Do something

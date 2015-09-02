@@ -10,15 +10,20 @@ namespace Exercises
 {
     class Exercise05ListArticles
     {
+        static ParaService Service { get; set; }
+
+        public Exercise05ListArticles()
+        {
+            Service = new ParaService(CredentialProvider.Creds);
+        }
+
         public static int getArticleCount()
         {
             var articleQuery = new ArticleQuery();
             articleQuery.RetrieveAllRecords = true;
             articleQuery.TotalOnly = true;
 
-            var articles = ParatureSDK.ApiHandler.Article.GetList(CredentialProvider.Creds, articleQuery);
-
-            return articles.TotalItems;
+            return Service.GetList<Article>(articleQuery).TotalItems;
         }
 
         public static ParaEntityList<Article> getArticles()
@@ -26,9 +31,7 @@ namespace Exercises
             var articleQuery = new ArticleQuery();
             articleQuery.RetrieveAllRecords = true;
 
-            var articles = ParatureSDK.ApiHandler.Article.GetList(CredentialProvider.Creds, articleQuery);
-
-            return articles;
+            return Service.GetList<Article>(articleQuery);
         }
 
         public static ParaEntityList<Article> getPublishedArticles()
@@ -37,9 +40,7 @@ namespace Exercises
             articleQuery.AddStaticFieldFilter(ArticleQuery.ArticleStaticFields.Published, ParaEnums.QueryCriteria.Equal, true);
             articleQuery.RetrieveAllRecords = true;
 
-            var articles = ParatureSDK.ApiHandler.Article.GetList(CredentialProvider.Creds, articleQuery);
-
-            return articles;
+            return Service.GetList<Article>(articleQuery);
         }
 
         public static ParaEntityList<Article> getArticlesByFolder(long folderID)
@@ -48,9 +49,7 @@ namespace Exercises
             articleQuery.AddStaticFieldFilter(ArticleQuery.ArticleStaticFields.Folders, ParaEnums.QueryCriteria.Equal, folderID.ToString());
             articleQuery.RetrieveAllRecords = true;
 
-            var articles = ParatureSDK.ApiHandler.Article.GetList(CredentialProvider.Creds, articleQuery);
-
-            return articles;
+            return Service.GetList<Article>(articleQuery);
         }
     }
 }
