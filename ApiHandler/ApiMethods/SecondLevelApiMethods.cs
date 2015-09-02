@@ -22,7 +22,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
         /// <returns></returns>
-        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.")]
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.", true)]
         public static TEntity GetDetails(Int64 id, ParaCredentials creds)
         {
             var entity = ApiUtils.ApiGetEntity<TEntity>(creds, id);
@@ -35,7 +35,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <param name="xml">
         /// The view XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.")]
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.", true)]
         public static TEntity GetDetails(XmlDocument xml)
         {
             var entity = ParaEntityParser.EntityFill<TEntity>(xml);
@@ -49,7 +49,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <param name="listXml">
         /// The view List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.")]
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.", true)]
         public static ParaEntityList<TEntity> GetList(XmlDocument listXml)
         {
             var list = ParaEntityParser.FillList<TEntity>(listXml);
@@ -65,13 +65,13 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <param name="creds"></param>
         /// <param name="query"></param>
         /// <returns></returns>
-        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.")]
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.", true)]
         public static ParaEntityList<TEntity> GetList(ParaCredentials creds, TQuery query)
         {
             return ApiUtils.ApiGetEntityList<TModule, TEntity>(creds, query);
         }
 
-        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.")]
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.", true)]
         public static ParaEntityList<TEntity> GetList(ParaCredentials creds)
         {
             return ApiUtils.ApiGetEntityList<TModule, TEntity>(creds, new TQuery());

@@ -1088,7 +1088,7 @@ namespace ParatureSDK.ParaObjects
         ///  The binary Byte array of the attachment you would like to add. 
         /// </param>
         /// <param name="fileName"></param>
-        [Obsolete("To be removed in favor of Ticket.AddAttachment(ParaService, byte[], string, string) in the next major revision.")]
+        [Obsolete("To be removed in favor of Ticket.AddAttachment(ParaService, byte[], string, string) in the next major revision.", true)]
         public void AttachmentsAdd(ParaCredentials creds, Byte[] attachment, string contentType, string fileName)
         {
             Ticket_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, attachment, contentType, fileName));
@@ -1122,7 +1122,7 @@ namespace ParatureSDK.ParaObjects
         /// <param name="fileName">
         /// The name you woule like the attachment to have.
         ///</param>
-        [Obsolete("To be removed in favor of Ticket.AddAttachment(ParaService, string, string, string) in the next major revision.")]
+        [Obsolete("To be removed in favor of Ticket.AddAttachment(ParaService, string, string, string) in the next major revision.", true)]
         public void AttachmentsAdd(ParaCredentials creds, string text, string contentType, string fileName)
         {
             Ticket_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, text, contentType, fileName));
@@ -1165,7 +1165,7 @@ namespace ParatureSDK.ParaObjects
         /// <param name="fileName">
         /// The name you woule like the attachment to have.
         ///</param>
-        [Obsolete("To be removed in favor of Ticket.UpdateAttachment(string, string, string) in the next major revision.")]
+        [Obsolete("To be removed in favor of Ticket.UpdateAttachment(string, string, string) in the next major revision.", true)]
         public void AttachmentsUpdate(ParaCredentials creds, string text, string attachmentGuid, string contentType, string fileName)
         {
             AttachmentsDelete(attachmentGuid);
@@ -1198,7 +1198,7 @@ namespace ParatureSDK.ParaObjects
         /// If you have an attachment and would like to replace the file, use this method. It will actually delete 
         /// the existing attachment, and then add a new one to replace it.
         /// </summary>
-        [Obsolete("To be removed in favor of Ticket.UpdateAttachment(ParaService, byte[], string, string) in the next major revision.")]
+        [Obsolete("To be removed in favor of Ticket.UpdateAttachment(ParaService, byte[], string, string) in the next major revision.", true)]
         public void AttachmentsUpdate(ParaCredentials creds, Byte[] attachment, string attachmentGuid, string contentType, string fileName)
         {
             AttachmentsDelete(attachmentGuid);
@@ -1211,14 +1211,14 @@ namespace ParatureSDK.ParaObjects
         /// </summary>
         public void UpdateAttachment(ParaService service, Byte[] attachment, string attachmentGuid, string contentType, string fileName)
         {
-            AttachmentsDelete(attachmentGuid);
+            DeleteAttachment(attachmentGuid);
             Ticket_Attachments.Add(service.UploadFile<Ticket>(attachment, contentType, fileName));
         }
 
         /// <summary>
         /// If you have an attachment and would like to delete, just pass the id here.
         /// </summary>
-        [Obsolete("To be removed in favor of Ticket.DeleteAttachment in the next major revision.")]
+        [Obsolete("To be removed in favor of Ticket.DeleteAttachment in the next major revision.", true)]
         public bool AttachmentsDelete(string attachmentGuid)
         {
             return DeleteAttachment(attachmentGuid);
