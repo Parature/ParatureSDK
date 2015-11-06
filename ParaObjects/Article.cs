@@ -490,10 +490,34 @@ namespace ParatureSDK.ParaObjects
             }
         }
 
-        /// <summary>
-        /// List of articles that are related to the this article. Introduced in 15.1
-        /// </summary>
-        public List<Article> Related_Articles
+		/// <summary>
+		/// Comma separated list of keywords that describe a KB article
+		/// </summary>
+		public string Language
+		{
+			get { return GetFieldValue<string>("Language"); }
+			set
+			{
+				var field = StaticFields.FirstOrDefault(f => f.Name == "Language");
+				if (field == null)
+				{
+					field = new StaticField
+					{
+						Name = "Language",
+						FieldType = "text",
+						DataType = "string"
+					};
+					StaticFields.Add(field);
+				}
+
+				field.Value = value;
+			}
+		}
+
+		/// <summary>
+		/// List of articles that are related to the this article. Introduced in 15.1
+		/// </summary>
+		public List<Article> Related_Articles
         {
             get
             {
