@@ -515,6 +515,30 @@ namespace ParatureSDK.ParaObjects
 		}
 
 		/// <summary>
+		/// Translations for this article
+		/// </summary>
+		public List<ArticleTranslation> Translations
+		{
+			get { return GetFieldValue<List<ArticleTranslation>>("Translations"); }
+			set
+			{
+				var field = StaticFields.FirstOrDefault(f => f.Name == "Translations");
+				if (field == null)
+				{
+					field = new StaticField
+					{
+						Name = "Translations",
+						FieldType = "entitymultiple",
+						DataType = "entity"
+					};
+					StaticFields.Add(field);
+				}
+
+				field.Value = value;
+			}
+		}
+
+		/// <summary>
 		/// List of articles that are related to the this article. Introduced in 15.1
 		/// </summary>
 		public List<Article> Related_Articles
