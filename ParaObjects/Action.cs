@@ -36,7 +36,7 @@ namespace ParatureSDK.ParaObjects
         ///  The binary Byte array of the attachment you would like to add. 
         /// </param>
         /// <param name="fileName"></param>
-        [Obsolete("To be removed in favor of Action.AddAttachment(ParaService, byte[], string, string) in the next major revision.", true)]
+        [Obsolete("To be removed in favor of Action.AddAttachment(ParaService, byte[], string, string) in the next major revision.", false)]
         public void AddAttachment(ParaCredentials creds, Byte[] attachment, string contentType, string fileName)
         {
             Action_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, attachment, contentType, fileName));
@@ -70,7 +70,7 @@ namespace ParatureSDK.ParaObjects
         /// <param name="fileName">
         /// The name you woule like the attachment to have.
         ///</param>
-        [Obsolete("To be removed in favor of Action.AddAttachment(ParaService, byte[], string, string) in the next major revision.", true)]
+        [Obsolete("To be removed in favor of Action.AddAttachment(ParaService, byte[], string, string) in the next major revision.", false)]
         public void AddAttachment(ParaCredentials creds, string text, string contentType, string fileName)
         {
             Action_Attachments.Add(ApiHandler.Ticket.AddAttachment(creds, text, contentType, fileName));

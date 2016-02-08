@@ -30,7 +30,7 @@ namespace ParatureSDK.ApiHandler
         /// <param name="pc">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
-        [Obsolete("To be removed in favor of ParaService.GetDetails<Ticket> in next major revision.", true)]
+        [Obsolete("To be removed in favor of ParaService.GetDetails<Ticket> in next major revision.", false)]
         public static ParaObjects.Ticket GetDetails(Int64 ticketNumber, ParaCredentials pc, bool includeHistory)
         {
             var arl = new ArrayList();
@@ -66,7 +66,7 @@ namespace ParatureSDK.ApiHandler
         /// Your credentials object.
         /// </param>
         /// <returns></returns>
-        [Obsolete("To be removed in favor of ParaService.RunActionOn in next major revision.", true)]
+        [Obsolete("To be removed in favor of ParaService.RunActionOn in next major revision.", false)]
         public static ApiCallResponse ActionRun(Int64 ticketId, Action action, ParaCredentials pc)
         {
             var ar = ApiUtils.ActionRun<ParaObjects.Ticket>(ticketId, action, pc);

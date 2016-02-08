@@ -190,6 +190,7 @@ namespace ParatureSDK
             return resp;
         }
 
+        [Obsolete("To be removed in next major revision, use the FilePerformUpload(string, Byte[], string, string) overload instead.", false)]
         public static ApiCallResponse FilePerformUpload(string postUrl, Attachment attachment)
         {
             return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment);

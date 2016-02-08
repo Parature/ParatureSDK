@@ -17,7 +17,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <param name="xml">
         /// The entity XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        [Obsolete("To be removed in favor of ParaService.GetDetails in next major revision.", true)]
+        [Obsolete("To be removed in favor of ParaService.GetDetails in next major revision.", false)]
         public static TEntity GetDetails(XmlDocument xml)
         {
             var entity = ParaEntityParser.EntityFill<TEntity>(xml);
@@ -40,13 +40,13 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <param name="pc">
         /// The Parature Credentials class is used to hold the standard login information. It is very useful to have it instantiated only once, with the proper information, and then pass this class to the different methods that need it.
         /// </param>
-        [Obsolete("To be removed in favor of ParaService.GetDetails in next major revision.", true)]
+        [Obsolete("To be removed in favor of ParaService.GetDetails in next major revision.", false)]
         public static TEntity GetDetails(Int64 entityId, ParaCredentials pc)
         {
             return GetDetails(entityId, pc, new ArrayList());
         }
 
-        [Obsolete("To be removed in favor of ParaService.GetDetails in next major revision.", true)]
+        [Obsolete("To be removed in favor of ParaService.GetDetails in next major revision.", false)]
         public static TEntity GetDetails(Int64 entityId, ParaCredentials pc, ArrayList queryStringParams)
         {
             var entity = ApiUtils.ApiGetEntity<TEntity>(pc, entityId,
@@ -58,7 +58,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <summary>
         /// Will return the first 25 objects returned by the APIs.
         /// </summary>            
-        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.", true)]
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.", false)]
         public static ParaEntityList<TEntity> GetList(ParaCredentials pc)
         {
             return ApiUtils.ApiGetEntityList<TEntity>(pc);
@@ -68,7 +68,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// Provides you with the capability to list objects, following criteria you would set
         /// by instantiating a ModuleQuery.*Query object
         /// </summary>
-        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.", true)]
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.", false)]
         public static ParaEntityList<TEntity> GetList(ParaCredentials pc, TQuery query)
         {
             // Making a schema call and returning all custom fields to be included in the call.
@@ -87,7 +87,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <param name="listXml">
         /// The List XML, is should follow the exact template of the XML returned by the Parature APIs.
         /// </param>
-        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.", true)]
+        [Obsolete("To be removed in favor of ParaService.GetList in next major revision.", false)]
         public static ParaEntityList<TEntity> GetList(XmlDocument listXml)
         {
             var entityList = ParaEntityParser.FillList<TEntity>(listXml);
@@ -100,7 +100,7 @@ namespace ParatureSDK.ApiHandler.ApiMethods
         /// <summary>
         /// Gets an empty object with the scheam (custom fields, if any).
         /// </summary>            
-        [Obsolete("To be removed in favor of ParaService.Create in next major revision.", true)]
+        [Obsolete("To be removed in favor of ParaService.Create in next major revision.", false)]
         public static TEntity Schema(ParaCredentials pc)
         {
             var entity = new TEntity();

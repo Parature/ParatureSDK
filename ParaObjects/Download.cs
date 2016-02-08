@@ -634,7 +634,7 @@ namespace ParatureSDK.ParaObjects
         /// <param name="EmailAttachment">
         /// The email attachment to upload.
         /// </param>
-        [Obsolete("To be removed in favor of Download.AddAttachment(ParaService, System.Net.Mail.Attachment) in the next major revision.", true)]
+        [Obsolete("To be removed in favor of Download.AddAttachment(ParaService, System.Net.Mail.Attachment) in the next major revision.", false)]
         public void AttachmentsAdd(ParaCredentials paracredentials, System.Net.Mail.Attachment EmailAttachment)
         {
             Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, EmailAttachment);
@@ -669,7 +669,7 @@ namespace ParatureSDK.ParaObjects
         /// <param name="FileName">
         /// 
         ///</param>
-        [Obsolete("To be removed in favor of Download.AddAttachment(ParaService, byte[], string, string) in the next major revision.", true)]
+        [Obsolete("To be removed in favor of Download.AddAttachment(ParaService, byte[], string, string) in the next major revision.", false)]
         public void AttachmentsAdd(ParaCredentials paracredentials, Byte[] Attachment, string contentType, string FileName)
         {
             this.Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, Attachment, contentType, FileName);
@@ -713,7 +713,7 @@ namespace ParatureSDK.ParaObjects
         /// <param name="FileName">
         /// The name you woule like the attachment to have.
         ///</param>
-        [Obsolete("To be removed in favor of Download.AddAttachment(ParaService, string, string, string) in the next major revision.", true)]
+        [Obsolete("To be removed in favor of Download.AddAttachment(ParaService, string, string, string) in the next major revision.", false)]
         public void AttachmentsAdd(ParaCredentials paracredentials, string text, string contentType, string FileName)
         {
             Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, text, contentType, FileName);
@@ -758,7 +758,7 @@ namespace ParatureSDK.ParaObjects
         /// <param name="FileName">
         /// The name you woule like the attachment to have.
         ///</param>
-        [Obsolete("To be removed in favor of Download.UpdateAttachment(ParaService, string, string, string) in the next major revision.", true)]
+        [Obsolete("To be removed in favor of Download.UpdateAttachment(ParaService, string, string, string) in the next major revision.", false)]
         public void AttachmentsUpdate(ParaCredentials paracredentials, string text, string contentType, string FileName)
         {
             Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, text, contentType, FileName);
@@ -794,7 +794,7 @@ namespace ParatureSDK.ParaObjects
         /// If you have a download file and would like to replace the file, use this method. It will actually delete 
         /// the existing attachment, and then add a new one to replace it.
         /// </summary>
-        [Obsolete("To be removed in favor of Download.UpdateAttachment(ParaService, byte[], string, string) in the next major revision.", true)]
+        [Obsolete("To be removed in favor of Download.UpdateAttachment(ParaService, byte[], string, string) in the next major revision.", false)]
         public void AttachmentsUpdate(ParaCredentials paracredentials, Byte[] Attachment, string contentType, string FileName)
         {
             this.Attachment = ApiHandler.Download.DownloadUploadFile(paracredentials, Attachment, contentType, FileName);
