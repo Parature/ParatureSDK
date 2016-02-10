@@ -1,3 +1,4 @@
+using System;
 using System.Xml.Serialization;
 
 namespace ParatureSDK
@@ -133,7 +134,9 @@ namespace ParatureSDK
             /// <summary>
             /// Updates an object
             /// </summary>
+						[Obsolete("This value will be removed in favor of ApiCallHttpMethod.Put in the next major version.", false)]
             Update = 2,
+						Put = 2,
             /// <summary>
             /// Deletes an object
             /// </summary>
