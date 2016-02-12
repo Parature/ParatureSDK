@@ -74,7 +74,7 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ParatureSDK.csproj">
+    <ProjectReference Include="..\ParatureSDK\ParatureSDK.csproj">
       <Project>{9debf649-1163-4b2c-b466-8b0c75a784ff}</Project>
       <Name>ParatureSDK</Name>
     </ProjectReference>

@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParatureSDK", "ParatureSDK.csproj", "{9DEBF649-1163-4B2C-B466-8B0C75A784FF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exercises", "exercises\Exercises.csproj", "{41ED2E9E-ED41-4199-B983-A3783B021BAB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{48EDF914-50A8-41E0-99D3-A857353A9B6B}"
@@ -12,7 +10,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		CONTRIBUTING.md = CONTRIBUTING.md
+		License.txt = License.txt
+		Microsoft-Contribution-License-Agreement.docx = Microsoft-Contribution-License-Agreement.docx
+		Microsoft-Contribution-License-Agreement.pdf = Microsoft-Contribution-License-Agreement.pdf
+		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParatureSDK", "ParatureSDK\ParatureSDK.csproj", "{9DEBF649-1163-4B2C-B466-8B0C75A784FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,14 +25,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9DEBF649-1163-4B2C-B466-8B0C75A784FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9DEBF649-1163-4B2C-B466-8B0C75A784FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9DEBF649-1163-4B2C-B466-8B0C75A784FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9DEBF649-1163-4B2C-B466-8B0C75A784FF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{41ED2E9E-ED41-4199-B983-A3783B021BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{41ED2E9E-ED41-4199-B983-A3783B021BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41ED2E9E-ED41-4199-B983-A3783B021BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41ED2E9E-ED41-4199-B983-A3783B021BAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DEBF649-1163-4B2C-B466-8B0C75A784FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DEBF649-1163-4B2C-B466-8B0C75A784FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DEBF649-1163-4B2C-B466-8B0C75A784FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DEBF649-1163-4B2C-B466-8B0C75A784FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
