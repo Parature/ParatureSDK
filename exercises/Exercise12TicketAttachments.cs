@@ -29,12 +29,12 @@ namespace Exercises
 
         public static void AddAttachment(Ticket ticket, string fileName, string fileContents)
         {
-            ticket.AddAttachment(Service, fileContents, "text/plain", fileName);
+            ticket.AddAttachment(Service, fileContents, fileName);
             var response = Service.Update(ticket);
         }
 
         /// <summary>
-        /// Demonstrates how to delete individual attachments. 
+        /// Demonstrates how to delete individual attachments.
         /// </summary>
         /// <param name="ticket"></param>
         public static void DeleteAllAttachments(Ticket ticket)
@@ -45,7 +45,7 @@ namespace Exercises
                 foreach (var guid in ticketGuids)
                 {
                     //Must use this method to ensure the last attachment gets deleted properly
-                    //You can modify the list directly to delete attachments, 
+                    //You can modify the list directly to delete attachments,
                     //  but deleting the last attachment is equivalent to deleting all attachments.
                     //  We add a check to prevent this from happening accidentally
                     ticket.DeleteAttachment(guid);

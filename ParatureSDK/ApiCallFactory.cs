@@ -10,12 +10,15 @@ using Microsoft.VisualBasic;
 using ParatureSDK.Fields;
 using ParatureSDK.ParaObjects;
 using Attachment = System.Net.Mail.Attachment;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ParatureSDK
 {
     /// <summary>
     /// The APICallFactory manages all calls made to the APIs server. No API calls should be made outside of this class.
-    /// </summary>    
+    /// </summary>
     static internal class ApiCallFactory
     {
         public static ApiCallResponse ObjectCreateUpdate<T>(ParaCredentials paracredentials, XmlDocument fileToPost, Int64 objectid)
@@ -24,19 +27,19 @@ namespace ParatureSDK
             return ObjectCreateUpdate<T>(paracredentials, fileToPost, objectid, null);
         }
 
-        internal static ApiCallResponse ObjectCreateUpdate(ParaCredentials paracredentials, string entityType,
+        internal static async Task<ApiCallResponse> ObjectCreateUpdate(ParaCredentials paracredentials, string entityType,
             XmlDocument fileToPost, Int64 objectid)
         {
-            return ObjectCreateUpdate(paracredentials, entityType, fileToPost, objectid, null);
+            return await ObjectCreateUpdate(paracredentials, entityType, fileToPost, objectid, null);
         }
 
         public static ApiCallResponse ObjectCreateUpdate<T>(ParaCredentials paracredentials, XmlDocument fileToPost,
             Int64 objectid, ArrayList arguments)
         {
-            return ObjectCreateUpdate(paracredentials, typeof (T).Name, fileToPost, objectid, arguments);
+            return ObjectCreateUpdate(paracredentials, typeof (T).Name, fileToPost, objectid, arguments).Result;
         }
 
-        internal static ApiCallResponse ObjectCreateUpdate(ParaCredentials paracredentials, string entityType, XmlDocument fileToPost, Int64 objectid, ArrayList arguments)
+        internal static async Task<ApiCallResponse> ObjectCreateUpdate(ParaCredentials paracredentials, string entityType, XmlDocument fileToPost, Int64 objectid, ArrayList arguments)
         {
             if (arguments == null)
             {
@@ -62,10 +65,10 @@ namespace ParatureSDK
             // or an update (when we received an objectid>0)
             var apicallhttpmethod = (objectid == 0)
                 ? ParaEnums.ApiCallHttpMethod.Post
-                : ParaEnums.ApiCallHttpMethod.Update;
+                : ParaEnums.ApiCallHttpMethod.Put;
 
             // Calling the next method that manages the call.
-            return ApiMakeTheCall(apiCallUrl, apicallhttpmethod, fileToPost);
+            return await ApiMakeTheCall(apiCallUrl, apicallhttpmethod, fileToPost);
         }
 
         public static ApiCallResponse ObjectDelete<T>(ParaCredentials paracredentials, Int64 objectid, bool purge)
@@ -88,18 +91,18 @@ namespace ParatureSDK
                 apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityType, objectid, false);
             }
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, null, null).Result;
         }
 
         ///  <summary>
         ///  Use this method to get the details of an object that you plan to fill.
         ///  </summary>
         ///  <param name="paracredentials">
-        /// The credentials to be used for making the API call. 
+        /// The credentials to be used for making the API call.
         /// Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
         /// </param>
         /// <param name="objectid">
-        /// The id of the object to create or update. 
+        /// The id of the object to create or update.
         /// Value Type: <see cref="Int64" />   (System.int64)
         /// </param>
         public static ApiCallResponse ObjectGetDetail<T>(ParaCredentials paracredentials, Int64 objectid) where T: ParaEntityBaseProperties
@@ -111,11 +114,11 @@ namespace ParatureSDK
         ///  Use this method to get the details of an object that you plan to fill.
         ///  </summary>
         ///  <param name="paracredentials">
-        /// The credentials to be used for making the API call. 
+        /// The credentials to be used for making the API call.
         /// Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
         /// </param>
         /// <param name="objectid">
-        /// The id of the object to create or update. 
+        /// The id of the object to create or update.
         /// Value Type: <see cref="Int64" />   (System.int64)
         /// </param>
         public static ApiCallResponse ObjectGetDetail<T>(ParaCredentials paracredentials, Int64 objectid, ArrayList arguments) where T : ParaEntityBaseProperties
@@ -123,46 +126,46 @@ namespace ParatureSDK
             var entityName = typeof(T).Name;
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityName, objectid, arguments);
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, null, null).Result;
         }
 
         ///  <summary>
         ///  Use this method to get the details of an Entity that you plan to fill.
         ///  </summary>
         ///  <param name="paracredentials">
-        /// The credentials to be used for making the API call. 
+        /// The credentials to be used for making the API call.
         /// Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
         /// </param>
         /// <param name="objectid">
-        /// The id of the object to create or update. 
+        /// The id of the object to create or update.
         /// Value Type: <see cref="Int64" />   (System.int64)
         /// </param>
         public static ApiCallResponse ChatTranscriptGetDetail(ParaCredentials paracredentials, Int64 objectid)
         {
             var apiCallUrl = ApiUrlBuilder.ApiChatTranscriptUrl(paracredentials, objectid);
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, null, null).Result;
         }
 
         /// <summary>
         /// Use this method to get a list of objects that you plan to fill.
         /// </summary>
         /// <param name="paracredentials">
-        ///The credentials to be used for making the API call. 
+        ///The credentials to be used for making the API call.
         ///Value Type: <see cref="ParaCredentials" />   (ParaConnect.ParaCredentials)
         ///</param>
         /// <param name="module">
-        ///The name of the module to create or update. Choose from the ParatureModule enum list. 
+        ///The name of the module to create or update. Choose from the ParatureModule enum list.
         ///</param>
         /// <param name="arguments">
         ///The list of extra optional arguments you need to include in the call. For example, any fields filtering, any custom fields to include, etc.
-        ///Value Type: <see cref="ArrayList" />   
+        ///Value Type: <see cref="ArrayList" />
         ///</param>
         public static ApiCallResponse ObjectGetList<T>(ParaCredentials paracredentials, ArrayList arguments)
         {
             var entityType = typeof (T).Name;
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityType, 0, arguments);
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, null, null).Result;
         }
 
         public static ApiCallResponse ObjectSecondLevelGetList<TModule, TEntity>(ParaCredentials paracredentials, ArrayList arguments)
@@ -170,7 +173,7 @@ namespace ParatureSDK
             where TEntity: ParaEntityBaseProperties
         {
             var apiCallUrl = ApiUrlBuilder.ApiObjectCustomUrl<TModule, TEntity>(paracredentials, arguments);
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, null, null).Result;
         }
 
         /// <summary>
@@ -181,392 +184,297 @@ namespace ParatureSDK
             var entityType = typeof (T).Name;
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityType, 0, true);
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get);
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, null, null).Result;
         }
 
         public static ApiCallResponse FileUploadGetUrl<TEntity>(ParaCredentials paracredentials) where TEntity: ParaEntity
         {
-            var resp = ApiMakeTheCall(ApiUrlBuilder.ApiObjectCustomUrl<TEntity>(paracredentials, "upload"), ParaEnums.ApiCallHttpMethod.Get);
-            return resp;
+            return ApiMakeTheCall(ApiUrlBuilder.ApiObjectCustomUrl<TEntity>(paracredentials, "upload"), ParaEnums.ApiCallHttpMethod.Get).Result;
         }
 
-        [Obsolete("To be removed in next major revision, use the FilePerformUpload(string, Byte[], string, string) overload instead.", false)]
+        [Obsolete("To be removed in next major revision, use the FilePerformUpload(string, Byte[], string) overload instead.", false)]
         public static ApiCallResponse FilePerformUpload(string postUrl, Attachment attachment)
         {
-            return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment);
+            var filebytes = new byte[Convert.ToInt32(attachment.ContentStream.Length - 1) + 1];
+            attachment.ContentStream.Read(filebytes, 0, filebytes.Length);
+            return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, filebytes, attachment.ContentType.Name).Result;
         }
 
+        [Obsolete("To be removed in next major revision, use the FilePerformUpload(string, Byte[], string) overload instead.", false)]
         public static ApiCallResponse FilePerformUpload(string postUrl, Byte[] attachment, string contentType, string fileName)
         {
-            return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment, contentType, fileName);
+            return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment, fileName).Result;
         }
 
-        private static ApiCallResponse ApiMakeTheCall(string apiCallUrl, ParaEnums.ApiCallHttpMethod httpMethod)
+        public static ApiCallResponse FilePerformUpload(string postUrl, Byte[] attachment, string fileName)
         {
-            var ac = new ApiCallResponse();
-            var uriAddress = new Uri(apiCallUrl);
-            var req = WebRequest.Create(uriAddress) as HttpWebRequest;
+            return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment, fileName).Result;
+        }
 
-            req.Method = ApiHttpPostProvider(httpMethod);
-            ac.HttpCallMethod = req.Method;
-            req.KeepAlive = false;
-
-            //2 minutes request timeout
-            req.Timeout = 120 * 1000;
-
-            //Provide a way for the user to configure the connection -> proxy, timeout, etc
-            ApiRequestSettings.GlobalPreRequest(req);
-
-            ac.XmlSent = null;
-
-            ac.HasException = false;
-            ac.CalledUrl = apiCallUrl;
-            return ApiHttpRequestProcessor(ac, req);
+        private static async Task<ApiCallResponse> ApiMakeTheCall(string apiCallUrl, ParaEnums.ApiCallHttpMethod httpMethod)
+        {
+            return await ApiMakeTheCall(apiCallUrl, httpMethod, null, null);
         }
 
         /// <summary>
         /// The true call is being made by this method.
         /// </summary>
-        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, XmlDocument xmlPosted)
+        static async Task<ApiCallResponse> ApiMakeTheCall(string apiCallUrl, ParaEnums.ApiCallHttpMethod httpMethod, XmlDocument xmlPosted)
         {
-            var ac = new ApiCallResponse();
-            var uriAddress = new Uri(callurl);
-            var req = WebRequest.Create(uriAddress) as HttpWebRequest;
-
-            req.Method = ApiHttpPostProvider(httpMethod);
-            ac.HttpCallMethod = req.Method;
-            req.KeepAlive = false;
-            
-            //2 minutes request timeout
-            req.Timeout = 120 * 1000;
-
-            if (xmlPosted != null)
+            using (var handler = new HttpClientHandler())
             {
-                req.ContentType = "application/x-www-form-urlencoded";
+                ApiRequestSettings.GlobalPreRequest(handler);
 
-                // Create a byte array of the data we want to send
-                var bytedata = Encoding.UTF8.GetBytes(xmlPosted.OuterXml);
-
-                // Set the content length in the request headers   
-                req.ContentLength = bytedata.Length;
-
-                //Provide a way for the user to configure the connection -> proxy, timeout, etc
-                ApiRequestSettings.GlobalPreRequest(req);
-
-                // Write data   
-                using (Stream postStream = req.GetRequestStream())
+                using (var client = new HttpClient(handler))
                 {
-                    postStream.Write(bytedata, 0, bytedata.Length);
+                    client.Timeout = new TimeSpan(0, 2, 0);
+
+                    switch (httpMethod)
+                    {
+                        case ParaEnums.ApiCallHttpMethod.Get:
+                            using (var responseMsg = await client.GetAsync(apiCallUrl))
+                            {
+                                return await ApiHttpRequestProcessor(responseMsg);
+                            }
+                        case ParaEnums.ApiCallHttpMethod.Delete:
+                            using (var responseMsg = await client.DeleteAsync(apiCallUrl))
+                            {
+                                return await ApiHttpRequestProcessor(responseMsg);
+                            }
+                        case ParaEnums.ApiCallHttpMethod.Post:
+                            if (xmlPosted == null)
+                            {
+                                throw new ArgumentException("Invalid HTTP method, only GET or DELETE are supported without body content.", "httpMethod");
+                            }
+                            using (var content = new StringContent(xmlPosted.OuterXml))
+                            {
+                                using (var responseMsg = await client.PostAsync(apiCallUrl, content))
+                                {
+                                    return await ApiHttpRequestProcessor(responseMsg);
+                                }
+                            }
+                        case ParaEnums.ApiCallHttpMethod.Put:
+                            if (xmlPosted == null)
+                            {
+                                throw new ArgumentException("Invalid HTTP method, only GET or DELETE are supported without body content.", "httpMethod");
+                            }
+                            using (var content = new StringContent(xmlPosted.OuterXml))
+                            {
+                                using (var responseMsg = await client.PutAsync(apiCallUrl, content))
+                                {
+                                    return await ApiHttpRequestProcessor(responseMsg);
+                                }
+                            }
+                        default:
+                            throw new InvalidOperationException("Invalid HTTP method specified.");
+                    }
                 }
-                ac.XmlSent = xmlPosted;
             }
-            else
+        }
+
+        /// <summary>
+        /// The call, with passing a binary file.
+        /// </summary>
+        static async Task<ApiCallResponse> ApiMakeTheCall(string apiCallUrl, ParaEnums.ApiCallHttpMethod httpMethod, Byte[] attachment, string fileName)
+        {
+            using (var handler = new HttpClientHandler())
             {
-                ac.XmlSent = null;
+                ApiRequestSettings.GlobalPreRequest(handler);
+
+                using (var client = new HttpClient(handler))
+                {
+                    client.Timeout = new TimeSpan(0, 2, 0);
+
+                    switch (httpMethod)
+                    {
+                        case ParaEnums.ApiCallHttpMethod.Get:
+                            using (var responseMsg = await client.GetAsync(apiCallUrl))
+                            {
+                                return await ApiHttpRequestProcessor(responseMsg);
+                            }
+                        case ParaEnums.ApiCallHttpMethod.Delete:
+                            using (var responseMsg = await client.DeleteAsync(apiCallUrl))
+                            {
+                                return await ApiHttpRequestProcessor(responseMsg);
+                            }
+                        case ParaEnums.ApiCallHttpMethod.Post:
+                            if (attachment == null)
+                            {
+                                throw new ArgumentException("Invalid HTTP method, only GET or DELETE are supported without body content.", "httpMethod");
+                            }
+                            using (var content = new MultipartFormDataContent())
+                            {
+                                content.Add(new ByteArrayContent(attachment), fileName, fileName);
+                                using (var responseMsg = await client.PostAsync(apiCallUrl, content))
+                                {
+                                    return await ApiHttpRequestProcessor(responseMsg);
+                                }
+                            }
+                        case ParaEnums.ApiCallHttpMethod.Put:
+                            if (attachment == null)
+                            {
+                                throw new ArgumentException("Invalid HTTP method, only GET or DELETE are supported without body content.", "httpMethod");
+                            }
+                            using (var content = new MultipartFormDataContent())
+                            {
+                                content.Add(new ByteArrayContent(attachment), fileName, fileName);
+                                using (var responseMsg = await client.PutAsync(apiCallUrl, content))
+                                {
+                                    return await ApiHttpRequestProcessor(responseMsg);
+                                }
+                            }
+                        default:
+                            throw new InvalidOperationException("Invalid HTTP method specified.");
+                    }
+                }
             }
-
-            ac.HasException = false;
-            ac.CalledUrl = callurl;
-            return ApiHttpRequestProcessor(ac, req);
-
-        }
-
-        /// <summary>
-        /// The call, with passing a binary file.
-        /// </summary>
-        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, Attachment att)
-        {
-
-            const string boundary = "--ParaBoundary";
-            const string lineBreak = "\r\n";
-            var contentDisposition = String.Format("Content-Disposition: {0}; name=\"{1}\"; filename=\"{1}\"", att.ContentType.MediaType, att.ContentType.Name);
-            var ac = new ApiCallResponse();
-            var uriAddress = new Uri(callurl);
-
-            var req = WebRequest.Create(uriAddress) as HttpWebRequest;
-            req.Method = ApiHttpPostProvider(httpMethod);
-            req.KeepAlive = false;
-            ac.HttpCallMethod = req.Method;
-
-            req.AllowWriteStreamBuffering = true;
-            req.ReadWriteTimeout = 10 * 60 * 1000;
-            req.Timeout = -1;
-
-            //Provide a way for the user to configure the connection -> proxy, timeout, etc
-            ApiRequestSettings.GlobalPreRequest(req);
-
-            req.ContentType = att.ContentType.MediaType + "; boundary:" + boundary; ;
-
-            var filebytes = new byte[Convert.ToInt32(att.ContentStream.Length - 1) + 1];
-            att.ContentStream.Read(filebytes, 0, filebytes.Length);
-            var sb = new StringBuilder();
-            sb.AppendLine(boundary);
-            sb.AppendLine(contentDisposition);
-            sb.AppendLine("Content-Type: " + att.ContentType.MediaType);
-            sb.AppendLine("");
-
-            string header = sb.ToString();
-            string endboundary = lineBreak + boundary + "--";
-
-            byte[] footerBytes = Encoding.ASCII.GetBytes(endboundary);
-            byte[] headBytes = Encoding.ASCII.GetBytes(header);
-
-            req.ContentLength = headBytes.Length + filebytes.Length + footerBytes.Length;
-            var reqStreamTest = req.GetRequestStream();
-            // String to Byte Array
-            var totalRequest = new byte[headBytes.Length + filebytes.Length + footerBytes.Length];
-            headBytes.CopyTo(totalRequest, 0);
-            filebytes.CopyTo(totalRequest, headBytes.Length);
-            footerBytes.CopyTo(totalRequest, headBytes.Length + filebytes.Length);
-            reqStreamTest.Write(totalRequest, 0, totalRequest.Length);
-
-            reqStreamTest.Close();
-
-            ac.HasException = false;
-            ac.CalledUrl = callurl;
-
-            return ApiHttpRequestProcessor(ac, req);
-
-        }
-
-        /// <summary>
-        /// The call, with passing a binary file.
-        /// </summary>
-        static ApiCallResponse ApiMakeTheCall(string callurl, ParaEnums.ApiCallHttpMethod httpMethod, Byte[] attachment, string contentType, string fileName)
-        {
-
-            const string boundary = "--ParaBoundary";
-            const string lineBreak = "\r\n";
-            string contentDisposition = String.Format("Content-Disposition: {0}; name=\"{1}\"; filename=\"{1}\"", contentType, fileName);
-            var ac = new ApiCallResponse();
-            var uriAddress = new Uri(callurl);
-
-            var req = WebRequest.Create(uriAddress) as HttpWebRequest;
-            req.Method = ApiHttpPostProvider(httpMethod);
-            req.KeepAlive = false;
-            ac.HttpCallMethod = req.Method;
-
-            req.AllowWriteStreamBuffering = true;
-            req.ReadWriteTimeout = 10 * 60 * 1000;
-            req.Timeout = -1;
-
-            //Provide a way for the user to configure the connection -> proxy, timeout, etc
-            ApiRequestSettings.GlobalPreRequest(req);
-
-            req.ContentType = contentType + "; boundary:" + boundary; ;
-
-            var sb = new StringBuilder();
-            sb.AppendLine(boundary);
-            sb.AppendLine(contentDisposition);
-            sb.AppendLine("Content-Type: " + contentType);
-            sb.AppendLine("");
-
-            var header = sb.ToString();
-            const string endBoundary = lineBreak + boundary + "--";
-
-            var footerBytes = Encoding.ASCII.GetBytes(endBoundary);
-            var headBytes = Encoding.ASCII.GetBytes(header);
-
-            req.ContentLength = headBytes.Length + attachment.Length + footerBytes.Length;
-            var reqStreamTest = req.GetRequestStream();
-            // String to Byte Array
-            var totalRequest = new byte[headBytes.Length + attachment.Length + footerBytes.Length];
-            headBytes.CopyTo(totalRequest, 0);
-            attachment.CopyTo(totalRequest, headBytes.Length);
-            footerBytes.CopyTo(totalRequest, headBytes.Length + attachment.Length);
-            reqStreamTest.Write(totalRequest, 0, totalRequest.Length);
-
-            reqStreamTest.Close();
-
-            ac.HasException = false;
-            ac.CalledUrl = callurl;
-
-            return ApiHttpRequestProcessor(ac, req);
         }
 
         /// <summary>
         /// Performs the http web request for all ApiMakeCall methods.
         /// </summary>
         /// <param name="ac">
-        /// Api Call response, this object is partially filled in the ApiMakeCall methods, this method will just be adding 
+        /// Api Call response, this object is partially filled in the ApiMakeCall methods, this method will just be adding
         /// certain data to it and return it.
         /// </param>
         /// <param name="req">
-        /// The http web Request object. Each ApiMakeCall method will have its own http webrequest information. This method will make 
+        /// The http web Request object. Each ApiMakeCall method will have its own http webrequest information. This method will make
         /// the http call with the request object passed to it.
         /// </param>
         /// <returns></returns>
-        static ApiCallResponse ApiHttpRequestProcessor(ApiCallResponse ac, HttpWebRequest req)
+        static async Task<ApiCallResponse> ApiHttpRequestProcessor(HttpResponseMessage responseMsg)
         {
-            var responseFromServer = "";
+            var result = new ApiCallResponse()
+            {
+                CalledUrl = responseMsg.RequestMessage.RequestUri.ToString(),
+                HttpCallMethod = responseMsg.RequestMessage.Method.Method
+            };
 
             try
             {
-                using (var httpWResp = req.GetResponse() as HttpWebResponse)
+                using (var content = responseMsg.RequestMessage.Content)
                 {
-                    try
-                    {
-                        ac.HttpResponseCode = (int)httpWResp.StatusCode;
-                    }
-                    catch (Exception exRespCode)
-                    {
-                        ac.HttpResponseCode = -1;
-                    }
-
-                    var reader = new StreamReader(httpWResp.GetResponseStream());
-
-                    responseFromServer = reader.ReadToEnd();
-
-                    reader.Close();
-
-                    try
-                    {
-                        ac.XmlReceived.LoadXml(responseFromServer);
-                    }
-                    catch (Exception ex)
-                    {
-                        ac.XmlReceived = null;
-                    }
-
-                    try
-                    {
-                        ac.HttpResponseCode = (int)httpWResp.StatusCode;
-                        if (ac.HttpResponseCode == 201)
-                        {
-                            try
-                            {
-                                ac.Id = Int64.Parse(ac.XmlReceived.DocumentElement.Attributes["id"].Value);
-                            }
-                            catch (Exception exx)
-                            {
-                                ac.Id = 0;
-                            }
-                        }
-                    }
-                    catch (Exception exx)
-                    {
-                        ac.HttpResponseCode = -1;
-                    }
-
-                    ac.HasException = false;
-                    ac.ExceptionDetails = "";
+                    result.XmlSent.Load(await content.ReadAsStreamAsync());
                 }
 
-            }
-            catch (WebException ex)
-            {
                 try
                 {
-                    ac.HttpResponseCode = (int)((((HttpWebResponse)ex.Response).StatusCode));
-                    ac.ExceptionDetails = ex.Message;
+                    result.HttpResponseCode = (int)responseMsg.StatusCode;
                 }
                 catch
-                {}
-                ac.HasException = true;
-
-                if (String.IsNullOrEmpty(ac.ExceptionDetails) == true)
                 {
-                    ac.ExceptionDetails = ex.ToString();
+                    result.HttpResponseCode = -1;
                 }
 
-                if (String.IsNullOrEmpty(responseFromServer) == false)
+                string responseContent = null;
+
+                using (var content = responseMsg.Content)
                 {
-                    ac.ExceptionDetails = "Response from server: " + responseFromServer;
+                    responseContent = await content.ReadAsStringAsync();
                 }
 
-
-                string exresponseFromServer = "";
                 try
                 {
-                    var exreader = new StreamReader(ex.Response.GetResponseStream());
-                    exresponseFromServer = exreader.ReadToEnd().ToString();
-                    exreader.Close();
-
-                    if (String.IsNullOrEmpty(exresponseFromServer) == false)
-                    {
-                        ac.ExceptionDetails = ac.ExceptionDetails + Environment.NewLine + "Exception response:" + exresponseFromServer;
-                    }
-
+                    result.XmlReceived.LoadXml(responseContent);
                 }
-                catch (Exception exread)
+                catch (Exception)
                 {
-                    if (ac.HttpResponseCode == 0)
-                    {
-                        ac.HttpResponseCode = 503;
-                    }
+                    result.XmlReceived = null;
                 }
 
-                if (String.IsNullOrEmpty(exresponseFromServer) == false)
+                if (result.HttpResponseCode == 201)
                 {
-                    try
-                    {
-                        ac.XmlReceived.LoadXml(exresponseFromServer);
+                    Int64.TryParse(result.XmlReceived?.DocumentElement?.Attributes["id"]?.Value, out result.Id);
+                }
 
-                        XmlNode mainnode = ac.XmlReceived.DocumentElement;
-                        if (mainnode.LocalName.ToLower() == "error")
-                        {
-                            if (mainnode.Attributes["code"].InnerText.ToLower() != "")
-                            {
-                                ac.HttpResponseCode = Int32.Parse(mainnode.Attributes["code"].InnerText.ToString());
-                            }
-                            if (mainnode.Attributes["message"].InnerText.ToLower() != "")
-                            {
-                                ac.ExceptionDetails = mainnode.Attributes["message"].InnerText.ToString();
-                            }
-                        }
-                    }
-                    catch (Exception exp)
-                    {
-                        ac.XmlReceived = null;
-                    }
-                }
-                else
-                {
-                    ac.XmlReceived = null;
-                }
+                result.HasException = false;
             }
+            //catch (WebException ex)
+            //{
+            //	try
+            //	{
+            //		ac.HttpResponseCode = (int)((((HttpWebResponse)ex.Response).StatusCode));
+            //		ac.ExceptionDetails = ex.Message;
+            //	}
+            //	catch
+            //	{ }
+            //	ac.HasException = true;
+
+            //	if (String.IsNullOrEmpty(ac.ExceptionDetails) == true)
+            //	{
+            //		ac.ExceptionDetails = ex.ToString();
+            //	}
+
+            //	if (String.IsNullOrEmpty(responseFromServer) == false)
+            //	{
+            //		ac.ExceptionDetails = "Response from server: " + responseFromServer;
+            //	}
+
+
+            //	string exresponseFromServer = "";
+            //	try
+            //	{
+            //		var exreader = new StreamReader(ex.Response.GetResponseStream());
+            //		exresponseFromServer = exreader.ReadToEnd().ToString();
+            //		exreader.Close();
+
+            //		if (String.IsNullOrEmpty(exresponseFromServer) == false)
+            //		{
+            //			ac.ExceptionDetails = ac.ExceptionDetails + Environment.NewLine + "Exception response:" + exresponseFromServer;
+            //		}
+
+            //	}
+            //	catch (Exception exread)
+            //	{
+            //		if (ac.HttpResponseCode == 0)
+            //		{
+            //			ac.HttpResponseCode = 503;
+            //		}
+            //	}
+
+            //	if (String.IsNullOrEmpty(exresponseFromServer) == false)
+            //	{
+            //		try
+            //		{
+            //			ac.XmlReceived.LoadXml(exresponseFromServer);
+
+            //			XmlNode mainnode = ac.XmlReceived.DocumentElement;
+            //			if (mainnode.LocalName.ToLower() == "error")
+            //			{
+            //				if (mainnode.Attributes["code"].InnerText.ToLower() != "")
+            //				{
+            //					ac.HttpResponseCode = Int32.Parse(mainnode.Attributes["code"].InnerText.ToString());
+            //				}
+            //				if (mainnode.Attributes["message"].InnerText.ToLower() != "")
+            //				{
+            //					ac.ExceptionDetails = mainnode.Attributes["message"].InnerText.ToString();
+            //				}
+            //			}
+            //		}
+            //		catch (Exception exp)
+            //		{
+            //			ac.XmlReceived = null;
+            //		}
+            //	}
+            //	else
+            //	{
+            //		ac.XmlReceived = null;
+            //	}
+            //}
             finally
             {
                 // xml sent and xml received cleanup
-                // TEMP FIX
-                if (ac.XmlReceived != null && String.IsNullOrEmpty(ac.XmlReceived.InnerXml))
+                if (result.XmlReceived != null && String.IsNullOrEmpty(result.XmlReceived.InnerXml))
                 {
-                    ac.XmlReceived = null;
+                    result.XmlReceived = null;
                 }
-                if (ac.XmlSent != null && String.IsNullOrEmpty(ac.XmlSent.InnerXml))
+                if (result.XmlSent != null && String.IsNullOrEmpty(result.XmlSent.InnerXml))
                 {
-                    ac.XmlSent = null;
+                    result.XmlSent = null;
                 }
             }
 
-            return ac;
-        }
-
-        /// <summary>
-        /// Returns the Http request method for an API call, requires an ApiCallHttpMethod enum.
-        /// </summary>
-        internal static String ApiHttpPostProvider(ParaEnums.ApiCallHttpMethod apiCallHttpMethod)
-        {
-            string httpPostMethod = "";
-            switch (apiCallHttpMethod)
-            {
-                case ParaEnums.ApiCallHttpMethod.Get:
-                    httpPostMethod = "GET";
-                    break;
-
-                case ParaEnums.ApiCallHttpMethod.Delete:
-                    httpPostMethod = "DELETE";
-                    break;
-
-                case ParaEnums.ApiCallHttpMethod.Post:
-                    httpPostMethod = "POST";
-                    break;
-
-                case ParaEnums.ApiCallHttpMethod.Update:
-                    httpPostMethod = "PUT";
-                    break;
-            }
-            return httpPostMethod;
+            return result;
         }
     }
 }

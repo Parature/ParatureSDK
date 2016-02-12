@@ -38,7 +38,7 @@ namespace ParatureSDK.ApiHandler
         /// Returns an object with all the properties of the entity.
         /// </summary>
         /// <param name="entityId">
-        ///The entity number that you would like to get the details of. 
+        ///The entity number that you would like to get the details of.
         ///Value Type: <see cref="Int64" />   (System.Int64)
         ///</param>
         /// <param name="pc">
@@ -67,7 +67,7 @@ namespace ParatureSDK.ApiHandler
 
         /// <summary>
         /// Will return the first 25 accounts returned by the APIs.
-        /// </summary>            
+        /// </summary>
         [Obsolete("To be removed in favor of ParaService.GetList in next major revision.", false)]
         public static ParaEntityList<ParaObjects.Download> GetList(ParaCredentials pc)
         {

@@ -23,7 +23,7 @@ namespace ParatureSDK.ParaObjects
         /// <summary>
         /// Whether or not there was an exception.
         /// </summary>
-        public bool HasException;
+        public bool HasException = false;
         /// <summary>
         /// The details of the error message, if the call generated an exception.
         /// </summary>

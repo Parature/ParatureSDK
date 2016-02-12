@@ -68,7 +68,7 @@ namespace ParatureSDK
             /// </summary>
             Like,
             /// <summary>
-            /// Can be used for dates, as well as numeric values. 
+            /// Can be used for dates, as well as numeric values.
             /// Equivalent to a "&gt;" sign for numeric values and "&gt;=" for dates.
             /// </summary>
             MoreThan,
@@ -134,9 +134,9 @@ namespace ParatureSDK
             /// <summary>
             /// Updates an object
             /// </summary>
-						[Obsolete("This value will be removed in favor of ApiCallHttpMethod.Put in the next major version.", false)]
+            [Obsolete("This value will be removed in favor of ApiCallHttpMethod.Put in the next major version.", false)]
             Update = 2,
-						Put = 2,
+            Put = 2,
             /// <summary>
             /// Deletes an object
             /// </summary>
@@ -149,7 +149,7 @@ namespace ParatureSDK
         public enum ApiVersion
         {
             /// <summary>
-            /// version 1 
+            /// version 1
             /// </summary>
             v1 = 1
         }
