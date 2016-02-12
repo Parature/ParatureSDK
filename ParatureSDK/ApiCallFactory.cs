@@ -389,78 +389,79 @@ namespace ParatureSDK
 
                 result.HasException = false;
             }
-            //catch (WebException ex)
-            //{
-            //	try
-            //	{
-            //		ac.HttpResponseCode = (int)((((HttpWebResponse)ex.Response).StatusCode));
-            //		ac.ExceptionDetails = ex.Message;
-            //	}
-            //	catch
-            //	{ }
-            //	ac.HasException = true;
+            catch (WebException ex)
+            {
+                try
+                {
+                    result.HttpResponseCode = (int)((((HttpWebResponse)ex.Response).StatusCode));
+                    result.ExceptionDetails = ex.Message;
+                }
+                catch
+                { }
+                result.HasException = true;
 
-            //	if (String.IsNullOrEmpty(ac.ExceptionDetails) == true)
-            //	{
-            //		ac.ExceptionDetails = ex.ToString();
-            //	}
+                if (String.IsNullOrEmpty(result.ExceptionDetails) == true)
+                {
+                    result.ExceptionDetails = ex.ToString();
+                }
 
-            //	if (String.IsNullOrEmpty(responseFromServer) == false)
-            //	{
-            //		ac.ExceptionDetails = "Response from server: " + responseFromServer;
-            //	}
+                var responseFromServer = await responseMsg.Content.ReadAsStringAsync();
+                if (!String.IsNullOrEmpty(responseFromServer))
+                {
+                    result.ExceptionDetails = "Response from server: " + responseFromServer;
+                }
 
 
-            //	string exresponseFromServer = "";
-            //	try
-            //	{
-            //		var exreader = new StreamReader(ex.Response.GetResponseStream());
-            //		exresponseFromServer = exreader.ReadToEnd().ToString();
-            //		exreader.Close();
+                string exresponseFromServer = "";
+                try
+                {
+                    var exreader = new StreamReader(ex.Response.GetResponseStream());
+                    exresponseFromServer = exreader.ReadToEnd().ToString();
+                    exreader.Close();
 
-            //		if (String.IsNullOrEmpty(exresponseFromServer) == false)
-            //		{
-            //			ac.ExceptionDetails = ac.ExceptionDetails + Environment.NewLine + "Exception response:" + exresponseFromServer;
-            //		}
+                    if (String.IsNullOrEmpty(exresponseFromServer) == false)
+                    {
+                        result.ExceptionDetails = result.ExceptionDetails + Environment.NewLine + "Exception response:" + exresponseFromServer;
+                    }
 
-            //	}
-            //	catch (Exception exread)
-            //	{
-            //		if (ac.HttpResponseCode == 0)
-            //		{
-            //			ac.HttpResponseCode = 503;
-            //		}
-            //	}
+                }
+                catch (Exception exread)
+                {
+                    if (result.HttpResponseCode == 0)
+                    {
+                        result.HttpResponseCode = 503;
+                    }
+                }
 
-            //	if (String.IsNullOrEmpty(exresponseFromServer) == false)
-            //	{
-            //		try
-            //		{
-            //			ac.XmlReceived.LoadXml(exresponseFromServer);
+                if (String.IsNullOrEmpty(exresponseFromServer) == false)
+                {
+                    try
+                    {
+                        result.XmlReceived.LoadXml(exresponseFromServer);
 
-            //			XmlNode mainnode = ac.XmlReceived.DocumentElement;
-            //			if (mainnode.LocalName.ToLower() == "error")
-            //			{
-            //				if (mainnode.Attributes["code"].InnerText.ToLower() != "")
-            //				{
-            //					ac.HttpResponseCode = Int32.Parse(mainnode.Attributes["code"].InnerText.ToString());
-            //				}
-            //				if (mainnode.Attributes["message"].InnerText.ToLower() != "")
-            //				{
-            //					ac.ExceptionDetails = mainnode.Attributes["message"].InnerText.ToString();
-            //				}
-            //			}
-            //		}
-            //		catch (Exception exp)
-            //		{
-            //			ac.XmlReceived = null;
-            //		}
-            //	}
-            //	else
-            //	{
-            //		ac.XmlReceived = null;
-            //	}
-            //}
+                        XmlNode mainnode = result.XmlReceived.DocumentElement;
+                        if (mainnode.LocalName.ToLower() == "error")
+                        {
+                            if (mainnode.Attributes["code"].InnerText.ToLower() != "")
+                            {
+                                result.HttpResponseCode = Int32.Parse(mainnode.Attributes["code"].InnerText.ToString());
+                            }
+                            if (mainnode.Attributes["message"].InnerText.ToLower() != "")
+                            {
+                                result.ExceptionDetails = mainnode.Attributes["message"].InnerText.ToString();
+                            }
+                        }
+                    }
+                    catch (Exception exp)
+                    {
+                        result.XmlReceived = null;
+                    }
+                }
+                else
+                {
+                    result.XmlReceived = null;
+                }
+            }
             finally
             {
                 // xml sent and xml received cleanup
