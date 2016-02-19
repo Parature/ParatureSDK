@@ -73,6 +73,12 @@ namespace ParatureSDK
         public ApiCallResponse Update(IMutableEntity entity)
         {
             var pe = entity as ParaEntity;
+
+            if (pe.Id == 0)
+            {
+                throw new ArgumentException("The update operation requires an existing object ID. Populate the entity ID to perform an update.");
+            }
+
             Folder folder = null;
             ApiCallResponse reply = null;
 
