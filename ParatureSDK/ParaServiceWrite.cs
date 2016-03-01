@@ -123,13 +123,13 @@ namespace ParatureSDK
 
 
         /// <summary>
-        /// Internal method to attach a file for the Parature entity
+        /// Method to attach a file for the Parature entity
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="pc"></param>
         /// <param name="attachment"></param>
         /// <returns></returns>
-        public Attachment UploadFile<TEntity>(Attachment attachment)
+        public Attachment UploadFile<TEntity>(System.Net.Mail.Attachment attachment)
             where TEntity : ParaEntity
         {
             var postUrlR = ApiCallFactory.FileUploadGetUrl<TEntity>(Credentials);
@@ -145,7 +145,7 @@ namespace ParatureSDK
         }
 
         /// <summary>
-        /// Internal method to handle the upload of a file to Parature.
+        /// Method to handle the upload of a file to Parature.
         /// </summary>
         public Attachment UploadFile<TEntity>(Byte[] attachment, String contentType, String fileName)
             where TEntity : ParaEntity
