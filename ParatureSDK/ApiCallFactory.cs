@@ -70,7 +70,7 @@ namespace ParatureSDK
 
         public static ApiCallResponse ObjectDelete<T>(ParaCredentials paracredentials, Int64 objectid, bool purge)
         {
-            return ObjectDelete(paracredentials, typeof (T).ToString(), objectid, purge);
+            return ObjectDelete(paracredentials, typeof (T).Name, objectid, purge);
         }
 
         internal static ApiCallResponse ObjectDelete(ParaCredentials paracredentials, string entityType, Int64 objectid,
