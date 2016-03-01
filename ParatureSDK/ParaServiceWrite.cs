@@ -106,39 +106,8 @@ namespace ParatureSDK
         /// <summary>
         /// Deletes the entity from the server.
         /// </summary>
-        /// <param name="entity">The entity to delete</param>
-        /// <returns></returns>
-        public ApiCallResponse Delete(IMutableEntity entity)
-        {
-            var pe = entity as ParaEntity;
-            Folder folder = null;
-            ApiCallResponse reply = null;
-
-            if (pe == null)
-            {
-                folder = entity as Folder;
-                if (folder == null)
-                {
-                    throw new ArgumentException("You can only call this function on a Folder-derived or ParaEntity-derived object.", "entity");
-                }
-                else
-                {
-                    reply = ApiCallFactory.ObjectDelete<Folder>(Credentials, folder.Id, true);
-                }
-            }
-            else
-            {
-                reply = ApiCallFactory.ObjectCreateUpdate(Credentials, pe.GetType().Name, XmlGenerator.GenerateXml(pe), pe.Id);
-            }
-
-            return reply;
-        }
-
-        /// <summary>
-        /// Deletes the entity from the server.
-        /// </summary>
         /// <param name="purge">To delete the entity permanently or not (to the trash instead)</param>
-        /// <param name="id">todo: describe id parameter on Delete</param>
+        /// <param name="id">The object ID of the object to trash/delete</param>
         /// <returns></returns>
         public ApiCallResponse Delete<TEntity>(long id, bool purge)
             where TEntity : ParaEntityBaseProperties, new()
