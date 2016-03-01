@@ -129,7 +129,7 @@ namespace ParatureSDK
         /// <param name="pc"></param>
         /// <param name="attachment"></param>
         /// <returns></returns>
-        internal Attachment UploadFile<TEntity>(System.Net.Mail.Attachment attachment)
+        public Attachment UploadFile<TEntity>(Attachment attachment)
             where TEntity : ParaEntity
         {
             var postUrlR = ApiCallFactory.FileUploadGetUrl<TEntity>(Credentials);
@@ -147,7 +147,7 @@ namespace ParatureSDK
         /// <summary>
         /// Internal method to handle the upload of a file to Parature.
         /// </summary>
-        internal Attachment UploadFile<TEntity>(Byte[] attachment, String contentType, String fileName)
+        public Attachment UploadFile<TEntity>(Byte[] attachment, String contentType, String fileName)
             where TEntity : ParaEntity
         {
             Attachment attach;
