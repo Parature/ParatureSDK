@@ -7,7 +7,7 @@ namespace ParatureSDK.ParaObjects
     {
         public string Name = "";
         public string Description = "";
-        public bool? Is_Private;
+        public bool Is_Private;
 
         public Folder()
         {

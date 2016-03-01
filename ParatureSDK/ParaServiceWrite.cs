@@ -1,6 +1,7 @@
 ﻿using ParatureSDK.ParaObjects;
 using ParatureSDK.XmlToObjectParser;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,22 +40,19 @@ namespace ParatureSDK
         public ApiCallResponse Insert(IMutableEntity entity)
         {
             var pe = entity as ParaEntity;
-            Folder folder = null;
-            ApiCallResponse reply = null;
+            ApiCallResponse reply;
 
+            //Check if the object is a ParaEntity, if not its a folder
             if (pe == null)
             {
-                folder = entity as Folder;
+                var folder = entity as Folder;
                 if (folder == null)
                 {
                     throw new ArgumentException("You can only call this function on a Folder-derived or ParaEntity-derived object.", "entity");
                 }
-                else
-                {
-                    var doc = XmlGenerator.GenerateXml(folder);
-                    reply = ApiCallFactory.ObjectCreateUpdate<Folder>(Credentials, doc, 0);
-                    folder.Id = reply.Id;
-                }
+
+                reply = ApiCallFactory.ObjectCreateUpdate(Credentials, folder.GetType().Name, XmlGenerator.GenerateXml(folder), 0);
+                folder.Id = reply.Id;
             }
             else
             {
