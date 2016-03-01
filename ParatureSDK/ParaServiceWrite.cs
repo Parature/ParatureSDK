@@ -56,7 +56,7 @@ namespace ParatureSDK
             }
             else
             {
-                reply = ApiCallFactory.ObjectCreateUpdate(Credentials, pe.GetType().Name, XmlGenerator.GenerateXml(pe), pe.Id);
+                reply = ApiCallFactory.ObjectCreateUpdate(Credentials, pe.GetType().Name, XmlGenerator.GenerateXml(pe), 0);
                 pe.Id = reply.Id;
             }
 
@@ -72,11 +72,6 @@ namespace ParatureSDK
         {
             var pe = entity as ParaEntity;
 
-            if (pe.Id == 0)
-            {
-                throw new ArgumentException("The update operation requires an existing object ID. Populate the entity ID to perform an update.");
-            }
-
             Folder folder = null;
             ApiCallResponse reply = null;
 
@@ -87,14 +82,16 @@ namespace ParatureSDK
                 {
                     throw new ArgumentException("You can only call this function on a Folder-derived or ParaEntity-derived object.", "entity");
                 }
-                else
-                {
-                    var doc = XmlGenerator.GenerateXml(folder);
-                    reply = ApiCallFactory.ObjectCreateUpdate<Folder>(Credentials, doc, folder.Id);
-                }
+
+                reply = ApiCallFactory.ObjectCreateUpdate(Credentials, folder.GetType().Name, XmlGenerator.GenerateXml(folder), folder.Id);
             }
             else
             {
+                if (pe.Id == 0)
+                {
+                    throw new ArgumentException("The update operation requires an existing object ID. Populate the entity ID to perform an update.");
+                }
+
                 reply = ApiCallFactory.ObjectCreateUpdate(Credentials, pe.GetType().Name, XmlGenerator.GenerateXml(pe), pe.Id);
             }
 
