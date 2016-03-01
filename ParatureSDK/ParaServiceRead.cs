@@ -95,33 +95,6 @@ namespace ParatureSDK
             return folder;
         }
 
-        ///  <summary>
-        ///  Returns a Download object with all the properties of a customer.
-        ///  </summary>
-        ///  <param name="folderId">
-        /// The Download number that you would like to get the details of. 
-        /// Value Type: <see cref="Int64" />   (System.Int64)
-        /// </param>
-        /// 
-        public Folder GetDetails(long folderId)
-        {
-            var folder = new Folder();
-            var ar = ApiCallFactory.ObjectGetDetail<Folder>(Credentials, folderId);
-            if (ar.HasException == false)
-            {
-                folder = ParaEntityParser.EntityFill<Folder>(ar.XmlReceived);
-                folder.FullyLoaded = true;
-            }
-            else
-            {
-                folder.FullyLoaded = false;
-                folder.Id = 0;
-            }
-
-            folder.ApiCallResponse = ar;
-            return folder;
-        }
-
         public TFolder GetDetails<TFolder>(XmlDocument xml)
             where TFolder : Folder, new()
         {
