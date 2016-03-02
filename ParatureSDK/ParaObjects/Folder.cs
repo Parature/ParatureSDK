@@ -1,9 +1,12 @@
 using System;
+using System.Linq;
+using System.Xml.Linq;
 using System.Xml.Serialization;
+using ParatureSDK.XmlToObjectParser;
 
 namespace ParatureSDK.ParaObjects
 {
-    public class Folder : ParaEntityBaseProperties, IMutableEntity
+    public class Folder : ParaEntityBaseProperties, IMutableEntity, ParaXmlSerializer.IXmlDeserializationCallback
     {
         public string Name = "";
         public string Description = "";
@@ -28,5 +31,29 @@ namespace ParatureSDK.ParaObjects
         /// set just the id of the folder, then make the ParentFolder equals the one you just created.
         /// </summary>
         public Folder Parent_Folder;
+
+        /// <summary>
+        /// Callback after Deserialization to set parent folder correctly. Implemented to preserve backwards compatability when creating folders.
+        /// </summary>
+        /// <param name="xml">The XML received</param>
+        public void OnXmlDeserialization(XDocument xml)
+        {
+            try
+            {
+                //Find the parent folder
+                var parentFolderNode = xml.Descendants("Parent_Folder").FirstOrDefault();
+                var nameNode = parentFolderNode.Descendants("Name").FirstOrDefault();
+                var parentFolder = XElement.Parse(parentFolderNode.FirstNode.ToString());
+
+                Parent_Folder = new Folder();
+                Parent_Folder.Name = nameNode.Value;
+                Parent_Folder.Id = long.Parse(parentFolder.Attribute("id").Value);
+            }
+            catch (Exception e)
+            {
+                Parent_Folder = new Folder();
+            }
+            
+        }
     }
 }
