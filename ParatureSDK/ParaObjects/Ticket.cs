@@ -1096,7 +1096,7 @@ namespace ParatureSDK.ParaObjects
 
         ///  <summary>
         ///  Uploads an attachment to the current ticket. 
-        ///  The attachment will also be added to the current Ticket's attachments collection.
+        ///  The attachment will also be added to the current Ticket's attachments collection. To complete attachment, the Update method should be performed on the attachment.
         ///  </summary>
         ///  <param name="attachment">
         ///  The binary Byte array of the attachment you would like to add. 
