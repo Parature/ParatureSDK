@@ -5,6 +5,7 @@ using ParatureSDK;
 using ParatureSDK.Query.EntityQuery;
 using ParatureSDK.Query.ModuleQuery;
 using ParatureSDK.ParaObjects;
+using System.Text;
 
 namespace Exercises
 {
@@ -62,6 +63,24 @@ namespace Exercises
             }
 
             return downloads.TotalItems;
-        } 
+        }
+
+        public static void UploadFileForDownload()
+        {
+            var download = new Download()
+            {
+                Name = "API Test File",
+                Title = "API Test File Title"
+            };
+
+            var bytes = Encoding.ASCII.GetBytes("test file");
+
+            download.AddAttachment(Service, bytes, "text/plain", "readme.md");
+
+            if (download.ApiCallResponse.HasException)
+            {
+                throw new Exception(download.ApiCallResponse.ExceptionDetails);
+            }
+        }
     }
 }
