@@ -7,7 +7,7 @@ namespace ParatureSDK.ParaObjects.EntityReferences
 {
     public class TicketReference: EntityReference<Ticket>
     {
-        public Ticket Entity
+        public Ticket Ticket
         {
             get { return base.Entity; }
             set { base.Entity = value; }
