@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ParatureSDK;
+using System.IO;
 
 namespace Exercises
 {
@@ -10,6 +11,7 @@ namespace Exercises
     {
         static void Main(string[] args)
         {
+            DownloadExamples.UploadFileForDownload();
         }
     }
 }

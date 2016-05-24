@@ -13,6 +13,7 @@ using Attachment = System.Net.Mail.Attachment;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 
 namespace ParatureSDK
 {
@@ -91,7 +92,7 @@ namespace ParatureSDK
                 apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityType, objectid, false);
             }
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, null, null).Result;
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Delete, null, null, null).Result;
         }
 
         ///  <summary>
@@ -126,7 +127,7 @@ namespace ParatureSDK
             var entityName = typeof(T).Name;
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityName, objectid, arguments);
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, null, null).Result;
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, null, null, null).Result;
         }
 
         ///  <summary>
@@ -144,7 +145,7 @@ namespace ParatureSDK
         {
             var apiCallUrl = ApiUrlBuilder.ApiChatTranscriptUrl(paracredentials, objectid);
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, null, null).Result;
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, null, null, null).Result;
         }
 
         /// <summary>
@@ -165,7 +166,7 @@ namespace ParatureSDK
         {
             var entityType = typeof (T).Name;
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityType, 0, arguments);
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, null, null).Result;
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, null, null, null).Result;
         }
 
         public static ApiCallResponse ObjectSecondLevelGetList<TModule, TEntity>(ParaCredentials paracredentials, ArrayList arguments)
@@ -173,7 +174,7 @@ namespace ParatureSDK
             where TEntity: ParaEntityBaseProperties
         {
             var apiCallUrl = ApiUrlBuilder.ApiObjectCustomUrl<TModule, TEntity>(paracredentials, arguments);
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, null, null).Result;
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, null, null, null).Result;
         }
 
         /// <summary>
@@ -184,7 +185,7 @@ namespace ParatureSDK
             var entityType = typeof (T).Name;
             var apiCallUrl = ApiUrlBuilder.ApiObjectUrl(paracredentials, entityType, 0, true);
 
-            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, null, null).Result;
+            return ApiMakeTheCall(apiCallUrl, ParaEnums.ApiCallHttpMethod.Get, null, null, null).Result;
         }
 
         public static ApiCallResponse FileUploadGetUrl<TEntity>(ParaCredentials paracredentials) where TEntity: ParaEntity
@@ -197,23 +198,17 @@ namespace ParatureSDK
         {
             var filebytes = new byte[Convert.ToInt32(attachment.ContentStream.Length - 1) + 1];
             attachment.ContentStream.Read(filebytes, 0, filebytes.Length);
-            return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, filebytes, attachment.ContentType.Name).Result;
+            return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, filebytes, attachment.ContentType.Name, attachment.Name).Result;
         }
 
-        [Obsolete("To be removed in next major revision, use the FilePerformUpload(string, Byte[], string) overload instead.", false)]
         public static ApiCallResponse FilePerformUpload(string postUrl, Byte[] attachment, string contentType, string fileName)
         {
-            return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment, fileName).Result;
-        }
-
-        public static ApiCallResponse FilePerformUpload(string postUrl, Byte[] attachment, string fileName)
-        {
-            return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment, fileName).Result;
+            return ApiMakeTheCall(postUrl, ParaEnums.ApiCallHttpMethod.Post, attachment, contentType, fileName).Result;
         }
 
         private static async Task<ApiCallResponse> ApiMakeTheCall(string apiCallUrl, ParaEnums.ApiCallHttpMethod httpMethod)
         {
-            return await ApiMakeTheCall(apiCallUrl, httpMethod, null, null);
+            return await ApiMakeTheCall(apiCallUrl, httpMethod, null, null, null);
         }
 
         /// <summary>
@@ -275,7 +270,7 @@ namespace ParatureSDK
         /// <summary>
         /// The call, with passing a binary file.
         /// </summary>
-        static async Task<ApiCallResponse> ApiMakeTheCall(string apiCallUrl, ParaEnums.ApiCallHttpMethod httpMethod, Byte[] attachment, string fileName)
+        static async Task<ApiCallResponse> ApiMakeTheCall(string apiCallUrl, ParaEnums.ApiCallHttpMethod httpMethod, Byte[] attachment, string contentType, string fileName)
         {
             using (var handler = new HttpClientHandler())
             {
@@ -302,9 +297,16 @@ namespace ParatureSDK
                             {
                                 throw new ArgumentException("Invalid HTTP method, only GET or DELETE are supported without body content.", "httpMethod");
                             }
-                            using (var content = new MultipartFormDataContent())
+                            using (var content = new MultipartFormDataContent(Guid.NewGuid().ToString()))
                             {
-                                content.Add(new ByteArrayContent(attachment), fileName, fileName);
+                                var baContent = new ByteArrayContent(attachment);
+                                baContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+                                baContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                                {
+                                    Name = fileName,
+                                    FileName = fileName
+                                };
+                                content.Add(baContent);
                                 using (var responseMsg = await client.PostAsync(apiCallUrl, content))
                                 {
                                     return await ApiHttpRequestProcessor(responseMsg);
@@ -354,7 +356,10 @@ namespace ParatureSDK
             {
                 using (var content = responseMsg.RequestMessage.Content)
                 {
-                    result.XmlSent.Load(await content.ReadAsStreamAsync());
+                    if (content != null && content.GetType() != typeof(MultipartFormDataContent))
+                    {
+                        result.XmlSent.Load(await content.ReadAsStreamAsync());
+                    }
                 }
 
                 try
@@ -370,7 +375,15 @@ namespace ParatureSDK
 
                 using (var content = responseMsg.Content)
                 {
-                    responseContent = await content.ReadAsStringAsync();
+                    if (content != null)
+                    {
+                        //if the API returns an invalid header
+                        if (content.Headers.ContentType.CharSet != null && content.Headers.ContentType.CharSet.ToUpper() == "\"UTF-8\"")
+                        {
+                            content.Headers.ContentType.CharSet = "UTF-8";
+                        }
+                        responseContent = await content.ReadAsStringAsync();
+                    }
                 }
 
                 try
@@ -461,6 +474,11 @@ namespace ParatureSDK
                 {
                     result.XmlReceived = null;
                 }
+            }
+            catch (Exception ex)
+            {
+                result.HasException = true;
+                result.ExceptionDetails = ex.Message;
             }
             finally
             {

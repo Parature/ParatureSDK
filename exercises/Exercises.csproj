@@ -71,7 +71,7 @@
   <ItemGroup>
     <None Include="API Overview and Exercises.pptx" />
     <None Include="App.config" />
-    <None Include="README.md" />
+    <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ParatureSDK\ParatureSDK.csproj">

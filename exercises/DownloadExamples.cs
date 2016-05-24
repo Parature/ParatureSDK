@@ -6,6 +6,7 @@ using ParatureSDK.Query.EntityQuery;
 using ParatureSDK.Query.ModuleQuery;
 using ParatureSDK.ParaObjects;
 using System.IO;
+using System.Text;
 
 namespace Exercises
 {
@@ -65,7 +66,7 @@ namespace Exercises
             return downloads.TotalItems;
         }
 
-        public static void UploadFileForDownload(FileStream file)
+        public static void UploadFileForDownload()
         {
             var download = new Download()
             {
@@ -73,10 +74,9 @@ namespace Exercises
                 Title = "API Test File Title"
             };
 
-            var bytes = new byte[file.Length];
-            file.Read(bytes, 0, bytes.Count());
+            var bytes = Encoding.ASCII.GetBytes("test file");
 
-            download.AddAttachment(Service, bytes, "test.xlsx");
+            download.AddAttachment(Service, bytes, "text/plain", "readme.md");
 
             if (download.ApiCallResponse.HasException)
             {

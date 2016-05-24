@@ -172,7 +172,7 @@ namespace ParatureSDK
         /// <summary>
         /// Internal method to handle the upload of a file to Parature.
         /// </summary>
-        internal Attachment UploadFile<TEntity>(Byte[] attachment, String fileName)
+        internal Attachment UploadFile<TEntity>(Byte[] attachment, string contentType, String fileName)
             where TEntity : ParaEntity
         {
             Attachment attach;
@@ -182,7 +182,7 @@ namespace ParatureSDK
             if (String.IsNullOrEmpty(postUrl) == false)
             {
                 var uploadResponse =
-                    ApiCallFactory.FilePerformUpload(postUrl, attachment, fileName)
+                    ApiCallFactory.FilePerformUpload(postUrl, attachment, contentType, fileName)
                         .XmlReceived;
 
                 attach = new Attachment();

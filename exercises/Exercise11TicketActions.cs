@@ -50,7 +50,7 @@ namespace Exercises
         /// <param name="action"></param>
         public static void AddAttachmentToAction(Action action)
         {
-            action.AddAttachment(Service, "Contents of the file", "attachment1.txt");
+            action.AddAttachment(Service, "Contents of the file", "text/plain", "attachment1.txt");
         }
     }
 }

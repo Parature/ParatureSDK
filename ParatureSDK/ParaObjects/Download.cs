@@ -693,30 +693,10 @@ namespace ParatureSDK.ParaObjects
         /// <param name="FileName">
         ///
         ///</param>
-        [Obsolete("To be removed in the next major version in favor of AddAttachment(ParaService, byte[], string).")]
         public void AddAttachment(ParaService service, Byte[] attachment, string contentType, string fileName)
         {
-            this.Attachment = service.UploadFile<Download>(attachment, fileName);
+            this.Attachment = service.UploadFile<Download>(attachment, contentType, fileName);
             Guid = this.Attachment.Guid;
-        }
-
-        /// <summary>
-        /// Uploads the file to the current Download.
-        /// The file will also be added to the current Downloads's Guid.
-        /// </summary>
-        /// <param name="Attachment">
-        /// The binary Byte array of the file you would like to upload.
-        ///</param>
-        /// <param name="paracredentials">
-        /// The parature credentials class for the APIs.
-        /// </param>
-        /// <param name="FileName">
-        ///
-        ///</param>
-        public void AddAttachment(ParaService service, byte[] attachment, string fileName)
-        {
-            Attachment = service.UploadFile<Download>(attachment, fileName);
-            Guid = Attachment.Guid;
         }
 
         /// <summary>
@@ -761,7 +741,7 @@ namespace ParatureSDK.ParaObjects
         {
             var encoding = new ASCIIEncoding();
             var bytes = encoding.GetBytes(text);
-            Attachment = service.UploadFile<Download>(bytes, fileName);
+            Attachment = service.UploadFile<Download>(bytes, "text/plain", fileName);
             Guid = Attachment.Guid;
         }
 
@@ -803,37 +783,11 @@ namespace ParatureSDK.ParaObjects
         /// <param name="FileName">
         /// The name you woule like the attachment to have.
         ///</param>
-        [Obsolete("To be removed in favor of Download.UpdateAttachment(ParaService, string, string) in the next major revision.", false)]
         public void UpdateAttachment(ParaService service, string text, string contentType, string fileName)
         {
             var encoding = new ASCIIEncoding();
             var bytes = encoding.GetBytes(text);
-            Attachment = service.UploadFile<Download>(bytes, fileName);
-            Guid = Attachment.Guid;
-            Name = fileName;
-        }
-
-
-        /// <summary>
-        /// Updates the current download attachment with a text based file. You need to pass a string, and the mime type of a text based file (html, text, etc...).
-        /// </summary>
-        /// <param name="text">
-        /// The content of the text based file.
-        ///</param>
-        /// <param name="paracredentials">
-        /// The parature credentials class for the APIs.
-        /// </param>
-        /// <param name="contentType">
-        /// The type of content being uploaded, you have to make sure this is the right text.
-        /// </param>
-        /// <param name="FileName">
-        /// The name you woule like the attachment to have.
-        ///</param>
-        public void UpdateAttachment(ParaService service, string text, string fileName)
-        {
-            var encoding = new ASCIIEncoding();
-            var bytes = encoding.GetBytes(text);
-            Attachment = service.UploadFile<Download>(bytes, fileName);
+            Attachment = service.UploadFile<Download>(bytes, contentType, fileName);
             Guid = Attachment.Guid;
             Name = fileName;
         }
@@ -854,21 +808,9 @@ namespace ParatureSDK.ParaObjects
         /// If you have a download file and would like to replace the file, use this method. It will actually delete
         /// the existing attachment, and then add a new one to replace it.
         /// </summary>
-        [Obsolete("To be removed in favor of Download.UpdateAttachment(ParaService, byte[], string) in the next major revision.", false)]
         public void UpdateAttachment(ParaService service, byte[] attachment, string contentType, string fileName)
         {
-            this.Attachment = service.UploadFile<Download>(attachment, fileName);
-            Guid = this.Attachment.Guid;
-            Name = fileName;
-        }
-
-        /// <summary>
-        /// If you have a download file and would like to replace the file, use this method. It will actually delete
-        /// the existing attachment, and then add a new one to replace it.
-        /// </summary>
-        public void UpdateAttachment(ParaService service, byte[] attachment, string fileName)
-        {
-            this.Attachment = service.UploadFile<Download>(attachment, fileName);
+            this.Attachment = service.UploadFile<Download>(attachment, contentType, fileName);
             Guid = this.Attachment.Guid;
             Name = fileName;
         }

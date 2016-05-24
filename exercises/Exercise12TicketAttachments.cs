@@ -27,9 +27,9 @@ namespace Exercises
             return Service.GetDetails<Ticket>(ticketId).Ticket_Attachments;
         }
 
-        public static void AddAttachment(Ticket ticket, string fileName, string fileContents)
+        public static void AddAttachment(Ticket ticket, string fileName, string contentType, string fileContents)
         {
-            ticket.AddAttachment(Service, fileContents, fileName);
+            ticket.AddAttachment(Service, fileContents, contentType, fileName);
             var response = Service.Update(ticket);
         }
 
